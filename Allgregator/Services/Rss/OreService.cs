@@ -1,4 +1,5 @@
-﻿using Allgregator.Models.Rss;
+﻿using Allgregator.Models;
+using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Prism.Mvvm;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Services.Rss {
     public class OreService : BindableBase {
-        private SettingsService settingsService;
+        private Settings settings;
         private LinkRepository linkRepository;
 
         private CancellationTokenSource cancellationTokenSource;
@@ -20,9 +21,9 @@ namespace Allgregator.Services.Rss {
         private int progressMaximum;
 
         public OreService(
-            SettingsService settingsService,
+            Settings settings,
             LinkRepository linkRepository) {
-            this.settingsService = settingsService;
+            this.settings = settings;
             this.linkRepository = linkRepository;
 
             progressIndicator = new Progress<int>((one) => ProgressValue++);
@@ -61,7 +62,7 @@ namespace Allgregator.Services.Rss {
                     var lastRetrieve = DateTimeOffset.Now;
                     var outdated = collection.Mined.OldRecos?.Where(n => n.PublishDate >= collection.Mined.AcceptTime);
                     await Task.WhenAll(collection.Links.Select(link => Task.Run(() => {
-                        retrieveService.Production(link, collection.Mined.AcceptTime, settingsService.CutoffTime, outdated);
+                        retrieveService.Production(link, collection.Mined.AcceptTime, settings.RssCutoffTime, outdated);
                         progressIndicator.Report(1);
                     }, cancellationTokenSource.Token)));
 

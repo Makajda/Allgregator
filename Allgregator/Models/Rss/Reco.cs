@@ -1,7 +1,7 @@
 ﻿using Allgregator.Common;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace Allgregator.Models.Rss {
     public class Reco : IEquatable<Reco> {

@@ -1,6 +1,4 @@
 ﻿using Allgregator.Repositories.Rss;
-using Allgregator.Services;
-using Allgregator.Services.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
 using Prism.DryIoc;
@@ -17,6 +15,8 @@ namespace Allgregator {
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+            var settings = new SettingsRepository().GetSettings();//TODO try
+            containerRegistry.RegisterInstance(settings);
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
     }

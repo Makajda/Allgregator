@@ -1,5 +1,5 @@
-﻿using Prism.Mvvm;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Prism.Mvvm;
 using System.Collections.ObjectModel;
 
 namespace Allgregator.Models.Rss {
@@ -17,12 +17,14 @@ namespace Allgregator.Models.Rss {
         }
 
         private ObservableCollection<Link> links;
+        [JsonIgnore]
         public ObservableCollection<Link> Links {
             get => links;
             set => SetProperty(ref links, value);
         }
 
         private Mined mined;
+        [JsonIgnore]
         public Mined Mined {
             get { return mined; }
             set { SetProperty(ref mined, value); }

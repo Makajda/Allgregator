@@ -1,14 +1,31 @@
-﻿using Allgregator.Models.Rss;
+﻿using Allgregator.Common;
+using Allgregator.Models.Rss;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 
 namespace Allgregator.Repositories.Rss {
     public class CollectionRepository {
+        private const string nameFile = "collections.json";
         public IEnumerable<Collection> GetCollections() {
-            var collections = new List<Collection>();
-            collections.Add(new Collection(1) { Name = "Первая коллекция" });
-            collections.Add(new Collection(2) { Name = "Вторая коллекция" });
-            collections.Add(new Collection(3) { Name = "Третья коллекция" });
-            return collections;
+            var name = Path.Combine(Given.PathData, nameFile);
+            if (File.Exists(name)) {
+                var json = File.ReadAllText(name);
+                return JsonConvert.DeserializeObject<IEnumerable<Collection>>(json);
+            }
+            else {
+                var collections = new List<Collection>();
+                collections.Add(new Collection(1) { Name = "Основная" });
+                return collections;
+            }
+        }
+
+        public void Save(IEnumerable<Collection> collections) {
+            var json = JsonConvert.SerializeObject(collections, Formatting.Indented);
+            var name = Path.Combine(Given.PathData, nameFile);
+            File.WriteAllText(name, json);
         }
     }
 }

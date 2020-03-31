@@ -3,13 +3,7 @@ using Allgregator.Repositories.Rss;
 using Allgregator.Services.Rss;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels {
     public class MainWindowViewModel : BindableBase {
@@ -31,6 +25,7 @@ namespace Allgregator.ViewModels {
             OreCommand = new DelegateCommand(Ore);
             StateCommand = new DelegateCommand<string>(SetState);
             Collections = new ObservableCollection<Collection>(collectionRepository.GetCollections());
+            //TODO setiings RssCollectionId start
         }
 
         public DelegateCommand OreCommand { get; private set; }
