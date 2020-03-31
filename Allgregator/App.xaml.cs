@@ -1,4 +1,7 @@
-﻿using Allgregator.ViewModels;
+﻿using Allgregator.Repositories.Rss;
+using Allgregator.Services;
+using Allgregator.Services.Rss;
+using Allgregator.ViewModels;
 using Allgregator.Views;
 using Prism.DryIoc;
 using Prism.Ioc;
