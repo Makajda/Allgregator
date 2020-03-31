@@ -3,8 +3,6 @@ using Allgregator.Models.Rss;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
 
 namespace Allgregator.Repositories.Rss {
     public class CollectionRepository {
@@ -17,7 +15,7 @@ namespace Allgregator.Repositories.Rss {
             }
             else {
                 var collections = new List<Collection>();
-                collections.Add(new Collection(1) { Name = "Основная" });
+                collections.Add(new Collection(1) { Name = "Основной" });
                 return collections;
             }
         }
