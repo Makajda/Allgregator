@@ -4,9 +4,8 @@
              >
     
     <Grid>
-        <ListBox Grid.Row="1" Background="Blue"
-                 x:Name="news"
-                 ItemsSource="{Binding CurrentCollection.Mined.NewRecos}"
+        <ListBox Background="Blue"
+                 ItemsSource="{Binding CurrentChapter.Mined.NewRecos}"
                  DisplayMemberPath="ItemTitle"
                  >
         </ListBox>

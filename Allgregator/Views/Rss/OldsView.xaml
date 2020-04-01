@@ -4,9 +4,8 @@
              >
     
     <Grid>
-        <ListBox Grid.Row="1" Background="Green" Opacity="0"
-                 x:Name="olds"
-                 ItemsSource="{Binding CurrentCollection.Mined.OldRecos}"
+        <ListBox Background="Green"
+                 ItemsSource="{Binding CurrentChapter.Mined.OldRecos}"
                  DisplayMemberPath="ItemTitle"
                  >
         </ListBox>

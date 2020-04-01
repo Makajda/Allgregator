@@ -7,8 +7,8 @@ using System.IO;
 namespace Allgregator.Repositories.Rss {
     public class LinkRepository {
         private const string nameFile = "links{0}.json";
-        public IEnumerable<Link> GetLinks(int collectionId) {
-            var name = Path.Combine(Given.PathData, string.Format(nameFile, collectionId));
+        public IEnumerable<Link> GetLinks(int chapterId) {
+            var name = Path.Combine(Given.PathData, string.Format(nameFile, chapterId));
             if (File.Exists(name)) {
                 var json = File.ReadAllText(name);
                 return JsonConvert.DeserializeObject<IEnumerable<Link>>(json);
@@ -44,9 +44,9 @@ namespace Allgregator.Repositories.Rss {
             }
         }
 
-        public void Save(int collectionId, IEnumerable<Link> links) {
+        public void Save(int chapterId, IEnumerable<Link> links) {
             var json = JsonConvert.SerializeObject(links, Formatting.Indented);
-            var name = Path.Combine(Given.PathData, string.Format(nameFile, collectionId));
+            var name = Path.Combine(Given.PathData, string.Format(nameFile, chapterId));
             File.WriteAllText(name, json);
         }
     }

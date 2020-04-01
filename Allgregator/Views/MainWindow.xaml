@@ -7,20 +7,13 @@
         Title="{Binding Title}"
         >
 
-    <Window.Resources>
-        <CollectionViewSource Source="{Binding Collections}" x:Key="collections"/>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" />
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
-
-        <Button Grid.Row="2" Content="State1" Padding="15" Command="{Binding StateCommand}" CommandParameter="newsState"/>
     </Grid>
 </Window>

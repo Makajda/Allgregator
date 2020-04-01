@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Allgregator.Views.Rss.ChapterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="clr-namespace:Allgregator.Common"
+             >
+
+    <UserControl.Resources>
+        <common:IdEqToVisibilityConverter x:Key="IdEqToVisibilityConverter"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Button Width="150" Content="{Binding Name}" Command="{Binding DataContext.ActivateCommand, 
+            RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}" CommandParameter="{Binding}">
+            <Button.Visibility>
+                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}" ConverterParameter="reverse">
+                    <Binding Path="Id"/>
+                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
+                </MultiBinding>
+            </Button.Visibility>
+        </Button>
+
+        <Border BorderBrush="Blue" BorderThickness="5">
+            <Border.Visibility>
+                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}">
+                    <Binding Path="Id"/>
+                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
+                </MultiBinding>
+            </Border.Visibility>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" Content="n/o" Command="{Binding OreCommand}"/>
+                <Button Grid.Row="1" Grid.Column="0" Content="links" Command="{Binding StateCommand}"/>
+                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Width="150" Content="{Binding Name}" Command="{Binding StateCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding StateCommand}"/>
+                <Button Grid.Row="1" Grid.Column="2" Content="update" Command="{Binding StateCommand}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -4,9 +4,8 @@
              >
     
     <Grid>
-        <ListBox Grid.Row="1" Background="Red" Opacity="0"
-                 x:Name="links"
-                 ItemsSource="{Binding CurrentCollection.Mined.Links}"
+        <ListBox Background="Red"
+                 ItemsSource="{Binding CurrentChapter.Mined.Links}"
                  DisplayMemberPath="Name"
                  >
         </ListBox>

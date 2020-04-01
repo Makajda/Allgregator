@@ -18,7 +18,7 @@ namespace Allgregator {
     public partial class App : PrismApplication {
         protected override Window CreateShell() {
             var regionManager = Container.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(CollectionsView));
+            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));
             regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(NewsView));
             regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(OldsView));
             regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(LinksView));

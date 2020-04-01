@@ -7,8 +7,8 @@ using System.IO.Compression;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
-        public Mined GetMined(int collectionId) {
-            var (entryName, fileName) = GetNames(collectionId);
+        public Mined GetMined(int chapterId) {
+            var (entryName, fileName) = GetNames(chapterId);
 
             try {
                 using (var archive = ZipFile.OpenRead(fileName)) {
@@ -30,8 +30,8 @@ namespace Allgregator.Repositories.Rss {
             return new Mined();
         }
 
-        public void Save(int collectionId, Mined mined) {
-            var (entryName, fileName) = GetNames(collectionId);
+        public void Save(int chapterId, Mined mined) {
+            var (entryName, fileName) = GetNames(chapterId);
 
             using (var fileStream = new FileStream(fileName, FileMode.Open)) {
                 using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create)) {
@@ -46,9 +46,9 @@ namespace Allgregator.Repositories.Rss {
             }
         }
 
-        private (string, string) GetNames(int collectionId) {
+        private (string, string) GetNames(int chapterId) {
             const string nameFile = "mined{0}";
-            var name = string.Format(nameFile, collectionId);
+            var name = string.Format(nameFile, chapterId);
             var entryName = Path.ChangeExtension(name, "json");
             var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
             return (entryName, fileName);

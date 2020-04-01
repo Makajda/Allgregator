@@ -1,6 +1,5 @@
 ﻿using Allgregator.Models;
 using Allgregator.Models.Rss;
-using Allgregator.Repositories.Rss;
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 namespace Allgregator.Services.Rss {
     public class OreService : BindableBase {
         private Settings settings;
-        private LinkRepository linkRepository;
 
         private CancellationTokenSource cancellationTokenSource;
         private bool isRetrieveCanceled = true;
@@ -21,10 +19,9 @@ namespace Allgregator.Services.Rss {
         private int progressMaximum;
 
         public OreService(
-            Settings settings,
-            LinkRepository linkRepository) {
+            Settings settings
+            ) {
             this.settings = settings;
-            this.linkRepository = linkRepository;
 
             progressIndicator = new Progress<int>((one) => ProgressValue++);
         }
@@ -49,28 +46,28 @@ namespace Allgregator.Services.Rss {
             catch (ObjectDisposedException) { }
         }
 
-        public async Task Retrieve(Collection collection) {
-            if (collection == null || collection.Links == null || collection.Mined == null) {
+        public async Task Retrieve(Chapter chapter) {
+            if (chapter == null || chapter.Links == null || chapter.Mined == null) {
                 return;
             }
 
             isRetrieveCanceled = false;
             using (var retrieveService = new RetrieveService()) {
                 using (cancellationTokenSource = new CancellationTokenSource()) {
-                    ProgressMaximum = collection.Links.Count;
+                    ProgressMaximum = chapter.Links.Count;
                     ProgressValue = 0;
                     var lastRetrieve = DateTimeOffset.Now;
-                    var outdated = collection.Mined.OldRecos?.Where(n => n.PublishDate >= collection.Mined.AcceptTime);
-                    await Task.WhenAll(collection.Links.Select(link => Task.Run(() => {
-                        retrieveService.Production(link, collection.Mined.AcceptTime, settings.RssCutoffTime, outdated);
+                    var outdated = chapter.Mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
+                    await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
+                        retrieveService.Production(link, chapter.Mined.AcceptTime, settings.RssCutoffTime, outdated);
                         progressIndicator.Report(1);
                     }, cancellationTokenSource.Token)));
 
                     if (!isRetrieveCanceled) {
-                        collection.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderBy(n => n.PublishDate));
-                        collection.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderBy(n => n.PublishDate));
-                        collection.Mined.Errors = retrieveService.Errors.ToList();
-                        collection.Mined.LastRetrieve = lastRetrieve;
+                        chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderBy(n => n.PublishDate));
+                        chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderBy(n => n.PublishDate));
+                        chapter.Mined.Errors = retrieveService.Errors.ToList();
+                        chapter.Mined.LastRetrieve = lastRetrieve;
                     }
                 }
             }

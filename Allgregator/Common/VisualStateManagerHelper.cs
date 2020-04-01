@@ -4,7 +4,6 @@ using System.Windows.Controls;
 namespace Allgregator.Common {
     public class VisualStateManagerHelper {
         /*
-
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="Common">
             <VisualState x:Name="newsState">

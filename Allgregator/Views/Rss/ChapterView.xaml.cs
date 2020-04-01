@@ -13,10 +13,10 @@ using System.Windows.Shapes;
 
 namespace Allgregator.Views.Rss {
     /// <summary>
-    /// Interaction logic for CollectionsView.xaml
+    /// Interaction logic for ChapterView.xaml
     /// </summary>
-    public partial class CollectionsView : UserControl {
-        public CollectionsView() {
+    public partial class ChapterView : UserControl {
+        public ChapterView() {
             InitializeComponent();
         }
     }

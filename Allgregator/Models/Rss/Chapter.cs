@@ -3,12 +3,12 @@ using Prism.Mvvm;
 using System.Collections.ObjectModel;
 
 namespace Allgregator.Models.Rss {
-    public class Collection : BindableBase {
-        public readonly int Id;
-
-        public Collection(int id) {
+    public class Chapter : BindableBase {
+        public Chapter(int id) {
             Id = id;
         }
+
+        public int Id { get; private set; }
 
         private string name;
         public string Name {
