@@ -16,6 +16,8 @@ namespace Allgregator.Repositories.Rss {
             else {
                 var collections = new List<Collection>();
                 collections.Add(new Collection(1) { Name = "Основной" });
+                collections.Add(new Collection(2) { Name = "Второй" });
+                collections.Add(new Collection(3) { Name = "Третий" });
                 return collections;
             }
         }

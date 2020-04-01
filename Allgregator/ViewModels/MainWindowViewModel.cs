@@ -1,9 +1,11 @@
-﻿using Allgregator.Models.Rss;
+﻿using Allgregator.Models;
+using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services.Rss;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Allgregator.ViewModels {
     public class MainWindowViewModel : BindableBase {
@@ -13,6 +15,7 @@ namespace Allgregator.ViewModels {
         OreService oreService;
 
         public MainWindowViewModel(
+            Settings settings,
             CollectionRepository collectionRepository,
             LinkRepository linkRepository,
             MinedRepository minedRepository,
@@ -24,8 +27,8 @@ namespace Allgregator.ViewModels {
 
             OreCommand = new DelegateCommand(Ore);
             StateCommand = new DelegateCommand<string>(SetState);
-            Collections = new ObservableCollection<Collection>(collectionRepository.GetCollections());
-            //TODO setiings RssCollectionId start
+            Collections = new ObservableCollection<Collection>(collectionRepository.GetCollections());//TODO null
+            CurrentCollection = Collections.FirstOrDefault(n => n.Id == settings.RssCollectionId);
         }
 
         public DelegateCommand OreCommand { get; private set; }
@@ -42,7 +45,6 @@ namespace Allgregator.ViewModels {
         }
 
         private async void Ore() {
-            State = "newsState";
             await oreService.Retrieve(CurrentCollection);
         }
 

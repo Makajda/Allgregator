@@ -18,12 +18,12 @@ namespace Allgregator.Repositories.Rss {
             }
         }
 
-        public void Save() {
+        public void Save(Settings settings) {
             try {
                 if (!Directory.Exists(Given.PathData))
                     Directory.CreateDirectory(Given.PathData);
 
-                var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+                var json = JsonConvert.SerializeObject(settings, Formatting.Indented);
                 var name = Path.Combine(Given.PathData, nameFile);
                 File.WriteAllText(name, json);
             }

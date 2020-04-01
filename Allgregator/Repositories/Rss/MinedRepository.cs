@@ -1,25 +1,57 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models.Rss;
 using Newtonsoft.Json;
+using System;
 using System.IO;
+using System.IO.Compression;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
-        private const string nameFile = "mined{0}.json";
         public Mined GetMined(int collectionId) {
-            var name = Path.Combine(Given.PathData, string.Format(nameFile, collectionId));
-            if (File.Exists(name)) {
-                var json = File.ReadAllText(name);
-                return JsonConvert.DeserializeObject<Mined>(json);
+            var (entryName, fileName) = GetNames(collectionId);
+
+            try {
+                using (var archive = ZipFile.OpenRead(fileName)) {
+                    if (archive.Entries.Count > 0) {
+                        var entry = archive.Entries[0];
+                        if (entry != null) {
+                            using (var stream = entry.Open()) {
+                                using (var reader = new StreamReader(entry.Open())) {
+                                    var json = reader.ReadToEnd();
+                                    return JsonConvert.DeserializeObject<Mined>(json);
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            catch (Exception) { }
 
             return new Mined();
         }
 
         public void Save(int collectionId, Mined mined) {
-            var json = JsonConvert.SerializeObject(mined, Formatting.Indented);
-            var name = Path.Combine(Given.PathData, string.Format(nameFile, collectionId));
-            File.WriteAllText(name, json);
+            var (entryName, fileName) = GetNames(collectionId);
+
+            using (var fileStream = new FileStream(fileName, FileMode.Open)) {
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create)) {
+                    var entry = archive.CreateEntry(entryName);
+                    using (var streamEntry = entry.Open()) {
+                        using (var writer = new StreamWriter(streamEntry)) {
+                            var json = JsonConvert.SerializeObject(mined, Formatting.Indented);
+                            writer.WriteLine(json);
+                        }
+                    }
+                }
+            }
+        }
+
+        private (string, string) GetNames(int collectionId) {
+            const string nameFile = "mined{0}";
+            var name = string.Format(nameFile, collectionId);
+            var entryName = Path.ChangeExtension(name, "json");
+            var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
+            return (entryName, fileName);
         }
     }
 }
