@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -26,8 +27,12 @@ namespace Allgregator.ViewModels.Rss {
             this.oreService = oreService;
             this.regionManager = regionManager;
 
-            OreCommand = new DelegateCommand(Ore);
             ActivateCommand = new DelegateCommand<Chapter>(Activate);
+            NewsOldsCommand = new DelegateCommand(NewsOlds);
+            LinksCommand = new DelegateCommand(Links);
+            OpenCommand = new DelegateCommand(Open);
+            DeleteCommand = new DelegateCommand(Delete);
+            UpdateCommand = new DelegateCommand(Update);
 
             var chapters = chapterRepository.GetChapters();
             if (chapters != null) {
@@ -40,10 +45,15 @@ namespace Allgregator.ViewModels.Rss {
 
                 CurrentChapter = currentChapter;
             }
+            //TODO regionManager.RequestNavigate(Given.MainRegion, state);
         }
 
-        public DelegateCommand OreCommand { get; private set; }
         public DelegateCommand<Chapter> ActivateCommand { get; private set; }
+        public DelegateCommand NewsOldsCommand { get; private set; }
+        public DelegateCommand LinksCommand { get; private set; }
+        public DelegateCommand OpenCommand { get; private set; }
+        public DelegateCommand DeleteCommand { get; private set; }
+        public DelegateCommand UpdateCommand { get; private set; }
 
         public ObservableCollection<Chapter> Chapters { get; private set; }
 
@@ -53,19 +63,24 @@ namespace Allgregator.ViewModels.Rss {
             set => SetProperty(ref currentChapter, value);
         }
 
-        private string chapterState = "1111";
-        public string ChapterState {
-            get => chapterState;
-            set => SetProperty(ref chapterState, value);
-        }
-
         private void Activate(Chapter chapter) {
             CurrentChapter = chapter;
         }
 
-        private async void Ore() {
+        private void NewsOlds() {
+        }
+
+        private void Links() {
+        }
+
+        private void Open() {
+        }
+
+        private void Delete() {
+        }
+
+        private async void Update() {
             await oreService.Retrieve(CurrentChapter);
-            //regionManager.RequestNavigate(Given.MainRegion, state);
         }
     }
 }
