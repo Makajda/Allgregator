@@ -5,6 +5,7 @@
              >
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <common:IdEqToVisibilityConverter x:Key="IdEqToVisibilityConverter"/>
 
         <Style TargetType="Button">
@@ -45,10 +46,20 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="n/o" Command="{Binding DataContext.NewsOldsCommand, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="links" Command="{Binding DataContext.LinksCommand,
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                <StackPanel Grid.RowSpan="2">
+                    <Button Content="news" Command="{Binding DataContext.NewsCommand, 
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
+                            Visibility="{Binding  DataContext.IsNewsVisible, Converter={StaticResource BooleanToVisibilityConverter},
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                    <Button Content="olds" Command="{Binding DataContext.OldsCommand, 
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
+                            Visibility="{Binding  DataContext.IsOldsVisible, Converter={StaticResource BooleanToVisibilityConverter},
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                    <Button Content="links" Command="{Binding DataContext.LinksCommand,
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
+                            Visibility="{Binding  DataContext.IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter},
+                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                </StackPanel>
                 <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Width="150" Content="{Binding Name}" Command="{Binding DataContext.OpenCommand,
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
                 <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding DataContext.DeleteCommand,

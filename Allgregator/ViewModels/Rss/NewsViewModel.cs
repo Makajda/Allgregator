@@ -12,9 +12,11 @@ namespace Allgregator.ViewModels.Rss {
     public class NewsViewModel : BindableBase, INavigationAware {
         private readonly MinedRepository minedRepository;
         public NewsViewModel(
-            MinedRepository minedRepository
+            MinedRepository minedRepository,
+            IEventAggregator eventAggregator
             ) {
             this.minedRepository = minedRepository;
+            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(ChapterChanged);
         }
 
         private Chapter chapter;
