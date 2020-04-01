@@ -1,10 +1,14 @@
 ﻿using Allgregator.Common;
-using Allgregator.Models;
 using Allgregator.Repositories.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
+using Allgregator.Views.Rss;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Mvvm;
+using Prism.Regions;
+using System;
+using System.Reflection;
 using System.Windows;
 
 namespace Allgregator {
@@ -13,26 +17,29 @@ namespace Allgregator {
     /// </summary>
     public partial class App : PrismApplication {
         protected override Window CreateShell() {
-            var mainWindow = Container.Resolve<MainWindow>();
-            var settings = Container.Resolve<Settings>();
+            var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(CollectionsView));
+            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(NewsView));
+            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(OldsView));
+            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(LinksView));
 
-            WindowUtilities.SetWindowBoundsAndState(mainWindow, settings.MainWindowBounds, settings.MainWindowState);
-
-            mainWindow.Closing += (s, e) => {
-                var settings = Container.Resolve<Settings>();
-                var settingsRepository = Container.Resolve<SettingsRepository>();
-                settings.MainWindowBounds = mainWindow.RestoreBounds;
-                settings.MainWindowState = mainWindow.WindowState;
-                settingsRepository.Save(settings);
-            };
-
-            return mainWindow;
+            return WindowUtilities.GetMainWindow(Container);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
-            var settings = new SettingsRepository().GetSettings();//TODO try
-            containerRegistry.RegisterInstance(settings);
+            var settingsRepository = Container.Resolve<SettingsRepository>();
+            containerRegistry.RegisterInstance(settingsRepository.GetSettings());
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
+        }
+
+        protected override void ConfigureServiceLocator() {
+            base.ConfigureServiceLocator();
+            ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver((viewType) => {
+                var viewName = viewType.FullName.Replace(".Views.", ".ViewModels.");
+                var viewAssemblyName = viewType.GetTypeInfo().Assembly.FullName;
+                var viewModelName = $"{viewName}Model, {viewAssemblyName}";
+                return Type.GetType(viewModelName);
+            });
         }
     }
 }

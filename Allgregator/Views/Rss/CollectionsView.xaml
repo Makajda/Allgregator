@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Allgregator.Views.Rss.CollectionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"  
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             >
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!--<ListBox ItemsSource="{Binding Source={StaticResource collections}}"
+                 DisplayMemberPath="Name" SelectedItem="{Binding CurrentCollection}"
+                 >
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>-->
+
+        <Button Grid.Row="1" Content="Ore" Padding="15" Command="{Binding OreCommand}"/>
+        <Button Grid.Row="2" Content="State1" Padding="15" Command="{Binding StateCommand}" CommandParameter="newsState"/>
+        <Button Grid.Row="3" Content="State2" Padding="15" Command="{Binding StateCommand}" CommandParameter="oldsState"/>
+        <Button Grid.Row="4" Content="State3" Padding="15" Command="{Binding StateCommand}" CommandParameter="linksState"/>
+    </Grid>
+</UserControl>
