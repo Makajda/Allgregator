@@ -2,7 +2,6 @@
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services.Rss;
-using Allgregator.Views.Rss;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -55,7 +54,7 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get { return isActive; }
-            set { SetProperty(ref isActive, value, () => { if (isActive) SetMainView(); }); }
+            set { SetProperty(ref isActive, value, () => { if (IsActive) SetMainView(); }); }
         }
 
         private bool isNewsVisible;
@@ -84,10 +83,12 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void SetMainView() {
-            var type = IsNewsVisible ? (IsOldsVisible ? typeof(LinksView) : typeof(OldsView)) : typeof(NewsView);
-            var parameters = new NavigationParameters();
-            parameters.Add(null, Chapter);
-            regionManager.RequestNavigate(Given.MainRegion, type.Name, parameters);
+            var region = regionManager.Regions[Given.MainRegion];
+            region.Context = Chapter;
+            //TODO const var type = IsNewsVisible ? (IsOldsVisible ? typeof(LinksView) : typeof(OldsView)) : typeof(NewsView);
+            //var view = region.GetView(type.Name);
+            //if (view != null)
+            //    region.Activate(view);
         }
 
         private void Open() {

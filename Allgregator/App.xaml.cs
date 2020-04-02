@@ -1,6 +1,7 @@
 ﻿using Allgregator.Common;
 using Allgregator.Repositories.Rss;
 using Allgregator.ViewModels;
+using Allgregator.ViewModels.Rss;
 using Allgregator.Views;
 using Allgregator.Views.Rss;
 using Prism.DryIoc;
@@ -16,14 +17,22 @@ namespace Allgregator {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : PrismApplication {
-        protected override Window CreateShell() {
+        protected override Window CreateShell() => WindowUtilities.GetMainWindow(Container);
+
+        protected override void OnInitialized() {
+            base.OnInitialized();
+
             var regionManager = Container.Resolve<IRegionManager>();
             regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));
-            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(NewsView));
-            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(OldsView));
-            regionManager.RegisterViewWithRegion(Given.MainRegion, typeof(LinksView));
 
-            return WindowUtilities.GetMainWindow(Container);
+            var region = regionManager.Regions[Given.MainRegion];
+            var recosView = Container.Resolve<RecosView>();
+            var recosViewModel = Container.Resolve<RecosViewModel>();
+            recosViewModel.IsNews = true;
+            recosView.DataContext = recosViewModel;
+            region.Add(recosView, "NewsView");//TODO const
+            region.Add(Container.Resolve<RecosView>(), "OldsView");
+            region.Add(Container.Resolve<LinksView>(), "LinksView");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
