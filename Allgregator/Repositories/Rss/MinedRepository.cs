@@ -7,7 +7,7 @@ using System.IO.Compression;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
-        public Mined GetMined(int chapterId) {
+        public Mined Get(int chapterId) {
             var (entryName, fileName) = GetNames(chapterId);
 
             try {
@@ -33,7 +33,7 @@ namespace Allgregator.Repositories.Rss {
         public void Save(int chapterId, Mined mined) {
             var (entryName, fileName) = GetNames(chapterId);
 
-            using (var fileStream = new FileStream(fileName, FileMode.Open)) {
+            using (var fileStream = new FileStream(fileName, FileMode.Create)) {
                 using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create)) {
                     var entry = archive.CreateEntry(entryName);
                     using (var streamEntry = entry.Open()) {

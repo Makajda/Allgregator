@@ -23,7 +23,7 @@ namespace Allgregator.ViewModels.Rss {
             ) {
             this.chapterRepository = chapterRepository;
 
-            var chapters = chapterRepository.GetChapters();
+            var chapters = chapterRepository.Get();
             if (chapters != null) {
                 var container = (App.Current as PrismApplication).Container;
                 Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));

@@ -7,7 +7,7 @@ using System.IO;
 namespace Allgregator.Repositories.Rss {
     public class SettingsRepository {
         private const string nameFile = "settings.json";
-        public Settings GetSettings() {
+        public Settings Get() {
             try {
                 var name = Path.Combine(Given.PathData, nameFile);
                 var json = File.ReadAllText(name);

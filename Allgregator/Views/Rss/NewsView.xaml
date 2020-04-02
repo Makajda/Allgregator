@@ -7,7 +7,7 @@
     
     <Grid>
         <ListBox Background="Blue"
-                 ItemsSource="{Binding CurrentChapter.Mined.NewRecos}"
+                 ItemsSource="{Binding Chapter.Mined.NewRecos}"
                  DisplayMemberPath="ItemTitle"
                  >
         </ListBox>

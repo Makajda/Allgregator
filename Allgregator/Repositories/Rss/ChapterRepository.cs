@@ -7,7 +7,7 @@ using System.IO;
 namespace Allgregator.Repositories.Rss {
     public class ChapterRepository {
         private const string nameFile = "chapters.json";
-        public IEnumerable<Chapter> GetChapters() {
+        public IEnumerable<Chapter> Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             if (File.Exists(name)) {
                 var json = File.ReadAllText(name);

@@ -1,30 +1,33 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models.Rss;
+using Allgregator.Repositories.Rss;
 using Allgregator.Services.Rss;
 using Allgregator.Views.Rss;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System.Collections.ObjectModel;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
         private readonly OreService oreService;
+        private readonly LinkRepository linkRepository;
         private readonly IRegionManager regionManager;
-        private readonly IEventAggregator eventAggregator;
 
         public ChapterViewModel(
             Chapter chapter,
+            LinkRepository linkRepository,
             OreService oreService,
             IRegionManager regionManager,
             IEventAggregator eventAggregator
             ) {
             Chapter = chapter;
             this.oreService = oreService;
+            this.linkRepository = linkRepository;
             this.regionManager = regionManager;
-            this.eventAggregator = eventAggregator;
 
-            ActivateCommand = new DelegateCommand(Activate);
+            ActivateCommand = new DelegateCommand(() => eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter));
             NewsCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(false, true, true));
             OldsCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(true, false, true));
             LinksCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(true, true, false));
@@ -52,7 +55,7 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get { return isActive; }
-            set { SetProperty(ref isActive, value); }
+            set { SetProperty(ref isActive, value, () => { if (isActive) SetMainView(); }); }
         }
 
         private bool isNewsVisible;
@@ -82,12 +85,9 @@ namespace Allgregator.ViewModels.Rss {
 
         private void SetMainView() {
             var type = IsNewsVisible ? (IsOldsVisible ? typeof(LinksView) : typeof(OldsView)) : typeof(NewsView);
-            regionManager.RequestNavigate(Given.MainRegion, type.Name);
-        }
-
-        private void Activate() {
-            eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
-            SetMainView();
+            var parameters = new NavigationParameters();
+            parameters.Add(null, Chapter);
+            regionManager.RequestNavigate(Given.MainRegion, type.Name, parameters);
         }
 
         private void Open() {
@@ -99,8 +99,12 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async void Update() {
-            //TODO
-            //await oreService.Retrieve(CurrentChapter);
+            if (Chapter.Links == null) {
+                Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
+            }
+
+            await oreService.Retrieve(Chapter);
+            Chapter.Mined.IsNeedToSave = true;
         }
     }
 }

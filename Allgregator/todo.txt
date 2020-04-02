@@ -5,3 +5,5 @@ delete
 когда сохранянть mined
 эвейтизация
 tests: retrieve, outdate, acceptTime
+
+проверить try на все вызовы всех репозиториев

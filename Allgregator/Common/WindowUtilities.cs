@@ -2,6 +2,7 @@
 using Allgregator.Repositories.Rss;
 using Allgregator.Views;
 using DryIoc;
+using Prism.Events;
 using Prism.Ioc;
 using System.Windows;
 
@@ -14,6 +15,8 @@ namespace Allgregator.Common {
             SetWindowBoundsAndState(mainWindow, settings.MainWindowBounds, settings.MainWindowState);
 
             mainWindow.Closing += (s, e) => {
+                var eventAggregator = container.Resolve<IEventAggregator>();
+                eventAggregator.GetEvent<WindowClosingEvent>().Publish(e);
                 var settings = container.Resolve<Settings>();
                 var settingsRepository = container.Resolve<SettingsRepository>();
                 settings.MainWindowBounds = mainWindow.RestoreBounds;
@@ -45,4 +48,7 @@ namespace Allgregator.Common {
                 window.WindowState = state;
         }
     }
+
+    public class WindowClosingEvent : PubSubEvent<System.ComponentModel.CancelEventArgs> { }
+
 }

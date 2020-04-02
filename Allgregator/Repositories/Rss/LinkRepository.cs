@@ -7,7 +7,7 @@ using System.IO;
 namespace Allgregator.Repositories.Rss {
     public class LinkRepository {
         private const string nameFile = "links{0}.json";
-        public IEnumerable<Link> GetLinks(int chapterId) {
+        public IEnumerable<Link> Get(int chapterId) {
             var name = Path.Combine(Given.PathData, string.Format(nameFile, chapterId));
             if (File.Exists(name)) {
                 var json = File.ReadAllText(name);

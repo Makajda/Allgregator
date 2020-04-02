@@ -35,5 +35,8 @@ namespace Allgregator.Models.Rss {
             get => errors;
             set => SetProperty(ref errors, value);
         }
+
+        [JsonIgnore]
+        public bool IsNeedToSave { get; set; }
     }
 }
