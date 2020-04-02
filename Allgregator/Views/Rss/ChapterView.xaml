@@ -7,36 +7,24 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <common:IdEqToVisibilityConverter x:Key="IdEqToVisibilityConverter"/>
+        <common:BooleanToNotVisibilityConverter x:Key="BooleanToNotVisibilityConverter"/>
         <sys:Double x:Key="widthMainButton">150</sys:Double>
 
         <Style TargetType="Button">
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="5,3,5,3"/>
             <Setter Property="Padding" Value="15"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Button Width="{StaticResource widthMainButton}" Content="{Binding Name}" Command="{Binding DataContext.ActivateCommand, 
-            RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}" CommandParameter="{Binding}">
-            <Button.Visibility>
-                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}" ConverterParameter="reverse">
-                    <Binding Path="Id"/>
-                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
-                </MultiBinding>
-            </Button.Visibility>
-        </Button>
+    <Grid Margin="0,0,0,5">
+        <Button Width="{StaticResource widthMainButton}" 
+                Content="{Binding Chapter.Name}" 
+                Command="{Binding ActivateCommand}"
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToNotVisibilityConverter}}"/>
 
-        <Border BorderBrush="Blue" BorderThickness="5">
-            <Border.Visibility>
-                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}">
-                    <Binding Path="Id"/>
-                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
-                </MultiBinding>
-            </Border.Visibility>
-
+        <Border BorderBrush="Blue" 
+                BorderThickness="5"
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -49,27 +37,23 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.RowSpan="2">
-                    <Button Content="news" Command="{Binding DataContext.NewsCommand, 
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
-                            Visibility="{Binding  DataContext.IsNewsVisible, Converter={StaticResource BooleanToVisibilityConverter},
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
-                    <Button Content="olds" Command="{Binding DataContext.OldsCommand, 
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
-                            Visibility="{Binding  DataContext.IsOldsVisible, Converter={StaticResource BooleanToVisibilityConverter},
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
-                    <Button Content="links" Command="{Binding DataContext.LinksCommand,
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"
-                            Visibility="{Binding  DataContext.IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter},
-                        RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                    <Button Content="news" Command="{Binding NewsCommand}"
+                            Visibility="{Binding IsNewsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Content="olds" Command="{Binding OldsCommand}"
+                            Visibility="{Binding IsOldsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Content="links" Command="{Binding LinksCommand}"
+                            Visibility="{Binding  IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </StackPanel>
-                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Width="{StaticResource widthMainButton}" Content="{Binding Name}"
-                        Command="{Binding DataContext.OpenCommand,
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding DataContext.DeleteCommand,
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
-                <Button Grid.Row="1" Grid.Column="2" Content="update" Command="{Binding DataContext.UpdateCommand,
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}"/>
+                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
+                        Width="{StaticResource widthMainButton}" 
+                        Content="{Binding Chapter.Name}"
+                        Command="{Binding OpenCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding DeleteCommand}"/>
+                <Button Grid.Row="1" Grid.Column="2" Content="update" Command="{Binding UpdateCommand}"/>
             </Grid>
         </Border>
+
+        <Rectangle Height="5" Fill="Orange" VerticalAlignment="Bottom" Margin="5,0,5,0"
+                Visibility="{Binding IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

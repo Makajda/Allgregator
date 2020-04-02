@@ -13,7 +13,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" />
+        <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" HorizontalAlignment="Center"/>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

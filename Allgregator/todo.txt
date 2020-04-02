@@ -1,39 +1,7 @@
-﻿1) views
-2) tests: retrieve, outdate, acceptTime
-
-    <Grid Width="150">
-        <Button Content="{Binding Name}" Command="{Binding DataContext.ActivateCommand, 
-            RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}}" CommandParameter="{Binding}">
-            <Button.Visibility>
-                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}" ConverterParameter="reverse">
-                    <Binding Path="Id"/>
-                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
-                </MultiBinding>
-            </Button.Visibility>
-        </Button>
-        
-        <Grid>
-            <Grid.Visibility>
-                <MultiBinding Converter="{StaticResource IdEqToVisibilityConverter}">
-                    <Binding Path="Id"/>
-                    <Binding Path="DataContext.CurrentChapter.Id" RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=2}"/>
-                </MultiBinding>
-            </Grid.Visibility>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Row="0" Grid.Column="0" Content="n/o" Command="{Binding OreCommand}"/>
-            <Button Grid.Row="1" Grid.Column="0" Content="links" Command="{Binding StateCommand}"/>
-            <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{Binding Name}" Command="{Binding StateCommand}"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding StateCommand}"/>
-            <Button Grid.Row="1" Grid.Column="2" Content="update" Command="{Binding StateCommand}"/>
-        </Grid>
-    </Grid>
+﻿template reco
+progress - oreService для каждой главы своя
+open
+delete
+когда сохранянть mined
+эвейтизация
+tests: retrieve, outdate, acceptTime
