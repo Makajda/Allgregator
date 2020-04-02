@@ -30,9 +30,9 @@ namespace Allgregator {
             var recosViewModel = Container.Resolve<RecosViewModel>();
             recosViewModel.IsNews = true;
             recosView.DataContext = recosViewModel;
-            region.Add(recosView, "NewsView");//TODO const
-            region.Add(Container.Resolve<RecosView>(), "OldsView");
-            region.Add(Container.Resolve<LinksView>(), "LinksView");
+            region.Add(recosView, RssChapterViews.NewsView.ToString());
+            region.Add(Container.Resolve<RecosView>(), RssChapterViews.OldsView.ToString());
+            region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {

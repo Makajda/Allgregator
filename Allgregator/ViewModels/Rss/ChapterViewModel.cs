@@ -27,9 +27,9 @@ namespace Allgregator.ViewModels.Rss {
             this.regionManager = regionManager;
 
             ActivateCommand = new DelegateCommand(() => eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter));
-            NewsCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(false, true, true));
-            OldsCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(true, false, true));
-            LinksCommand = new DelegateCommand(() => SetVisibleNewsOldsLinks(true, true, false));
+            NewsCommand = new DelegateCommand(() => CurrentView = RssChapterViews.NewsView);
+            OldsCommand = new DelegateCommand(() => CurrentView = RssChapterViews.OldsView);
+            LinksCommand = new DelegateCommand(() => CurrentView = RssChapterViews.LinksView);
             OpenCommand = new DelegateCommand(Open);
             DeleteCommand = new DelegateCommand(Delete);
             UpdateCommand = new DelegateCommand(Update);
@@ -54,41 +54,21 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get { return isActive; }
-            set { SetProperty(ref isActive, value, () => { if (IsActive) SetMainView(); }); }
+            set { SetProperty(ref isActive, value, () => { if (IsActive) SetView(); }); }
         }
 
-        private bool isNewsVisible;
-        public bool IsNewsVisible {
-            get => isNewsVisible;
-            set => SetProperty(ref isNewsVisible, value);
+        private RssChapterViews currentView;
+        public RssChapterViews CurrentView {
+            get => currentView;
+            private set => SetProperty(ref currentView, value, SetView);
         }
 
-        private bool isOldsVisible = true;
-        public bool IsOldsVisible {
-            get => isOldsVisible;
-            set => SetProperty(ref isOldsVisible, value);
-        }
-
-        private bool isLinksVisible = true;
-        public bool IsLinksVisible {
-            get => isLinksVisible;
-            set => SetProperty(ref isLinksVisible, value);
-        }
-
-        private void SetVisibleNewsOldsLinks(bool news, bool olds, bool links) {
-            IsNewsVisible = news;
-            IsOldsVisible = olds;
-            IsLinksVisible = links;
-            SetMainView();
-        }
-
-        private void SetMainView() {
+        private void SetView() {
             var region = regionManager.Regions[Given.MainRegion];
             region.Context = Chapter;
-            //TODO const var type = IsNewsVisible ? (IsOldsVisible ? typeof(LinksView) : typeof(OldsView)) : typeof(NewsView);
-            //var view = region.GetView(type.Name);
-            //if (view != null)
-            //    region.Activate(view);
+            var view = region.GetView(CurrentView.ToString());
+            if (view != null)
+                region.Activate(view);
         }
 
         private void Open() {

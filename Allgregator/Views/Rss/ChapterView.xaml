@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:common="clr-namespace:Allgregator.Common"
+             xmlns:converters="clr-namespace:Allgregator.Converters"
              >
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <common:BooleanToNotVisibilityConverter x:Key="BooleanToNotVisibilityConverter"/>
+        <converters:BooleanNotToVisibilityConverter x:Key="BooleanNotToVisibilityConverter"/>
+        <converters:IntEqToVisibilityConverter x:Key="IntEqToVisibilityConverter"/>
         <sys:Double x:Key="widthMainButton">150</sys:Double>
 
         <Style TargetType="Button">
@@ -20,7 +22,7 @@
         <Button Width="{StaticResource widthMainButton}" 
                 Content="{Binding Chapter.Name}" 
                 Command="{Binding ActivateCommand}"
-                Visibility="{Binding IsActive, Converter={StaticResource BooleanToNotVisibilityConverter}}"/>
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
 
         <Border BorderBrush="Blue" 
                 BorderThickness="5"
@@ -38,11 +40,17 @@
 
                 <StackPanel Grid.RowSpan="2">
                     <Button Content="news" Command="{Binding NewsCommand}"
-                            Visibility="{Binding IsNewsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            Visibility="{Binding CurrentView, 
+                        Converter={StaticResource IntEqToVisibilityConverter}, 
+                        ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
                     <Button Content="olds" Command="{Binding OldsCommand}"
-                            Visibility="{Binding IsOldsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            Visibility="{Binding CurrentView, 
+                        Converter={StaticResource IntEqToVisibilityConverter}, 
+                        ConverterParameter={x:Static common:RssChapterViews.OldsView}}"/>
                     <Button Content="links" Command="{Binding LinksCommand}"
-                            Visibility="{Binding  IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            Visibility="{Binding CurrentView, 
+                        Converter={StaticResource IntEqToVisibilityConverter}, 
+                        ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
                 </StackPanel>
                 <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
                         Width="{StaticResource widthMainButton}" 

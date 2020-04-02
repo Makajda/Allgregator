@@ -45,6 +45,8 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void OnIsActiveChanged() {
+            IsActiveChanged?.Invoke(this, EventArgs.Empty);
+
             if (IsActive) {
                 Chapter = regionManager.Regions[Given.MainRegion].Context as Chapter;
                 if (Chapter != null) {

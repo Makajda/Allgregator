@@ -10,4 +10,10 @@ namespace Allgregator.Common {
     }
 
     public class ChapterChangedEvent : PubSubEvent<Chapter> { }
+
+    public enum RssChapterViews {
+        NewsView,
+        OldsView,
+        LinksView
+    }
 }
