@@ -39,15 +39,18 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.RowSpan="2">
-                    <Button Content="news" Command="{Binding NewsCommand}"
+                    <Button Content="news" Command="{Binding ViewsCommand}"
+                            CommandParameter="{x:Static common:RssChapterViews.NewsView}"
                             Visibility="{Binding CurrentView, 
                         Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
-                    <Button Content="olds" Command="{Binding OldsCommand}"
+                    <Button Content="olds" Command="{Binding ViewsCommand}"
+                            CommandParameter="{x:Static common:RssChapterViews.OldsView}"
                             Visibility="{Binding CurrentView, 
                         Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.OldsView}}"/>
-                    <Button Content="links" Command="{Binding LinksCommand}"
+                    <Button Content="links" Command="{Binding ViewsCommand}"
+                            CommandParameter="{x:Static common:RssChapterViews.LinksView}"
                             Visibility="{Binding CurrentView, 
                         Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>

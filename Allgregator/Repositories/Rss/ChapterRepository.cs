@@ -15,9 +15,11 @@ namespace Allgregator.Repositories.Rss {
             }
             else {
                 var chapters = new List<Chapter>();
-                chapters.Add(new Chapter(1) { Name = "Основной" });
-                chapters.Add(new Chapter(2) { Name = "Второй" });
-                chapters.Add(new Chapter(3) { Name = "Третий" });
+                chapters.Add(new Chapter(4) { Name = "Четвёртая" });
+                chapters.Add(new Chapter(1) { Name = "Основная" });
+                chapters.Add(new Chapter(2) { Name = "Вторая" });
+                chapters.Add(new Chapter(5) { Name = "Пятая" });
+                chapters.Add(new Chapter(3) { Name = "Третья" });
                 return chapters;
             }
         }

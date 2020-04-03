@@ -5,11 +5,51 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              >
 
-    <Grid>
-        <ListBox Background="Blue"
-                 ItemsSource="{Binding Chapter.Mined.NewRecos}"
-                 DisplayMemberPath="ItemTitle"
-                 >
-        </ListBox>
-    </Grid>
+    <UserControl.Resources>
+        <DataTemplate x:Key="RecosItemTemplate">
+            <Border Background="White" Margin="13" Width="246" Height="398">
+                <Grid>
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="1" Text="{Binding FeedTitle}" FontSize="14"
+                                   TextTrimming="WordEllipsis" TextWrapping="Wrap"
+                                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                                   Foreground="Blue"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ItemTitle}" VerticalAlignment="Top"
+                                   FontSize="16" FontWeight="Medium" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+
+                        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding SummaryText}" Margin="0,10,0,0" VerticalAlignment="Top"
+                                   TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="15"/>
+                    </Grid>
+
+                    <Button Grid.Row="2" Grid.Column="1" Content="x" Background="White"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Opacity="0.2" Width="60" Height="60"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="LightBlue">
+        <ItemsControl x:Name="list"
+                      HorizontalAlignment="Center"
+                      ItemTemplate="{StaticResource RecosItemTemplate}"
+                      >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

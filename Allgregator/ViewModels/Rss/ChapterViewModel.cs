@@ -6,6 +6,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.ObjectModel;
 
 namespace Allgregator.ViewModels.Rss {
@@ -13,6 +14,7 @@ namespace Allgregator.ViewModels.Rss {
         private readonly OreService oreService;
         private readonly LinkRepository linkRepository;
         private readonly IRegionManager regionManager;
+        private readonly IEventAggregator eventAggregator;
 
         public ChapterViewModel(
             Chapter chapter,
@@ -25,11 +27,10 @@ namespace Allgregator.ViewModels.Rss {
             this.oreService = oreService;
             this.linkRepository = linkRepository;
             this.regionManager = regionManager;
+            this.eventAggregator = eventAggregator;
 
-            ActivateCommand = new DelegateCommand(() => eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter));
-            NewsCommand = new DelegateCommand(() => CurrentView = RssChapterViews.NewsView);
-            OldsCommand = new DelegateCommand(() => CurrentView = RssChapterViews.OldsView);
-            LinksCommand = new DelegateCommand(() => CurrentView = RssChapterViews.LinksView);
+            ActivateCommand = new DelegateCommand(Activate);
+            ViewsCommand = new DelegateCommand<RssChapterViews?>((view) => CurrentView = view ?? RssChapterViews.NewsView);
             OpenCommand = new DelegateCommand(Open);
             DeleteCommand = new DelegateCommand(Delete);
             UpdateCommand = new DelegateCommand(Update);
@@ -38,9 +39,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         public DelegateCommand ActivateCommand { get; private set; }
-        public DelegateCommand NewsCommand { get; private set; }
-        public DelegateCommand OldsCommand { get; private set; }
-        public DelegateCommand LinksCommand { get; private set; }
+        public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
@@ -53,8 +52,8 @@ namespace Allgregator.ViewModels.Rss {
 
         private bool isActive;
         public bool IsActive {
-            get { return isActive; }
-            set { SetProperty(ref isActive, value, () => { if (IsActive) SetView(); }); }
+            get => isActive;
+            private set => SetProperty(ref isActive, value, () => { if (IsActive) SetView(); });
         }
 
         private RssChapterViews currentView;
@@ -63,9 +62,12 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref currentView, value, SetView);
         }
 
+        public void Activate() {
+            eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
+        }
+
         private void SetView() {
             var region = regionManager.Regions[Given.MainRegion];
-            region.Context = Chapter;
             var view = region.GetView(CurrentView.ToString());
             if (view != null)
                 region.Activate(view);
@@ -80,12 +82,16 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async void Update() {
-            if (Chapter.Links == null) {
-                Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
-            }
+            if (Chapter != null) {
+                if (Chapter.Links == null) {
+                    Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
+                }
 
-            await oreService.Retrieve(Chapter);
-            Chapter.Mined.IsNeedToSave = true;
+                await oreService.Retrieve(Chapter);
+                if (Chapter.Mined != null) {
+                    Chapter.Mined.IsNeedToSave = true;
+                }
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Allgregator.ViewModels.Rss {
             this.minedRepository = minedRepository;
             this.regionManager = regionManager;
 
+            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => Chapter = chapter);
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(SaveMined);
         }
 
@@ -29,13 +30,11 @@ namespace Allgregator.ViewModels.Rss {
         private Chapter chapter;
         public Chapter Chapter {
             get => chapter;
-            private set => SetProperty(ref chapter, value, () => SaveMined());
-        }
-
-        private bool isNews;
-        public bool IsNews {
-            get => isNews;
-            set => SetProperty(ref isNews, value);
+            private set {
+                SaveMined();
+                SetProperty(ref chapter, value);
+                LoadMined();
+            }
         }
 
         private bool isActive;
@@ -46,9 +45,11 @@ namespace Allgregator.ViewModels.Rss {
 
         private void OnIsActiveChanged() {
             IsActiveChanged?.Invoke(this, EventArgs.Empty);
+            LoadMined();
+        }
 
+        private void LoadMined() {
             if (IsActive) {
-                Chapter = regionManager.Regions[Given.MainRegion].Context as Chapter;
                 if (Chapter != null) {
                     if (Chapter.Mined == null) {
                         Chapter.Mined = minedRepository.Get(Chapter.Id);

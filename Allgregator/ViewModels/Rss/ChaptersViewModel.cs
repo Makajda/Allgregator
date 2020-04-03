@@ -34,7 +34,7 @@ namespace Allgregator.ViewModels.Rss {
                 }
 
                 if (currentChapter != null) {
-                    currentChapter.IsActive = true;
+                    currentChapter.Activate();
                 }
             }
         }
