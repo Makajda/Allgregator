@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Services.Rss {
     public class OreService : BindableBase {
-        private Settings settings;
-
+        private readonly Settings settings;
         private CancellationTokenSource cancellationTokenSource;
-        private bool isRetrieveCanceled = true;
-
         private IProgress<int> progressIndicator;
         private int progressValue;
         private int progressMaximum;
@@ -24,6 +21,12 @@ namespace Allgregator.Services.Rss {
             this.settings = settings;
 
             progressIndicator = new Progress<int>((one) => ProgressValue++);
+        }
+
+        private bool isRetrieving;
+        public bool IsRetrieving {
+            get { return isRetrieving; }
+            set { SetProperty(ref isRetrieving, value); }
         }
 
         public int ProgressValue {
@@ -39,7 +42,7 @@ namespace Allgregator.Services.Rss {
         public void CancelRetrieve() {
             try {
                 if (cancellationTokenSource != null && cancellationTokenSource.Token.CanBeCanceled) {
-                    isRetrieveCanceled = true;
+                    IsRetrieving = false;
                     cancellationTokenSource.Cancel();
                 }
             }
@@ -51,11 +54,11 @@ namespace Allgregator.Services.Rss {
                 return;
             }
 
-            isRetrieveCanceled = false;
+            IsRetrieving = true;
             using (var retrieveService = new RetrieveService()) {
                 using (cancellationTokenSource = new CancellationTokenSource()) {
-                    ProgressMaximum = chapter.Links.Count;
-                    ProgressValue = 0;
+                    ProgressMaximum = chapter.Links.Count + 1;
+                    ProgressValue = 1;
                     var lastRetrieve = DateTimeOffset.Now;
                     var outdated = chapter.Mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
                     await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
@@ -63,11 +66,12 @@ namespace Allgregator.Services.Rss {
                         progressIndicator.Report(1);
                     }, cancellationTokenSource.Token)));
 
-                    if (!isRetrieveCanceled) {
+                    if (IsRetrieving) {
                         chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderBy(n => n.PublishDate));
                         chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderBy(n => n.PublishDate));
                         chapter.Mined.Errors = retrieveService.Errors.ToList();
                         chapter.Mined.LastRetrieve = lastRetrieve;
+                        IsRetrieving = false;
                     }
                 }
             }

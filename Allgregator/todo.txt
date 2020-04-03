@@ -1,5 +1,4 @@
 ﻿template reco
-progress - oreService для каждой главы своя
 open
 delete
 когда сохранянть mined

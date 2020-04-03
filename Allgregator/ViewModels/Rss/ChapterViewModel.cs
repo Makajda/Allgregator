@@ -10,7 +10,6 @@ using System.Collections.ObjectModel;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
-        private readonly OreService oreService;
         private readonly LinkRepository linkRepository;
         private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
@@ -23,7 +22,7 @@ namespace Allgregator.ViewModels.Rss {
             IEventAggregator eventAggregator
             ) {
             Chapter = chapter;
-            this.oreService = oreService;
+            OreService = oreService;
             this.linkRepository = linkRepository;
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
@@ -42,6 +41,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
+        public OreService OreService { get; private set; }
 
         private Chapter chapter;
         public Chapter Chapter {
@@ -86,7 +86,7 @@ namespace Allgregator.ViewModels.Rss {
                     Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
                 }
 
-                await oreService.Retrieve(Chapter);
+                await OreService.Retrieve(Chapter);
                 if (Chapter.Mined != null) {
                     Chapter.Mined.IsNeedToSave = true;
                 }

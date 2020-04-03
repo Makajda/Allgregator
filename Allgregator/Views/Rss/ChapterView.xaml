@@ -64,7 +64,12 @@
             </Grid>
         </Border>
 
-        <Rectangle Height="5" Fill="Orange" VerticalAlignment="Bottom" Margin="5,0,5,0"
-                Visibility="{Binding IsLinksVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <ProgressBar Height="5" 
+                     Background="Orange" 
+                     VerticalAlignment="Bottom" Margin="5,0,5,0"
+                     Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
+                     Value="{Binding OreService.ProgressValue, Mode=OneWay}"
+                     ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
+                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
