@@ -1,7 +1,7 @@
-﻿template reco
+﻿foreground и background везде
+template reco img
 open
 delete
-когда сохранянть mined
 эвейтизация
 tests: retrieve, outdate, acceptTime
 

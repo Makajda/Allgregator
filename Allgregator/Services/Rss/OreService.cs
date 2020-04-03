@@ -69,7 +69,7 @@ namespace Allgregator.Services.Rss {
                     if (IsRetrieving) {
                         chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderBy(n => n.PublishDate));
                         chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderBy(n => n.PublishDate));
-                        chapter.Mined.Errors = retrieveService.Errors.ToList();
+                        chapter.Mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();
                         chapter.Mined.LastRetrieve = lastRetrieve;
                         IsRetrieving = false;
                     }

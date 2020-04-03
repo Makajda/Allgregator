@@ -33,7 +33,7 @@ namespace Allgregator.Views.Rss {
 
                 var path = string.Format("{0}.{1}.{2}{3}s", nameof(Chapter), nameof(Mined), isNew ? "New" : "Old", nameof(Reco));
                 view.list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
-                view.Background = isNew ? Brushes.LightGreen : Brushes.SandyBrown;
+                view.Background = isNew ? Brushes.LightBlue : Brushes.SandyBrown;
             }
         }
     }

@@ -7,7 +7,7 @@
     
     <Grid>
         <ListBox Background="Red"
-                 ItemsSource="{Binding CurrentChapter.Mined.Links}"
+                 ItemsSource="{Binding Chapter.Links}"
                  DisplayMemberPath="Name"
                  >
         </ListBox>

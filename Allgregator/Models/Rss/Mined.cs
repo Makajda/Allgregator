@@ -30,7 +30,6 @@ namespace Allgregator.Models.Rss {
             set => SetProperty(ref oldRecos, value);
         }
 
-        [JsonIgnore]
         public IEnumerable<Error> Errors {
             get => errors;
             set => SetProperty(ref errors, value);

@@ -10,16 +10,26 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BooleanNotToVisibilityConverter x:Key="BooleanNotToVisibilityConverter"/>
         <converters:IntEqToVisibilityConverter x:Key="IntEqToVisibilityConverter"/>
+        <converters:NullToBrushConverter x:Key="NullToBrushConverter" BrushNotNull="Red" BrushNull="Black"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <sys:Double x:Key="widthMainButton">150</sys:Double>
 
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5,3,5,3"/>
             <Setter Property="Padding" Value="15"/>
         </Style>
+
+        <DataTemplate x:Key="errorItemTemplate">
+            <StackPanel Orientation="Horizontal" Background="Red">
+                <TextBlock Text="{Binding Link.Name}" Width="150" Margin="20" Foreground="White" FontSize="14"/>
+                <TextBlock Text="{Binding Exception.Message}" Width="450" Margin="0,20,20,20" Foreground="White" FontSize="14"/>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid Margin="0,0,0,5">
         <Button Width="{StaticResource widthMainButton}" 
+                Foreground="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToBrushConverter}}"
                 Content="{Binding Chapter.Name}" 
                 Command="{Binding ActivateCommand}"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
@@ -35,6 +45,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -57,10 +68,23 @@
                 </StackPanel>
                 <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
                         Width="{StaticResource widthMainButton}" 
-                        Content="{Binding Chapter.Name}"
-                        Command="{Binding OpenCommand}"/>
+                        Foreground="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToBrushConverter}}"
+                        Command="{Binding OpenCommand}">
+                    <Button.Content>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Chapter.Name}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Chapter.Mined.LastRetrieve}"/>
+                            <TextBlock Text="{Binding Chapter.Mined.AcceptTime}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <Button Grid.Row="0" Grid.Column="2" Content="del" Command="{Binding DeleteCommand}"/>
                 <Button Grid.Row="1" Grid.Column="2" Content="update" Command="{Binding UpdateCommand}"/>
+                <ToggleButton Grid.RowSpan="2" Grid.Column="3" Content="errors" x:Name="errorsButton" Margin="5,3,5,3" Padding="15"
+                              Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"/>
+                <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False">
+                    <ListBox ItemsSource="{Binding Chapter.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
+                </Popup>
             </Grid>
         </Border>
 
