@@ -7,7 +7,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="RecosItemTemplate">
-            <Border Background="White" Margin="13" Width="246" Height="398">
+            <Border Background="White" Margin="13" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray">
                 <Grid>
                     <Grid Margin="20">
                         <Grid.RowDefinitions>
@@ -40,7 +40,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="LightBlue">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <ItemsControl x:Name="list"
                       HorizontalAlignment="Center"
                       ItemTemplate="{StaticResource RecosItemTemplate}"
