@@ -3,11 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:converters="clr-namespace:Allgregator.Converters"
              >
 
     <UserControl.Resources>
+        <converters:UriToImageConverter x:Key="UriToImageConverter"/>
+
         <DataTemplate x:Key="RecosItemTemplate">
-            <Border Background="White" Margin="13" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray">
+            <Border Background="White" Margin="9" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray">
                 <Grid>
                     <Grid Margin="20">
                         <Grid.RowDefinitions>
@@ -21,6 +24,9 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
+                        <Image Grid.RowSpan="2" Source="{Binding ImageUri, Converter={StaticResource UriToImageConverter}}"
+                               Stretch="Uniform" MaxHeight="50" MaxWidth="50" Margin="0,0,10,0" VerticalAlignment="Top"/>
+
                         <TextBlock Grid.Column="1" Text="{Binding FeedTitle}" FontSize="14"
                                    TextTrimming="WordEllipsis" TextWrapping="Wrap"
                                    HorizontalAlignment="Right" VerticalAlignment="Top"
@@ -33,8 +39,9 @@
                                    TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="15"/>
                     </Grid>
 
-                    <Button Grid.Row="2" Grid.Column="1" Content="x" Background="White"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Opacity="0.2" Width="60" Height="60"/>
+                    <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent" 
+                          VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60"
+                          ToolTip="&#x2717;"/>
                 </Grid>
             </Border>
         </DataTemplate>

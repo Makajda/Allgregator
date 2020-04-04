@@ -27,7 +27,6 @@ namespace Allgregator.ViewModels.Rss {
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
 
-            ActivateCommand = new DelegateCommand(Activate);
             ViewsCommand = new DelegateCommand<RssChapterViews?>((view) => CurrentView = view ?? RssChapterViews.NewsView);
             OpenCommand = new DelegateCommand(Open);
             DeleteCommand = new DelegateCommand(Delete);
@@ -36,7 +35,6 @@ namespace Allgregator.ViewModels.Rss {
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => IsActive = chapter.Id == Chapter.Id);
         }
 
-        public DelegateCommand ActivateCommand { get; private set; }
         public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand DeleteCommand { get; private set; }
@@ -73,7 +71,12 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void Open() {
-            //TODO
+            if (IsActive) {
+                //TODO
+            }
+            else {
+                Activate();
+            }
         }
 
         private void Delete() {

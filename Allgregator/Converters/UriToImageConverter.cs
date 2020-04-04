@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Allgregator.Common;
+using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Converters {
-    public class IntEqToVisibilityConverter : IValueConverter {
+    public class UriToImageConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (int)value == (int)parameter ? Visibility.Collapsed : Visibility.Visible;
+            return CacheImageHelper.Get(value as Uri);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
