@@ -28,6 +28,7 @@
         <Button x:Key="mainButton" x:Shared="False"
                 Width="150" Padding="0"
                 Foreground="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToBrushConverter}}"
+                Background="LightGoldenrodYellow"
                 VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
                 Command="{Binding OpenCommand}">
             <DockPanel LastChildFill="True">
@@ -71,24 +72,27 @@
                 <StackPanel Grid.RowSpan="2">
                     <Button Content="&#x27F0;" Command="{Binding ViewsCommand}"
                             CommandParameter="{x:Static common:RssChapterViews.NewsView}"
-                            Visibility="{Binding CurrentView, 
-                        Converter={StaticResource IntEqToVisibilityConverter}, 
+                            Background="LightBlue"
+                            Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
                     <Button Content="&#x27F1;" Command="{Binding ViewsCommand}"
                             CommandParameter="{x:Static common:RssChapterViews.OldsView}"
+                            Background="SandyBrown"
                             Visibility="{Binding CurrentView, 
                         Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.OldsView}}"/>
                     <Button Content="&#x1D118;" Command="{Binding ViewsCommand}"
                             CommandParameter="{x:Static common:RssChapterViews.LinksView}"
+                            Background="LightGreen"
                             Visibility="{Binding CurrentView, 
                         Converter={StaticResource IntEqToVisibilityConverter}, 
                         ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
                 </StackPanel>
                 <ContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{StaticResource mainButton}"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="&#x2715;" Command="{Binding DeleteCommand}"/>
-                <Button Grid.Row="1" Grid.Column="2" Content="&#x2B6E;" Command="{Binding UpdateCommand}"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="&#x2715;" Background="SandyBrown" Command="{Binding MoveCommand}"/>
+                <Button Grid.Row="1" Grid.Column="2" Content="&#x2B6E;" Background="LightBlue" Command="{Binding UpdateCommand}"/>
                 <ToggleButton Grid.RowSpan="2" Grid.Column="3" Content="&#x1D166;" x:Name="errorsButton"
+                              Background="Red"
                               Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"/>
                 <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False">
                     <ListBox ItemsSource="{Binding Chapter.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>

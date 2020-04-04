@@ -13,7 +13,8 @@
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
-            <Border Background="White" Margin="9" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray">
+            <Border Background="White" Margin="9" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray"
+                    MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <Grid>
                     <Grid Margin="20">
                         <i:Interaction.Triggers>
@@ -50,6 +51,7 @@
 
                     <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent"
                           VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60" ToolTip="&#x2717;"
+                          MouseEnter="Path_MouseEnter" MouseLeave="Path_MouseLeave"
                           Visibility="{Binding IsNew, ElementName=view, ConverterParameter={StaticResource BooleanToVisibilityConverter}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonUp">

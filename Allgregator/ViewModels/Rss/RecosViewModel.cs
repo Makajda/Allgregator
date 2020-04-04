@@ -28,12 +28,6 @@ namespace Allgregator.ViewModels.Rss {
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(SaveMined);
         }
 
-        private void Move(Reco reco) {
-            Chapter.Mined.NewRecos.Remove(reco);
-            Chapter.Mined.OldRecos.Insert(0, reco);
-            Chapter.Mined.IsNeedToSave = true;
-        }
-
         public event EventHandler IsActiveChanged;
         public DelegateCommand<Reco> OpenCommand { get; private set; }
         public DelegateCommand<Reco> MoveCommand { get; private set; }
@@ -59,12 +53,16 @@ namespace Allgregator.ViewModels.Rss {
             LoadMined();
         }
 
+        private void Move(Reco reco) {
+            Chapter.Mined.NewRecos.Remove(reco);
+            Chapter.Mined.OldRecos.Insert(0, reco);
+            Chapter.Mined.IsNeedToSave = true;
+        }
+
         private void LoadMined() {
             if (IsActive) {
                 if (Chapter != null) {
-                    if (Chapter.Mined == null) {
-                        Chapter.Mined = minedRepository.Get(Chapter.Id);
-                    }
+                    if (Chapter.Mined == null) Chapter.Mined = minedRepository.Get(Chapter.Id);
                 }
             }
         }

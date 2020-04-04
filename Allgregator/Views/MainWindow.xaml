@@ -7,7 +7,7 @@
         Title="{Binding Title}"
         >
 
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />

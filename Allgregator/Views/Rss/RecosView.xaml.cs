@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Allgregator.Views.Rss {
     /// <summary>
@@ -35,6 +36,22 @@ namespace Allgregator.Views.Rss {
                 view.list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
                 view.Background = isNew ? Brushes.LightBlue : Brushes.SandyBrown;
             }
+        }
+
+        private void Grid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
+            ((Border)sender).Background = Brushes.Azure;
+        }
+
+        private void Grid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
+            ((Border)sender).Background = Brushes.White;
+        }
+
+        private void Path_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
+            ((Path)sender).Fill= Brushes.SandyBrown;
+        }
+
+        private void Path_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {
+            ((Path)sender).Fill = Brushes.Transparent;
         }
     }
 }

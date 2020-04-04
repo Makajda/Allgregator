@@ -1,5 +1,4 @@
-﻿using Allgregator.Models;
-using Allgregator.Models.Rss;
+﻿using Allgregator.Models.Rss;
 using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
@@ -9,17 +8,12 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Services.Rss {
     public class OreService : BindableBase {
-        private readonly Settings settings;
         private CancellationTokenSource cancellationTokenSource;
         private IProgress<int> progressIndicator;
         private int progressValue;
         private int progressMaximum;
 
-        public OreService(
-            Settings settings
-            ) {
-            this.settings = settings;
-
+        public OreService() {
             progressIndicator = new Progress<int>((one) => ProgressValue++);
         }
 
@@ -62,13 +56,13 @@ namespace Allgregator.Services.Rss {
                     var lastRetrieve = DateTimeOffset.Now;
                     var outdated = chapter.Mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
                     await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
-                        retrieveService.Production(link, chapter.Mined.AcceptTime, settings.RssCutoffTime, outdated);
+                        retrieveService.Production(link, chapter.Mined.AcceptTime, chapter.Mined.CutoffTime, outdated);
                         progressIndicator.Report(1);
                     }, cancellationTokenSource.Token)));
 
                     if (IsRetrieving) {
-                        chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderBy(n => n.PublishDate));
-                        chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderBy(n => n.PublishDate));
+                        chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderByDescending(n => n.PublishDate));
+                        chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderByDescending(n => n.PublishDate));
                         chapter.Mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();
                         chapter.Mined.LastRetrieve = lastRetrieve;
                         IsRetrieving = false;

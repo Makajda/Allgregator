@@ -7,6 +7,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
@@ -29,7 +30,7 @@ namespace Allgregator.ViewModels.Rss {
 
             ViewsCommand = new DelegateCommand<RssChapterViews?>((view) => CurrentView = view ?? RssChapterViews.NewsView);
             OpenCommand = new DelegateCommand(Open);
-            DeleteCommand = new DelegateCommand(Delete);
+            MoveCommand = new DelegateCommand(Move);
             UpdateCommand = new DelegateCommand(Update);
 
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => IsActive = chapter.Id == Chapter.Id);
@@ -37,7 +38,7 @@ namespace Allgregator.ViewModels.Rss {
 
         public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand OpenCommand { get; private set; }
-        public DelegateCommand DeleteCommand { get; private set; }
+        public DelegateCommand MoveCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
         public OreService OreService { get; private set; }
 
@@ -59,40 +60,39 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref currentView, value, SetView);
         }
 
-        public void Activate() {
-            eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
-        }
+        public void Activate() => eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
 
         private void SetView() {
             var region = regionManager.Regions[Given.MainRegion];
             var view = region.GetView(CurrentView.ToString());
-            if (view != null)
-                region.Activate(view);
+            if (view != null) region.Activate(view);
         }
 
         private void Open() {
             if (IsActive) {
-                //TODO open all
+                if (Chapter?.Mined?.NewRecos != null) {
+                    foreach (var reco in Chapter.Mined.NewRecos) WindowUtilities.Run(reco.Uri.ToString());
+                }
             }
-            else {
-                Activate();
-            }
+            else Activate();
         }
 
-        private void Delete() {
-            //TODO
+        private void Move() {
+            if (Chapter?.Mined?.NewRecos != null) {
+                Chapter.Mined.IsNeedToSave = true;
+                foreach (var reco in Chapter.Mined.NewRecos.ToList()) {
+                    Chapter.Mined.NewRecos.Remove(reco);
+                    Chapter.Mined.OldRecos.Insert(0, reco);
+                }
+            }
         }
 
         private async void Update() {
             if (Chapter != null) {
-                if (Chapter.Links == null) {
-                    Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
-                }
+                if (Chapter.Links == null) Chapter.Links = new ObservableCollection<Link>(linkRepository.Get(Chapter.Id));
 
                 await OreService.Retrieve(Chapter);
-                if (Chapter.Mined != null) {
-                    Chapter.Mined.IsNeedToSave = true;
-                }
+                if (Chapter.Mined != null) Chapter.Mined.IsNeedToSave = true;
             }
         }
     }

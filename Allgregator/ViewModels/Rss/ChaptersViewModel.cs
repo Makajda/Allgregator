@@ -29,13 +29,9 @@ namespace Allgregator.ViewModels.Rss {
                 Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
 
                 var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == settings.RssChapterId);
-                if (currentChapter == null) {
-                    currentChapter = Chapters.FirstOrDefault();
-                }
+                if (currentChapter == null) currentChapter = Chapters.FirstOrDefault();
 
-                if (currentChapter != null) {
-                    currentChapter.Activate();
-                }
+                if (currentChapter != null) currentChapter.Activate();
             }
         }
 
