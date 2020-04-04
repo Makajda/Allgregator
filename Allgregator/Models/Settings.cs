@@ -1,5 +1,4 @@
 ﻿using Prism.Mvvm;
-using System;
 using System.Windows;
 
 namespace Allgregator.Models {
@@ -7,11 +6,5 @@ namespace Allgregator.Models {
         public Rect MainWindowBounds { get; set; }
         public WindowState MainWindowState { get; set; }
         public int RssChapterId { get; set; } = 1;
-
-        private DateTimeOffset rssCutoffTime = DateTimeOffset.Now.AddMonths(-7);
-        public DateTimeOffset RssCutoffTime {
-            get => rssCutoffTime;
-            set => SetProperty(ref rssCutoffTime, value);
-        }
     }
 }

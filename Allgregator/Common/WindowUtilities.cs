@@ -4,6 +4,8 @@ using Allgregator.Views;
 using DryIoc;
 using Prism.Events;
 using Prism.Ioc;
+using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Allgregator.Common {
@@ -46,6 +48,17 @@ namespace Allgregator.Common {
             }
             else
                 window.WindowState = state;
+        }
+
+        public static void Run(string name) {
+            var myProcess = new Process();
+
+            try {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = name;
+                myProcess.Start();
+            }
+            catch (Exception) { }
         }
     }
 

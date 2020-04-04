@@ -2,6 +2,7 @@
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Prism;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -20,12 +21,22 @@ namespace Allgregator.ViewModels.Rss {
             ) {
             this.minedRepository = minedRepository;
             this.regionManager = regionManager;
+            OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri.ToString()));
+            MoveCommand = new DelegateCommand<Reco>(Move);
 
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => Chapter = chapter);
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(SaveMined);
         }
 
+        private void Move(Reco reco) {
+            Chapter.Mined.NewRecos.Remove(reco);
+            Chapter.Mined.OldRecos.Insert(0, reco);
+            Chapter.Mined.IsNeedToSave = true;
+        }
+
         public event EventHandler IsActiveChanged;
+        public DelegateCommand<Reco> OpenCommand { get; private set; }
+        public DelegateCommand<Reco> MoveCommand { get; private set; }
 
         private Chapter chapter;
         public Chapter Chapter {

@@ -72,7 +72,7 @@ namespace Allgregator.ViewModels.Rss {
 
         private void Open() {
             if (IsActive) {
-                //TODO
+                //TODO open all
             }
             else {
                 Activate();

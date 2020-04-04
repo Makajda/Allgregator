@@ -1,7 +1,5 @@
 ﻿foreground и background везде
-template reco img
-open
-delete
+sort recos
 эвейтизация
 tests: retrieve, outdate, acceptTime
 

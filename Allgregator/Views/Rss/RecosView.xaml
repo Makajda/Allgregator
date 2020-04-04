@@ -4,15 +4,24 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:converters="clr-namespace:Allgregator.Converters"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             x:Name="view"
              >
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
             <Border Background="White" Margin="9" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray">
                 <Grid>
                     <Grid Margin="20">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <i:InvokeCommandAction Command="{Binding DataContext.OpenCommand, ElementName=list}" CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -39,9 +48,15 @@
                                    TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="15"/>
                     </Grid>
 
-                    <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent" 
-                          VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60"
-                          ToolTip="&#x2717;"/>
+                    <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent"
+                          VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60" ToolTip="&#x2717;"
+                          Visibility="{Binding IsNew, ElementName=view, ConverterParameter={StaticResource BooleanToVisibilityConverter}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                <i:InvokeCommandAction Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Path>
                 </Grid>
             </Border>
         </DataTemplate>
