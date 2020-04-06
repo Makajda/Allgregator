@@ -1,15 +1,9 @@
-﻿using Allgregator.Common;
-using Allgregator.Models;
+﻿using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
-using Allgregator.Services.Rss;
-using Allgregator.Views.Rss;
-using Prism.Commands;
 using Prism.DryIoc;
 using Prism.Ioc;
-using Prism.Events;
 using Prism.Mvvm;
-using Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Linq;
 

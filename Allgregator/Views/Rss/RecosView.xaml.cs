@@ -25,13 +25,17 @@ namespace Allgregator.Views.Rss {
 
         private void RecosView_Loaded(object sender, RoutedEventArgs e) {
             var color = (Color)ColorConverter.ConvertFromString("#91C9FF");
-            if (IsNew)
+            string part;
+            if (IsNew) {
                 Background = new SolidColorBrush(color);
+                part = "New";
+            }
             else {
                 Background = new LinearGradientBrush(color, Colors.SandyBrown, 90);
+                part = "Old";
             }
 
-            var path = string.Format("{0}.{1}.{2}{3}s", nameof(Chapter), nameof(Mined), IsNew ? "New" : "Old", nameof(Reco));
+            var path = string.Format("{0}.{1}.{2}{3}s", nameof(Chapter), nameof(Mined), part, nameof(Reco));
             list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
         }
 

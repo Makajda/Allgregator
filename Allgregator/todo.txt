@@ -1,5 +1,4 @@
 ﻿foreground и background везде
-newtonjson remove
 эвейтизация
 tests: retrieve, outdate, acceptTime
 
