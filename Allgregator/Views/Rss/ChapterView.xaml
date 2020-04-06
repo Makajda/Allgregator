@@ -14,7 +14,6 @@
         <converters:TodayConverter x:Key="TodayConverter"/>
 
         <Style x:Key="buttonBase" TargetType="ButtonBase">
-            <Setter Property="Margin" Value="2"/>
             <Setter Property="Padding" Value="15"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
@@ -51,11 +50,11 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="0,0,0,5">
+    <Grid Margin="0,0,1,30">
         <ContentControl Content="{StaticResource mainButton}" Visibility="{Binding IsActive, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
 
-        <Border BorderBrush="Blue" 
-                BorderThickness="5"
+        <Border BorderBrush="Gray" 
+                BorderThickness="0,0,3,3"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>

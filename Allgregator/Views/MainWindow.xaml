@@ -7,13 +7,22 @@
         Title="{Binding Title}"
         >
 
-    <Grid Background="AliceBlue">
+    <Grid Background="#91C9FF">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" HorizontalAlignment="Center"/>
+        <TextBlock Text="Rss" 
+                   FontSize="48" 
+                   FontStretch="ExtraExpanded"
+                   FontFamily="Comic"
+                   VerticalAlignment="Center" 
+                   Margin="50,0,0,0"
+                   Foreground="Green"
+                   />
+
+        <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" HorizontalAlignment="Right"/>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

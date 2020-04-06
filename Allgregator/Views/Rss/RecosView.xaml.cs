@@ -12,30 +12,27 @@ namespace Allgregator.Views.Rss {
     public partial class RecosView : UserControl {
         public RecosView() {
             InitializeComponent();
+
+            Loaded += RecosView_Loaded;
         }
 
-        public RecosView(bool? isNew)
+        public RecosView(bool isNew)
             : this() {
             IsNew = isNew;
         }
 
-        public bool? IsNew {
-            get => (bool?)GetValue(IsNewProperty);
-            set => SetValue(IsNewProperty, value);
-        }
+        public bool IsNew { get; private set; }
 
-        public static readonly DependencyProperty IsNewProperty =
-            DependencyProperty.Register("IsNew", typeof(bool?), typeof(RecosView), new PropertyMetadata(null, OnIsNewChanged));
-
-        private static void OnIsNewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (e.NewValue != null) {
-                var view = (RecosView)d;
-                var isNew = ((bool?)e.NewValue).Value;
-
-                var path = string.Format("{0}.{1}.{2}{3}s", nameof(Chapter), nameof(Mined), isNew ? "New" : "Old", nameof(Reco));
-                view.list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
-                view.Background = isNew ? Brushes.LightBlue : Brushes.SandyBrown;
+        private void RecosView_Loaded(object sender, RoutedEventArgs e) {
+            var color = (Color)ColorConverter.ConvertFromString("#91C9FF");
+            if (IsNew)
+                Background = new SolidColorBrush(color);
+            else {
+                Background = new LinearGradientBrush(color, Colors.SandyBrown, 90);
             }
+
+            var path = string.Format("{0}.{1}.{2}{3}s", nameof(Chapter), nameof(Mined), IsNew ? "New" : "Old", nameof(Reco));
+            list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
         }
 
         private void Grid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -47,7 +44,7 @@ namespace Allgregator.Views.Rss {
         }
 
         private void Path_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) {
-            ((Path)sender).Fill= Brushes.SandyBrown;
+            ((Path)sender).Fill = Brushes.SandyBrown;
         }
 
         private void Path_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) {

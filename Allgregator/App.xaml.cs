@@ -24,7 +24,7 @@ namespace Allgregator {
             var regionManager = Container.Resolve<IRegionManager>();
             var region = regionManager.Regions[Given.MainRegion];
             region.Add(Container.Resolve<RecosView>((typeof(bool), true)), RssChapterViews.NewsView.ToString());
-            region.Add(Container.Resolve<RecosView>((typeof(bool), false)), RssChapterViews.OldsView.ToString());
+            region.Add(Container.Resolve<RecosView>(), RssChapterViews.OldsView.ToString());
             region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
             regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));//last
         }
