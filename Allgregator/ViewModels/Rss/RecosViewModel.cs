@@ -7,6 +7,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class RecosViewModel : BindableBase, IActiveAware {
@@ -20,8 +21,9 @@ namespace Allgregator.ViewModels.Rss {
             OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri.ToString()));
             MoveCommand = new DelegateCommand<Reco>(Move);
 
-            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => Chapter = chapter);
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(SaveMined);
+            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(ChangeChapter);
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(async (cancelEventArgs) => await Save(cancelEventArgs));
+            IsActiveChanged += async (s, e) => await Load();
         }
 
         public event EventHandler IsActiveChanged;
@@ -31,22 +33,13 @@ namespace Allgregator.ViewModels.Rss {
         private Chapter chapter;
         public Chapter Chapter {
             get => chapter;
-            private set {
-                SaveMined();
-                SetProperty(ref chapter, value);
-                LoadMined();
-            }
+            private set => SetProperty(ref chapter, value);
         }
 
         private bool isActive;
         public bool IsActive {
             get => isActive;
-            set => SetProperty(ref isActive, value, OnIsActiveChanged);
-        }
-
-        private void OnIsActiveChanged() {
-            IsActiveChanged?.Invoke(this, EventArgs.Empty);
-            LoadMined();
+            set => SetProperty(ref isActive, value, () => IsActiveChanged?.Invoke(this, EventArgs.Empty));
         }
 
         private void Move(Reco reco) {
@@ -55,28 +48,37 @@ namespace Allgregator.ViewModels.Rss {
             Chapter.Mined.IsNeedToSave = true;
         }
 
-        private void LoadMined() {
-            if (IsActive) {
-                if (Chapter != null) {
-                    if (Chapter.Mined == null) Chapter.Mined = minedRepository.Get(Chapter.Id);
+        private async void ChangeChapter(Chapter chapter) {
+            await Save();
+            Chapter = chapter;
+            await Load();
+        }
+
+        private async Task Load() {
+            if (IsActive && Chapter != null && Chapter.Mined == null) {
+                try {
+                    Chapter.Mined = await minedRepository.Get(Chapter.Id);
                 }
+                catch (Exception) { /*//TODO Log*/ }
             }
         }
 
-        private void SaveMined(CancelEventArgs cancelEventArgs = null) {
-            if (Chapter != null) {
-                if (Chapter.Mined != null) {
-                    var mined = Chapter.Mined;
-                    if (mined.IsNeedToSave) {
-                        if (mined.NewRecos != null && mined.NewRecos.Count == 0) {
-                            mined.AcceptTime = mined.LastRetrieve;
-                        }
+        private async Task Save(CancelEventArgs cancelEventArgs = null) {
+            if (Chapter != null && Chapter.Mined != null) {
+                var mined = Chapter.Mined;
+                if (mined.IsNeedToSave) {
+                    if (mined.NewRecos != null && mined.NewRecos.Count == 0) {
+                        mined.AcceptTime = mined.LastRetrieve;
+                    }
 
-                        minedRepository.Save(Chapter.Id, mined);
+                    try {
+                        await minedRepository.Save(Chapter.Id, mined);
                         Chapter.Mined.IsNeedToSave = false;
                     }
+                    catch (Exception) { /*//TODO Log*/ }
                 }
             }
         }
     }
 }
+

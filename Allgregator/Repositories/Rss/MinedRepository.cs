@@ -1,13 +1,15 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models.Rss;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
-        public Mined Get(int chapterId) {
+        public async Task<Mined> Get(int chapterId) {
             var (entryName, fileName) = GetNames(chapterId);
 
             try {
@@ -17,8 +19,8 @@ namespace Allgregator.Repositories.Rss {
                         if (entry != null) {
                             using (var stream = entry.Open()) {
                                 using (var reader = new StreamReader(entry.Open())) {
-                                    var json = reader.ReadToEnd();
-                                    return JsonConvert.DeserializeObject<Mined>(json);
+                                    var json = await reader.ReadToEndAsync();
+                                    return JsonSerializer.Deserialize<Mined>(json);
                                 }
                             }
                         }
@@ -30,7 +32,7 @@ namespace Allgregator.Repositories.Rss {
             return new Mined();
         }
 
-        public void Save(int chapterId, Mined mined) {
+        public async Task Save(int chapterId, Mined mined) {
             var (entryName, fileName) = GetNames(chapterId);
 
             using (var fileStream = new FileStream(fileName, FileMode.Create)) {
@@ -38,8 +40,14 @@ namespace Allgregator.Repositories.Rss {
                     var entry = archive.CreateEntry(entryName);
                     using (var streamEntry = entry.Open()) {
                         using (var writer = new StreamWriter(streamEntry)) {
-                            var json = JsonConvert.SerializeObject(mined, Formatting.Indented);
-                            writer.WriteLine(json);
+                            var json = JsonSerializer.Serialize<Mined>(mined,
+                                new JsonSerializerOptions() {
+                                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                                    IgnoreNullValues = true,
+                                    WriteIndented = false
+                                });
+
+                            await writer.WriteLineAsync(json);
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using Allgregator.Common;
+using Allgregator.Models;
 using Allgregator.Repositories.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
@@ -16,7 +17,7 @@ namespace Allgregator {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : PrismApplication {
-        protected override Window CreateShell() => WindowUtilities.GetMainWindow(Container);
+        protected override Window CreateShell() => WindowUtilities.GetMainWindow();
 
         protected override void OnInitialized() {
             base.OnInitialized();
@@ -26,12 +27,13 @@ namespace Allgregator {
             region.Add(Container.Resolve<RecosView>((typeof(bool), true)), RssChapterViews.NewsView.ToString());
             region.Add(Container.Resolve<RecosView>(), RssChapterViews.OldsView.ToString());
             region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
-            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));//last
+            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));//last for subscriptions of ChapterChangedEvent in Activate()
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             var settingsRepository = Container.Resolve<SettingsRepository>();
-            containerRegistry.RegisterInstance(settingsRepository.Get());
+            var settings = settingsRepository.Get();
+            containerRegistry.RegisterInstance<Settings>(settings);
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
 

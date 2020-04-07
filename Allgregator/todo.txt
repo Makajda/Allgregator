@@ -1,5 +1,5 @@
 ﻿foreground и background везде
-эвейтизация
+links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
 
 проверить try на все вызовы всех репозиториев

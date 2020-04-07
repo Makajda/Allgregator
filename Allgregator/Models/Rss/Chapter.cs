@@ -1,14 +1,10 @@
-﻿using Newtonsoft.Json;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace Allgregator.Models.Rss {
     public class Chapter : BindableBase {
-        public Chapter(int id) {
-            Id = id;
-        }
-
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         private string name;
         public string Name {

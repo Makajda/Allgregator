@@ -1,10 +1,9 @@
-﻿using Prism.Mvvm;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Allgregator.Models {
-    public class Settings : BindableBase {
+    public class Settings {
         public Rect MainWindowBounds { get; set; }
         public WindowState MainWindowState { get; set; }
-        public int RssChapterId { get; set; } = 1;
+        public int RssChapterId { get; set; }
     }
 }

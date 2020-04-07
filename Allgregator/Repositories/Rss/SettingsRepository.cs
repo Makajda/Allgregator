@@ -1,8 +1,10 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
-using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
     public class SettingsRepository {
@@ -11,23 +13,25 @@ namespace Allgregator.Repositories.Rss {
             try {
                 var name = Path.Combine(Given.PathData, nameFile);
                 var json = File.ReadAllText(name);
-                return JsonConvert.DeserializeObject<Settings>(json);
+                return JsonSerializer.Deserialize<Settings>(json);
             }
             catch (Exception) {
                 return new Settings();
             }
         }
 
-        public void Save(Settings settings) {
-            try {
-                if (!Directory.Exists(Given.PathData))
-                    Directory.CreateDirectory(Given.PathData);
+        public async Task Save(Settings settings) {
+            if (!Directory.Exists(Given.PathData))
+                Directory.CreateDirectory(Given.PathData);
+            var json = JsonSerializer.Serialize<Settings>(settings,
+                new JsonSerializerOptions() {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    IgnoreNullValues = true,
+                    WriteIndented = true
+                });
 
-                var json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-                var name = Path.Combine(Given.PathData, nameFile);
-                File.WriteAllText(name, json);
-            }
-            catch (Exception) { /*TODO Log*/ }
+            var name = Path.Combine(Given.PathData, nameFile);
+            await File.WriteAllTextAsync(name, json);
         }
     }
 }
