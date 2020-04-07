@@ -48,13 +48,15 @@ namespace Allgregator.Services.Rss {
                 return;
             }
 
-            IsRetrieving = true;
+            ProgressMaximum = chapter.Links.Count + 1;
+            ProgressValue = 1;
+
+
             using (var retrieveService = new RetrieveService()) {
                 using (cancellationTokenSource = new CancellationTokenSource()) {
-                    ProgressMaximum = chapter.Links.Count + 1;
-                    ProgressValue = 1;
+                    IsRetrieving = true;
+                    var outdated = chapter.Mined?.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
                     var lastRetrieve = DateTimeOffset.Now;
-                    var outdated = chapter.Mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
                     await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
                         retrieveService.Production(link, chapter.Mined.AcceptTime, chapter.Mined.CutoffTime, outdated);
                         progressIndicator.Report(1);
@@ -65,6 +67,7 @@ namespace Allgregator.Services.Rss {
                         chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderByDescending(n => n.PublishDate));
                         chapter.Mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();
                         chapter.Mined.LastRetrieve = lastRetrieve;
+                        chapter.Mined.IsNeedToSave = true;
                         IsRetrieving = false;
                     }
                 }

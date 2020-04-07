@@ -1,8 +1,12 @@
 ﻿foreground и background везде
+отмена ore
+индикатор загрузки tiles itemsControl
+progress load xml
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
 
 проверить try на все вызовы всех репозиториев
+проверить путую папку Data
 
 
 

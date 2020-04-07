@@ -55,27 +55,39 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async Task Load() {
-            if (IsActive && Chapter != null && Chapter.Mined == null) {
+            if (IsActive && Chapter != null && !Chapter.IsMinedLoading && Chapter.Mined == null) {
+                Chapter.IsMinedLoading = true;
+
                 try {
                     Chapter.Mined = await minedRepository.Get(Chapter.Id);
                 }
-                catch (Exception) { /*//TODO Log*/ }
+                catch (Exception e) { /*//TODO Log*/ }
+
+                Chapter.IsMinedLoading = false;
+
+                if (chapter.Mined == null) {
+                    chapter.Mined = new Mined();
+                }
             }
         }
 
         private async Task Save(CancelEventArgs cancelEventArgs = null) {
             if (Chapter != null && Chapter.Mined != null) {
                 var mined = Chapter.Mined;
-                if (mined.IsNeedToSave) {
+                if (mined.IsNeedToSave && !mined.IsSaving) {
                     if (mined.NewRecos != null && mined.NewRecos.Count == 0) {
                         mined.AcceptTime = mined.LastRetrieve;
                     }
 
+                    mined.IsSaving = true;
+
                     try {
                         await minedRepository.Save(Chapter.Id, mined);
-                        Chapter.Mined.IsNeedToSave = false;
+                        mined.IsNeedToSave = false;
                     }
-                    catch (Exception) { /*//TODO Log*/ }
+                    catch (Exception e) { /*//TODO Log*/ }
+
+                    mined.IsSaving = false;
                 }
             }
         }

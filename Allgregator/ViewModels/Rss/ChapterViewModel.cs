@@ -89,10 +89,9 @@ namespace Allgregator.ViewModels.Rss {
 
         private async void Update() {
             if (Chapter != null) {
+                //todo try
                 if (Chapter.Links == null) Chapter.Links = new ObservableCollection<Link>(await linkRepository.Get(Chapter.Id));
-
                 await OreService.Retrieve(Chapter);
-                if (Chapter.Mined != null) Chapter.Mined.IsNeedToSave = true;
             }
         }
     }

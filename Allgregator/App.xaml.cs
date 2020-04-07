@@ -32,7 +32,14 @@ namespace Allgregator {
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             var settingsRepository = Container.Resolve<SettingsRepository>();
-            var settings = settingsRepository.Get();
+            Settings settings;
+            try {
+                settings = settingsRepository.Get();
+            }
+            catch (Exception) {
+                settings = new Settings();
+            }
+
             containerRegistry.RegisterInstance<Settings>(settings);
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }

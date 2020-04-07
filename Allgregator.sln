@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator", "Allgregator\Allgregator.csproj", "{62FC81BE-C81C-420F-B981-A7474D3A6F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllgregatorTests", "AllgregatorTests\AllgregatorTests.csproj", "{DEB62540-3169-4225-A615-85E6A8BC4732}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AllgregatorTests", "AllgregatorTests\AllgregatorTests.csproj", "{DEB62540-3169-4225-A615-85E6A8BC4732}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

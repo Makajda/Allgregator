@@ -37,7 +37,7 @@
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,5"
                            Text="{Binding Chapter.Mined.AcceptTime, Converter={StaticResource TodayConverter}}" 
                            HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding Chapter.Name}" TextWrapping="WrapWithOverflow" 
+                <TextBlock Text="{Binding Chapter.Id}" TextWrapping="WrapWithOverflow" 
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </DockPanel>
         </Button>
