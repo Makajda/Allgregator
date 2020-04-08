@@ -13,13 +13,13 @@
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
-            <Border Background="White" Margin="9" Width="246" Height="398" BorderThickness="0,0,5,5" BorderBrush="Gray"
+            <Border Background="White" Margin="9" Width="246" Height="398"
                     MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
                 <Grid>
                     <Grid Margin="20">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding DataContext.OpenCommand, ElementName=list}" CommandParameter="{Binding}"/>
+                                <i:InvokeCommandAction Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         

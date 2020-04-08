@@ -1,9 +1,10 @@
-﻿foreground и background везде
+﻿foreground и background везде, chapter buttons. Кнопка обновить всегда видна и мжно нажать, не активируя главу
 отмена ore
 индикатор загрузки tiles itemsControl
 progress load xml
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
+перенести главы и линки в static CreateDefault()
 
 проверить try на все вызовы всех репозиториев
 проверить путую папку Data

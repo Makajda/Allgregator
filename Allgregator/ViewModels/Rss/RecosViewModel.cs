@@ -43,9 +43,14 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void Move(Reco reco) {
-            Chapter.Mined.NewRecos.Remove(reco);
-            Chapter.Mined.OldRecos.Insert(0, reco);
-            Chapter.Mined.IsNeedToSave = true;
+            var mined = Chapter.Mined;
+            mined.NewRecos.Remove(reco);
+            mined.OldRecos.Insert(0, reco);
+            if (mined.NewRecos.Count == 0) {
+                mined.AcceptTime = mined.LastRetrieve;
+            }
+
+            mined.IsNeedToSave = true;
         }
 
         private async void ChangeChapter(Chapter chapter) {
@@ -75,10 +80,6 @@ namespace Allgregator.ViewModels.Rss {
             if (Chapter != null && Chapter.Mined != null) {
                 var mined = Chapter.Mined;
                 if (mined.IsNeedToSave && !mined.IsSaving) {
-                    if (mined.NewRecos != null && mined.NewRecos.Count == 0) {
-                        mined.AcceptTime = mined.LastRetrieve;
-                    }
-
                     mined.IsSaving = true;
 
                     try {

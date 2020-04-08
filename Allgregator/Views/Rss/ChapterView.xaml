@@ -25,7 +25,8 @@
         </Style>
 
         <Button x:Key="mainButton" x:Shared="False"
-                Width="150" Padding="0"
+                Width="150" 
+                Padding="0"
                 Foreground="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToBrushConverter}}"
                 Background="LightGoldenrodYellow"
                 VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
@@ -54,7 +55,7 @@
         <ContentControl Content="{StaticResource mainButton}" Visibility="{Binding IsActive, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
 
         <Border BorderBrush="Gray" 
-                BorderThickness="0,0,3,3"
+                BorderThickness="0,0,0,5"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
