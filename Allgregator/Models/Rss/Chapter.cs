@@ -25,8 +25,5 @@ namespace Allgregator.Models.Rss {
             get { return mined; }
             set { SetProperty(ref mined, value); }
         }
-
-        [JsonIgnore]
-        public bool IsMinedLoading { get; set; }
     }
 }

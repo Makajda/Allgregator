@@ -58,7 +58,9 @@ namespace Allgregator.ViewModels.Rss {
                     var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
                     if (currentChapter == null) currentChapter = Chapters.FirstOrDefault();
 
-                    if (currentChapter != null) currentChapter.Activate();
+                    if (currentChapter != null) {
+                        await currentChapter.Activate();
+                    }
                 }
             }
         }

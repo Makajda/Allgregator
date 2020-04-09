@@ -10,12 +10,15 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
         private readonly Settings settings;
         private readonly LinkRepository linkRepository;
+        private readonly MinedRepository minedRepository;
         private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
 
@@ -24,6 +27,7 @@ namespace Allgregator.ViewModels.Rss {
             OreService oreService,
             Settings settings,
             LinkRepository linkRepository,
+            MinedRepository minedRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator
             ) {
@@ -31,14 +35,16 @@ namespace Allgregator.ViewModels.Rss {
             OreService = oreService;
             this.settings = settings;
             this.linkRepository = linkRepository;
+            this.minedRepository = minedRepository;
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
 
             ViewsCommand = new DelegateCommand<RssChapterViews?>((view) => CurrentView = view ?? RssChapterViews.NewsView);
-            OpenCommand = new DelegateCommand(Open);
-            MoveCommand = new DelegateCommand(Move);
+            OpenCommand = new DelegateCommand(OpenAll);
+            MoveCommand = new DelegateCommand(MoveAll);
             UpdateCommand = new DelegateCommand(Update);
 
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(async (cancelEventArgs) => await SaveMined(cancelEventArgs));
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => IsActive = chapter.Id == Chapter.Id);
         }
 
@@ -66,9 +72,12 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref currentView, value, SetView);
         }
 
-        public void Activate() {
+        public async Task Activate() {
             eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
             settings.RssChapterId = Chapter.Id;
+            await SaveMined();
+            Chapter = chapter;
+            await LoadMined();
         }
 
         private void SetView() {
@@ -77,17 +86,20 @@ namespace Allgregator.ViewModels.Rss {
             if (view != null) region.Activate(view);
         }
 
-        private void Open() {
+        private async void OpenAll() {
             if (IsActive) {
                 if (Chapter?.Mined?.NewRecos != null) {
+                    //todo ообщить, если слишком много нужно открыть
                     foreach (var reco in Chapter.Mined.NewRecos) WindowUtilities.Run(reco.Uri.ToString());
                 }
             }
-            else Activate();
+            else {
+                await Activate();
+            }
         }
 
-        private void Move() {
-            if (Chapter?.Mined?.NewRecos != null) {
+        private void MoveAll() {
+            if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
                 Chapter.Mined.IsNeedToSave = true;
                 foreach (var reco in Chapter.Mined.NewRecos.ToList()) {
                     Chapter.Mined.NewRecos.Remove(reco);
@@ -111,8 +123,36 @@ namespace Allgregator.ViewModels.Rss {
                     Chapter.Links = new ObservableCollection<Link>(chapters);
                 }
 
+                await LoadMined();
                 await OreService.Retrieve(Chapter);
             }
+        }
+
+        private async Task LoadMined() {
+            if (Chapter != null && Chapter.Mined == null) {
+                try {
+                    Chapter.Mined = await minedRepository.Get(Chapter.Id);
+                }
+                catch (Exception e) { /*//TODO Log*/ }
+
+                if (chapter.Mined == null) {
+                    chapter.Mined = new Mined();
+                }
+            }
+        }
+
+        private async Task SaveMined(CancelEventArgs cancelEventArgs = null) {
+            if (Chapter != null && Chapter.Mined != null) {
+                var mined = Chapter.Mined;
+                if (mined.IsNeedToSave) {
+                    try {
+                        await minedRepository.Save(Chapter.Id, mined);
+                        mined.IsNeedToSave = false;
+                    }
+                    catch (Exception e) { /*//TODO Log*/ }
+                }
+            }
+            //todo mayby save links or chapters
         }
     }
 }

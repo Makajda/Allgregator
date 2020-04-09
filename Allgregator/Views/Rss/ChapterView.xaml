@@ -30,22 +30,31 @@
     </UserControl.Resources>
 
     <Grid>
-        <Button Width="160" Height="100" BorderThickness="0" 
-                common:AttachedControl.Path="M 0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
-                Template="{StaticResource ButtonPathTemplate}"
-                Padding="15" 
+        <Button Width="160" Height="100" Padding="15" Style="{StaticResource managerButton}"
+                common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
                 Background="LightGoldenrodYellow"
                 Command="{Binding OpenCommand}">
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Margin="0,5,0,0"
-                           Text="{Binding Chapter.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}" 
-                           HorizontalAlignment="Center"/>
+                            Text="{Binding Chapter.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}" 
+                            HorizontalAlignment="Center"/>
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,5"
-                           Text="{Binding Chapter.Mined.AcceptTime, Converter={StaticResource TodayConverter}}" 
-                           HorizontalAlignment="Center"/>
+                            Text="{Binding Chapter.Mined.AcceptTime, Converter={StaticResource TodayConverter}}" 
+                            HorizontalAlignment="Center"/>
                 <TextBlock Text="{Binding Chapter.Id}" TextTrimming="CharacterEllipsis" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </DockPanel>
+        </Button>
+
+        <Button Width="50" Height="50" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
+                Command="{Binding UpdateCommand}"
+                common:AttachedControl.Path="M0,1 L1,1 L1,0 Z"
+                Background="Transparent" Foreground="White"
+                HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="RosyBrown"/>
+            </Button.Resources>
         </Button>
 
         <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -84,7 +93,7 @@
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
-                          common:AttachedControl.Path="M 0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
+                          common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
                           x:Name="errorsButton" Background="Red"
                           Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
                           HorizontalAlignment="Right"/>

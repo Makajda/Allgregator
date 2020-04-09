@@ -43,9 +43,6 @@ namespace Allgregator.Models.Rss {
         }
 
         [JsonIgnore]
-        public bool IsSaving { get; set; }
-
-        [JsonIgnore]
         public bool IsNeedToSave { get; set; }
     }
 }

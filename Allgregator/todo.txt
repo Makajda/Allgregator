@@ -1,12 +1,13 @@
 ﻿foreground и background везде, chapter buttons. Кнопка обновить всегда видна и мжно нажать, не активируя главу
 отмена ore
-индикатор загрузки tiles itemsControl
+индикатор загрузки tiles itemsControl и деактивировать что надо
 progress load xml
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
+деактивировать что надо при загрузке
 
 проверить try на все вызовы всех репозиториев
-проверить путую папку Data
+проверить пустую папку Data
 
 1,6180339887 
 
