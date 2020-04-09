@@ -52,7 +52,7 @@
                     <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent"
                           VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60" ToolTip="&#x2717;"
                           MouseEnter="Path_MouseEnter" MouseLeave="Path_MouseLeave"
-                          Visibility="{Binding IsNew, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}">
+                          Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonUp">
                                 <i:InvokeCommandAction Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}"/>
