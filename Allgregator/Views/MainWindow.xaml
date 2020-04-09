@@ -8,7 +8,6 @@
         >
 
     <Grid Background="#91C9FF">
-    <!--<Grid Background="LightGoldenrodYellow">-->
             <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
@@ -24,6 +23,6 @@
                    />
 
         <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" HorizontalAlignment="Right"/>
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" Margin="0,30,0,0"/>
     </Grid>
 </Window>

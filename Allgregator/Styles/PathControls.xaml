@@ -19,7 +19,7 @@
 
     <ControlTemplate x:Key="ButtonTemplateRB" TargetType="{x:Type ButtonBase}">
         <Grid>
-            <Path Data="M0,10 A10,10 0 0 0 10,0 H12 V12 H0 Z"
+            <Path Data="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
                   StrokeThickness="1"
                   x:Name="border" 
                   Stroke="{TemplateBinding BorderBrush}" 
@@ -56,7 +56,7 @@
 
     <ControlTemplate x:Key="ButtonTemplateLB" TargetType="{x:Type ButtonBase}">
         <Grid>
-            <Path Data="M0,0 H2 A10,10 0 0 0 12,10 V12 H0 Z"
+            <Path Data="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
                   StrokeThickness="1"
                   x:Name="border" 
                   Stroke="{TemplateBinding BorderBrush}" 
@@ -92,7 +92,7 @@
 
     <ControlTemplate x:Key="ButtonTemplateLT" TargetType="{x:Type ButtonBase}">
         <Grid>
-            <Path Data="M0,0 V12 H2 A10,10 0 0 1 12,2 V0 Z"
+            <Path Data="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
                   StrokeThickness="1"
                   x:Name="border" 
                   Stroke="{TemplateBinding BorderBrush}" 
@@ -128,7 +128,7 @@
 
     <ControlTemplate x:Key="ButtonTemplateRT" TargetType="{x:Type ButtonBase}">
         <Grid>
-            <Path Data="M0,0 V2 A10,10 0 0 1 10,12 H12 V0 Z"
+            <Path Data="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
                   x:Name="border" 
                   Stretch="Fill"
                   StrokeThickness="1"
