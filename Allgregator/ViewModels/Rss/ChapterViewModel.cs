@@ -45,7 +45,7 @@ namespace Allgregator.ViewModels.Rss {
             UpdateCommand = new DelegateCommand(Update);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(async (cancelEventArgs) => await SaveMined(cancelEventArgs));
-            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => IsActive = chapter.Id == Chapter.Id);
+            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(CurrentChanged);
         }
 
         public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
@@ -75,8 +75,6 @@ namespace Allgregator.ViewModels.Rss {
         public async Task Activate() {
             eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
             settings.RssChapterId = Chapter.Id;
-            await SaveMined();
-            Chapter = chapter;
             await LoadMined();
         }
 
@@ -84,6 +82,13 @@ namespace Allgregator.ViewModels.Rss {
             var region = regionManager.Regions[Given.MainRegion];
             var view = region.GetView(CurrentView.ToString());
             if (view != null) region.Activate(view);
+        }
+
+        private async void CurrentChanged(Chapter chapter) {
+            IsActive = chapter.Id == Chapter.Id;
+            if (!IsActive) {
+                await SaveMined();
+            }
         }
 
         private async void OpenAll() {
