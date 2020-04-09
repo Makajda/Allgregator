@@ -1,8 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Allgregator.Common {
-    public class VisualStateManagerHelper {
+namespace Allgregator.Common
+{
+    public class AttachedVisualStateManager
+    {
         /*
     <VisualStateManager.VisualStateGroups>
         <VisualStateGroup x:Name="Common">
@@ -22,19 +24,23 @@ namespace Allgregator.Common {
             DependencyProperty.RegisterAttached(
                 "State",
                 typeof(string),
-                typeof(VisualStateManagerHelper),
+                typeof(AttachedVisualStateManager),
                 new PropertyMetadata(null, OnStateChanged));
 
-        public static string GetState(DependencyObject obj) {
+        public static string GetState(DependencyObject obj)
+        {
             return (string)obj.GetValue(StateProperty);
         }
 
-        public static void SetState(DependencyObject obj, string value) {
+        public static void SetState(DependencyObject obj, string value)
+        {
             obj.SetValue(StateProperty, value);
         }
 
-        private static void OnStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (e.NewValue != null) {
+        private static void OnStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue != null)
+            {
                 VisualStateManager.GoToElementState((Control)d, (string)e.NewValue, true);
             }
         }

@@ -26,5 +26,15 @@ namespace Allgregator.Repositories.Rss {
 
             await File.WriteAllTextAsync(name, json);
         }
+
+        public static IEnumerable<Chapter> CreateDefault() {
+            return new List<Chapter>() {
+                new Chapter() { Id = 4, Name = "Четвёртая" },
+                new Chapter() { Id = 0, Name = "Основная" },
+                new Chapter() { Id = 2, Name = "Вторая" },
+                new Chapter() { Id = 5, Name = "Пятая" },
+                new Chapter() { Id = 3, Name = "Третья" }
+            };
+        }
     }
 }

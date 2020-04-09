@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace Allgregator.Converters {
-    public class NullToBrushConverter : IValueConverter {
-        public Brush BrushNull { get; set; }
-        public Brush BrushNotNull { get; set; }
-
+    public class ThicknessToDoubleConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return value == null ? BrushNull : BrushNotNull;
+            return ((Thickness)value).Left;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            throw new NotImplementedException();
+            var d = (double)value;
+            return new Thickness(d);
         }
     }
 }

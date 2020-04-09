@@ -4,11 +4,10 @@
 progress load xml
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
-перенести главы и линки в static CreateDefault()
 
 проверить try на все вызовы всех репозиториев
 проверить путую папку Data
 
 1,6180339887 
 
-PathData указывать прямо в xaml и привязывать oneTime к аттач-свойству, присваивая Data в template
+isNew привязывать всю в xaml

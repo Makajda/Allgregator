@@ -4,7 +4,7 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:converters="clr-namespace:Allgregator.Converters"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:common="clr-namespace:Allgregator.Common"
              x:Name="view"
              >
 
@@ -13,16 +13,12 @@
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
-            <Border Background="White" Margin="9" Width="246" Height="398"
-                    MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave">
+            <Button Background="White" Margin="9" Width="246" Height="398" Padding="0"
+                    Template="{StaticResource ButtonPathTemplate}" common:AttachedControl.Path="M0,1 V10 H10 V0 H1 Z"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
                 <Grid>
                     <Grid Margin="20">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -49,18 +45,18 @@
                                    TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="15"/>
                     </Grid>
 
-                    <Path Data="M0,60 L60,60 L60,0 Z" Stroke="LightGray" StrokeThickness="1" Fill="Transparent"
-                          VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="60" Height="60" ToolTip="&#x2717;"
-                          MouseEnter="Path_MouseEnter" MouseLeave="Path_MouseLeave"
-                          Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                <i:InvokeCommandAction Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </Path>
+                    <Button Width="60" Height="60" Margin="-1"
+                            Template="{StaticResource ButtonPathTemplate}" common:AttachedControl.Path="M0,1 L1,0 V1 Z"
+                            BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x2717;"
+                            Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
+                        <Button.Resources>
+                            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
+                        </Button.Resources>
+                    </Button>
                 </Grid>
-            </Border>
+            </Button>
         </DataTemplate>
     </UserControl.Resources>
 

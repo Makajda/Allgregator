@@ -1,4 +1,5 @@
 ﻿using Allgregator.Common;
+using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services.Rss;
@@ -6,24 +7,29 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
+        private readonly Settings settings;
         private readonly LinkRepository linkRepository;
         private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
 
         public ChapterViewModel(
             Chapter chapter,
-            LinkRepository linkRepository,
             OreService oreService,
+            Settings settings,
+            LinkRepository linkRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator
             ) {
             Chapter = chapter;
             OreService = oreService;
+            this.settings = settings;
             this.linkRepository = linkRepository;
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
@@ -60,7 +66,10 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref currentView, value, SetView);
         }
 
-        public void Activate() => eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
+        public void Activate() {
+            eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
+            settings.RssChapterId = Chapter.Id;
+        }
 
         private void SetView() {
             var region = regionManager.Regions[Given.MainRegion];
@@ -89,8 +98,19 @@ namespace Allgregator.ViewModels.Rss {
 
         private async void Update() {
             if (Chapter != null) {
-                //todo try
-                if (Chapter.Links == null) Chapter.Links = new ObservableCollection<Link>(await linkRepository.Get(Chapter.Id));
+                if (Chapter.Links == null) {
+                    IEnumerable<Link> chapters;
+                    try {
+                        chapters = await linkRepository.Get(Chapter.Id);
+                    }
+                    catch (Exception e) {
+                        /*//TODO Log*/
+                        chapters = LinkRepository.CreateDefault();
+                    }
+
+                    Chapter.Links = new ObservableCollection<Link>(chapters);
+                }
+
                 await OreService.Retrieve(Chapter);
             }
         }

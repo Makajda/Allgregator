@@ -48,13 +48,7 @@ namespace Allgregator.ViewModels.Rss {
                 }
                 catch (Exception) {
                     /*//TODO Log*/
-                    chapters = new List<Chapter>() {
-                        new Chapter() { Id = 4, Name = "Четвёртая" },
-                        new Chapter() { Id = 0, Name = "Основная" },
-                        new Chapter() { Id = 2, Name = "Вторая" },
-                        new Chapter() { Id = 5, Name = "Пятая" },
-                        new Chapter() { Id = 3, Name = "Третья" }
-                    };
+                    chapters = ChapterRepository.CreateDefault();
                 }
 
                 if (chapters != null) {

@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class LinksViewModel : BindableBase, IActiveAware {
-        private readonly LinkRepository linksRepository;
+        private readonly LinkRepository linkRepository;
         private readonly IRegionManager regionManager;
 
         public LinksViewModel(
-            LinkRepository linksRepository,
+            LinkRepository linkRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator
             ) {
-            this.linksRepository = linksRepository;
+            this.linkRepository = linkRepository;
             this.regionManager = regionManager;
 
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(ChangeChapter);
@@ -51,39 +51,16 @@ namespace Allgregator.ViewModels.Rss {
 
         private async Task Load() {
             if (IsActive && Chapter != null && Chapter.Links == null) {
+                IEnumerable<Link> chapters;
                 try {
-                    Chapter.Links = new ObservableCollection<Link>(await linksRepository.Get(Chapter.Id));
+                    chapters = await linkRepository.Get(Chapter.Id);
                 }
-                catch (Exception) {
+                catch (Exception e) {
                     /*//TODO Log*/
-                    Chapter.Links = new ObservableCollection<Link>() {
-                        new Link() {
-                            HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",
-                            Name = "BBC News - Health",
-                            XmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml"
-                        },
-                        new Link() {
-                            HtmlUrl = "http://feeds.skynews.com/feeds/rss/business.xml",
-                            Name = "Business News - Markets reports and financial news from Sky",
-                            XmlUrl = "http://feeds.skynews.com/feeds/rss/business.xml"
-                        },
-                        new Link() {
-                            HtmlUrl = "http://rss.cnn.com/rss/edition_technology.rss",
-                            Name = "CNN.com - Technology",
-                            XmlUrl = "http://rss.cnn.com/rss/edition_technology.rss"
-                        },
-                        new Link() {
-                            HtmlUrl = "http://feeds.foxnews.com/foxnews/sports",
-                            Name = "FOX News",
-                            XmlUrl = "http://feeds.foxnews.com/foxnews/sports"
-                        },
-                        new Link() {
-                            HtmlUrl = "http://feeds.reuters.com/news/artsculture",
-                            Name = "Reuters: Arts",
-                            XmlUrl = "http://feeds.reuters.com/news/artsculture"
-                        }
-                    };
+                    chapters = LinkRepository.CreateDefault();
                 }
+
+                Chapter.Links = new ObservableCollection<Link>(chapters);
             }
         }
 
@@ -92,7 +69,7 @@ namespace Allgregator.ViewModels.Rss {
                 try {
                     //todo needSave await linksRepository.Save(Chapter.Id, Chapter.Links);
                 }
-                catch (Exception) { /*//TODO Log*/ }
+                catch (Exception e) { /*//TODO Log*/ }
             }
         }
     }

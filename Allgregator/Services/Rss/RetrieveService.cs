@@ -48,7 +48,7 @@ namespace Allgregator.Services.Rss {
             catch (OperationCanceledException) { }
             catch (Exception exception) {
                 lock (syncErrors) {
-                    Errors.Add(new Error(link, exception));
+                    Errors.Add(new Error() { Link = link.Name, Message = exception.Message });
                 }
             }
         }
