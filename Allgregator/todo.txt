@@ -1,5 +1,5 @@
 ﻿foreground и background
-отмена ore и лтмена при закрытии окна до окончания загрузки
+отмена ore и отмена при закрытии окна до окончания загрузки
 индикатор загрузки tiles itemsControl и деактивировать что надо
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
