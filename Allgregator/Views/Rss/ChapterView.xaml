@@ -46,9 +46,9 @@
             </DockPanel>
         </Button>
 
-        <Button Width="50" Height="50" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
+        <Button Width="35" Height="35" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
                 Command="{Binding UpdateCommand}"
-                common:AttachedControl.Path="M0,1 L1,1 L1,0 Z"
+                common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
                 Background="Transparent" Foreground="White"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -97,7 +97,7 @@
                           x:Name="errorsButton" Background="Red"
                           Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
                           HorizontalAlignment="Right"/>
-            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Center">
+            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
                 <ListBox ItemsSource="{Binding Chapter.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
             </Popup>
         </Grid>

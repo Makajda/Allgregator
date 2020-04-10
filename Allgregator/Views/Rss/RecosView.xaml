@@ -12,6 +12,19 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
+        <LinearGradientBrush x:Key="MainBackgroundNew" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#91C9FF" Offset="0" />
+            <GradientStop Color="LightGreen" Offset="1" />
+        </LinearGradientBrush>
+
+
+        <LinearGradientBrush x:Key="MainBackgroundOld" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#91C9FF" Offset="0" />
+            <GradientStop Color="SaddleBrown" Offset="1" />
+        </LinearGradientBrush>
+        
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
+
         <DataTemplate x:Key="RecosItemTemplate">
             <Button Background="White" Margin="9" Width="246" Height="398" Padding="0"
                     Template="{StaticResource ButtonPathTemplate}" common:AttachedControl.Path="M0,1 V10 H10 V0 H1 Z"
@@ -60,7 +73,9 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Background="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToBrushConverter}}"
+                  >
         <ItemsControl x:Name="list"
                       HorizontalAlignment="Center"
                       ItemTemplate="{StaticResource RecosItemTemplate}"

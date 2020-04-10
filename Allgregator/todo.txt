@@ -1,7 +1,6 @@
-﻿foreground и background везде, chapter buttons. Кнопка обновить всегда видна и мжно нажать, не активируя главу
+﻿foreground и background
 отмена ore
 индикатор загрузки tiles itemsControl и деактивировать что надо
-progress load xml
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
 деактивировать что надо при загрузке
@@ -10,5 +9,3 @@ tests: retrieve, outdate, acceptTime
 проверить пустую папку Data
 
 1,6180339887 
-
-isNew привязывать всю в xaml
