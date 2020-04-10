@@ -9,3 +9,5 @@ tests: retrieve, outdate, acceptTime
 проверить пустую папку Data
 
 1,6180339887 
+
+в строке 2 показать обнаружение

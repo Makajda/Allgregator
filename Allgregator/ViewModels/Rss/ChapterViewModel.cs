@@ -109,7 +109,7 @@ namespace Allgregator.ViewModels.Rss {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
                 var count = recos.Count;
                 if (count > settings.RssMaxOpenTabs) {
-                    dialogService.Show($"{count}?", OpenReal);
+                    dialogService.Show($"{count}?", OpenReal, 72d);
                 }
                 else {
                     OpenReal();

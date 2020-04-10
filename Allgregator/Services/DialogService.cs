@@ -6,9 +6,7 @@ using System.Windows.Media;
 
 namespace Allgregator.Services {
     public class DialogService {
-        private Popup popup;
-
-        public void Show(string message, Action callback) {
+        public void Show(string message, Action callback, double fontSize = 16, bool isStrikethrough = false) {
             var panel = new Grid() {
                 Background = Brushes.Red,
                 Width = 398d,
@@ -18,12 +16,26 @@ namespace Allgregator.Services {
             var textBlock = new TextBlock() {
                 Text = message,
                 Foreground = Brushes.White,
-                FontSize = 72d,
+                FontSize = fontSize,
+                TextWrapping = TextWrapping.Wrap,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
 
+            if(isStrikethrough) {
+                textBlock.TextDecorations = TextDecorations.Strikethrough;
+            }
+
             panel.Children.Add(textBlock);
+
+            var popup = new Popup() {
+                AllowsTransparency = true,
+                UseLayoutRounding = true,
+                StaysOpen = false,
+                Placement = PlacementMode.Mouse,
+                Child = panel,
+                IsOpen = true
+            };
 
             if (callback != null) {
                 var button = new Button() {
@@ -37,18 +49,9 @@ namespace Allgregator.Services {
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
 
-                button.Click += (s, e) => callback();
+                button.Click += (s, e) => { popup.IsOpen = false; callback(); };
                 panel.Children.Add(button);
             }
-
-            popup = new Popup() {
-                AllowsTransparency = true,
-                UseLayoutRounding = true,
-                StaysOpen = false,
-                Placement = PlacementMode.Mouse,
-                Child = panel,
-                IsOpen = true
-            };
         }
     }
 }
