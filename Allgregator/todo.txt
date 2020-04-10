@@ -1,5 +1,5 @@
 ﻿foreground и background
-отмена ore
+отмена ore и лтмена при закрытии окна до окончания загрузки
 индикатор загрузки tiles itemsControl и деактивировать что надо
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
@@ -7,5 +7,7 @@ tests: retrieve, outdate, acceptTime
 
 проверить try на все вызовы всех репозиториев
 проверить пустую папку Data
+
+слева две кнопки: фильтр списка и настройки (макс-табс, главы)
 
 1,6180339887 
