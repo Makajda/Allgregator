@@ -1,7 +1,7 @@
 ﻿using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
-using Prism;
+using Prism.Commands;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
-    public class ChaptersViewModel : BindableBase, IActiveAware {
+    public class ChaptersViewModel : BindableBase {
         private readonly ChapterRepository chapterRepository;
         private readonly int startChapterId;
 
@@ -22,11 +22,7 @@ namespace Allgregator.ViewModels.Rss {
             ) {
             this.chapterRepository = chapterRepository;
             startChapterId = settings.RssChapterId;
-
-            IsActiveChanged += async (s, e) => await Load();
         }
-
-        public event EventHandler IsActiveChanged;
 
         private ObservableCollection<ChapterViewModel> chapters;
         public ObservableCollection<ChapterViewModel> Chapters {
@@ -34,14 +30,8 @@ namespace Allgregator.ViewModels.Rss {
             set => SetProperty(ref chapters, value);
         }
 
-        private bool isActive;
-        public bool IsActive {
-            get => isActive;
-            set => SetProperty(ref isActive, value, () => IsActiveChanged?.Invoke(this, EventArgs.Empty));
-        }
-
-        private async Task Load() {
-            if (IsActive && Chapters == null) {
+        public async Task Load() {
+            if (Chapters == null) {
                 IEnumerable<Chapter> chapters = null;
                 try {
                     chapters = await chapterRepository.Get();

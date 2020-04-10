@@ -32,7 +32,7 @@ namespace Allgregator.ViewModels.Rss {
                 mined.AcceptTime = mined.LastRetrieve;
             }
 
-            mined.IsNeedToSave = true;
+            Chapter.IsNeedToSaveMined = true;
         }
     }
 }

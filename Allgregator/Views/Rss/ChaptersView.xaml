@@ -6,19 +6,31 @@
              xmlns:views="clr-namespace:Allgregator.Views.Rss"
              >
 
-    <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding Chapters}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+    <DockPanel LastChildFill="True">
+        <TextBlock DockPanel.Dock="Left"
+                   Text="Rss"
+                   FontSize="48" 
+                   FontStretch="ExtraExpanded"
+                   FontFamily="Comic"
+                   VerticalAlignment="Center" 
+                   Margin="50,0,30,0"
+                   Foreground="Green"
+                   />
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:ChapterView />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right">
+            <ItemsControl ItemsSource="{Binding Chapters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:ChapterView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

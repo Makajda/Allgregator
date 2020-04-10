@@ -48,7 +48,7 @@ namespace Allgregator.ViewModels.Rss {
             MoveCommand = new DelegateCommand(MoveAll);
             UpdateCommand = new DelegateCommand(Update);
 
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(async (cancelEventArgs) => await SaveMined(cancelEventArgs));
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(Closing);
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(ChapterChanged);
         }
 
@@ -67,10 +67,10 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get => isActive;
-            private set => SetProperty(ref isActive, value, () => { if (IsActive) SetView(); });
+            private set => SetProperty(ref isActive, value, SetView);
         }
 
-        private RssChapterViews currentView;
+        private RssChapterViews currentView = RssChapterViews.LinksView;
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value, SetView);
@@ -80,19 +80,28 @@ namespace Allgregator.ViewModels.Rss {
             eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
             settings.RssChapterId = Chapter.Id;
             await LoadMined();
+            await LoadLinks();
         }
 
         private void SetView() {
-            var region = regionManager.Regions[Given.MainRegion];
-            var view = region.GetView(CurrentView.ToString());
-            if (view != null) region.Activate(view);
+            if (IsActive) {
+                var region = regionManager.Regions[Given.MainRegion];
+                var view = region.GetView(CurrentView.ToString());
+                if (view != null) region.Activate(view);
+            }
         }
 
         private async void ChapterChanged(Chapter chapter) {
             IsActive = chapter.Id == Chapter.Id;
             if (!IsActive) {
                 await SaveMined();
+                await SaveLinks();
             }
+        }
+
+        private async void Closing(CancelEventArgs cancelEventArgs = null) {
+            await SaveMined();
+            await SaveLinks();
         }
 
         private async void OpenAll() {
@@ -120,7 +129,7 @@ namespace Allgregator.ViewModels.Rss {
 
         private void MoveAll() {
             if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
-                Chapter.Mined.IsNeedToSave = true;
+                Chapter.IsNeedToSaveMined = true;
                 var cache = Chapter.Mined.NewRecos.Reverse();
                 foreach (var reco in cache) {
                     Chapter.Mined.NewRecos.Remove(reco);
@@ -131,26 +140,41 @@ namespace Allgregator.ViewModels.Rss {
 
         private async void Update() {
             if (Chapter != null) {
-                if (Chapter.Links == null) {
-                    IEnumerable<Link> chapters;
-                    try {
-                        chapters = await linkRepository.Get(Chapter.Id);
-                    }
-                    catch (Exception e) {
-                        /*//TODO Log*/
-                        chapters = LinkRepository.CreateDefault();
-                    }
-
-                    Chapter.Links = new ObservableCollection<Link>(chapters);
-                }
-
-                await LoadMined();
+                await LoadLinks(true);
+                await LoadMined(true);
                 await OreService.Retrieve(Chapter);
             }
         }
 
-        private async Task LoadMined() {
-            if (Chapter != null && Chapter.Mined == null) {
+        private async Task LoadLinks(bool force = false) {
+            if (Chapter != null && CurrentView == RssChapterViews.LinksView && (force || Chapter.Links == null)) {
+                IEnumerable<Link> chapters;
+                try {
+                    chapters = await linkRepository.Get(Chapter.Id);
+                }
+                catch (Exception e) {
+                    /*//TODO Log*/
+                    chapters = LinkRepository.CreateDefault();
+                }
+
+                Chapter.Links = new ObservableCollection<Link>(chapters);
+            }
+        }
+
+        private async Task SaveLinks() {
+            if (Chapter != null && Chapter.Links != null) {
+                if (Chapter.IsNeedToSaveLinks) {
+                    try {
+                        await linkRepository.Save(Chapter.Id, Chapter.Links);
+                        Chapter.IsNeedToSaveLinks = false;
+                    }
+                    catch (Exception e) { /*//TODO Log*/ }
+                }
+            }
+        }
+
+        private async Task LoadMined(bool force = false) {
+            if (Chapter != null && !(CurrentView != RssChapterViews.LinksView) && (force || Chapter.Mined == null)) {
                 try {
                     Chapter.Mined = await minedRepository.Get(Chapter.Id);
                 }
@@ -162,18 +186,16 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private async Task SaveMined(CancelEventArgs cancelEventArgs = null) {
+        private async Task SaveMined() {
             if (Chapter != null && Chapter.Mined != null) {
-                var mined = Chapter.Mined;
-                if (mined.IsNeedToSave) {
+                if (Chapter.IsNeedToSaveMined) {
                     try {
-                        await minedRepository.Save(Chapter.Id, mined);
-                        mined.IsNeedToSave = false;
+                        await minedRepository.Save(Chapter.Id, Chapter.Mined);
+                        Chapter.IsNeedToSaveMined = false;
                     }
                     catch (Exception e) { /*//TODO Log*/ }
                 }
             }
-            //todo mayby save links or chapters
         }
     }
 }

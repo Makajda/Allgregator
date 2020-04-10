@@ -4,12 +4,52 @@
              xmlns:prism="http://prismlibrary.com/"  
              prism:ViewModelLocator.AutoWireViewModel="True"
              >
-    
-    <Grid>
-        <ListBox Background="Red"
-                 ItemsSource="{Binding Chapter.Links}"
-                 DisplayMemberPath="Name"
+
+    <UserControl.Resources>
+        <Style x:Key="estyle">
+            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+            <Setter Property="TextBlock.Margin" Value="9"/>
+        </Style>
+
+        <Style x:Key="hstyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="TextBlock.Margin" Value="9"/>
+            <Setter Property="Background" Value="Green"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="0,30,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <DataGrid x:Name="dg" 
+                  ItemsSource="{Binding Chapter.Links}"
+                  SelectionMode="Single" SelectionUnit="FullRow"
+                  AutoGenerateColumns="False"
+                  AlternatingRowBackground="LightGray"
+                  GridLinesVisibility="Vertical"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Center"
+                  ColumnWidth="*"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  FontSize="16"
                  >
-        </ListBox>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                <DataGridTextColumn Header="Url" Binding="{Binding Path=HtmlUrl}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                <DataGridTextColumn Header="Xml" Binding="{Binding Path=XmlUrl}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="1" Text="{Binding SelectedItem.Name, ElementName=dg}" Margin="20"/>
+        <TextBlock Grid.Row="2" Text="{Binding SelectedItem.HtmlUrl, ElementName=dg}" Margin="20"/>
+        <TextBlock Grid.Row="3" Text="{Binding SelectedItem.XmlUrl, ElementName=dg}" Margin="20"/>
     </Grid>
 </UserControl>

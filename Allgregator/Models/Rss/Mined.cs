@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text.Json.Serialization;
 
 namespace Allgregator.Models.Rss {
     public class Mined : BindableBase {
@@ -41,8 +40,5 @@ namespace Allgregator.Models.Rss {
             get => errors;
             set => SetProperty(ref errors, value);
         }
-
-        [JsonIgnore]
-        public bool IsNeedToSave { get; set; }
     }
 }

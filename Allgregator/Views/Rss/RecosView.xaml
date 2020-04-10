@@ -73,7 +73,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,30,0,0"
                   Background="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToBrushConverter}}"
                   >
         <ItemsControl x:Name="list"

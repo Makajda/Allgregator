@@ -23,11 +23,12 @@ namespace Allgregator {
             base.OnInitialized();
 
             var regionManager = Container.Resolve<IRegionManager>();
+            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));
+
             var region = regionManager.Regions[Given.MainRegion];
             region.Add(Container.Resolve<RecosView>((typeof(bool), true)), RssChapterViews.NewsView.ToString());
             region.Add(Container.Resolve<RecosView>((typeof(bool), false)), RssChapterViews.OldsView.ToString());
             region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
-            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));//last for subscriptions of ChapterChangedEvent in Activate()
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
