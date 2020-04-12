@@ -34,7 +34,7 @@
                 common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
                 Background="LightGoldenrodYellow"
                 Command="{Binding OpenCommand}">
-            <DockPanel LastChildFill="True">
+            <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0"
                            Text="{Binding Chapter.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}" 
                            HorizontalAlignment="Center"/>

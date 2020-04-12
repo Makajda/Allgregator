@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:Allgregator.Views.Rss"
              >
 
-    <DockPanel LastChildFill="True">
+    <DockPanel>
         <TextBlock DockPanel.Dock="Left"
                    Text="Rss"
                    FontSize="48" 

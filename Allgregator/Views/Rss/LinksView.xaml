@@ -56,22 +56,27 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
 
-        <Button Content="paste" Width="50" FontSize="20" HorizontalAlignment="Left" Padding="9" Margin="20,0,0,0"/>
-        <TextBox Grid.Row="1"/>
-        <Button Grid.Row="1" Grid.Column="1" Content="+" Width="100" FontSize="20" Padding="9" Margin="5"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <!--<ListBox Grid.Row="2"/>/todo-->
+            <TextBox />
+            <Button Grid.Column="1" Content="pst" Width="50" FontSize="20" Padding="9" Margin="5"/>
+            <Button Grid.Column="2" Content="+" Width="100" FontSize="20" Padding="9" Margin="5"/>
+        </Grid>
 
-        <DataGrid Grid.Row="3" Grid.ColumnSpan="2"
-                  x:Name="dg" 
+        <!--<ListBox Grid.Row="1"/>/todo-->
+
+        <DataGrid Grid.Row="2"
+                  x:Name="dg"
                   BeginningEdit="dg_BeginningEdit" 
                   CellEditEnding="dg_CellEditEnding"
                   ItemsSource="{Binding Chapter.Links}"
@@ -94,5 +99,42 @@
                 <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Border Grid.Row="3" Margin="10" Background="LightGoldenrodYellow" CornerRadius="50">
+            <DockPanel Grid.Row="3" Margin="10">
+                <Button Content="Delete all" FontSize="16" Padding="9" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" />
+
+                <WrapPanel Orientation="Horizontal" Margin="25,0">
+                    <WrapPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="15,0,0,0"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Width" Value="100"/>
+                        </Style>
+                    </WrapPanel.Resources>
+
+                    <StackPanel>
+                        <TextBlock Text="Cutoff"/>
+                        <TextBox/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Accept"/>
+                        <TextBox/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Last"/>
+                        <TextBox/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Width="300"/>
+                    </StackPanel>
+                </WrapPanel>
+            </DockPanel>
+        </Border>
     </Grid>
 </UserControl>
