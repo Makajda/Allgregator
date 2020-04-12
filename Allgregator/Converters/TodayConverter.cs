@@ -8,7 +8,7 @@ namespace Allgregator.Converters {
             if (value is DateTimeOffset d) {
                 if (d != DateTimeOffset.MinValue) {
                     var now = DateTimeOffset.Now;
-                    var date = now.Date == d.Date ? null : $"{d.Day:D2}.{d.Month:D2} ";
+                    var date = now.Date == d.Date ? null : (now.Year == d.Year && now.Month == d.Month ? $"{d.Day:D2} " : $"{d.Day:D2}.{d.Month:D2} ");
                     var time = d.TimeOfDay;
                     var valret = $"{date}{time.Hours:D2}:{time.Minutes:D2}";
                     return valret;
