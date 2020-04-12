@@ -118,10 +118,6 @@
                     </WrapPanel.Resources>
 
                     <StackPanel>
-                        <TextBlock Text="Cutoff"/>
-                        <TextBox/>
-                    </StackPanel>
-                    <StackPanel>
                         <TextBlock Text="Accept"/>
                         <TextBox/>
                     </StackPanel>

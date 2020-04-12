@@ -1,7 +1,6 @@
 ﻿using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
-using Prism.Commands;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -46,11 +45,11 @@ namespace Allgregator.ViewModels.Rss {
                     Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
 
                     var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
-                    if (currentChapter == null) currentChapter = Chapters.FirstOrDefault();
-
-                    if (currentChapter != null) {
-                        await currentChapter.Activate();
+                    if (currentChapter == null) {
+                        currentChapter = Chapters.FirstOrDefault();
                     }
+
+                    currentChapter?.Activate();
                 }
             }
         }

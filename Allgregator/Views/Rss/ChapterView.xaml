@@ -58,28 +58,40 @@
         </Button>
 
         <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Button Content="&#x27F0;" Style="{StaticResource managerButton}"
-                    Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.NewsView}"
-                    common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
-                    Background="LightBlue" 
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
-            <Button Content="&#x27F1;" Style="{StaticResource managerButton}"
-                    Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
-                    common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
-                    Background="SandyBrown"
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.OldsView}}"/>
-            <Button Content="&#x1D118;" Style="{StaticResource managerButton}"
-                    Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.LinksView}"
-                    common:AttachedControl.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
-                    Background="LightGreen"
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <StackPanel>
+                <Button Content="&#x27F0;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.NewsView}"
+                        common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
+                        Background="LightBlue" 
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
+                    ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
+                <Button Content="&#x27F1;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
+                        common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
+                        Background="SandyBrown"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
+                    ConverterParameter={x:Static common:RssChapterViews.OldsView}}"/>
+                <Button Content="&#x27F1;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
+                        common:AttachedControl.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
+                        Background="SandyBrown"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
+                    ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
+                <Button Content="&#x1D118;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.LinksView}"
+                        common:AttachedControl.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
+                        Background="LightGreen"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
+                    ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
+            </StackPanel>
             <Button Content="&#x2715;" Style="{StaticResource managerButton}"
                     common:AttachedControl.Path="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
                     Background="SandyBrown" 

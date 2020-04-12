@@ -43,13 +43,13 @@ namespace Allgregator.ViewModels.Rss {
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
 
-            ViewsCommand = new DelegateCommand<RssChapterViews?>((view) => CurrentView = view ?? RssChapterViews.NewsView);
+            ViewsCommand = new DelegateCommand<RssChapterViews?>(async (view) => await ChangeView(view));
             OpenCommand = new DelegateCommand(OpenAll);
             MoveCommand = new DelegateCommand(MoveAll);
             UpdateCommand = new DelegateCommand(Update);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(Closing);
-            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(ChapterChanged);
+            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(CurrentChapterChanged);
         }
 
         public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
@@ -67,33 +67,41 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get => isActive;
-            private set => SetProperty(ref isActive, value, SetView);
+            private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView;//todo = RssChapterViews.LinksView;
+        private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
-            private set => SetProperty(ref currentView, value, SetView);
+            private set => SetProperty(ref currentView, value);
         }
 
-        public async Task Activate() {
+        public void Activate() {
             eventAggregator.GetEvent<ChapterChangedEvent>().Publish(Chapter);
             settings.RssChapterId = Chapter.Id;
+        }
+
+        private async Task ChangeView(RssChapterViews? view) {
+            if (IsActive) {
+                CurrentView = CurrentView = view ?? RssChapterViews.NewsView;
+                await CurrentViewChanged();
+            }
+        }
+
+        private async Task CurrentViewChanged() {
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewControl = region.GetView(CurrentView.ToString());
+            if (viewControl != null) region.Activate(viewControl);
             await LoadMined();
             await LoadLinks();
         }
 
-        private void SetView() {
-            if (IsActive) {
-                var region = regionManager.Regions[Given.MainRegion];
-                var view = region.GetView(CurrentView.ToString());
-                if (view != null) region.Activate(view);
-            }
-        }
-
-        private async void ChapterChanged(Chapter chapter) {
+        private async void CurrentChapterChanged(Chapter chapter) {
             IsActive = chapter.Id == Chapter.Id;
-            if (!IsActive) {
+            if (IsActive) {
+                await CurrentViewChanged();
+            }
+            else {
                 await SaveMined();
                 await SaveLinks();
             }
@@ -116,7 +124,7 @@ namespace Allgregator.ViewModels.Rss {
                 }
             }
             else {
-                await Activate();
+                Activate();
             }
         }
 
@@ -147,7 +155,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async Task LoadLinks(bool force = false) {
-            if (Chapter != null && CurrentView == RssChapterViews.LinksView && (force || Chapter.Links == null)) {
+            if (Chapter != null && Chapter.Links == null && (force || CurrentView == RssChapterViews.LinksView)) {
                 IEnumerable<Link> chapters;
                 try {
                     chapters = await linkRepository.Get(Chapter.Id);
@@ -174,7 +182,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async Task LoadMined(bool force = false) {
-            if (Chapter != null && !(CurrentView != RssChapterViews.LinksView) && (force || Chapter.Mined == null)) {
+            if (Chapter != null && Chapter.Mined == null && (force || CurrentView != RssChapterViews.LinksView)) {
                 try {
                     Chapter.Mined = await minedRepository.Get(Chapter.Id);
                 }
