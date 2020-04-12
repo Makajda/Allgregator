@@ -24,7 +24,7 @@
         </LinearGradientBrush>
         
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
-
+        
         <DataTemplate x:Key="RecosItemTemplate">
             <Button Background="White" Margin="9" Width="246" Height="398" Padding="0"
                     Template="{StaticResource ButtonPathTemplate}" common:AttachedControl.Path="M0,1 V10 H10 V0 H1 Z"
@@ -64,10 +64,10 @@
                             VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x2717;"
                             Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
-                        <Button.Resources>
-                            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
-                        </Button.Resources>
-                    </Button>
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
+                    </Button.Resources>
+                </Button>
                 </Grid>
             </Button>
         </DataTemplate>
