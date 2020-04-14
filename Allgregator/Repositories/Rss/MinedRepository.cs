@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
         public async Task<Mined> GetOrDefault(int chapterId) {
-            Mined s;
             try {
-                s = await Get(chapterId);
+                return await Get(chapterId);
             }
             catch (Exception e) {
                 /*//TODO Log*/

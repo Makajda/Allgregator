@@ -12,16 +12,14 @@ namespace Allgregator.Repositories.Rss {
         private const string nameFile = "chapters.json";
 
         public async Task<IEnumerable<Chapter>> GetOrDefault() {
-            IEnumerable<Chapter> s;
             try {
-                s = await Get();
+                return await Get();
             }
             catch (Exception e) {
                 /*//TODO Log*/
-                s = CreateDefault();
             }
 
-            return s;
+            return CreateDefault();
         }
 
         public async Task<IEnumerable<Chapter>> Get() {
