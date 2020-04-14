@@ -15,8 +15,9 @@
                 <Trigger Property="IsEditing" Value="True">
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="DataGridCell">
-                                <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <ControlTemplate TargetType="DataGridCell"><!--//todo-->
+                                <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                    Path=Content.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                                          FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                                          Padding="5" BorderThickness="0" Background="White" Foreground="Black"/>

@@ -70,7 +70,7 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
+        private RssChapterViews currentView = RssChapterViews.OldsView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
@@ -112,7 +112,7 @@ namespace Allgregator.ViewModels.Rss {
             await SaveLinks();
         }
 
-        private async void OpenAll() {
+        private void OpenAll() {
             if (IsActive) {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
                 var count = recos.Count;
