@@ -57,10 +57,14 @@ namespace Allgregator.Services.Rss {
                     IsRetrieving = true;
                     var outdated = chapter.Mined?.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
                     var lastRetrieve = DateTimeOffset.Now;
-                    await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
-                        retrieveService.Production(link, chapter.Mined.AcceptTime, chapter.Mined.CutoffTime, outdated);
-                        progressIndicator.Report(1);
-                    }, cancellationTokenSource.Token)));
+                    try {
+                        await Task.WhenAll(chapter.Links.Select(link => Task.Run(() => {
+                            retrieveService.Production(link, chapter.Mined.AcceptTime, chapter.Mined.CutoffTime, outdated);
+                            progressIndicator.Report(1);
+                        }, cancellationTokenSource.Token)));
+                    }
+                    catch (OperationCanceledException) { 
+                    }
 
                     if (IsRetrieving) {
                         chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderByDescending(n => n.PublishDate));

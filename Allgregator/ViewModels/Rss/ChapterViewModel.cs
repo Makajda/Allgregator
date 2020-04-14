@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
@@ -47,6 +48,7 @@ namespace Allgregator.ViewModels.Rss {
             OpenCommand = new DelegateCommand(OpenAll);
             MoveCommand = new DelegateCommand(MoveAll);
             UpdateCommand = new DelegateCommand(Update);
+            CancelUpdateCommand = new DelegateCommand(OreService.CancelRetrieve);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(Closing);
             eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe(CurrentChapterChanged);
@@ -56,6 +58,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
+        public DelegateCommand CancelUpdateCommand { get; private set; }
         public OreService OreService { get; private set; }
 
         private Chapter chapter;
@@ -70,7 +73,7 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView = RssChapterViews.OldsView;//todo
+        private RssChapterViews currentView;// = RssChapterViews.OldsView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
@@ -102,14 +105,18 @@ namespace Allgregator.ViewModels.Rss {
                 await CurrentViewChanged();
             }
             else {
-                await SaveMined();
-                await SaveLinks();
+                await Save();
             }
         }
 
-        private async void Closing(CancelEventArgs cancelEventArgs = null) {
-            await SaveMined();
+        private void Closing(CancelEventArgs e) {
+            var taskFactory = new TaskFactory(CancellationToken.None, TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
+            taskFactory.StartNew(Save).Unwrap().GetAwaiter().GetResult();
+        }
+
+        private async Task Save() {
             await SaveLinks();
+            await SaveMined();
         }
 
         private void OpenAll() {
@@ -147,7 +154,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async void Update() {
-            if (Chapter != null) {
+            if (Chapter != null && !OreService.IsRetrieving) {
                 await LoadLinks(true);
                 await LoadMined(true);
                 await OreService.Retrieve(Chapter);

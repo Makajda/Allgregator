@@ -38,6 +38,7 @@ namespace Allgregator {
                 settings = settingsRepository.Get();
             }
             catch (Exception) {
+                /*//TODO Log*/
                 settings = new Settings();
             }
 

@@ -1,9 +1,6 @@
 ﻿foreground и background
-отмена ore и отмена при закрытии окна до окончания загрузки
-индикатор загрузки tiles itemsControl и деактивировать что надо
 links: add link, find, add chapter
 tests: retrieve, outdate, acceptTime
-деактивировать что надо при загрузке
 
 проверить try на все вызовы всех репозиториев
 проверить пустую папку Data
@@ -11,5 +8,3 @@ tests: retrieve, outdate, acceptTime
 1,6180339887 
 
 в строке 2 показать обнаружение
-
-ButtonPathTemplate переделать на Visual State
