@@ -73,7 +73,7 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView;// = RssChapterViews.OldsView;//todo
+        private RssChapterViews currentView = RssChapterViews.LinksView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
@@ -124,7 +124,7 @@ namespace Allgregator.ViewModels.Rss {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
                 var count = recos.Count;
                 if (count > settings.RssMaxOpenTabs) {
-                    dialogService.Show($"{count}?", OpenReal, 72d);
+                    dialogService.Show($"{count}?", OpenReal, null, 72d);
                 }
                 else {
                     OpenReal();
@@ -135,7 +135,7 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private void OpenReal() {
+        private void OpenReal(object o = null) {
             var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
             if (recos != null) {
                 foreach (var reco in recos) WindowUtilities.Run(reco.Uri.ToString());

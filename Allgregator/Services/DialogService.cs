@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace Allgregator.Services {
     public class DialogService {
-        public void Show(string message, Action callback, double fontSize = 16, bool isStrikethrough = false) {
+        public void Show(string message, Action<object> callback, object parameter = null, double fontSize = 16, bool isStrikethrough = false) {
             var panel = new Grid() {
                 Background = Brushes.Red,
                 Width = 398d,
@@ -22,7 +22,7 @@ namespace Allgregator.Services {
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            if(isStrikethrough) {
+            if (isStrikethrough) {
                 textBlock.TextDecorations = TextDecorations.Strikethrough;
             }
 
@@ -39,17 +39,17 @@ namespace Allgregator.Services {
 
             if (callback != null) {
                 var button = new Button() {
-                    Content = "Ok",
+                    Content = '\u2714',
                     Background = Brushes.Yellow,
                     FontStyle = FontStyles.Italic,
-                    FontSize = 16,
-                    Padding = new Thickness(30),
+                    FontSize = 28,
+                    Padding = new Thickness(20),
                     Margin = new Thickness(20),
                     HorizontalAlignment = HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
 
-                button.Click += (s, e) => { popup.IsOpen = false; callback(); };
+                button.Click += (s, e) => { popup.IsOpen = false; callback(parameter); };
                 panel.Children.Add(button);
             }
         }

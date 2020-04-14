@@ -48,8 +48,14 @@
             <Setter Property="FontSize" Value="16"/>
         </Style>
 
+        <DataTemplate x:Key="moveColumn">
+            <Button Content="&#x21AB;" Width="50" FontSize="20" Padding="9"
+                    Command="{Binding DataContext.MoveCommand, ElementName=dg}" CommandParameter="{Binding}"/>
+        </DataTemplate>
+
         <DataTemplate x:Key="delColumn">
-            <Button Content="&#x2715;" Width="50" FontSize="14" Padding="9" Click="ButtonDelete_Click"/>
+            <Button Content="&#x2715;" Width="50" FontSize="14" Padding="9" 
+                    Command="{Binding DataContext.DeleteCommand, ElementName=dg}" CommandParameter="{Binding}"/>
         </DataTemplate>
     </UserControl.Resources>
 
@@ -97,6 +103,7 @@
                 <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
                 <DataGridTextColumn Header="Url" Binding="{Binding Path=HtmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
                 <DataGridTextColumn Header="Xml" Binding="{Binding Path=XmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                <DataGridTemplateColumn CellTemplate="{StaticResource moveColumn}" Width="50"/>
                 <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
             </DataGrid.Columns>
         </DataGrid>
