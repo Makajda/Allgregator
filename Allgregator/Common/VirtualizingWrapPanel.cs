@@ -450,6 +450,10 @@ namespace Allgregator.Common {
         /// <param name="availableSize">The size available to child elements of the wrap panel</param>
         /// <returns>The size required by the WrapPanel and its child elements.</returns>
         protected override Size MeasureOverride(Size availableSize) {
+            if (availableSize.Width == double.PositiveInfinity || availableSize.Height == double.PositiveInfinity) {
+                return Size.Empty;
+            }
+
             if (m_itemsControl == null || m_itemsControl.Items.Count == 0)
                 return availableSize;
 
