@@ -103,14 +103,16 @@
                     Background="RosyBrown"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-            <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
-                          common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
-                          x:Name="errorsButton" Background="Red"
-                          Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
-                          HorizontalAlignment="Right"/>
-            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
-                <ListBox ItemsSource="{Binding Chapter.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
-            </Popup>
+            <Grid Visibility="{Binding Chapter.Mined, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
+                <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
+                              common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
+                              x:Name="errorsButton" Background="Red"
+                              Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
+                              HorizontalAlignment="Right"/>
+                <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
+                    <ListBox ItemsSource="{Binding Chapter.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
+                </Popup>
+            </Grid>
         </Grid>
 
         <ProgressBar Height="5" 
