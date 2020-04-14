@@ -4,8 +4,6 @@ using Allgregator.Repositories.Rss;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,15 +29,7 @@ namespace Allgregator.ViewModels.Rss {
 
         public async Task Load() {
             if (Chapters == null) {
-                IEnumerable<Chapter> chapters = null;
-                try {
-                    chapters = await chapterRepository.Get();
-                }
-                catch (Exception) {
-                    /*//TODO Log*/
-                    chapters = ChapterRepository.CreateDefault();
-                }
-
+                var chapters = await chapterRepository.GetOrDefault();
                 if (chapters != null) {
                     var container = (App.Current as PrismApplication).Container;
                     Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));

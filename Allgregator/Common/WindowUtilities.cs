@@ -6,11 +6,19 @@ using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 
 namespace Allgregator.Common {
     public static class WindowUtilities {
+        public static Settings GetSettings() {
+            var container = (App.Current as PrismApplication).Container;
+            var settingsRepository = container.Resolve<SettingsRepository>();
+            var settings = settingsRepository.Get();
+            return settings;
+        }
+
         public static MainWindow GetMainWindow() {
             var container = (App.Current as PrismApplication).Container;
             var window = container.Resolve<MainWindow>();
@@ -20,7 +28,7 @@ namespace Allgregator.Common {
             return window;
         }
 
-        private static async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        private static void Window_Closing(object sender, CancelEventArgs e) {
             if (sender is MainWindow mainWindow) {
                 var container = (App.Current as PrismApplication).Container;
                 var eventAggregator = container.Resolve<IEventAggregator>();
@@ -30,9 +38,9 @@ namespace Allgregator.Common {
                 settings.MainWindowBounds = mainWindow.RestoreBounds;
                 settings.MainWindowState = mainWindow.WindowState;
                 try {
-                    await settingsRepository.Save(settings);
+                    settingsRepository.Save(settings);
                 }
-                catch (Exception) { /*//TODO Log*/ }
+                catch (Exception ex) { /*//TODO Log*/ }
             }
         }
 
@@ -69,6 +77,6 @@ namespace Allgregator.Common {
         }
     }
 
-    public class WindowClosingEvent : PubSubEvent<System.ComponentModel.CancelEventArgs> { }
+    public class WindowClosingEvent : PubSubEvent<CancelEventArgs> { }
 
 }

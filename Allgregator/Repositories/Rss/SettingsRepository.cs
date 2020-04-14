@@ -1,20 +1,32 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
+using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
     public class SettingsRepository {
         private const string nameFile = "settings.json";
+
+        public Settings GetOrDefault() {
+            try {
+                return Get();
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+            }
+
+            return new Settings();
+        }
+
         public Settings Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = File.ReadAllText(name);
             return JsonSerializer.Deserialize<Settings>(json);
         }
 
-        public async Task Save(Settings settings) {
+        public void Save(Settings settings) {
             if (!Directory.Exists(Given.PathData))
                 Directory.CreateDirectory(Given.PathData);
             var json = JsonSerializer.Serialize<Settings>(settings,
@@ -25,7 +37,7 @@ namespace Allgregator.Repositories.Rss {
                 });
 
             var name = Path.Combine(Given.PathData, nameFile);
-            await File.WriteAllTextAsync(name, json);
+            File.WriteAllText(name, json);
         }
     }
 }

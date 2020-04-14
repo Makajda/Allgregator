@@ -1,5 +1,6 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models.Rss;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
@@ -9,6 +10,20 @@ using System.Threading.Tasks;
 namespace Allgregator.Repositories.Rss {
     public class LinkRepository {
         private const string nameFile = "links{0}.json";
+
+        public async Task<IEnumerable<Link>> GetOrDefault(int chapterId) {
+            IEnumerable<Link> s;
+            try {
+                s = await Get(chapterId);
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+                s = CreateDefault();
+            }
+
+            return s;
+        }
+
         public async Task<IEnumerable<Link>> Get(int chapterId) {
             var name = GetName(chapterId);
             var json = await File.ReadAllTextAsync(name);
@@ -32,7 +47,7 @@ namespace Allgregator.Repositories.Rss {
             return name;
         }
 
-        public static IEnumerable<Link> CreateDefault() {
+        private IEnumerable<Link> CreateDefault() {
             return new List<Link>() {
                 new Link() {
                     HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",

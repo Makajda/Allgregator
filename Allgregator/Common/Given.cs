@@ -9,7 +9,8 @@ namespace Allgregator.Common {
         public const string MainRegion = "MainRegion";
     }
 
-    public class ChapterChangedEvent : PubSubEvent<Chapter> { }
+    public class CurrentChapterChangedEvent : PubSubEvent<Chapter> { }
+    public class LinkMovedEvent : PubSubEvent<(int Id, Link Link)> { }
 
     public enum RssChapterViews {
         NewsView,

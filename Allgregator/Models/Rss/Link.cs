@@ -8,11 +8,6 @@ namespace Allgregator.Models.Rss {
         private string name;
         private string htmlUrl;
 
-        public string XmlUrl {
-            get => xmlUrl;
-            set => SetProperty(ref xmlUrl, value);
-        }
-
         public string Name {
             get => name;
             set => SetProperty(ref name, value);
@@ -21,6 +16,11 @@ namespace Allgregator.Models.Rss {
         public string HtmlUrl {
             get => htmlUrl;
             set => SetProperty(ref htmlUrl, value);
+        }
+
+        public string XmlUrl {
+            get => xmlUrl;
+            set => SetProperty(ref xmlUrl, value);
         }
 
         public Link Clone() {

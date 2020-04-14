@@ -9,6 +9,18 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
+        public async Task<Mined> GetOrDefault(int chapterId) {
+            Mined s;
+            try {
+                s = await Get(chapterId);
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+            }
+
+            return new Mined();
+        }
+
         public async Task<Mined> Get(int chapterId) {
             var (entryName, fileName) = GetNames(chapterId);
             Mined mined = null;

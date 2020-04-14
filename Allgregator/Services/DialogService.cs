@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -6,12 +7,8 @@ using System.Windows.Media;
 
 namespace Allgregator.Services {
     public class DialogService {
-        public void Show(string message, Action<object> callback, object parameter = null, double fontSize = 16, bool isStrikethrough = false) {
-            var panel = new Grid() {
-                Background = Brushes.Red,
-                Width = 398d,
-                Height = 246d
-            };
+        public void Show(string message, Action callback, double fontSize = 16, bool isStrikethrough = false) {
+            var (popup, grid) = Create();
 
             var textBlock = new TextBlock() {
                 Text = message,
@@ -26,16 +23,7 @@ namespace Allgregator.Services {
                 textBlock.TextDecorations = TextDecorations.Strikethrough;
             }
 
-            panel.Children.Add(textBlock);
-
-            var popup = new Popup() {
-                AllowsTransparency = true,
-                UseLayoutRounding = true,
-                StaysOpen = false,
-                Placement = PlacementMode.Mouse,
-                Child = panel,
-                IsOpen = true
-            };
+            grid.Children.Add(textBlock);
 
             if (callback != null) {
                 var button = new Button() {
@@ -49,9 +37,58 @@ namespace Allgregator.Services {
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
 
-                button.Click += (s, e) => { popup.IsOpen = false; callback(parameter); };
-                panel.Children.Add(button);
+                button.Click += (s, e) => { popup.IsOpen = false; callback(); };
+                grid.Children.Add(button);
             }
+        }
+
+        public void Show(IEnumerable<string> messages, Action<string> callback, double fontSize = 16) {
+            var (popup, grid) = Create();
+
+            var scrollViewer = new ScrollViewer() {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
+
+            var itemsControl = new ItemsControl() {
+                Foreground = Brushes.White,
+                FontSize = fontSize
+            };
+
+            scrollViewer.Content = itemsControl;
+            grid.Children.Add(scrollViewer);
+
+            foreach (var message in messages) {
+                var button = new Button() {
+                    Content = message,
+                    Padding = new Thickness(20)
+                };
+
+                button.Click += (s, e) => {
+                    popup.IsOpen = false; callback(message);
+                };
+
+                itemsControl.Items.Add(button);
+            }
+        }
+
+        private (Popup, Grid) Create() {
+            var panel = new Grid() {
+                Background = Brushes.Red,
+                Width = 398d,
+                Height = 246d
+            };
+
+            var popup = new Popup() {
+                AllowsTransparency = true,
+                UseLayoutRounding = true,
+                StaysOpen = false,
+                Placement = PlacementMode.Mouse,
+                Child = panel,
+                IsOpen = true
+            };
+
+            return (popup, panel);
         }
     }
 }

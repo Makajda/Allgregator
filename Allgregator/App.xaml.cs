@@ -1,6 +1,5 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
-using Allgregator.Repositories.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
 using Allgregator.Views.Rss;
@@ -32,17 +31,7 @@ namespace Allgregator {
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
-            var settingsRepository = Container.Resolve<SettingsRepository>();
-            Settings settings;
-            try {
-                settings = settingsRepository.Get();
-            }
-            catch (Exception) {
-                /*//TODO Log*/
-                settings = new Settings();
-            }
-
-            containerRegistry.RegisterInstance<Settings>(settings);
+            containerRegistry.RegisterInstance<Settings>(WindowUtilities.GetSettings());
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
 

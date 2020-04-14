@@ -12,7 +12,7 @@ namespace Allgregator.ViewModels.Rss {
             OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri.ToString()));
             MoveCommand = new DelegateCommand<Reco>(Move);
 
-            eventAggregator.GetEvent<ChapterChangedEvent>().Subscribe((chapter) => Chapter = chapter);
+            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
 
         public DelegateCommand<Reco> OpenCommand { get; private set; }
