@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"  
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:common="clr-namespace:Allgregator.Common"
              >
 
     <UserControl.Resources>
@@ -48,13 +49,22 @@
             <Setter Property="FontSize" Value="16"/>
         </Style>
 
+        <Style x:Key="managerButton" TargetType="ButtonBase">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template" Value="{StaticResource ButtonPathTemplate}"/>
+            <Setter Property="common:AttachedControl.Path" Value="M0,0 V1 H1 V0 Z"/>
+        </Style>
+
         <DataTemplate x:Key="moveColumn">
-            <Button Content="&#x21AB;" Width="50" FontSize="20" Padding="9"
+            <Button Content="&#x21B4;" Style="{StaticResource managerButton}"
                     Command="{Binding DataContext.MoveCommand, ElementName=dg}" CommandParameter="{Binding}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="delColumn">
-            <Button Content="&#x2715;" Width="50" FontSize="14" Padding="9" 
+            <Button Content="&#x2715;" FontSize="14" Style="{StaticResource managerButton}" 
                     Command="{Binding DataContext.DeleteCommand, ElementName=dg}" CommandParameter="{Binding}"/>
         </DataTemplate>
     </UserControl.Resources>
@@ -94,7 +104,7 @@
                   AutoGenerateColumns="False"
                   RowBackground="LightSteelBlue"
                   AlternatingRowBackground="LightGray"
-                  GridLinesVisibility="Vertical"
+                  GridLinesVisibility="None"
                   VerticalAlignment="Top"
                   HorizontalAlignment="Center"
                   ColumnWidth="*"
