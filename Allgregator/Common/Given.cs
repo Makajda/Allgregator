@@ -18,7 +18,7 @@ namespace Allgregator.Common {
         LinksView
     }
 
-    public enum RssLinkViews {
+    public enum RssLinksView {
         NormalView,
         DetectionView,
         SelectionView

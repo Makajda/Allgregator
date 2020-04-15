@@ -75,7 +75,7 @@
 
     <Grid Margin="0,30,0,0">
         <Grid Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinkViews.NormalView}}">
+            ConverterParameter={x:Static common:RssLinksView.NormalView}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -161,8 +161,8 @@
 
         <StackPanel VerticalAlignment="Center"
                     Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinkViews.DetectionView}}">
-            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="150" IsIndeterminate="True"/>
+            ConverterParameter={x:Static common:RssLinksView.DetectionView}}">
+            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True"/>
             <TextBlock Text="{Binding Address}" 
                        Foreground="White" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
@@ -171,11 +171,12 @@
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinkViews.SelectionView}}">
+            ConverterParameter={x:Static common:RssLinksView.SelectionView}}">
             <ItemsControl ItemsSource="{Binding Links}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding XmlUrl}" Style="{StaticResource managerButton}"
+                        <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource managerButton}"
+                                Margin="10" Padding="10"
                                 Command="{Binding DataContext.SelectionCommand, ElementName=view}"
                                 CommandParameter="{Binding}"/>
                     </DataTemplate>

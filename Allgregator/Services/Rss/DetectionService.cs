@@ -64,8 +64,15 @@ namespace Allgregator.Services.Rss {
                 }
             }
 
-            links.Add(new Link() { Name = address, XmlUrl = address, HtmlUrl = address });
-            return links.Distinct(new LinkComparer()).OrderBy(n => n.XmlUrl.ToString().Length);
+            if (links.Count == 0) {
+                links.Add(new Link() { Name = address, XmlUrl = address, HtmlUrl = address });
+            }
+            else {
+                links = links.Distinct(new LinkComparer()).OrderBy(n => n.XmlUrl.ToString().Length).ToList();
+            }
+
+            links.Add(new Link());
+            return links;
         }
 
         private async Task<List<Link>> ValidationRsses(IEnumerable<string> rsses) {
@@ -141,23 +148,6 @@ namespace Allgregator.Services.Rss {
                 }
                 catch (Exception) { }
             }
-
-            try {
-                var uAddress = new UriBuilder(address);
-                var hosts = uAddress.Host.Split('.');
-                if (hosts.Length > 1) {
-                    if (Uri.TryCreate($"http://feeds.feedburner.com/{hosts[hosts.Length - 2]}/", UriKind.Absolute, out Uri uri)) {
-                        result.Add(uri.ToString());
-                    }
-
-                    if (hosts.Length > 2) {
-                        if (Uri.TryCreate($"http://feeds.feedburner.com/{hosts[hosts.Length - 2]}{hosts[hosts.Length - 1]}/", UriKind.Absolute, out uri)) {
-                            result.Add(uri.ToString());
-                        }
-                    }
-                }
-            }
-            catch (Exception) { }
 
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Common;
+using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
@@ -30,6 +31,6 @@ namespace Allgregator.Models.Rss {
         public bool IsNeedToSaveLinks { get; set; }
 
         [JsonIgnore]
-        public bool IsNeedToSaveMined { get; set; }
+        public RssLinksView LinksView { get; set; }
     }
 }

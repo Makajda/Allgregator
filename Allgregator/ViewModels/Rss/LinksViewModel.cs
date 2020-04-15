@@ -46,8 +46,8 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref chapter, value);
         }
 
-        private RssLinkViews currentView;
-        public RssLinkViews CurrentView {
+        private RssLinksView currentView;
+        public RssLinksView CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
         }
@@ -85,22 +85,25 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async void Add() {
-            CurrentView = RssLinkViews.DetectionView;
+            CurrentView = RssLinksView.DetectionView;
             var link = await detectionService.GetLink(Address);
             if (link != null) {
                 Selected(link);
             }
             else {
                 Links = await detectionService.GetLinks(Address);
-                CurrentView = Links == null ? RssLinkViews.NormalView : RssLinkViews.SelectionView;
+                CurrentView = Links == null ? RssLinksView.NormalView : RssLinksView.SelectionView;
             }
         }
 
         private void Selected(Link link) {
-            Address = null;
-            Chapter.Links.Add(link);
-            Chapter.IsNeedToSaveLinks = true;
-            CurrentView = RssLinkViews.NormalView;
+            if (link.XmlUrl != null) {
+                Address = null;
+                Chapter.Links.Add(link);
+                Chapter.IsNeedToSaveLinks = true;
+            }
+
+            CurrentView = RssLinksView.NormalView;
         }
     }
 }
