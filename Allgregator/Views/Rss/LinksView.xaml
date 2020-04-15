@@ -55,7 +55,7 @@
             <Setter Property="Height" Value="50"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template" Value="{StaticResource ButtonPathTemplate}"/>
-            <Setter Property="common:AttachedControl.Path" Value="M0,0 V1 H1 V0 Z"/>
+            <Setter Property="common:AttachedControl.Rect" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="moveColumn">
@@ -86,8 +86,8 @@
             </Grid.ColumnDefinitions>
 
             <TextBox />
-            <Button Grid.Column="1" Content="pst" Width="50" FontSize="20" Padding="9" Margin="5"/>
-            <Button Grid.Column="2" Content="+" Width="100" FontSize="20" Padding="9" Margin="5"/>
+            <Button Grid.Column="1" Content="pst" Margin="5" Style="{StaticResource managerButton}"/>
+            <Button Grid.Column="2" Content="+" Width="100" Margin="5" Style="{StaticResource managerButton}"/>
         </Grid>
 
         <!--<ListBox Grid.Row="1"/>/todo-->
@@ -120,7 +120,9 @@
 
         <Border Grid.Row="3" Margin="10" Background="LightGoldenrodYellow" CornerRadius="50">
             <DockPanel Grid.Row="3" Margin="10">
-                <Button Content="Delete all" FontSize="16" Padding="9" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" />
+                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
+                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
+                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
 
                 <WrapPanel Orientation="Horizontal" Margin="25,0">
                     <WrapPanel.Resources>

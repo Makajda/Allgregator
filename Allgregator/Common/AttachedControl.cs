@@ -5,6 +5,13 @@ using System.Windows.Shapes;
 
 namespace Allgregator.Common {
     public class AttachedControl {
+
+
+        public static bool GetRect(DependencyObject obj) => (bool)obj.GetValue(RectProperty);
+        public static void SetRect(DependencyObject obj, bool value) => obj.SetValue(RectProperty, value);
+        public static readonly DependencyProperty RectProperty = DependencyProperty.RegisterAttached(
+            "Rect", typeof(bool), typeof(AttachedControl), new PropertyMetadata(false, OnRectChanged));
+
         public static bool GetCircle(DependencyObject obj) => (bool)obj.GetValue(CircleProperty);
         public static void SetCircle(DependencyObject obj, bool value) => obj.SetValue(CircleProperty, value);
         public static readonly DependencyProperty CircleProperty = DependencyProperty.RegisterAttached(
@@ -15,6 +22,14 @@ namespace Allgregator.Common {
         public static readonly DependencyProperty PathProperty = DependencyProperty.RegisterAttached(
             "Path", typeof(Geometry), typeof(AttachedControl), new PropertyMetadata(null, OnPathChanged));
 
+
+        private static void OnRectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (e.NewValue is bool value && value == true) {
+                //M0,0 V1 H1 V0 Z
+                var geometry = new RectangleGeometry() { Rect = new Rect(0, 0, 1, 1) };
+                SetPath(d, geometry);
+            }
+        }
 
         private static void OnCircleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (e.NewValue is bool value && value == true) {
