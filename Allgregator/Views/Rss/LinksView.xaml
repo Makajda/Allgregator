@@ -4,9 +4,12 @@
              xmlns:prism="http://prismlibrary.com/"  
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:common="clr-namespace:Allgregator.Common"
+             xmlns:converters="clr-namespace:Allgregator.Converters"
              >
 
     <UserControl.Resources>
+        <converters:IntEqToVisibilityConverter x:Key="IntEqToVisibilityConverter"/>
+
         <Style TargetType="DataGridCell" >
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
@@ -70,61 +73,54 @@
     </UserControl.Resources>
 
     <Grid Margin="0,30,0,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinkViews.ListView}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox />
-            <Button Grid.Column="1" Content="pst" Margin="5" Style="{StaticResource managerButton}"/>
-            <Button Grid.Column="2" Content="+" Width="100" Margin="5" Style="{StaticResource managerButton}"/>
-        </Grid>
+                <TextBox x:Name="linkAddress"/>
+                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" FontSize="14" Style="{StaticResource managerButton}"/>
+                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource managerButton}"/>
+            </Grid>
 
-        <!--<ListBox Grid.Row="1"/>/todo-->
+            <DataGrid Grid.Row="1"
+                      x:Name="dg"
+                      BeginningEdit="dg_BeginningEdit" 
+                      CellEditEnding="dg_CellEditEnding"
+                      ItemsSource="{Binding Chapter.Links}"
+                      SelectionMode="Single" 
+                      SelectionUnit="Cell"
+                      CanUserDeleteRows="False"
+                      CanUserAddRows="False"
+                      AutoGenerateColumns="False"
+                      RowBackground="LightSteelBlue"
+                      AlternatingRowBackground="LightGray"
+                      GridLinesVisibility="None"
+                      VerticalAlignment="Top"
+                      HorizontalAlignment="Center"
+                      ColumnWidth="*"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTextColumn Header="Url" Binding="{Binding Path=HtmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTextColumn Header="Xml" Binding="{Binding Path=XmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource moveColumn}" Width="50"/>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
-        <DataGrid Grid.Row="2"
-                  x:Name="dg"
-                  BeginningEdit="dg_BeginningEdit" 
-                  CellEditEnding="dg_CellEditEnding"
-                  ItemsSource="{Binding Chapter.Links}"
-                  SelectionMode="Single" 
-                  SelectionUnit="Cell"
-                  CanUserDeleteRows="False"
-                  CanUserAddRows="False"
-                  AutoGenerateColumns="False"
-                  RowBackground="LightSteelBlue"
-                  AlternatingRowBackground="LightGray"
-                  GridLinesVisibility="None"
-                  VerticalAlignment="Top"
-                  HorizontalAlignment="Center"
-                  ColumnWidth="*"
-                  >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
-                <DataGridTextColumn Header="Url" Binding="{Binding Path=HtmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
-                <DataGridTextColumn Header="Xml" Binding="{Binding Path=XmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
-                <DataGridTemplateColumn CellTemplate="{StaticResource moveColumn}" Width="50"/>
-                <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <Border Grid.Row="3" Margin="10" Background="LightGoldenrodYellow" CornerRadius="50">
-            <DockPanel Grid.Row="3" Margin="10">
-                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
-                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
-                <Button Content="Delete all" Margin="5,5,25,5" DockPanel.Dock="Right" TabIndex="999" Style="{StaticResource managerButton }"/>
-
-                <WrapPanel Orientation="Horizontal" Margin="25,0">
+            <Border Grid.Row="2" Margin="10" Background="LightGoldenrodYellow" CornerRadius="50">
+                <WrapPanel Grid.Row="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
                     <WrapPanel.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="Margin" Value="15,0,0,0"/>
@@ -134,6 +130,10 @@
                             <Setter Property="Padding" Value="5"/>
                             <Setter Property="FontSize" Value="16"/>
                             <Setter Property="Width" Value="100"/>
+                        </Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource managerButton}">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Width" Value="130"/>
                         </Style>
                     </WrapPanel.Resources>
 
@@ -149,8 +149,29 @@
                         <TextBlock Text="Name"/>
                         <TextBox Width="300"/>
                     </StackPanel>
+
+                    <Button Content="to opml"/>
+                    <Button Content="from opml"/>
+                    <Button Content="delete all"/>
                 </WrapPanel>
-            </DockPanel>
-        </Border>
+            </Border>
+        </Grid>
+
+        <StackPanel VerticalAlignment="Center"
+                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinkViews.DetectionView}}">
+            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="150" IsIndeterminate="True"/>
+            <TextBlock Text="{Binding Text, ElementName=linkAddress}" 
+                       Foreground="White" FontSize="28" Margin="20"
+                       TextWrapping="Wrap" TextAlignment="Center"/>
+        </StackPanel>
+
+        <ListBox HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinkViews.AddView}}">
+            <ListBoxItem>111</ListBoxItem>
+            <ListBoxItem>222</ListBoxItem>
+            <ListBoxItem>333</ListBoxItem>
+        </ListBox>
     </Grid>
 </UserControl>

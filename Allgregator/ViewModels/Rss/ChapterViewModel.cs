@@ -53,7 +53,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand UpdateCommand { get; private set; }
         public DelegateCommand CancelUpdateCommand { get; private set; }
         public OreService OreService { get; private set; }
-        public Chapter Chapter { get; set; }
+        public Chapter Chapter { get; private set; }
 
         private bool isActive;
         public bool IsActive {

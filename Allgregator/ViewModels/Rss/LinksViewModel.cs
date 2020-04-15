@@ -36,6 +36,12 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref chapter, value);
         }
 
+        private RssLinkViews currentView = RssLinkViews.DetectionView;//todo
+        public RssLinkViews CurrentView {
+            get => currentView;
+            private set => SetProperty(ref currentView, value);
+        }
+
         private async void Move(Link link) {
             var chapters = await chapterRepository.GetOrDefault();
             dialogService.Show(chapters.Where(n => n.Id != Chapter.Id).Select(n => n.Name),
