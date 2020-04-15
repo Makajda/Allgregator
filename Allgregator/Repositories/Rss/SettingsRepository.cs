@@ -20,7 +20,7 @@ namespace Allgregator.Repositories.Rss {
             return new Settings();
         }
 
-        public Settings Get() {
+        private Settings Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = File.ReadAllText(name);
             return JsonSerializer.Deserialize<Settings>(json);

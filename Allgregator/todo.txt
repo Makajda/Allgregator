@@ -1,10 +1,10 @@
 ﻿foreground и background
-links: add link, find, add chapter
+add chapter, delete chapter
+add from opml, save opml
 tests: retrieve, outdate, acceptTime
 
 проверить try на все вызовы всех репозиториев и log
 проверить пустую папку Data
+что делать с CreateDefault
 
 1,6180339887 
-
-при нажатии на +, в строке 2 показать обнаружение вместо списка

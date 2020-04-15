@@ -20,8 +20,8 @@ namespace Allgregator.Views.Rss {
         private void dg_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e) {
             var link = e.Row.Item as Link;
             if (originalLink != null && link != null) {
-                if (DataContext is LinksViewModel viewModel && viewModel.Chapter != null && !viewModel.Chapter.IsNeedToSaveLinks) {
-                    viewModel.Chapter.IsNeedToSaveLinks = !originalLink.Equals(link);
+                if (DataContext is LinksViewModel viewModel && viewModel.Chapter != null && !viewModel.Chapter.Linked.IsNeedToSave) {
+                    viewModel.Chapter.Linked.IsNeedToSave = !originalLink.Equals(link);
                 }
             }
         }

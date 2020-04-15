@@ -1,6 +1,4 @@
-﻿using Allgregator.Common;
-using Prism.Mvvm;
-using System.Collections.ObjectModel;
+﻿using Prism.Mvvm;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Models.Rss {
@@ -13,11 +11,11 @@ namespace Allgregator.Models.Rss {
             set => SetProperty(ref name, value);
         }
 
-        private ObservableCollection<Link> links;
+        private Linked linked;
         [JsonIgnore]
-        public ObservableCollection<Link> Links {
-            get => links;
-            set => SetProperty(ref links, value);
+        public Linked Linked {
+            get { return linked; }
+            set { SetProperty(ref linked, value); }
         }
 
         private Mined mined;
@@ -26,11 +24,5 @@ namespace Allgregator.Models.Rss {
             get { return mined; }
             set { SetProperty(ref mined, value); }
         }
-
-        [JsonIgnore]
-        public bool IsNeedToSaveLinks { get; set; }
-
-        [JsonIgnore]
-        public RssLinksView LinksView { get; set; }
     }
 }

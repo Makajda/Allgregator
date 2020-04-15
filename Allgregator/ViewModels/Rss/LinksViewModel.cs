@@ -6,8 +6,6 @@ using Allgregator.Services.Rss;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Allgregator.ViewModels.Rss {
@@ -27,10 +25,10 @@ namespace Allgregator.ViewModels.Rss {
             this.dialogService = dialogService;
             this.detectionService = detectionService;
 
-            AddCommand = new DelegateCommand(Add);
+            AddCommand = new DelegateCommand(async () => await detectionService.SetAddress(Chapter.Linked));
             MoveCommand = new DelegateCommand<Link>(Move);
             DeleteCommand = new DelegateCommand<Link>(Delete);
-            SelectionCommand = new DelegateCommand<Link>(Selected);
+            SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Chapter.Linked, link));
 
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
@@ -46,32 +44,14 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref chapter, value);
         }
 
-        private RssLinksView currentView;
-        public RssLinksView CurrentView {
-            get => currentView;
-            private set => SetProperty(ref currentView, value);
-        }
-
-        private string address;
-        public string Address {
-            get { return address; }
-            set { SetProperty(ref address, value); }
-        }
-
-        private IEnumerable<Link> links;
-        public IEnumerable<Link> Links {
-            get { return links; }
-            set { SetProperty(ref links, value); }
-        }
-
         private async void Move(Link link) {
             var chapters = await chapterRepository.GetOrDefault();
             dialogService.Show(chapters.Where(n => n.Id != Chapter.Id).Select(n => n.Name),
                 name => {
                     var newChapter = chapters.FirstOrDefault(n => n.Name == name);
                     eventAggregator.GetEvent<LinkMovedEvent>().Publish((newChapter.Id, link));
-                    Chapter.IsNeedToSaveLinks = true;
-                    Chapter.Links.Remove(link);
+                    Chapter.Linked.IsNeedToSave = true;
+                    Chapter.Linked.Links.Remove(link);
                 });
         }
 
@@ -79,31 +59,9 @@ namespace Allgregator.ViewModels.Rss {
             dialogService.Show($"{link.Name}?", DeleteReal, 20, true);
 
             void DeleteReal() {
-                Chapter.Links.Remove(link);
-                Chapter.IsNeedToSaveLinks = true;
+                Chapter.Linked.Links.Remove(link);
+                Chapter.Linked.IsNeedToSave = true;
             }
-        }
-
-        private async void Add() {
-            CurrentView = RssLinksView.DetectionView;
-            var link = await detectionService.GetLink(Address);
-            if (link != null) {
-                Selected(link);
-            }
-            else {
-                Links = await detectionService.GetLinks(Address);
-                CurrentView = Links == null ? RssLinksView.NormalView : RssLinksView.SelectionView;
-            }
-        }
-
-        private void Selected(Link link) {
-            if (link.XmlUrl != null) {
-                Address = null;
-                Chapter.Links.Add(link);
-                Chapter.IsNeedToSaveLinks = true;
-            }
-
-            CurrentView = RssLinksView.NormalView;
         }
     }
 }

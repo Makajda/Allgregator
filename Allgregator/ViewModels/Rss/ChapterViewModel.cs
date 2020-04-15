@@ -121,7 +121,7 @@ namespace Allgregator.ViewModels.Rss {
 
         private void MoveAll() {
             if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
-                Chapter.IsNeedToSaveMined = true;
+                Chapter.Mined.IsNeedToSave = true;
                 var cache = Chapter.Mined.NewRecos.Reverse();
                 foreach (var reco in cache) {
                     Chapter.Mined.NewRecos.Remove(reco);

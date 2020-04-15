@@ -2,18 +2,17 @@
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Services.Rss {
     public class ChapterService {
-        private readonly LinkRepository linkRepository;
+        private readonly LinkedRepository linkedRepository;
         private readonly MinedRepository minedRepository;
         public ChapterService(
-            LinkRepository linkRepository,
+            LinkedRepository linkedRepository,
             MinedRepository minedRepository
             ) {
-            this.linkRepository = linkRepository;
+            this.linkedRepository = linkedRepository;
             this.minedRepository = minedRepository;
         }
 
@@ -35,15 +34,17 @@ namespace Allgregator.Services.Rss {
         public async Task LinkMoved(Chapter chapter, (int Id, Link Link) obj) {
             if (obj.Id == chapter.Id) {
                 await LoadLinks(chapter);
-                chapter.Links.Add(obj.Link);
+                chapter.Linked.Links.Add(obj.Link);
                 await SaveLinks(chapter);
             }
         }
 
         private async Task LoadLinks(Chapter chapter, bool force = true) {
-            if (chapter != null && chapter.Links == null && force) {
-                var links = await linkRepository.GetOrDefault(chapter.Id);
-                chapter.Links = new ObservableCollection<Link>(links);
+            if (chapter != null && chapter.Linked == null && force) {
+                chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);
+                if (chapter.Linked.CurrentView == RssLinksState.Detection) {
+                    chapter.Linked.CurrentView = RssLinksState.Normal;
+                }
             }
         }
 
@@ -54,11 +55,11 @@ namespace Allgregator.Services.Rss {
         }
 
         private async Task SaveLinks(Chapter chapter) {
-            if (chapter != null && chapter.Links != null) {
-                if (chapter.IsNeedToSaveLinks) {
+            if (chapter?.Linked?.Links != null) {
+                if (chapter.Linked.IsNeedToSave) {
                     try {
-                        await linkRepository.Save(chapter.Id, chapter.Links);
-                        chapter.IsNeedToSaveLinks = false;
+                        await linkedRepository.Save(chapter.Id, chapter.Linked);
+                        chapter.Linked.IsNeedToSave = false;
                     }
                     catch (Exception e) { /*//TODO Log*/ }
                 }
@@ -66,11 +67,11 @@ namespace Allgregator.Services.Rss {
         }
 
         private async Task SaveMined(Chapter chapter) {
-            if (chapter != null && chapter.Mined != null) {
-                if (chapter.IsNeedToSaveMined) {
+            if (chapter?.Mined != null) {
+                if (chapter.Mined.IsNeedToSave) {
                     try {
                         await minedRepository.Save(chapter.Id, chapter.Mined);
-                        chapter.IsNeedToSaveMined = false;
+                        chapter.Mined.IsNeedToSave = false;
                     }
                     catch (Exception e) { /*//TODO Log*/ }
                 }

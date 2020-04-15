@@ -20,7 +20,7 @@ namespace Allgregator.Repositories.Rss {
             return new Mined();
         }
 
-        public async Task<Mined> Get(int chapterId) {
+        private async Task<Mined> Get(int chapterId) {
             var (entryName, fileName) = GetNames(chapterId);
             Mined mined = null;
 

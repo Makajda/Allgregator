@@ -15,7 +15,7 @@ namespace Allgregator.Common {
         public static Settings GetSettings() {
             var container = (App.Current as PrismApplication).Container;
             var settingsRepository = container.Resolve<SettingsRepository>();
-            var settings = settingsRepository.Get();
+            var settings = settingsRepository.GetOrDefault();
             return settings;
         }
 

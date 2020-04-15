@@ -12,9 +12,33 @@ using System.Xml;
 
 namespace Allgregator.Services.Rss {
     public class DetectionService {
-        private const int timeout = 9_000;
+        private const int timeout = 45_000;
 
-        public async Task<Link> GetLink(string address) {
+        public async Task SetAddress(Linked linked) {
+            linked.CurrentView = RssLinksState.Detection;
+            var link = await GetLink(linked.Address);
+            if (link != null) {
+                Selected(linked, link);
+            }
+            else {
+                linked.DetectedLinks = await GetLinks(linked.Address);
+                linked.CurrentView = linked.DetectedLinks == null ? RssLinksState.Normal : RssLinksState.Selection;
+                linked.IsNeedToSave = true;
+            }
+        }
+
+        public void Selected(Linked linked, Link link) {
+            if (link.XmlUrl != null) {
+                linked.Links.Add(link);
+                linked.Address = null;
+                linked.DetectedLinks = null;
+            }
+
+            linked.CurrentView = RssLinksState.Normal;
+            linked.IsNeedToSave = true;
+        }
+
+        private async Task<Link> GetLink(string address) {
             Link link = null;
             if (!string.IsNullOrWhiteSpace(address)) {
                 using var cancellationTokenSource = new CancellationTokenSource(timeout);
@@ -38,7 +62,7 @@ namespace Allgregator.Services.Rss {
             return link;
         }
 
-        public async Task<IEnumerable<Link>> GetLinks(string address) {
+        private async Task<IEnumerable<Link>> GetLinks(string address) {
             if (string.IsNullOrWhiteSpace(address)) {
                 return null;
             }

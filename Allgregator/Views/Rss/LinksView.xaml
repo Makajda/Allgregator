@@ -74,8 +74,8 @@
     </UserControl.Resources>
 
     <Grid Margin="0,30,0,0">
-        <Grid Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksView.NormalView}}">
+        <Grid Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksState.Normal}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -89,7 +89,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Text="{Binding Address}"/>
+                <TextBox Text="{Binding Chapter.Linked.Address}"/>
                 <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" FontSize="14" Style="{StaticResource managerButton}"/><!--//todo-->
                 <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource managerButton}"
                         Command="{Binding AddCommand}"/>
@@ -99,7 +99,7 @@
                       x:Name="dg"
                       BeginningEdit="dg_BeginningEdit" 
                       CellEditEnding="dg_CellEditEnding"
-                      ItemsSource="{Binding Chapter.Links}"
+                      ItemsSource="{Binding Chapter.Linked.Links}"
                       SelectionMode="Single" 
                       SelectionUnit="Cell"
                       CanUserDeleteRows="False"
@@ -160,19 +160,19 @@
         </Grid>
 
         <StackPanel VerticalAlignment="Center"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksView.DetectionView}}">
+                    Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksState.Detection}}">
             <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True"/>
-            <TextBlock Text="{Binding Address}" 
+            <TextBlock Text="{Binding Chapter.Linked.Address}" 
                        Foreground="White" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
 
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                      Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksView.SelectionView}}">
-            <ItemsControl ItemsSource="{Binding Links}">
+                      Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksState.Selection}}">
+            <ItemsControl ItemsSource="{Binding Chapter.Linked.DetectedLinks}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource managerButton}"

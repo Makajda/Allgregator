@@ -22,7 +22,7 @@ namespace Allgregator.Repositories.Rss {
             return CreateDefault();
         }
 
-        public async Task<IEnumerable<Chapter>> Get() {
+        private async Task<IEnumerable<Chapter>> Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = await File.ReadAllTextAsync(name);
             return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);

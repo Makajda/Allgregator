@@ -1,17 +1,17 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models.Rss;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
-    public class LinkRepository {
-        private const string nameFile = "links{0}.json";
+    public class LinkedRepository {
+        private const string nameFile = "linked{0}.json";
 
-        public async Task<IEnumerable<Link>> GetOrDefault(int chapterId) {
+        public async Task<Linked> GetOrDefault(int chapterId) {
             try {
                 return await Get(chapterId);
             }
@@ -22,14 +22,14 @@ namespace Allgregator.Repositories.Rss {
             return CreateDefault();
         }
 
-        public async Task<IEnumerable<Link>> Get(int chapterId) {
+        private async Task<Linked> Get(int chapterId) {
             var name = GetName(chapterId);
             var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<IEnumerable<Link>>(json);
+            return JsonSerializer.Deserialize<Linked>(json);
         }
 
-        public async Task Save(int chapterId, IEnumerable<Link> links) {
-            var json = JsonSerializer.Serialize<IEnumerable<Link>>(links,
+        public async Task Save(int chapterId, Linked linked) {
+            var json = JsonSerializer.Serialize<Linked>(linked,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
@@ -45,8 +45,8 @@ namespace Allgregator.Repositories.Rss {
             return name;
         }
 
-        private IEnumerable<Link> CreateDefault() {
-            return new List<Link>() {
+        private Linked CreateDefault() {
+            var links = new ObservableCollection<Link>() {
                 new Link() {
                     HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",
                     Name = "BBC News - Health",
@@ -73,6 +73,8 @@ namespace Allgregator.Repositories.Rss {
                     XmlUrl = "http://feeds.reuters.com/news/artsculture"
                 }
             };
+
+            return new Linked() { Links = links };
         }
     }
 }
