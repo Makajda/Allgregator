@@ -5,20 +5,27 @@ using System.Windows.Shapes;
 
 namespace Allgregator.Common {
     public class AttachedControl {
-        public static Geometry GetPath(DependencyObject obj) {
-            return (Geometry)obj.GetValue(PathProperty);
+        public static bool GetCircle(DependencyObject obj) => (bool)obj.GetValue(CircleProperty);
+        public static void SetCircle(DependencyObject obj, bool value) => obj.SetValue(CircleProperty, value);
+        public static readonly DependencyProperty CircleProperty = DependencyProperty.RegisterAttached(
+            "Circle", typeof(bool), typeof(AttachedControl), new PropertyMetadata(false, OnCircleChanged));
+
+        public static Geometry GetPath(DependencyObject obj) => (Geometry)obj.GetValue(PathProperty);
+        public static void SetPath(DependencyObject obj, Geometry value) => obj.SetValue(PathProperty, value);
+        public static readonly DependencyProperty PathProperty = DependencyProperty.RegisterAttached(
+            "Path", typeof(Geometry), typeof(AttachedControl), new PropertyMetadata(null, OnPathChanged));
+
+
+        private static void OnCircleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (e.NewValue is bool value && value == true) {
+                //M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1
+                var geometry = new EllipseGeometry() { RadiusX = 1d, RadiusY = 1d };
+                SetPath(d, geometry);
+            }
         }
-
-        public static void SetPath(DependencyObject obj, Geometry value) {
-            obj.SetValue(PathProperty, value);
-        }
-
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.RegisterAttached("Path", typeof(Geometry), typeof(AttachedControl), new PropertyMetadata(null, OnPathChanged));
-
 
         private static void OnPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (d is FrameworkElement frameworkElement) {
+            if (d is FrameworkElement frameworkElement) {//one time
                 frameworkElement.Loaded += FrameworkElement_Loaded;
             }
         }

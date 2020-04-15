@@ -32,7 +32,7 @@
 
     <Grid>
         <Button Width="160" Height="100" Padding="15" Style="{StaticResource managerButton}"
-                common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
+                common:AttachedControl.Circle="True"
                 Background="LightGoldenrodYellow"
                 Command="{Binding OpenCommand}">
             <DockPanel>
@@ -49,7 +49,7 @@
 
         <Button Width="40" Height="40" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
                 Command="{Binding UpdateCommand}"
-                common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
+                common:AttachedControl.Circle="True"
                 Background="Transparent" Foreground="White"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -113,7 +113,7 @@
                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Grid Visibility="{Binding Chapter.Mined, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
                 <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
-                              common:AttachedControl.Path="M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1"
+                              common:AttachedControl.Circle="True"
                               x:Name="errorsButton" Background="Red"
                               Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
                               HorizontalAlignment="Right"/>
