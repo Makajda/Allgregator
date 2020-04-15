@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:common="clr-namespace:Allgregator.Common"
              xmlns:converters="clr-namespace:Allgregator.Converters"
+             x:Name="view"
              >
 
     <UserControl.Resources>
@@ -74,7 +75,7 @@
 
     <Grid Margin="0,30,0,0">
         <Grid Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinkViews.ListView}}">
+            ConverterParameter={x:Static common:RssLinkViews.NormalView}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -88,9 +89,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="linkAddress"/>
-                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" FontSize="14" Style="{StaticResource managerButton}"/>
-                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource managerButton}"/>
+                <TextBox Text="{Binding Address}"/>
+                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" FontSize="14" Style="{StaticResource managerButton}"/><!--//todo-->
+                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource managerButton}"
+                        Command="{Binding AddCommand}"/>
             </Grid>
 
             <DataGrid Grid.Row="1"
@@ -161,17 +163,24 @@
                     Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinkViews.DetectionView}}">
             <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="150" IsIndeterminate="True"/>
-            <TextBlock Text="{Binding Text, ElementName=linkAddress}" 
+            <TextBlock Text="{Binding Address}" 
                        Foreground="White" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
 
-        <ListBox HorizontalAlignment="Center" VerticalAlignment="Center"
-                 Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinkViews.AddView}}">
-            <ListBoxItem>111</ListBoxItem>
-            <ListBoxItem>222</ListBoxItem>
-            <ListBoxItem>333</ListBoxItem>
-        </ListBox>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinkViews.SelectionView}}">
+            <ItemsControl ItemsSource="{Binding Links}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding XmlUrl}" Style="{StaticResource managerButton}"
+                                Command="{Binding DataContext.SelectionCommand, ElementName=view}"
+                                CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
