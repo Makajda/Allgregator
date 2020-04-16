@@ -85,10 +85,13 @@
             ConverterParameter={x:Static common:RssLinksStates.Normal}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid>
+            <TextBlock Text="New link:" Margin="120,0"/>
+            
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -96,7 +99,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="q" Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightGoldenrodYellow"
+                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightGoldenrodYellow"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
                 <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}"/>
@@ -106,9 +109,9 @@
                         Command="{Binding AddCommand}"/>
             </Grid>
 
-            <DataGrid Grid.Row="1"
+            <DataGrid Grid.Row="2"
                       x:Name="dg"
-                      Margin="0,20,0,0"
+                      Margin="0,30,0,0"
                       BeginningEdit="dg_BeginningEdit" 
                       CellEditEnding="dg_CellEditEnding"
                       ItemsSource="{Binding Chapter.Linked.Links}"
@@ -159,61 +162,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
-
-        <!--Chapter-->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksStates.Chapter}}">
-            <StackPanel>
-                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="LightGoldenrodYellow"
-                            Style="{StaticResource circleButton}" HorizontalAlignment="Left"
-                            Command="{Binding BackCommand}"/>
-
-                <StackPanel Margin="10" HorizontalAlignment="Center">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="20,20,0,0"/>
-                        </Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="Padding" Value="10"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Width" Value="250"/>
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <StackPanel>
-                        <TextBlock Text="Last Retrieve"/>
-                        <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Accept Time"/>
-                        <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Name"/>
-                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <WrapPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource circleButton}">
-                            <Setter Property="Margin" Value="20,60"/>
-                            <Setter Property="Padding" Value="15"/>
-                            <Setter Property="Width" Value="130"/>
-                            <Setter Property="Height" Value="90"/>
-                        </Style>
-                    </WrapPanel.Resources>
-
-                    <Button Content="to opml"/>
-                    <Button Content="from opml"/>
-                    <Button Content="delete all"/>
-                </WrapPanel>
-            </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>

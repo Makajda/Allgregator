@@ -1,5 +1,6 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
+using Allgregator.Services.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
 using Allgregator.Views.Rss;
@@ -32,6 +33,7 @@ namespace Allgregator {
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterInstance<Settings>(WindowUtilities.GetSettings());
+            containerRegistry.RegisterSingleton<ChapterService>();
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
 

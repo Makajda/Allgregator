@@ -14,6 +14,7 @@ namespace Allgregator.ViewModels.Rss {
         private readonly DialogService dialogService;
         private readonly DetectionService detectionService;
         private readonly IEventAggregator eventAggregator;
+
         public LinksViewModel(
             ChapterRepository chapterRepository,
             DialogService dialogService,
@@ -25,8 +26,6 @@ namespace Allgregator.ViewModels.Rss {
             this.dialogService = dialogService;
             this.detectionService = detectionService;
 
-            ToChapterCommand = new DelegateCommand(() => Chapter.Linked.CurrentState = RssLinksStates.Chapter);
-            BackCommand = new DelegateCommand(() => Chapter.Linked.CurrentState = RssLinksStates.Normal);
             AddCommand = new DelegateCommand(async () => await detectionService.SetAddress(Chapter.Linked));
             MoveCommand = new DelegateCommand<Link>(Move);
             DeleteCommand = new DelegateCommand<Link>(Delete);
@@ -35,8 +34,6 @@ namespace Allgregator.ViewModels.Rss {
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
 
-        public DelegateCommand ToChapterCommand { get; private set; }
-        public DelegateCommand BackCommand { get; private set; }
         public DelegateCommand AddCommand { get; private set; }
         public DelegateCommand<Link> MoveCommand { get; private set; }
         public DelegateCommand<Link> DeleteCommand { get; private set; }

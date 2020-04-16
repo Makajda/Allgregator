@@ -21,7 +21,6 @@ namespace Allgregator.Common {
     public enum RssLinksStates {
         Normal,
         Detection,
-        Selection,
-        Chapter
+        Selection
     }
 }

@@ -4,6 +4,8 @@
              xmlns:prism="http://prismlibrary.com/"  
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:views="clr-namespace:Allgregator.Views.Rss"
+             xmlns:common="clr-namespace:Allgregator.Common"
+             xmlns:converters="clr-namespace:Allgregator.Converters"
              >
 
     <DockPanel>
@@ -13,24 +15,30 @@
                    FontStretch="ExtraExpanded"
                    FontFamily="Comic"
                    VerticalAlignment="Center" 
-                   Margin="50,0,30,0"
+                   Margin="50,0,5,0"
                    Foreground="Green"
                    />
 
-        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right">
-            <ItemsControl ItemsSource="{Binding Chapters}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+        <DockPanel HorizontalAlignment="Right">
+            <Button Content="&#x26B9;" FontSize="32" Foreground="DarkBlue" Padding="0" Width="50" 
+                    VerticalContentAlignment="Top" BorderThickness="0" Background="Transparent" common:Pathatt.Circle="True"
+                    Command="{Binding SettingsCommand}"/>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <views:ChapterView />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Chapters}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ChapterView />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
     </DockPanel>
 </UserControl>
