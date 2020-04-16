@@ -18,9 +18,10 @@ namespace Allgregator.Common {
         LinksView
     }
 
-    public enum RssLinksState {
+    public enum RssLinksStates {
         Normal,
         Detection,
-        Selection
+        Selection,
+        Chapter
     }
 }

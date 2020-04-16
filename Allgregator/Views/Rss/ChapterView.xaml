@@ -19,7 +19,6 @@
             <Setter Property="Width" Value="80"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template" Value="{StaticResource ButtonPathTemplate}"/>
         </Style>
 
         <DataTemplate x:Key="errorItemTemplate">
@@ -32,7 +31,7 @@
 
     <Grid>
         <Button Width="160" Height="100" Padding="15" Style="{StaticResource managerButton}"
-                common:AttachedControl.Circle="True"
+                common:Pathatt.Circle="True"
                 Background="LightGoldenrodYellow"
                 Command="{Binding OpenCommand}">
             <DockPanel>
@@ -49,7 +48,7 @@
 
         <Button Width="40" Height="40" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
                 Command="{Binding UpdateCommand}"
-                common:AttachedControl.Circle="True"
+                common:Pathatt.Circle="True"
                 Background="Transparent" Foreground="White"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -61,7 +60,7 @@
         <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.NewsView}"
-                    common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
+                    common:Pathatt.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
                     Background="LightBlue" 
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
                     HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -69,7 +68,7 @@
                 ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
             <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
-                    common:AttachedControl.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
+                    common:Pathatt.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
                     Background="SandyBrown"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
                     HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -77,7 +76,7 @@
                 ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
             <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
-                    common:AttachedControl.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
+                    common:Pathatt.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
                     Background="SandyBrown"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
@@ -85,35 +84,35 @@
                 ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
             <Button Content="&#x2630;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.LinksView}"
-                    common:AttachedControl.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
+                    common:Pathatt.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
                     Background="LightGreen"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
                     Visibility="{Binding CurrentView, Converter={StaticResource IntNqToVisibilityConverter}, 
                 ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
             <Button Content="&#x1F9F9;" Style="{StaticResource managerButton}"
-                    common:AttachedControl.Path="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
+                    common:Pathatt.Path="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
                     Background="SandyBrown" 
                     Command="{Binding MoveCommand}"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
                     HorizontalAlignment="Right" VerticalAlignment="Top"/>
             <Button Content="&#x2B6E;" Style="{StaticResource managerButton}"
                     Command="{Binding UpdateCommand}"
-                    common:AttachedControl.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
+                    common:Pathatt.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
                     Background="RosyBrown"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
             <Button Content="&#x2715;" Style="{StaticResource managerButton}"
                     Command="{Binding CancelUpdateCommand}"
-                    common:AttachedControl.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
+                    common:Pathatt.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
                     Background="Yellow"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <Grid Visibility="{Binding Chapter.Mined, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
                 <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
-                              common:AttachedControl.Circle="True"
+                              common:Pathatt.Circle="True"
                               x:Name="errorsButton" Background="Red"
                               Visibility="{Binding Chapter.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
                               HorizontalAlignment="Right"/>

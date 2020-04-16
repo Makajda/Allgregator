@@ -12,10 +12,10 @@ namespace Allgregator.Models.Rss {
             set => SetProperty(ref links, value);
         }
 
-        private RssLinksState currentView;
-        public RssLinksState CurrentView {
-            get => currentView;
-            set => SetProperty(ref currentView, value);
+        private RssLinksStates currentState= RssLinksStates.Chapter;//todo
+        public RssLinksStates CurrentState {
+            get => currentState;
+            set => SetProperty(ref currentState, value);
         }
 
         private string address;

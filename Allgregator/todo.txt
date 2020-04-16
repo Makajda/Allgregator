@@ -8,3 +8,5 @@ tests: retrieve, outdate, acceptTime
 что делать с CreateDefault
 
 1,6180339887 
+
+getOrDefauly FileNotFoundException

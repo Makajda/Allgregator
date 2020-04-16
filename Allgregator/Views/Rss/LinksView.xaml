@@ -53,50 +53,61 @@
             <Setter Property="FontSize" Value="16"/>
         </Style>
 
-        <Style x:Key="managerButton" TargetType="ButtonBase">
-            <Setter Property="Padding" Value="10"/>
+        <Style x:Key="pathButton" TargetType="ButtonBase">
+            <Setter Property="Padding" Value="0"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template" Value="{StaticResource ButtonPathTemplate}"/>
-            <Setter Property="common:AttachedControl.Rect" Value="True"/>
+        </Style>
+
+        <Style x:Key="rectButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
+            <Setter Property="common:Pathatt.Rect" Value="True"/>
+        </Style>
+
+        <Style x:Key="circleButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
+            <Setter Property="common:Pathatt.Circle" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="moveColumn">
-            <Button Content="&#x21B4;" Style="{StaticResource managerButton}"
+            <Button Content="&#x21B4;" Style="{StaticResource rectButton}"
                     Command="{Binding DataContext.MoveCommand, ElementName=dg}" CommandParameter="{Binding}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="delColumn">
-            <Button Content="&#x2715;" FontSize="14" Style="{StaticResource managerButton}" 
+            <Button Content="&#x2715;" FontSize="14" Style="{StaticResource rectButton}" 
                     Command="{Binding DataContext.DeleteCommand, ElementName=dg}" CommandParameter="{Binding}"/>
         </DataTemplate>
     </UserControl.Resources>
 
     <Grid Margin="0,30,0,0">
-        <Grid Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksState.Normal}}">
+        <Grid Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksStates.Normal}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Text="{Binding Chapter.Linked.Address}"/>
-                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" FontSize="14" Style="{StaticResource managerButton}"/><!--//todo-->
-                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource managerButton}"
+                <Button x:Name="q" Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightGoldenrodYellow"
+                        Style="{StaticResource circleButton}"
+                        Command="{Binding ToChapterCommand}"/>
+                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}"/>
+                <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
+                        Style="{StaticResource rectButton}"/><!--//todo-->
+                <Button Grid.Column="3" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
                         Command="{Binding AddCommand}"/>
             </Grid>
 
             <DataGrid Grid.Row="1"
                       x:Name="dg"
+                      Margin="0,20,0,0"
                       BeginningEdit="dg_BeginningEdit" 
                       CellEditEnding="dg_CellEditEnding"
                       ItemsSource="{Binding Chapter.Linked.Links}"
@@ -120,62 +131,27 @@
                     <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
                 </DataGrid.Columns>
             </DataGrid>
-
-            <Border Grid.Row="2" Margin="10" Background="LightGoldenrodYellow" CornerRadius="50">
-                <WrapPanel Grid.Row="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <WrapPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="15,0,0,0"/>
-                        </Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="Padding" Value="5"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Width" Value="100"/>
-                        </Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource managerButton}">
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="Width" Value="130"/>
-                        </Style>
-                    </WrapPanel.Resources>
-
-                    <StackPanel>
-                        <TextBlock Text="Accept"/>
-                        <TextBox/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Last"/>
-                        <TextBox/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Name"/>
-                        <TextBox Width="300"/>
-                    </StackPanel>
-
-                    <Button Content="to opml"/>
-                    <Button Content="from opml"/>
-                    <Button Content="delete all"/>
-                </WrapPanel>
-            </Border>
         </Grid>
 
+        <!--Detection-->
         <StackPanel VerticalAlignment="Center"
-                    Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksState.Detection}}">
+                    Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksStates.Detection}}">
             <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True"/>
             <TextBlock Text="{Binding Chapter.Linked.Address}" 
                        Foreground="White" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
 
+        <!--DetectedLinks-->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                      Visibility="{Binding Chapter.Linked.CurrentView, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static common:RssLinksState.Selection}}">
+                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksStates.Selection}}">
             <ItemsControl ItemsSource="{Binding Chapter.Linked.DetectedLinks}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource managerButton}"
+                        <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource rectButton}"
                                 Margin="10" Padding="10"
                                 Command="{Binding DataContext.SelectionCommand, ElementName=view}"
                                 CommandParameter="{Binding}"/>
@@ -183,5 +159,56 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+
+        <!--Chapter-->
+        <StackPanel Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static common:RssLinksStates.Chapter}}">
+
+            <WrapPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Left">
+                <WrapPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="15,0,0,0"/>
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Width" Value="100"/>
+                    </Style>
+                </WrapPanel.Resources>
+
+                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="5,5,20,5" Background="LightGoldenrodYellow"
+                        Style="{StaticResource circleButton}"
+                        Command="{Binding BackCommand}"/>
+
+                <StackPanel>
+                    <TextBlock Text="Last Retrieve"/>
+                    <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Accept Time"/>
+                    <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Name"/>
+                    <TextBox Width="300" Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </WrapPanel>
+
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <WrapPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource circleButton}">
+                        <Setter Property="Margin" Value="20"/>
+                        <Setter Property="Padding" Value="15"/>
+                        <Setter Property="Width" Value="130"/>
+                        <Setter Property="Height" Value="90"/>
+                    </Style>
+                </WrapPanel.Resources>
+
+                <Button Content="to opml"/>
+                <Button Content="from opml"/>
+                <Button Content="delete all"/>
+            </WrapPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

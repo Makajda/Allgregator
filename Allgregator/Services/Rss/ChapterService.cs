@@ -42,8 +42,8 @@ namespace Allgregator.Services.Rss {
         private async Task LoadLinks(Chapter chapter, bool force = true) {
             if (chapter != null && chapter.Linked == null && force) {
                 chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);
-                if (chapter.Linked.CurrentView == RssLinksState.Detection) {
-                    chapter.Linked.CurrentView = RssLinksState.Normal;
+                if (chapter.Linked.CurrentState == RssLinksStates.Detection) {
+                    chapter.Linked.CurrentState = RssLinksStates.Normal;
                 }
             }
         }

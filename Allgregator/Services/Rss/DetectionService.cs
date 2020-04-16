@@ -15,26 +15,26 @@ namespace Allgregator.Services.Rss {
         private const int timeout = 45_000;
 
         public async Task SetAddress(Linked linked) {
-            linked.CurrentView = RssLinksState.Detection;
+            linked.CurrentState = RssLinksStates.Detection;
             var link = await GetLink(linked.Address);
             if (link != null) {
                 Selected(linked, link);
             }
             else {
                 linked.DetectedLinks = await GetLinks(linked.Address);
-                linked.CurrentView = linked.DetectedLinks == null ? RssLinksState.Normal : RssLinksState.Selection;
+                linked.CurrentState = linked.DetectedLinks == null ? RssLinksStates.Normal : RssLinksStates.Selection;
                 linked.IsNeedToSave = true;
             }
         }
 
         public void Selected(Linked linked, Link link) {
-            if (link.XmlUrl != null) {
-                linked.Links.Add(link);
+            if (link?.XmlUrl != null) {
+                linked.Links.Insert(0, link);
                 linked.Address = null;
                 linked.DetectedLinks = null;
             }
 
-            linked.CurrentView = RssLinksState.Normal;
+            linked.CurrentState = RssLinksStates.Normal;
             linked.IsNeedToSave = true;
         }
 
