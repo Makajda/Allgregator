@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:IntEqToVisibilityConverter x:Key="IntEqToVisibilityConverter"/>
+        <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
 
         <Style TargetType="DataGridCell" >
             <Style.Triggers>
@@ -161,54 +162,58 @@
         </ScrollViewer>
 
         <!--Chapter-->
-        <StackPanel Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Chapter}}">
+            <StackPanel>
+                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="LightGoldenrodYellow"
+                            Style="{StaticResource circleButton}" HorizontalAlignment="Left"
+                            Command="{Binding BackCommand}"/>
 
-            <WrapPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Left">
-                <WrapPanel.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="15,0,0,0"/>
-                    </Style>
-                    <Style TargetType="TextBox">
-                        <Setter Property="Margin" Value="5"/>
-                        <Setter Property="Padding" Value="10"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="Width" Value="100"/>
-                    </Style>
-                </WrapPanel.Resources>
+                <StackPanel Margin="10" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="20,20,0,0"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Width" Value="250"/>
+                        </Style>
+                    </StackPanel.Resources>
 
-                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="5,5,20,5" Background="LightGoldenrodYellow"
-                        Style="{StaticResource circleButton}"
-                        Command="{Binding BackCommand}"/>
-
-                <StackPanel>
-                    <TextBlock Text="Last Retrieve"/>
-                    <TextBox Text="{Binding Chapter.Mined.LastRetrieve.Date, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel>
+                        <TextBlock Text="Last Retrieve"/>
+                        <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Accept Time"/>
+                        <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Accept Time"/>
-                    <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Name"/>
-                    <TextBox Width="300" Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
-            </WrapPanel>
 
-            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <WrapPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource circleButton}">
-                        <Setter Property="Margin" Value="20"/>
-                        <Setter Property="Padding" Value="15"/>
-                        <Setter Property="Width" Value="130"/>
-                        <Setter Property="Height" Value="90"/>
-                    </Style>
-                </WrapPanel.Resources>
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <WrapPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource circleButton}">
+                            <Setter Property="Margin" Value="20,60"/>
+                            <Setter Property="Padding" Value="15"/>
+                            <Setter Property="Width" Value="130"/>
+                            <Setter Property="Height" Value="90"/>
+                        </Style>
+                    </WrapPanel.Resources>
 
-                <Button Content="to opml"/>
-                <Button Content="from opml"/>
-                <Button Content="delete all"/>
-            </WrapPanel>
-        </StackPanel>
+                    <Button Content="to opml"/>
+                    <Button Content="from opml"/>
+                    <Button Content="delete all"/>
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -61,7 +61,7 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
+        private RssChapterViews currentView = RssChapterViews.LinksView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
