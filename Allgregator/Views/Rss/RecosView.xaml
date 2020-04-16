@@ -77,7 +77,6 @@
     <ListView x:Name="list" BorderThickness="0"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
               Background="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToBrushConverter}}"
-              HorizontalAlignment="Center"
               ItemTemplate="{StaticResource RecosItemTemplate}"
               >
         <ListView.ItemContainerStyle>
@@ -90,7 +89,7 @@
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
                 <!-- 246+20,398+20  for margin 10 ListViewItem-->
-                <common:VirtualizingWrapPanel ItemWidth="266" ItemHeight="418" Orientation="Horizontal"/>
+                <common:VirtualizingWrapPanel ItemWidth="266" ItemHeight="418"/>
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
     </ListView>

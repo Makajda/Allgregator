@@ -17,7 +17,7 @@ namespace Allgregator.Services.Rss {
         }
 
         public async Task Load(Chapter chapter, RssChapterViews currentView) {
-            await LoadMined(chapter, currentView != RssChapterViews.LinksView);
+            await LoadMined(chapter);
             await LoadLinks(chapter, currentView == RssChapterViews.LinksView);
         }
 
@@ -48,8 +48,8 @@ namespace Allgregator.Services.Rss {
             }
         }
 
-        private async Task LoadMined(Chapter chapter, bool force = true) {
-            if (chapter != null && chapter.Mined == null && force) {
+        private async Task LoadMined(Chapter chapter) {
+            if (chapter != null && chapter.Mined == null) {
                 chapter.Mined = await minedRepository.GetOrDefault(chapter.Id);
             }
         }

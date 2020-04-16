@@ -183,7 +183,7 @@
 
                 <StackPanel>
                     <TextBlock Text="Last Retrieve"/>
-                    <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Text="{Binding Chapter.Mined.LastRetrieve.Date, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Accept Time"/>
