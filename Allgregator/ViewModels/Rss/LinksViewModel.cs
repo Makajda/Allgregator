@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace Allgregator.ViewModels.Rss {
     public class LinksViewModel : BindableBase {
         private readonly ChapterRepository chapterRepository;
+        private readonly OpmlRepository opmlRepository;
         private readonly DialogService dialogService;
         private readonly DetectionService detectionService;
         private readonly IEventAggregator eventAggregator;
@@ -20,11 +21,13 @@ namespace Allgregator.ViewModels.Rss {
 
         public LinksViewModel(
             ChapterRepository chapterRepository,
+            OpmlRepository opmlRepository,
             DialogService dialogService,
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
             this.chapterRepository = chapterRepository;
+            this.opmlRepository = opmlRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.detectionService = detectionService;
@@ -35,6 +38,9 @@ namespace Allgregator.ViewModels.Rss {
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Chapter.Linked, link));
             ToChapterCommand = new DelegateCommand(ToChapter);
             FromChapterCommand = new DelegateCommand(FromChapter);
+            ToOpmlCommand = new DelegateCommand(ToOpml);
+            FromOpmlCommand = new DelegateCommand(FromOpml);
+            DeleteAllCommand = new DelegateCommand(DeleteAll);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapter));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
@@ -46,6 +52,9 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand<Link> SelectionCommand { get; private set; }
         public DelegateCommand ToChapterCommand { get; private set; }
         public DelegateCommand FromChapterCommand { get; private set; }
+        public DelegateCommand ToOpmlCommand { get; private set; }
+        public DelegateCommand FromOpmlCommand { get; private set; }
+        public DelegateCommand DeleteAllCommand { get; private set; }
 
         private Chapter chapter;
         public Chapter Chapter {
@@ -98,6 +107,30 @@ namespace Allgregator.ViewModels.Rss {
                     }
                 }
             }
+        }
+
+        private async void ToOpml() {
+            try {
+                await opmlRepository.Export();
+            }
+            catch (Exception exception) {
+                dialogService.Show(exception.Message);
+            }
+        }
+
+        private async void FromOpml() {
+            try {
+                var (chapters, links) = await opmlRepository.Import();
+                var str = $"+ collections: {chapters},  RSS: {links}";
+                dialogService.Show(str);
+            }
+            catch (Exception exception) {
+                dialogService.Show(exception.Message);
+            }
+        }
+
+        private void DeleteAll() {
+            //todo
         }
     }
 }

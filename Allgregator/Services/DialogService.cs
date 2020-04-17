@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Allgregator.Services {
     public class DialogService {
-        public void Show(string message, Action callback, double fontSize = 16, bool isStrikethrough = false) {
+        public void Show(string message, Action callback = null, double fontSize = 16, bool isStrikethrough = false) {
             var (popup, grid) = Create();
 
             var textBlock = new TextBlock() {
@@ -42,7 +42,7 @@ namespace Allgregator.Services {
             }
         }
 
-        public void Show(IEnumerable<string> messages, Action<string> callback, double fontSize = 16) {
+        public void Show(IEnumerable<string> messages, Action<string> callback = null, double fontSize = 16) {
             var (popup, grid) = Create();
 
             var scrollViewer = new ScrollViewer() {
@@ -65,7 +65,7 @@ namespace Allgregator.Services {
                 };
 
                 button.Click += (s, e) => {
-                    popup.IsOpen = false; callback(message);
+                    popup.IsOpen = false; callback?.Invoke(message);
                 };
 
                 itemsControl.Items.Add(button);

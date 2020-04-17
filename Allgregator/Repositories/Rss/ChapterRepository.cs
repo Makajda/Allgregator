@@ -41,7 +41,7 @@ namespace Allgregator.Repositories.Rss {
             await File.WriteAllTextAsync(name, json);
         }
 
-        public IEnumerable<Chapter> CreateDefault() {
+        private IEnumerable<Chapter> CreateDefault() {
             return new List<Chapter>() {
                 new Chapter() { Id = 4, Name = "Четвёртая" },
                 new Chapter() { Id = 0, Name = "Основная" },

@@ -213,9 +213,9 @@
                         </Style>
                     </WrapPanel.Resources>
 
-                    <Button Content="to opml"/>
-                    <Button Content="from opml"/>
-                    <Button Content="delete all"/>
+                    <Button Content="to opml" Command="{Binding ToOpmlCommand}"/>
+                    <Button Content="from opml" Command="{Binding FromOpmlCommand}"/>
+                    <Button Content="delete all" Command="{Binding DeleteAllCommand}"/>
                 </WrapPanel>
             </StackPanel>
         </ScrollViewer>
