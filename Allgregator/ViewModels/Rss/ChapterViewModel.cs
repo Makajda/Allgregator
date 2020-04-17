@@ -110,12 +110,14 @@ namespace Allgregator.ViewModels.Rss {
         private void OpenAll() {
             if (IsActive && CurrentView != RssChapterViews.LinksView) {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
-                var count = recos.Count;
-                if (count > settings.RssMaxOpenTabs) {
-                    dialogService.Show($"{count}?", OpenReal, 72d);
-                }
-                else {
-                    OpenReal();
+                if (recos != null) {
+                    var count = recos.Count;
+                    if (count > settings.RssMaxOpenTabs) {
+                        dialogService.Show($"{count}?", OpenReal, 72d);
+                    }
+                    else {
+                        OpenReal();
+                    }
                 }
             }
             else {
