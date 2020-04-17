@@ -6,12 +6,19 @@ using System.Windows.Data;
 namespace Allgregator.Converters {
     public class ThicknessToDoubleConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return ((Thickness)value).Left;
+            if (value is Thickness t) {
+                return t.Left;
+            }
+
+            return default(double);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            var d = (double)value;
-            return new Thickness(d);
+            if (value is double d) {
+                return new Thickness(d);
+            }
+
+            return default(Thickness);
         }
     }
 }

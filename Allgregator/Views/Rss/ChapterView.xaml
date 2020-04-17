@@ -18,7 +18,20 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="80"/>
             <Setter Property="Height" Value="50"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="updateCancelButton" TargetType="Button">
+            <Setter Property="DockPanel.Dock" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,-10,0"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="common:Pathatt.Circle" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="errorItemTemplate">
@@ -29,10 +42,15 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="1,0,1,0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
         <Button Width="160" Height="100" Padding="15" Style="{StaticResource managerButton}"
-                common:Pathatt.Circle="True"
-                Background="LightGoldenrodYellow"
+                common:Pathatt.Rect="True"
+                Background="LightGoldenrodYellow" Foreground="Black"
                 Command="{Binding OpenCommand}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0"
@@ -46,70 +64,31 @@
             </DockPanel>
         </Button>
 
-        <Button Width="40" Height="40" Padding="5" Content="&#x2B6E;" Style="{StaticResource managerButton}"
-                Command="{Binding UpdateCommand}"
-                common:Pathatt.Circle="True"
-                Background="Transparent" Foreground="White"
-                HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button.Resources>
-                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="RosyBrown"/>
-            </Button.Resources>
-        </Button>
-
         <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.NewsView}"
-                    common:Pathatt.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
+                    common:Pathatt.Path="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
                     Background="LightBlue" 
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntNqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
+                    HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"/>
             <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
                     common:Pathatt.Path="M0,0 V13 H3 A10,10 0 0 1 13,3 V0 Z"
                     Background="SandyBrown"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.NewsView}}"/>
-            <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
-                    Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
-                    common:Pathatt.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
+                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Button Content="&#x1F9F9;" Style="{StaticResource managerButton}"
+                    common:Pathatt.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
                     Background="SandyBrown"
-                    HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntEqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
+                    Command="{Binding MoveCommand}"
+                    HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             <Button Content="&#x2630;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.LinksView}"
                     common:Pathatt.Path="M0,0 H3 A10,10 0 0 0 13,10 V13 H0 Z"
                     Background="LightGreen"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Visibility="{Binding CurrentView, Converter={StaticResource IntNqToVisibilityConverter}, 
-                ConverterParameter={x:Static common:RssChapterViews.LinksView}}"/>
-            <Button Content="&#x1F9F9;" Style="{StaticResource managerButton}"
-                    common:Pathatt.Path="M0,0 V3 A10,10 0 0 1 10,13 H13 V0 Z"
-                    Background="SandyBrown" 
-                    Command="{Binding MoveCommand}"
-                    HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
-                    HorizontalAlignment="Right" VerticalAlignment="Top"/>
-            <Button Content="&#x2B6E;" Style="{StaticResource managerButton}"
-                    Command="{Binding UpdateCommand}"
-                    common:Pathatt.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
-                    Background="RosyBrown"
-                    HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanNotToVisibilityConverter}}"/>
-            <Button Content="&#x2715;" Style="{StaticResource managerButton}"
-                    Command="{Binding CancelUpdateCommand}"
-                    common:Pathatt.Path="M0,10 A10,10 0 0 0 10,0 H13 V13 H0 Z"
-                    Background="Yellow"
-                    HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
             <Grid Visibility="{Binding Chapter.Mined, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
                 <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
                               common:Pathatt.Circle="True"
@@ -122,13 +101,23 @@
             </Grid>
         </Grid>
 
-        <ProgressBar Height="5" 
-                     Background="Orange" 
-                     Foreground="Yellow"
-                     VerticalAlignment="Bottom" Margin="5,0,5,0"
-                     Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
-                     Value="{Binding OreService.ProgressValue, Mode=OneWay}"
-                     ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
-                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <DockPanel Grid.Row="1" Height="50">
+            <Button Content="&#x2B6E;" Command="{Binding UpdateCommand}" Style="{StaticResource updateCancelButton}"
+                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanNotToVisibilityConverter}}">
+                <Button.Resources>
+                    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="PaleGreen"/>
+                </Button.Resources>
+            </Button>
+
+            <Button Content="&#x2715;" Command="{Binding CancelUpdateCommand}" Style="{StaticResource updateCancelButton}"
+                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <ProgressBar Foreground="PaleGreen"
+                         Height="10"
+                         Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
+                         Value="{Binding OreService.ProgressValue, Mode=OneWay}"
+                         ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
+                         Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </DockPanel>
     </Grid>
 </UserControl>

@@ -6,7 +6,13 @@ using System.Windows.Data;
 namespace Allgregator.Converters {
     public class IntEqToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (int)value == (int)parameter ? Visibility.Visible : Visibility.Collapsed;
+            if (value is int v) {
+                if (parameter is int p) {
+                    return v == p ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

@@ -61,7 +61,7 @@ namespace Allgregator.ViewModels.Rss {
             private set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView = RssChapterViews.LinksView;//todo
+        private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
@@ -97,7 +97,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void OpenAll() {
-            if (IsActive) {
+            if (IsActive && CurrentView != RssChapterViews.LinksView) {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
                 var count = recos.Count;
                 if (count > settings.RssMaxOpenTabs) {

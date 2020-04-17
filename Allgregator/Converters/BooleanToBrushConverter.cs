@@ -8,7 +8,11 @@ namespace Allgregator.Converters {
         public Brush TrueBrush { get; set; }
         public Brush FalseBrush { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (bool)value ? TrueBrush : FalseBrush;
+            if (value is bool b) {
+                return b ? TrueBrush : FalseBrush;
+            }
+
+            return FalseBrush;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
