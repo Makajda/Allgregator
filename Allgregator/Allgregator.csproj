@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Repositories\Rss\ChapterRepository.cs~RF33ca53c6.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Prism.DryIoc" Version="7.2.0.1422" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="4.7.0" />
   </ItemGroup>

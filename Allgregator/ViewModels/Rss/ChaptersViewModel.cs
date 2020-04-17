@@ -56,7 +56,7 @@ namespace Allgregator.ViewModels.Rss {
                     currentChapter?.Activate();
                 }
             }
-            OnSettingsCommand();
+            //OnSettingsCommand();//todo
         }
 
         private async void ChapterDeleted(int id) {
