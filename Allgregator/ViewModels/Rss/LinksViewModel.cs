@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Allgregator.ViewModels.Rss {
     public class LinksViewModel : BindableBase {
         private readonly ChapterRepository chapterRepository;
-        private readonly OpmlRepository opmlRepository;
         private readonly DialogService dialogService;
         private readonly DetectionService detectionService;
         private readonly IEventAggregator eventAggregator;
@@ -22,13 +21,11 @@ namespace Allgregator.ViewModels.Rss {
 
         public LinksViewModel(
             ChapterRepository chapterRepository,
-            OpmlRepository opmlRepository,
             DialogService dialogService,
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
             this.chapterRepository = chapterRepository;
-            this.opmlRepository = opmlRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.detectionService = detectionService;
@@ -39,7 +36,7 @@ namespace Allgregator.ViewModels.Rss {
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Chapter.Linked, link));
             ToChapterCommand = new DelegateCommand(ToChapter);
             FromChapterCommand = new DelegateCommand(FromChapter);
-            DeleteAllCommand = new DelegateCommand(DeleteAll);
+            DeleteChapterCommand = new DelegateCommand(DeleteChapter);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapterName));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
@@ -51,7 +48,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand<Link> SelectionCommand { get; private set; }
         public DelegateCommand ToChapterCommand { get; private set; }
         public DelegateCommand FromChapterCommand { get; private set; }
-        public DelegateCommand DeleteAllCommand { get; private set; }
+        public DelegateCommand DeleteChapterCommand { get; private set; }
 
         private Chapter chapter;
         public Chapter Chapter {
@@ -103,10 +100,10 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private void DeleteAll() {
-            dialogService.Show($"{Chapter.Linked.Links.Count} links?", DeleteReal, 20, true);
+        private void DeleteChapter() {
+            dialogService.Show($"{Chapter.Linked.Links.Count} links?", DeleteChapterReal, 20, true);
 
-            void DeleteReal() {
+            void DeleteChapterReal() {
                 eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(Chapter.Id);
             }
         }

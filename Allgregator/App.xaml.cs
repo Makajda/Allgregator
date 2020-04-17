@@ -29,6 +29,7 @@ namespace Allgregator {
             region.Add(Container.Resolve<RecosView>((typeof(bool), true)), RssChapterViews.NewsView.ToString());
             region.Add(Container.Resolve<RecosView>((typeof(bool), false)), RssChapterViews.OldsView.ToString());
             region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
+            region.Add(Container.Resolve<SettingsView>(), Given.SettingsView);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {

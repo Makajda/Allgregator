@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Allgregator.Views.Rss.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:converters="clr-namespace:Allgregator.Converters"
+             >
+
+    <UserControl.Resources>
+        <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="20"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="20,0,0,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel HorizontalAlignment="Center">
+            <GroupBox Header="Options">
+                <StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Maximum Open Tabs"/>
+                        <TextBox Text="{Binding Settings.RssMaxOpenTabs, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Cutoff Time"/>
+                        <TextBox Text="{Binding Settings.RssCutoffTime, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="New Chapter">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <Button Content = "add chapter" Command="{Binding AddChapterCommand}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Opml">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content = "Export" Command="{Binding ToOpmlCommand}"/>
+                    <Button Content = "Import" Command="{Binding FromOpmlCommand}"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

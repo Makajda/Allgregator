@@ -7,26 +7,28 @@ using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChaptersViewModel : BindableBase {
+        private readonly IRegionManager regionManager;
         private readonly ChapterRepository chapterRepository;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
             ChapterRepository chapterRepository,
+            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
             ) {
+            this.regionManager = regionManager;
             this.chapterRepository = chapterRepository;
             startChapterId = settings.RssChapterId;
-            SettingsCommand = new DelegateCommand(OnSettings);
+            SettingsCommand = new DelegateCommand(OnSettingsCommand);
 
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
         }
@@ -54,6 +56,7 @@ namespace Allgregator.ViewModels.Rss {
                     currentChapter?.Activate();
                 }
             }
+            OnSettingsCommand();
         }
 
         private async void ChapterDeleted(int id) {
@@ -70,34 +73,11 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private void OnSettings() {
-            //todo
+        private void OnSettingsCommand() {
+            foreach (var chapter in Chapters) chapter.Deactivate();
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewControl = region.GetView(Given.SettingsView);
+            if (viewControl != null) region.Activate(viewControl);
         }
-        //public DelegateCommand ToOpmlCommand { get; private set; }
-        //public DelegateCommand FromOpmlCommand { get; private set; }
-
-        //            <Button Content = "to opml" Command="{Binding ToOpmlCommand}"/>
-        //            <Button Content = "from opml" Command="{Binding FromOpmlCommand}"/>
-        //ToOpmlCommand = new DelegateCommand(ToOpml);
-        //FromOpmlCommand = new DelegateCommand(FromOpml);
-        //private async void ToOpml() {
-        //    try {
-        //        await opmlRepository.Export();
-        //    }
-        //    catch (Exception exception) {
-        //        dialogService.Show(exception.Message);
-        //    }
-        //}
-
-        //private async void FromOpml() {
-        //    try {
-        //        var (chapters, links) = await opmlRepository.Import();
-        //        var str = $"+ collections: {chapters},  RSS: {links}";
-        //        dialogService.Show(str);
-        //    }
-        //    catch (Exception exception) {
-        //        dialogService.Show(exception.Message);
-        //    }
-        //}
     }
 }

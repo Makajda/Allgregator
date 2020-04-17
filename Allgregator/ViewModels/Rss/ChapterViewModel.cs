@@ -75,10 +75,12 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         public void Deactivate() {
-            IsActive = false;
-            var region = regionManager.Regions[Given.MainRegion];
-            var viewControl = region.GetView(CurrentView.ToString());
-            if (viewControl != null) region.Deactivate(viewControl);
+            if (IsActive == true) {
+                IsActive = false;
+                var region = regionManager.Regions[Given.MainRegion];
+                var viewControl = region.GetView(CurrentView.ToString());
+                if (viewControl != null) region.Deactivate(viewControl);
+            }
         }
 
         private async Task ChangeView(RssChapterViews? view) {
@@ -142,7 +144,7 @@ namespace Allgregator.ViewModels.Rss {
         private async void Update() {
             if (!OreService.IsRetrieving) {
                 await chapterService.Load(Chapter);
-                await OreService.Retrieve(Chapter, settings.CutoffTime);
+                await OreService.Retrieve(Chapter, settings.RssCutoffTime);
             }
         }
     }

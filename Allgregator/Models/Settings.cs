@@ -14,10 +14,10 @@ namespace Allgregator.Models {
             set { SetProperty(ref rssMaxOpenTabs, value); }
         }
 
-        private DateTimeOffset cutoffTime;
-        public DateTimeOffset CutoffTime {
-            get => cutoffTime;
-            set => SetProperty(ref cutoffTime, value);
+        private DateTimeOffset rssCutoffTime;
+        public DateTimeOffset RssCutoffTime {
+            get => rssCutoffTime;
+            set => SetProperty(ref rssCutoffTime, value);
         }
     }
 }
