@@ -38,6 +38,7 @@ namespace Allgregator.Repositories.Rss {
                 }
             }
 
+            mined.IsNeedToSave = false;
             return mined;
         }
 

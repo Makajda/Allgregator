@@ -43,7 +43,7 @@ namespace Allgregator.Services.Rss {
             catch (ObjectDisposedException) { }
         }
 
-        public async Task Retrieve(Chapter chapter) {
+        public async Task Retrieve(Chapter chapter, DateTimeOffset cutoffTime) {
             if (chapter?.Linked?.Links == null || chapter.Mined == null) {
                 return;
             }
@@ -59,7 +59,7 @@ namespace Allgregator.Services.Rss {
                     var lastRetrieve = DateTimeOffset.Now;
                     try {
                         await Task.WhenAll(chapter.Linked.Links.Select(link => Task.Run(() => {
-                            retrieveService.Production(link, chapter.Mined.AcceptTime, chapter.Mined.CutoffTime, outdated);
+                            retrieveService.Production(link, chapter.Mined.AcceptTime, cutoffTime, outdated);
                             progressIndicator.Report(1);
                         }, cancellationTokenSource.Token)));
                     }

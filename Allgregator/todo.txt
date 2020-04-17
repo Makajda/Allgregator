@@ -1,5 +1,6 @@
 ﻿foreground и background
-add chapter, delete chapter сорт name при сохранении
+add chapter, delete chapter
+chapters onSettings
 add from opml, save opml
 tests: retrieve, outdate, acceptTime
 

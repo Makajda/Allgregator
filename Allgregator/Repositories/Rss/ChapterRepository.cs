@@ -3,6 +3,7 @@ using Allgregator.Models.Rss;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Allgregator.Repositories.Rss {
 
         public async Task Save(IEnumerable<Chapter> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters,
+            var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters.OrderBy(n => n.Name),
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,

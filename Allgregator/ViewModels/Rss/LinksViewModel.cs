@@ -6,7 +6,9 @@ using Allgregator.Services.Rss;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class LinksViewModel : BindableBase {
@@ -14,6 +16,7 @@ namespace Allgregator.ViewModels.Rss {
         private readonly DialogService dialogService;
         private readonly DetectionService detectionService;
         private readonly IEventAggregator eventAggregator;
+        string savedName;
 
         public LinksViewModel(
             ChapterRepository chapterRepository,
@@ -30,7 +33,10 @@ namespace Allgregator.ViewModels.Rss {
             MoveCommand = new DelegateCommand<Link>(Move);
             DeleteCommand = new DelegateCommand<Link>(Delete);
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Chapter.Linked, link));
+            ToChapterCommand = new DelegateCommand(ToChapter);
+            FromChapterCommand = new DelegateCommand(FromChapter);
 
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapter));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
 
@@ -38,6 +44,8 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand<Link> MoveCommand { get; private set; }
         public DelegateCommand<Link> DeleteCommand { get; private set; }
         public DelegateCommand<Link> SelectionCommand { get; private set; }
+        public DelegateCommand ToChapterCommand { get; private set; }
+        public DelegateCommand FromChapterCommand { get; private set; }
 
         private Chapter chapter;
         public Chapter Chapter {
@@ -62,6 +70,33 @@ namespace Allgregator.ViewModels.Rss {
             void DeleteReal() {
                 Chapter.Linked.Links.Remove(link);
                 Chapter.Linked.IsNeedToSave = true;
+            }
+        }
+
+        private void ToChapter() {
+            savedName = Chapter.Name;
+            Chapter.Linked.CurrentState = RssLinksStates.Chapter;
+        }
+
+        private async void FromChapter() {
+            Chapter.Linked.CurrentState = RssLinksStates.Normal;
+            await SaveChapter();
+        }
+
+        private async Task SaveChapter() {
+            if (savedName != null && Chapter.Name != savedName) {
+                var chapters = await chapterRepository.GetOrDefault();
+                var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
+                if (chapter != null) {
+                    chapter.Name = Chapter.Name;
+                    try {
+                        await chapterRepository.Save(chapters);
+                        savedName = default;
+                    }
+                    catch (Exception e) {
+                        /*//TODO Log*/
+                    }
+                }
             }
         }
     }

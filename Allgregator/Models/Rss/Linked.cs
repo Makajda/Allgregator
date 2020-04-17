@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Models.Rss {
@@ -32,5 +33,6 @@ namespace Allgregator.Models.Rss {
 
         [JsonIgnore]
         public bool IsNeedToSave { get; set; }
+        public Utf8JsonWriter OrderBy { get; internal set; }
     }
 }

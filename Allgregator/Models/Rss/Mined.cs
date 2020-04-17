@@ -8,24 +8,18 @@ namespace Allgregator.Models.Rss {
     public class Mined : BindableBase {
         private DateTimeOffset lastRetrieve;
         private DateTimeOffset acceptTime;
-        private DateTimeOffset cutoffTime;
         private ObservableCollection<Reco> newRecos;
         private ObservableCollection<Reco> oldRecos;
         private IEnumerable<Error> errors;
 
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;
-            set => SetProperty(ref lastRetrieve, value);
+            set => SetProperty(ref lastRetrieve, value, () => IsNeedToSave = true);
         }
 
         public DateTimeOffset AcceptTime {
             get => acceptTime;
-            set => SetProperty(ref acceptTime, value);
-        }
-
-        public DateTimeOffset CutoffTime {
-            get => cutoffTime;
-            set => SetProperty(ref cutoffTime, value);
+            set => SetProperty(ref acceptTime, value, () => IsNeedToSave = true);
         }
 
         public ObservableCollection<Reco> NewRecos {

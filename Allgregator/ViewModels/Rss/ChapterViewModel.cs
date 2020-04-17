@@ -133,7 +133,7 @@ namespace Allgregator.ViewModels.Rss {
         private async void Update() {
             if (!OreService.IsRetrieving) {
                 await chapterService.Load(Chapter);
-                await OreService.Retrieve(Chapter);
+                await OreService.Retrieve(Chapter, settings.CutoffTime);
             }
         }
     }
