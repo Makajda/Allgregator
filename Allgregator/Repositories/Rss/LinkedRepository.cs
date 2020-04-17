@@ -40,6 +40,11 @@ namespace Allgregator.Repositories.Rss {
             await File.WriteAllTextAsync(name, json);
         }
 
+        public void DeleteFile(int id) {
+            var name = GetName(id);
+            File.Delete(name);
+        }
+
         private string GetName(int chapterId) {
             var name = Path.Combine(Given.PathData, string.Format(nameFile, chapterId));
             return name;

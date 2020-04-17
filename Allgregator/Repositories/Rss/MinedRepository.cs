@@ -20,26 +20,9 @@ namespace Allgregator.Repositories.Rss {
             return new Mined();
         }
 
-        private async Task<Mined> Get(int chapterId) {
-            var (entryName, fileName) = GetNames(chapterId);
-            Mined mined = null;
-
-            using (var archive = ZipFile.OpenRead(fileName)) {
-                if (archive.Entries.Count > 0) {
-                    var entry = archive.Entries[0];
-                    if (entry != null) {
-                        using (var stream = entry.Open()) {
-                            using (var reader = new StreamReader(entry.Open())) {
-                                var json = await reader.ReadToEndAsync();
-                                mined = JsonSerializer.Deserialize<Mined>(json);
-                            }
-                        }
-                    }
-                }
-            }
-
-            mined.IsNeedToSave = false;
-            return mined;
+        public void DeleteFile(int id) {
+            var (_, name) = GetNames(id);
+            File.Delete(name);
         }
 
         public async Task Save(int chapterId, Mined mined) {
@@ -64,7 +47,29 @@ namespace Allgregator.Repositories.Rss {
             }
         }
 
-        private (string, string) GetNames(int chapterId) {
+        private async Task<Mined> Get(int chapterId) {
+            var (entryName, fileName) = GetNames(chapterId);
+            Mined mined = null;
+
+            using (var archive = ZipFile.OpenRead(fileName)) {
+                if (archive.Entries.Count > 0) {
+                    var entry = archive.Entries[0];
+                    if (entry != null) {
+                        using (var stream = entry.Open()) {
+                            using (var reader = new StreamReader(entry.Open())) {
+                                var json = await reader.ReadToEndAsync();
+                                mined = JsonSerializer.Deserialize<Mined>(json);
+                            }
+                        }
+                    }
+                }
+            }
+
+            mined.IsNeedToSave = false;
+            return mined;
+        }
+
+        private (string EntryName, string FileName) GetNames(int chapterId) {
             const string nameFile = "mined{0}";
             var name = string.Format(nameFile, chapterId);
             var entryName = Path.ChangeExtension(name, "json");

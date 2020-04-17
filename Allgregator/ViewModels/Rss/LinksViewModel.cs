@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,11 +39,9 @@ namespace Allgregator.ViewModels.Rss {
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Chapter.Linked, link));
             ToChapterCommand = new DelegateCommand(ToChapter);
             FromChapterCommand = new DelegateCommand(FromChapter);
-            ToOpmlCommand = new DelegateCommand(ToOpml);
-            FromOpmlCommand = new DelegateCommand(FromOpml);
             DeleteAllCommand = new DelegateCommand(DeleteAll);
 
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapter));
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapterName));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
 
@@ -52,8 +51,6 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand<Link> SelectionCommand { get; private set; }
         public DelegateCommand ToChapterCommand { get; private set; }
         public DelegateCommand FromChapterCommand { get; private set; }
-        public DelegateCommand ToOpmlCommand { get; private set; }
-        public DelegateCommand FromOpmlCommand { get; private set; }
         public DelegateCommand DeleteAllCommand { get; private set; }
 
         private Chapter chapter;
@@ -89,48 +86,41 @@ namespace Allgregator.ViewModels.Rss {
 
         private async void FromChapter() {
             Chapter.Linked.CurrentState = RssLinksStates.Normal;
-            await SaveChapter();
+            await SaveChapterName();
         }
 
-        private async Task SaveChapter() {
+        private async Task SaveChapterName() {
             if (savedName != null && Chapter.Name != savedName) {
                 var chapters = await chapterRepository.GetOrDefault();
                 var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
                 if (chapter != null) {
                     chapter.Name = Chapter.Name;
-                    try {
-                        await chapterRepository.Save(chapters);
+                    var saved = await SaveChapters(chapters);
+                    if (saved) {
                         savedName = default;
-                    }
-                    catch (Exception e) {
-                        /*//TODO Log*/
                     }
                 }
             }
         }
 
-        private async void ToOpml() {
-            try {
-                await opmlRepository.Export();
-            }
-            catch (Exception exception) {
-                dialogService.Show(exception.Message);
-            }
-        }
-
-        private async void FromOpml() {
-            try {
-                var (chapters, links) = await opmlRepository.Import();
-                var str = $"+ collections: {chapters},  RSS: {links}";
-                dialogService.Show(str);
-            }
-            catch (Exception exception) {
-                dialogService.Show(exception.Message);
-            }
-        }
-
         private void DeleteAll() {
-            //todo
+            dialogService.Show($"{Chapter.Linked.Links.Count} links?", DeleteReal, 20, true);
+
+            void DeleteReal() {
+                eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(Chapter.Id);
+            }
+        }
+
+        private async Task<bool> SaveChapters(IEnumerable<Chapter> chapters) {
+            try {
+                await chapterRepository.Save(chapters);
+                return true;
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+            }
+
+            return false;
         }
     }
 }

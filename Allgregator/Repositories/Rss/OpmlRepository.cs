@@ -1,10 +1,12 @@
 ﻿using Allgregator.Models.Rss;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Cink = System.Tuple<string, System.Collections.Generic.List<Allgregator.Models.Rss.Link>>;
 
 namespace Allgregator.Repositories.Rss {
     public class OpmlRepository {
@@ -12,10 +14,10 @@ namespace Allgregator.Repositories.Rss {
         private readonly LinkedRepository linkedRepository;
 
         public OpmlRepository(
-            ChapterRepository collectionRepository,
+            ChapterRepository chapterRepository,
             LinkedRepository linkedRepository
             ) {
-            this.chapterRepository = collectionRepository;
+            this.chapterRepository = chapterRepository;
             this.linkedRepository = linkedRepository;
         }
 
@@ -25,58 +27,55 @@ namespace Allgregator.Repositories.Rss {
                 return default;
             }
 
-            var chapters = await chapterRepository.GetOrDefault();
+            var chapters = (await chapterRepository.GetOrDefault()).ToList();
 
-            foreach (var cink in cinks.Where(n => n.Item2.Count > 0)) {
-                var collection = await chapterRepository.AddCollection(cink.Item1);
-                await linkedRepository.AddLinks(collection.Id, cink.Item2);
+            foreach (var cink in cinks.Where(n => n.Links.Count > 0)) {
+                var id = 1;//todo
+                chapters.Add(new Chapter() { Id = id, Name = cink.Name });
+                var linked = await linkedRepository.GetOrDefault(id);
+                linked.Links = cink.Links;
+                await linkedRepository.Save(id, linked);
             }
 
-            var resval = new Tuple<int, int>(cinks.Count, cinks.SelectMany(n => n.Item2).Count());
-            return resval;
+            await chapterRepository.Save(chapters);
+
+            return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
         }
 
         public async Task Export() {
-            var collections = await chapterRepository.GetCollections();
+            var chapters = await chapterRepository.GetOrDefault();
             var cinks = new List<Cink>();
-            foreach (var collection in collections) {
-                var elinks = await linkedRepository.GetLinks(collection.Id);
-                var links = elinks == null ? new List<Link>() : elinks.ToList();
-                cinks.Add(new Cink(collection.Name, links));
+            foreach (var chapter in chapters) {
+                var linked = await linkedRepository.GetOrDefault(chapter.Id);
+                cinks.Add(new Cink() { Name = chapter.Name, Links = linked.Links });
             }
 
             await ExportPicker(cinks);
         }
 
         private async Task<List<Cink>> ImportPicker() {
-            var fileOpenPicker = new FileOpenPicker() {
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            fileOpenPicker.FileTypeFilter.Add(".opml");
-            var storageFile = await fileOpenPicker.PickSingleFileAsync();
-            if (storageFile == null) {
-                return null;
-            }
-
-            using (var fileStream = await storageFile.OpenStreamForReadAsync()) {
-                var xdocument = XDocument.Load(fileStream);
+            var picker = new OpenFileDialog();
+            picker.Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*";
+            if (picker.ShowDialog() == true) {
+                using var fileStream = picker.OpenFile();
+                using var cancellationTokenSource = new CancellationTokenSource();
+                var xdocument = await XDocument.LoadAsync(fileStream, LoadOptions.None, cancellationTokenSource.Token);
                 return OpmlParse(xdocument);
             }
+
+            return null;
         }
 
         private async Task ExportPicker(List<Cink> cinks) {
-            const string filename = "infeed";
-            var fileSavePicker = new FileSavePicker() {
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            fileSavePicker.FileTypeChoices.Add("opml", new List<string>() { ".opml" });
-            fileSavePicker.SuggestedFileName = filename;
-            var storageFile = await fileSavePicker.PickSaveFileAsync();
-            if (storageFile != null) {
+            const string filename = "allgregator";
+            var picker = new SaveFileDialog();
+            picker.Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*";
+            picker.FileName = filename;
+            if (picker.ShowDialog() == true) {
+                using var fileStream = picker.OpenFile();
+                using var cancellationTokenSource = new CancellationTokenSource();
                 var xdocument = ToOpml(cinks);
-                using (var fileStream = await storageFile.OpenStreamForWriteAsync()) {
-                    xdocument.Save(fileStream, SaveOptions.DisableFormatting);
-                }
+                await xdocument.SaveAsync(fileStream, SaveOptions.DisableFormatting, cancellationTokenSource.Token);
             }
         }
 
@@ -92,13 +91,13 @@ namespace Allgregator.Repositories.Rss {
             root.Add(body);
             foreach (var cink in cinks) {
                 var collection = new XElement("outline");
-                collection.Add(new XAttribute("text", cink.Item1 ?? string.Empty));
+                collection.Add(new XAttribute("text", cink.Name ?? string.Empty));
                 body.Add(collection);
-                if (cink.Item2 != null) {
-                    foreach (var link in cink.Item2) {
+                if (cink.Links != null) {
+                    foreach (var link in cink.Links) {
                         var outline = new XElement("outline");
                         outline.Add(new XAttribute("type", "rss"));
-                        outline.Add(new XAttribute("text", link.Text ?? string.Empty));
+                        outline.Add(new XAttribute("text", link.Name ?? string.Empty));
                         outline.Add(new XAttribute("xmlUrl", link.XmlUrl ?? string.Empty));
                         outline.Add(new XAttribute("htmlUrl", link.HtmlUrl ?? string.Empty));
                         collection.Add(outline);
@@ -127,18 +126,18 @@ namespace Allgregator.Repositories.Rss {
                 return resval;
             }
 
-            resval.Add(new Cink(null, new List<Link>())); // to current collection
+            resval.Add(new Cink() { Links = new ObservableCollection<Link>() }); // to current collection
 
             foreach (var outline in outlines) {
                 var link = LinkParse(outline);
                 if (link.XmlUrl != null) {
-                    resval[0].Item2.Add(link);
+                    resval[0].Links.Add(link);
                 }
                 else {
                     var os = outline.Elements();
                     if (os != null) {
-                        var links = new List<Link>();
-                        resval.Add(new Cink(link.Text, links)); // to new collection
+                        var links = new ObservableCollection<Link>();
+                        resval.Add(new Cink() { Name = link.Name, Links = links }); // to new collection
                         foreach (var o in os) {
                             link = LinkParse(o);
                             if (link.XmlUrl != null) {
@@ -157,6 +156,11 @@ namespace Allgregator.Repositories.Rss {
             var text = xe.Attribute("text")?.Value;
             var htmlUrl = xe.Attribute("htmlUrl")?.Value;
             return new Link() { XmlUrl = xmlUrl, Name = text, HtmlUrl = htmlUrl };
+        }
+
+        private class Cink {
+            public string Name;
+            public ObservableCollection<Link> Links;
         }
     }
 }

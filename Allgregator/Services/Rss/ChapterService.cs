@@ -39,6 +39,11 @@ namespace Allgregator.Services.Rss {
             }
         }
 
+        public void DeleteFiles(int id) {
+            linkedRepository.DeleteFile(id);
+            minedRepository.DeleteFile(id);
+        }
+
         private async Task LoadLinks(Chapter chapter, bool force = true) {
             if (chapter != null && chapter.Linked == null && force) {
                 chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);

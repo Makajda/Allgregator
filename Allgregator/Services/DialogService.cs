@@ -37,7 +37,7 @@ namespace Allgregator.Services {
                     VerticalAlignment = VerticalAlignment.Bottom
                 };
 
-                button.Click += (s, e) => { popup.IsOpen = false; callback(); };
+                button.Click += (s, e) => { popup.IsOpen = false; callback?.Invoke(); };
                 grid.Children.Add(button);
             }
         }

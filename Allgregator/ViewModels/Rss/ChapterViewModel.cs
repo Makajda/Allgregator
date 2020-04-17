@@ -45,12 +45,14 @@ namespace Allgregator.ViewModels.Rss {
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(async () => await chapterService.Save(Chapter)));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await chapterService.LinkMoved(Chapter, n));
+            eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(id => chapterService.DeleteFiles(id));
         }
 
         public DelegateCommand<RssChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
+
         public DelegateCommand CancelUpdateCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Chapter Chapter { get; private set; }
@@ -70,6 +72,13 @@ namespace Allgregator.ViewModels.Rss {
         public void Activate() {
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
             settings.RssChapterId = Chapter.Id;
+        }
+
+        public void Deactivate() {
+            IsActive = false;
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewControl = region.GetView(CurrentView.ToString());
+            if (viewControl != null) region.Deactivate(viewControl);
         }
 
         private async Task ChangeView(RssChapterViews? view) {
