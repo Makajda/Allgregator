@@ -6,7 +6,6 @@ using Allgregator.Services.Rss;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +13,6 @@ using System.Threading.Tasks;
 namespace Allgregator.ViewModels.Rss {
     public class ChapterViewModel : BindableBase {
         private readonly Settings settings;
-        private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
         private readonly ChapterService chapterService;
         private readonly DialogService dialogService;
@@ -24,7 +22,6 @@ namespace Allgregator.ViewModels.Rss {
             OreService oreService,
             ChapterService chapterService,
             Settings settings,
-            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
@@ -32,7 +29,6 @@ namespace Allgregator.ViewModels.Rss {
             OreService = oreService;
             this.chapterService = chapterService;
             this.settings = settings;
-            this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
 
@@ -60,7 +56,7 @@ namespace Allgregator.ViewModels.Rss {
         private bool isActive;
         public bool IsActive {
             get => isActive;
-            private set => SetProperty(ref isActive, value);
+            set => SetProperty(ref isActive, value);
         }
 
         private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
@@ -74,15 +70,6 @@ namespace Allgregator.ViewModels.Rss {
             settings.RssChapterId = Chapter.Id;
         }
 
-        public void Deactivate() {
-            if (IsActive == true) {
-                IsActive = false;
-                var region = regionManager.Regions[Given.MainRegion];
-                var viewControl = region.GetView(CurrentView.ToString());
-                if (viewControl != null) region.Deactivate(viewControl);
-            }
-        }
-
         private async Task ChangeView(RssChapterViews? view) {
             if (IsActive) {
                 CurrentView = CurrentView = view ?? RssChapterViews.NewsView;
@@ -91,9 +78,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async Task CurrentViewChanged() {
-            var region = regionManager.Regions[Given.MainRegion];
-            var viewControl = region.GetView(CurrentView.ToString());
-            if (viewControl != null) region.Activate(viewControl);
+            (App.Current as App).ManageMainViews(CurrentView, Chapter);
             await chapterService.Load(Chapter, CurrentView);
         }
 

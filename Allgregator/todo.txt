@@ -1,17 +1,12 @@
 ﻿foreground и background
-add chapter, delete chapter
-chapters onSettings
-add from opml, save opml
 tests: retrieve, outdate, acceptTime
 
 проверить try на все вызовы всех репозиториев и log
-messages
 проверить пустую папку Data
-что делать с CreateDefault
+что делать с CreateDefault, getOrDefauly FileNotFoundException
 
 1,6180339887 
 
-getOrDefauly FileNotFoundException
 listView recos bringToView
-
 isEnabled buttons
+virtualizing выскакивающие tiles

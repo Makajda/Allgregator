@@ -5,7 +5,6 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:views="clr-namespace:Allgregator.Views.Rss"
              xmlns:common="clr-namespace:Allgregator.Common"
-             xmlns:converters="clr-namespace:Allgregator.Converters"
              >
 
     <DockPanel>

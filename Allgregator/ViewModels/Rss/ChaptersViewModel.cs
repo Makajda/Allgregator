@@ -2,6 +2,7 @@
 using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
+using Allgregator.Views.Rss;
 using Prism.Commands;
 using Prism.DryIoc;
 using Prism.Events;
@@ -74,7 +75,7 @@ namespace Allgregator.ViewModels.Rss {
             var chapter = Chapters.FirstOrDefault(n => n.Chapter.Id == id);
             if (chapter != null) {
                 Chapters.Remove(chapter);
-                chapter.Deactivate();
+                chapter.IsActive = false;
                 await Save();
             }
         }
@@ -89,10 +90,16 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void OnSettingsCommand() {
-            foreach (var chapter in Chapters) chapter.Deactivate();
+            foreach (var chapter in Chapters) chapter.IsActive = false;
             var region = regionManager.Regions[Given.MainRegion];
-            var viewControl = region.GetView(Given.SettingsView);
-            if (viewControl != null) region.Activate(viewControl);
+            var view = region.GetView(Given.SettingsView);
+            if (view == null) {
+                var container = (App.Current as PrismApplication).Container;
+                view = container.Resolve<SettingsView>();
+                region.Add(view, Given.SettingsView);
+            }
+
+            region.Activate(view);
         }
     }
 }

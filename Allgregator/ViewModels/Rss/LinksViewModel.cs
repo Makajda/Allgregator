@@ -15,20 +15,20 @@ namespace Allgregator.ViewModels.Rss {
     public class LinksViewModel : BindableBase {
         private readonly ChapterRepository chapterRepository;
         private readonly DialogService dialogService;
-        private readonly DetectionService detectionService;
         private readonly IEventAggregator eventAggregator;
         string savedName;
 
         public LinksViewModel(
+            Chapter chapter,
             ChapterRepository chapterRepository,
             DialogService dialogService,
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
+            Chapter = chapter;
             this.chapterRepository = chapterRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
-            this.detectionService = detectionService;
 
             AddCommand = new DelegateCommand(async () => await detectionService.SetAddress(Chapter.Linked));
             MoveCommand = new DelegateCommand<Link>(Move);
@@ -39,7 +39,6 @@ namespace Allgregator.ViewModels.Rss {
             DeleteChapterCommand = new DelegateCommand(DeleteChapter);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapterName));
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(chapter => Chapter = chapter);
         }
 
         public DelegateCommand AddCommand { get; private set; }
@@ -49,12 +48,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand ToChapterCommand { get; private set; }
         public DelegateCommand FromChapterCommand { get; private set; }
         public DelegateCommand DeleteChapterCommand { get; private set; }
-
-        private Chapter chapter;
-        public Chapter Chapter {
-            get => chapter;
-            private set => SetProperty(ref chapter, value);
-        }
+        public Chapter Chapter { get; private set; }
 
         private async void Move(Link link) {
             var chapters = await chapterRepository.GetOrDefault();

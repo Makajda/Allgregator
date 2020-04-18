@@ -1,7 +1,9 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
+using Allgregator.Models.Rss;
 using Allgregator.Services.Rss;
 using Allgregator.ViewModels;
+using Allgregator.ViewModels.Rss;
 using Allgregator.Views;
 using Allgregator.Views.Rss;
 using Prism.DryIoc;
@@ -24,12 +26,6 @@ namespace Allgregator {
 
             var regionManager = Container.Resolve<IRegionManager>();
             regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));
-
-            var region = regionManager.Regions[Given.MainRegion];
-            region.Add(Container.Resolve<RecosView>((typeof(bool), true)), RssChapterViews.NewsView.ToString());
-            region.Add(Container.Resolve<RecosView>((typeof(bool), false)), RssChapterViews.OldsView.ToString());
-            region.Add(Container.Resolve<LinksView>(), RssChapterViews.LinksView.ToString());
-            region.Add(Container.Resolve<SettingsView>(), Given.SettingsView);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
@@ -46,6 +42,38 @@ namespace Allgregator {
                 var viewModelName = $"{viewName}Model, {viewAssemblyName}";
                 return Type.GetType(viewModelName);
             });
+        }
+
+        public void ManageMainViews(RssChapterViews currentView, Chapter chapter) {
+            var regionManager = Container.Resolve<IRegionManager>();
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewName = $"{currentView}.{chapter.Id}";
+            var view = region.GetView(viewName);
+            if (view == null) {
+                object viewModel;
+                switch (currentView) {
+                    case RssChapterViews.NewsView:
+                        view = Container.Resolve<RecosView>((typeof(bool), true));
+                        viewModel = Container.Resolve<RecosViewModel>((typeof(Chapter), chapter));
+                        break;
+                    case RssChapterViews.OldsView:
+                        view = Container.Resolve<RecosView>((typeof(bool), false));
+                        viewModel = Container.Resolve<RecosViewModel>((typeof(Chapter), chapter));
+                        break;
+                    case RssChapterViews.LinksView:
+                    default:
+                        view = Container.Resolve<LinksView>();
+                        viewModel = Container.Resolve<LinksViewModel>((typeof(Chapter), chapter));
+                        break;
+                }
+
+                region.Add(view, viewName);
+                if (view is FrameworkElement frameworkElement) {
+                    frameworkElement.DataContext = viewModel;
+                }
+            }
+
+            region.Activate(view);
         }
     }
 }
