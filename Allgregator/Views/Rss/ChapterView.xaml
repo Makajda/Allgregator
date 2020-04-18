@@ -42,25 +42,23 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="1,0,1,0">
+    <Grid Margin="3,6,3,0">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Button Width="160" Height="100" Padding="15" Style="{StaticResource managerButton}"
+        <Button Width="160" Height="100" Padding="0" BorderThickness="0"
                 common:Pathatt.Rect="True"
                 Background="LightGoldenrodYellow" Foreground="Black"
                 Command="{Binding OpenCommand}">
             <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0"
-                           Text="{Binding Chapter.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}" 
-                           HorizontalAlignment="Center"/>
-                <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
-                           Text="{Binding Chapter.Mined.AcceptTime, Converter={StaticResource TodayConverter}}" 
-                           HorizontalAlignment="Center"/>
+                <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
+                            Text="{Binding Chapter.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3" HorizontalAlignment="Center"
+                            Text="{Binding Chapter.Mined.AcceptTime, Converter={StaticResource TodayConverter}}"/>
                 <TextBlock Text="{Binding Chapter.Name}" FontSize="18" FontStyle="Italic" TextTrimming="WordEllipsis" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </DockPanel>
         </Button>
 

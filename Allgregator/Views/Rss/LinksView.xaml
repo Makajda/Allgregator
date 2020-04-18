@@ -78,7 +78,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="20">
         <!--Normal-->
         <Grid Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Normal}}">

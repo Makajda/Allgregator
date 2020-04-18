@@ -71,7 +71,7 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void ToChapter() {
-            savedName = Chapter.Name;
+            savedName = Chapter.Name ?? string.Empty;
             Chapter.Linked.CurrentState = RssLinksStates.Chapter;
         }
 
@@ -85,7 +85,7 @@ namespace Allgregator.ViewModels.Rss {
                 var chapters = await chapterRepository.GetOrDefault();
                 var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
                 if (chapter != null) {
-                    chapter.Name = Chapter.Name;
+                    chapter.Name = string.IsNullOrEmpty(Chapter.Name) ? null : Chapter.Name;
                     var saved = await SaveChapters(chapters);
                     if (saved) {
                         savedName = default;

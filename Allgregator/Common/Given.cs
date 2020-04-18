@@ -6,7 +6,6 @@ namespace Allgregator.Common {
         public const string PathData = "Data";
 
         public const string MenuRegion = "MenuRegion";
-        public const string ChapterRegion = "ChapterRegion";
         public const string MainRegion = "MainRegion";
 
         public const string SettingsView = "SettingsView";
