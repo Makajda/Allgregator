@@ -4,8 +4,6 @@
 проверить пустую папку Data
 что делать с CreateDefault, getOrDefauly FileNotFoundException
 
-virtualizing выскакивающие tiles и not center first
-
 isEnabled buttons
 
 foreground и background

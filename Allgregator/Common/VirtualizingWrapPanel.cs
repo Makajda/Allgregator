@@ -99,8 +99,8 @@ namespace Allgregator.Common {
 
             var visualIndex = 0;
 
-            //var currentX = layoutInfo.FirstRealizedItemLeft;
-            var currentX = (availableSize.Width - extentInfo.ItemsPerLine * ItemWidth) / 2d;//myChange
+            var deltaX = (availableSize.Width - extentInfo.ItemsPerLine * ItemWidth) / 2d;//myChange
+            var currentX = layoutInfo.FirstRealizedItemLeft + deltaX;
             var currentY = layoutInfo.FirstRealizedLineTop;
 
 
@@ -145,7 +145,7 @@ namespace Allgregator.Common {
                     if (currentX + ItemWidth * 2 >= availableSize.Width) {
                         // wrap to a new line
                         currentY += ItemHeight;
-                        currentX = (availableSize.Width - extentInfo.ItemsPerLine * ItemWidth) / 2d;//myChange from 0
+                        currentX = deltaX;//myChange from 0
                     }
                     else {
                         currentX += ItemWidth;
