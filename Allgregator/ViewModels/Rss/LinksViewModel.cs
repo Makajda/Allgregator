@@ -101,7 +101,12 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void DeleteChapter() {
-            dialogService.Show($"{Chapter.Linked.Links.Count} links?", DeleteChapterReal, 20, true);
+            if (Chapter?.Linked?.Links != null && Chapter.Linked.Links.Count > 0) {
+                dialogService.Show($"{Chapter.Linked.Links.Count} addresses?", DeleteChapterReal, 20, true);
+            }
+            else {
+                DeleteChapterReal();
+            }
 
             void DeleteChapterReal() {
                 eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(Chapter.Id);

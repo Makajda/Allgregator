@@ -14,6 +14,7 @@ namespace Allgregator.Common {
     public class CurrentChapterChangedEvent : PubSubEvent<Chapter> { }
     public class LinkMovedEvent : PubSubEvent<(int Id, Link Link)> { }
     public class ChapterDeletedEvent : PubSubEvent<int> { }
+    public class ChapterAddedEvent : PubSubEvent<Chapter[]> { }
 
     public enum RssChapterViews {
         NewsView,

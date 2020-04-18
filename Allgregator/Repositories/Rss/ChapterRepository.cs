@@ -23,12 +23,6 @@ namespace Allgregator.Repositories.Rss {
             return CreateDefault();
         }
 
-        private async Task<IEnumerable<Chapter>> Get() {
-            var name = Path.Combine(Given.PathData, nameFile);
-            var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);
-        }
-
         public async Task Save(IEnumerable<Chapter> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters.OrderBy(n => n.Name),
@@ -39,6 +33,23 @@ namespace Allgregator.Repositories.Rss {
                 });
 
             await File.WriteAllTextAsync(name, json);
+        }
+
+        public int GetNewId(IEnumerable<Chapter> chapters) {
+            var newId = 1;
+            foreach (var chapter in chapters.OrderBy(n => n.Id)) {
+                var id = chapter.Id;
+                if (id != newId) break;
+                newId++;
+            }
+
+            return newId;
+        }
+
+        private async Task<IEnumerable<Chapter>> Get() {
+            var name = Path.Combine(Given.PathData, nameFile);
+            var json = await File.ReadAllTextAsync(name);
+            return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);
         }
 
         private IEnumerable<Chapter> CreateDefault() {

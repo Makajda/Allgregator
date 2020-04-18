@@ -31,6 +31,7 @@ namespace Allgregator.ViewModels.Rss {
             SettingsCommand = new DelegateCommand(OnSettingsCommand);
 
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
+            eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
         }
 
         public DelegateCommand SettingsCommand { get; private set; }
@@ -42,21 +43,31 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         public async Task Load() {
-            if (Chapters == null) {
-                var chapters = await chapterRepository.GetOrDefault();
-                if (chapters != null) {
-                    var container = (App.Current as PrismApplication).Container;
-                    Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
+            var chapters = await chapterRepository.GetOrDefault();
+            if (chapters != null) {
+                var container = (App.Current as PrismApplication).Container;
+                Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
 
-                    var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
-                    if (currentChapter == null) {
-                        currentChapter = Chapters.FirstOrDefault();
-                    }
-
-                    currentChapter?.Activate();
+                var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
+                if (currentChapter == null) {
+                    currentChapter = Chapters.FirstOrDefault();
                 }
+
+                currentChapter?.Activate();
             }
-            //OnSettingsCommand();//todo
+        }
+
+        private async void ChapterAdded(Chapter[] chapters) {
+            foreach (var newChapter in chapters) {
+                if (newChapter.Id == 0) {
+                    newChapter.Id = chapterRepository.GetNewId(chapters);
+                }
+
+                var container = (App.Current as PrismApplication).Container;
+                Chapters.Add(container.Resolve<ChapterViewModel>((typeof(Chapter), newChapter)));
+            }
+
+            await Save();
         }
 
         private async void ChapterDeleted(int id) {
@@ -64,12 +75,16 @@ namespace Allgregator.ViewModels.Rss {
             if (chapter != null) {
                 Chapters.Remove(chapter);
                 chapter.Deactivate();
-                try {
-                    await chapterRepository.Save(Chapters.Select(n => n.Chapter));
-                }
-                catch (Exception e) {
-                    /*//TODO Log*/
-                }
+                await Save();
+            }
+        }
+
+        private async Task Save() {
+            try {
+                await chapterRepository.Save(Chapters.Select(n => n.Chapter));
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
             }
         }
 

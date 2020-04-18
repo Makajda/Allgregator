@@ -22,12 +22,6 @@ namespace Allgregator.Repositories.Rss {
             return CreateDefault(chapterId);
         }
 
-        private async Task<Linked> Get(int chapterId) {
-            var name = GetName(chapterId);
-            var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<Linked>(json);
-        }
-
         public async Task Save(int chapterId, Linked linked) {
             var json = JsonSerializer.Serialize<Linked>(linked,
                 new JsonSerializerOptions() {
@@ -43,6 +37,12 @@ namespace Allgregator.Repositories.Rss {
         public void DeleteFile(int id) {
             var name = GetName(id);
             File.Delete(name);
+        }
+
+        private async Task<Linked> Get(int chapterId) {
+            var name = GetName(chapterId);
+            var json = await File.ReadAllTextAsync(name);
+            return JsonSerializer.Deserialize<Linked>(json);
         }
 
         private string GetName(int chapterId) {

@@ -20,12 +20,6 @@ namespace Allgregator.Repositories.Rss {
             return new Settings();
         }
 
-        private Settings Get() {
-            var name = Path.Combine(Given.PathData, nameFile);
-            var json = File.ReadAllText(name);
-            return JsonSerializer.Deserialize<Settings>(json);
-        }
-
         public void Save(Settings settings) {
             if (!Directory.Exists(Given.PathData))
                 Directory.CreateDirectory(Given.PathData);
@@ -38,6 +32,12 @@ namespace Allgregator.Repositories.Rss {
 
             var name = Path.Combine(Given.PathData, nameFile);
             File.WriteAllText(name, json);
+        }
+
+        private Settings Get() {
+            var name = Path.Combine(Given.PathData, nameFile);
+            var json = File.ReadAllText(name);
+            return JsonSerializer.Deserialize<Settings>(json);
         }
     }
 }

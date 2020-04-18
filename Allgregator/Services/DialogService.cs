@@ -8,22 +8,13 @@ using System.Windows.Media;
 namespace Allgregator.Services {
     public class DialogService {
         public void Show(string message, Action callback = null, double fontSize = 16, bool isStrikethrough = false) {
-            var (popup, grid) = Create();
+            var (popup, host) = Create();
 
-            var textBlock = new TextBlock() {
-                Text = message,
-                Foreground = Brushes.White,
-                FontSize = fontSize,
-                TextWrapping = TextWrapping.Wrap,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+            var panel = new DockPanel() {
+                Background = Brushes.Red,
             };
 
-            if (isStrikethrough) {
-                textBlock.TextDecorations = TextDecorations.Strikethrough;
-            }
-
-            grid.Children.Add(textBlock);
+            host.Content = panel;
 
             if (callback != null) {
                 var button = new Button() {
@@ -33,30 +24,40 @@ namespace Allgregator.Services {
                     FontSize = 28,
                     Padding = new Thickness(20),
                     Margin = new Thickness(20),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Bottom
+                    VerticalAlignment = VerticalAlignment.Center
                 };
 
-                button.Click += (s, e) => { popup.IsOpen = false; callback?.Invoke(); };
-                grid.Children.Add(button);
+                button.SetValue(DockPanel.DockProperty, Dock.Right);
+                button.Click += (s, e) => { popup.IsOpen = false; callback(); };
+                panel.Children.Add(button);
             }
+
+            var textBlock = new TextBlock() {
+                Text = message,
+                Foreground = Brushes.White,
+                FontSize = fontSize,
+                Margin = new Thickness(10),
+                TextWrapping = TextWrapping.Wrap,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            if (isStrikethrough) {
+                textBlock.TextDecorations = TextDecorations.Strikethrough;
+            }
+
+            panel.Children.Add(textBlock);
         }
 
         public void Show(IEnumerable<string> messages, Action<string> callback = null, double fontSize = 16) {
-            var (popup, grid) = Create();
-
-            var scrollViewer = new ScrollViewer() {
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto
-            };
+            var (popup, host) = Create();
 
             var itemsControl = new ItemsControl() {
                 Foreground = Brushes.White,
                 FontSize = fontSize
             };
 
-            scrollViewer.Content = itemsControl;
-            grid.Children.Add(scrollViewer);
+            host.Content = itemsControl;
 
             foreach (var message in messages) {
                 var button = new Button() {
@@ -72,23 +73,26 @@ namespace Allgregator.Services {
             }
         }
 
-        private (Popup, Grid) Create() {
-            var panel = new Grid() {
-                Background = Brushes.Red,
-                Width = 398d,
-                Height = 246d
-            };
-
+        private (Popup, ContentControl) Create() {
             var popup = new Popup() {
                 AllowsTransparency = true,
+                Opacity = 0.8d,
+                Width = 400d,
+                MaxHeight = 647d,
                 UseLayoutRounding = true,
                 StaysOpen = false,
                 Placement = PlacementMode.Mouse,
-                Child = panel,
                 IsOpen = true
             };
 
-            return (popup, panel);
+            var scrollViewer = new ScrollViewer() {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled
+            };
+
+            popup.Child = scrollViewer;
+
+            return (popup, scrollViewer);
         }
     }
 }

@@ -1,7 +1,10 @@
-﻿using Allgregator.Models;
+﻿using Allgregator.Common;
+using Allgregator.Models;
+using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 
@@ -9,12 +12,16 @@ namespace Allgregator.ViewModels.Rss {
     public class SettingsViewModel : BindableBase {
         private readonly OpmlRepository opmlRepository;
         private readonly DialogService dialogService;
+        private readonly IEventAggregator eventAggregator;
+
         public SettingsViewModel(
             Settings settings,
             OpmlRepository opmlRepository,
+            IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
             this.opmlRepository = opmlRepository;
+            this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.Settings = settings;
 
@@ -27,7 +34,7 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand ToOpmlCommand { get; private set; }
         public DelegateCommand FromOpmlCommand { get; private set; }
         public Settings Settings { get; private set; }
-        
+
         private string addedName;
         public string AddedName {
             get { return addedName; }
@@ -35,6 +42,8 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void AddChapter() {
+            eventAggregator.GetEvent<ChapterAddedEvent>().Publish(new Chapter[] { new Chapter() { Name = AddedName } });
+            AddedName = null;
         }
 
         private async void ToOpml() {
@@ -49,7 +58,7 @@ namespace Allgregator.ViewModels.Rss {
         private async void FromOpml() {
             try {
                 var (chapters, links) = await opmlRepository.Import();
-                var str = $"+ collections: {chapters},  RSS: {links}";
+                var str = $"+++ collections: {chapters},  RSS: {links}";
                 dialogService.Show(str);
             }
             catch (Exception exception) {

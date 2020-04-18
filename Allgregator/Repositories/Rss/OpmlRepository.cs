@@ -1,5 +1,7 @@
-﻿using Allgregator.Models.Rss;
+﻿using Allgregator.Common;
+using Allgregator.Models.Rss;
 using Microsoft.Win32;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +14,16 @@ namespace Allgregator.Repositories.Rss {
     public class OpmlRepository {
         private readonly ChapterRepository chapterRepository;
         private readonly LinkedRepository linkedRepository;
+        private readonly IEventAggregator eventAggregator;
 
         public OpmlRepository(
             ChapterRepository chapterRepository,
-            LinkedRepository linkedRepository
+            LinkedRepository linkedRepository,
+            IEventAggregator eventAggregator
             ) {
             this.chapterRepository = chapterRepository;
             this.linkedRepository = linkedRepository;
+            this.eventAggregator = eventAggregator;
         }
 
         public async Task<(int Chapters, int Links)> Import() {
@@ -28,16 +33,20 @@ namespace Allgregator.Repositories.Rss {
             }
 
             var chapters = (await chapterRepository.GetOrDefault()).ToList();
+            var newChapters = new Chapter[cinks.Count];
+            var indexChapters = 0;
 
-            foreach (var cink in cinks.Where(n => n.Links.Count > 0)) {
-                var id = 1;//todo
-                chapters.Add(new Chapter() { Id = id, Name = cink.Name });
-                var linked = await linkedRepository.GetOrDefault(id);
+            foreach (var cink in cinks) {
+                var newId = chapterRepository.GetNewId(chapters);
+                var newChapter = new Chapter() { Id = newId, Name = cink.Name };
+                newChapters[indexChapters++] = newChapter;
+                chapters.Add(newChapter);
+                var linked = await linkedRepository.GetOrDefault(newId);
                 linked.Links = cink.Links;
-                await linkedRepository.Save(id, linked);
+                await linkedRepository.Save(newId, linked);
             }
 
-            await chapterRepository.Save(chapters);
+            eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
 
             return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
         }
