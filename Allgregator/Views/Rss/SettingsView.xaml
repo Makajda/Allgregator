@@ -36,7 +36,7 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel HorizontalAlignment="Center">
-            <GroupBox Header="Options">
+            <GroupBox Header="Options" Margin="10,0,10,10">
                 <StackPanel>
                     <StackPanel>
                         <TextBlock Text="Maximum Open Tabs"/>

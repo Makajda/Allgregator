@@ -51,7 +51,7 @@ namespace Allgregator.Repositories.Rss {
         }
 
         private Linked CreateDefault(int id) {
-            if (id == 1) {
+            if (id == 10001) {
                 var links = new ObservableCollection<Link>() {
                     new Link() {
                         HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",
@@ -67,24 +67,12 @@ namespace Allgregator.Repositories.Rss {
                         HtmlUrl = "http://rss.cnn.com/rss/edition_technology.rss",
                         Name = "CNN.com - Technology",
                         XmlUrl = "http://rss.cnn.com/rss/edition_technology.rss"
-                    }
-                };
-
-                return new Linked() { Links = links };
-            }
-            else if (id == 2) {
-                var links = new ObservableCollection<Link>() {
+                    },
                     new Link() {
                         HtmlUrl = "http://feeds.foxnews.com/foxnews/sports",
                         Name = "FOX News",
                         XmlUrl = "http://feeds.foxnews.com/foxnews/sports"
-                    }
-                };
-
-                return new Linked() { Links = links };
-            }
-            else if (id == 3) {
-                var links = new ObservableCollection<Link>() {
+                    },
                     new Link() {
                         HtmlUrl = "http://feeds.reuters.com/news/artsculture",
                         Name = "Reuters: Arts",

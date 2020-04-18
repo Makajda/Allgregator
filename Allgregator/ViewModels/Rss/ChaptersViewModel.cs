@@ -61,7 +61,7 @@ namespace Allgregator.ViewModels.Rss {
         private async void ChapterAdded(Chapter[] chapters) {
             foreach (var newChapter in chapters) {
                 if (newChapter.Id == 0) {
-                    newChapter.Id = chapterRepository.GetNewId(chapters);
+                    newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n=>n.Chapter));
                 }
 
                 var container = (App.Current as PrismApplication).Container;

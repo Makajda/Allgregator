@@ -23,7 +23,7 @@ namespace Allgregator.Common {
             var container = (App.Current as PrismApplication).Container;
             var window = container.Resolve<MainWindow>();
             var settings = container.Resolve<Settings>();
-            SetWindowBoundsAndState(window, settings.MainWindowBounds, settings.MainWindowState);
+            SetWindowBoundsAndState(window, settings.MainWindowLeft, settings.MainWindowTop, settings.MainWindowWidth, settings.MainWindowHeight, settings.MainWindowState);
             window.Closing += Window_Closing;
             return window;
         }
@@ -35,7 +35,10 @@ namespace Allgregator.Common {
                 eventAggregator.GetEvent<WindowClosingEvent>().Publish(e);
                 var settings = container.Resolve<Settings>();
                 var settingsRepository = container.Resolve<SettingsRepository>();
-                settings.MainWindowBounds = mainWindow.RestoreBounds;
+                settings.MainWindowLeft = mainWindow.RestoreBounds.Left;
+                settings.MainWindowTop = mainWindow.RestoreBounds.Top;
+                settings.MainWindowWidth = mainWindow.RestoreBounds.Width;
+                settings.MainWindowHeight = mainWindow.RestoreBounds.Height;
                 settings.MainWindowState = mainWindow.WindowState;
                 try {
                     settingsRepository.Save(settings);
@@ -44,13 +47,13 @@ namespace Allgregator.Common {
             }
         }
 
-        private static void SetWindowBoundsAndState(Window window, Rect bounds, WindowState state) {
-            window.Left = double.IsInfinity(bounds.Left) ? 0d : bounds.Left;
-            window.Top = double.IsInfinity(bounds.Top) ? 0d : bounds.Top;
-            if (bounds.Width > double.Epsilon && !double.IsInfinity(bounds.Width))
-                window.Width = bounds.Width;
-            if (bounds.Height > double.Epsilon && !double.IsInfinity(bounds.Height))
-                window.Height = bounds.Height;
+        private static void SetWindowBoundsAndState(Window window, double left, double top, double width, double height, WindowState state) {
+            window.Left = double.IsInfinity(left) ? 0d : left;
+            window.Top = double.IsInfinity(top) ? 0d : top;
+            if (width > double.Epsilon && !double.IsInfinity(width))
+                window.Width = width;
+            if (height > double.Epsilon && !double.IsInfinity(height))
+                window.Height = height;
             if (window.Left < 0d || window.Top < 0d
                 || window.Width < double.Epsilon
                 || window.Height < double.Epsilon

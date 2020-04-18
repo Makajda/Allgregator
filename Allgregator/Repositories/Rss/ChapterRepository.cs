@@ -54,9 +54,7 @@ namespace Allgregator.Repositories.Rss {
 
         private IEnumerable<Chapter> CreateDefault() {
             return new List<Chapter>() {
-                new Chapter() { Id = 1, Name = "Base" },
-                new Chapter() { Id = 2, Name = "Sport" },
-                new Chapter() { Id = 3, Name = "Art" }
+                new Chapter() { Id = 10001, Name = "Try" }
             };
         }
     }
