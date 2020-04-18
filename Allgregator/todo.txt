@@ -1,10 +1,6 @@
 ﻿tests: retrieve, outdate, acceptTime
 
-проверить try на все вызовы всех репозиториев и log
-проверить пустую папку Data
-что делать с CreateDefault, getOrDefauly FileNotFoundException
-
-isEnabled buttons
+что делать с CreateDefault, getOrDefault FileNotFoundException
 
 foreground и background
 

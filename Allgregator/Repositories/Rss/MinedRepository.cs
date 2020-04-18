@@ -20,11 +20,6 @@ namespace Allgregator.Repositories.Rss {
             return new Mined();
         }
 
-        public void DeleteFile(int id) {
-            var (_, name) = GetNames(id);
-            File.Delete(name);
-        }
-
         public async Task Save(int chapterId, Mined mined) {
             var (entryName, fileName) = GetNames(chapterId);
 
@@ -45,6 +40,11 @@ namespace Allgregator.Repositories.Rss {
                     }
                 }
             }
+        }
+
+        public void DeleteFile(int id) {
+            var (_, name) = GetNames(id);
+            File.Delete(name);
         }
 
         private async Task<Mined> Get(int chapterId) {

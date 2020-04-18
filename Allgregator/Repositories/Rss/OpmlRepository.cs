@@ -36,15 +36,18 @@ namespace Allgregator.Repositories.Rss {
             var newChapters = new Chapter[cinks.Count];
             var indexChapters = 0;
 
-            foreach (var cink in cinks) {
-                var newId = chapterRepository.GetNewId(chapters);
-                var newChapter = new Chapter() { Id = newId, Name = cink.Name };
-                newChapters[indexChapters++] = newChapter;
-                chapters.Add(newChapter);
-                var linked = await linkedRepository.GetOrDefault(newId);
-                linked.Links = cink.Links;
-                await linkedRepository.Save(newId, linked);
+            try {
+                foreach (var cink in cinks) {
+                    var newId = chapterRepository.GetNewId(chapters);
+                    var newChapter = new Chapter() { Id = newId, Name = cink.Name };
+                    newChapters[indexChapters++] = newChapter;
+                    chapters.Add(newChapter);
+                    var linked = await linkedRepository.GetOrDefault(newId);
+                    linked.Links = cink.Links;
+                    await linkedRepository.Save(newId, linked);
+                }
             }
+            catch (Exception e) { /*//TODO Log*/ }
 
             eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
 

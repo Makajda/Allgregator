@@ -40,8 +40,19 @@ namespace Allgregator.Services.Rss {
         }
 
         public void DeleteFiles(int id) {
-            linkedRepository.DeleteFile(id);
-            minedRepository.DeleteFile(id);
+            try {
+                linkedRepository.DeleteFile(id);
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+            }
+
+            try {
+                minedRepository.DeleteFile(id);
+            }
+            catch (Exception e) {
+                /*//TODO Log*/
+            }
         }
 
         private async Task LoadLinks(Chapter chapter, bool force = true) {
