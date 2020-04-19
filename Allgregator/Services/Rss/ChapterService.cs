@@ -16,14 +16,9 @@ namespace Allgregator.Services.Rss {
             this.minedRepository = minedRepository;
         }
 
-        public async Task Load(Chapter chapter, RssChapterViews currentView) {
+        public async Task Load(Chapter chapter, bool force = true) {
             await LoadMined(chapter);
-            await LoadLinks(chapter, currentView == RssChapterViews.LinksView);
-        }
-
-        public async Task Load(Chapter chapter) {
-            await LoadMined(chapter);
-            await LoadLinks(chapter);
+            await LoadLinks(chapter, force);
         }
 
         public async Task Save(Chapter chapter) {
@@ -60,6 +55,10 @@ namespace Allgregator.Services.Rss {
                 chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);
                 if (chapter.Linked.CurrentState == RssLinksStates.Detection || chapter.Linked.CurrentState == RssLinksStates.Chapter) {
                     chapter.Linked.CurrentState = RssLinksStates.Normal;
+                }
+
+                if (chapter.Linked.Links == null) {
+                    chapter.Linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
                 }
             }
         }

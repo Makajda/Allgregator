@@ -39,7 +39,6 @@ namespace Allgregator.ViewModels.Rss {
             OpenCommand = new DelegateCommand(Open);
             MoveCommand = new DelegateCommand(Move);
             UpdateCommand = new DelegateCommand(Update);
-            CancelUpdateCommand = new DelegateCommand(OreService.CancelRetrieve);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(async () => await chapterService.Save(Chapter)));
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
@@ -51,8 +50,6 @@ namespace Allgregator.ViewModels.Rss {
         public DelegateCommand OpenCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }
         public DelegateCommand UpdateCommand { get; private set; }
-
-        public DelegateCommand CancelUpdateCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Chapter Chapter { get; private set; }
 
@@ -82,7 +79,7 @@ namespace Allgregator.ViewModels.Rss {
 
         private async Task CurrentViewChanged() {
             viewsService.ManageMainViews(CurrentView, Chapter);
-            await chapterService.Load(Chapter, CurrentView);
+            await chapterService.Load(Chapter, CurrentView == RssChapterViews.LinksView);
         }
 
         private async void CurrentChapterChanged(Chapter chapter) {
@@ -132,7 +129,10 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private async void Update() {
-            if (!OreService.IsRetrieving) {
+            if (OreService.IsRetrieving) {
+                OreService.CancelRetrieve();
+            }
+            else {
                 await chapterService.Load(Chapter);
                 await OreService.Retrieve(Chapter, settings.RssCutoffTime);
             }

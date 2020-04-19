@@ -6,8 +6,8 @@ using System.Windows.Data;
 namespace Allgregator.Converters {
     public class BooleanNotToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (value is bool b) {
-                return b ? Visibility.Collapsed : Visibility.Visible;
+            if (value is bool b && b) {
+                return Visibility.Collapsed;
             }
 
             return Visibility.Visible;

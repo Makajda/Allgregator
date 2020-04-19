@@ -98,7 +98,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightGoldenrodYellow"
+                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightSeaGreen"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
                 <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}"/>
@@ -168,7 +168,7 @@
                       Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Chapter}}">
             <StackPanel>
-                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="LightGoldenrodYellow"
+                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="LightSeaGreen"
                         Style="{StaticResource circleButton}" HorizontalAlignment="Left"
                         Command="{Binding FromChapterCommand}"/>
 

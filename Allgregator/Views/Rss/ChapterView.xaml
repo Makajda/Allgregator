@@ -12,9 +12,8 @@
         <converters:IntNqToVisibilityConverter x:Key="IntNqToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:TodayConverter x:Key="TodayConverter"/>
-        <converters:BooleanToGeometryConverter x:Key="BooleanToGeometryConverter" 
-                                               TrueGeometry ="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
-                                               FalseGeometry ="M0,1 A1,1 0 0 1 1,0 V1 H0 Z"/>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="PaleGreen" FalseBrush="Transparent"/>
+        <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
 
         <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Padding" Value="10"/>
@@ -23,18 +22,6 @@
             <Setter Property="Height" Value="50"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-
-        <Style x:Key="underButton" TargetType="Button">
-            <Setter Property="DockPanel.Dock" Value="Right"/>
-            <Setter Property="Margin" Value="0,0,-10,0"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="common:Shaatt.Circle" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="errorItemTemplate">
@@ -53,7 +40,7 @@
 
         <Button Width="160" Height="100" Padding="0" BorderThickness="0"
                 common:Shaatt.Rect="True"
-                Background="LightGoldenrodYellow" Foreground="Black"
+                Background="LightSeaGreen" Foreground="Black"
                 Command="{Binding OpenCommand}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
@@ -65,28 +52,17 @@
             </DockPanel>
         </Button>
 
-        <!--explicitly Template for bind path!-->
-        <Button Content="&#x2B6E;" Style="{StaticResource managerButton}"
-                Template="{StaticResource ButtonPathTemplate}"
-                common:Shaatt.Path="{Binding IsActive, Converter={StaticResource BooleanToGeometryConverter}}"
-                Background="PaleGreen"
+        <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
+                Style="{StaticResource managerButton}"
+                common:Shaatt.Path="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
+                Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
                 Command="{Binding UpdateCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-
-        <!--<Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-              Visibility="{Binding IsActive, Converter={StaticResource BooleanNotToVisibilityConverter}}">
-            <Button Content="&#x2B6E;" Width="50" Height="50" Opacity="0.5" Padding="10" Margin="0,0,-1,-1" FontSize="18" 
-                    HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                    common:Shaatt.Path="M0,1 A1,1 0 0 1 1,0 V1 H0 Z"
-                    Background="Transparent" Foreground="Black" BorderBrush="PaleGreen"
-                    Command="{Binding UpdateCommand}"
-                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanNotToVisibilityConverter}}">
-                <Button.Resources>
-                    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="PaleGreen"/>
-                </Button.Resources>
-            </Button>
-        </Grid>-->
+                HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Green"/>
+            </Button.Resources>
+        </Button>
 
         <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
@@ -120,17 +96,17 @@
         </Grid>
 
         <DockPanel Grid.Row="1" Height="50">
-            <Grid DockPanel.Dock="Right">
-                <Button Content="&#x1F9F9;" Command="{Binding MoveCommand}" Style="{StaticResource underButton}"
-                        Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button.Resources>
-                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
-                    </Button.Resources>
-                </Button>
-            </Grid>
-
-            <Button Content="&#x2715;" Command="{Binding CancelUpdateCommand}" Style="{StaticResource underButton}"
-                    Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button DockPanel.Dock="Right" Content="&#x1F9F9;" 
+                    Width="50" Padding="0" Margin="0,0,-10,0"
+                    FontSize="18" BorderThickness="0"
+                    Background="Transparent" Foreground="White"
+                    common:Shaatt.Circle="True"
+                    Command="{Binding MoveCommand}"
+                    Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button.Resources>
+                    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
+                </Button.Resources>
+            </Button>
 
             <ProgressBar Foreground="PaleGreen"
                          Height="10"
