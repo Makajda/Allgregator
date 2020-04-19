@@ -20,7 +20,6 @@ namespace Allgregator.Services.Rss {
 
         public void Production(Link link, DateTimeOffset cutoffTime) {
             try {
-                var uri = new Uri(link.XmlUrl);
                 using var reader = XmlReader.Create(link.XmlUrl);
                 var feed = SyndicationFeed.Load(reader);
                 var recos = new List<Reco>();

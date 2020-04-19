@@ -75,13 +75,17 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void ToChapter() {
-            savedName = Chapter.Name ?? string.Empty;
-            Chapter.Linked.CurrentState = RssLinksStates.Chapter;
+            if (Chapter?.Linked != null) {
+                savedName = Chapter.Name ?? string.Empty;
+                Chapter.Linked.CurrentState = RssLinksStates.Chapter;
+            }
         }
 
         private async void FromChapter() {
-            Chapter.Linked.CurrentState = RssLinksStates.Normal;
-            await SaveChapterName();
+            if (Chapter?.Linked != null) {
+                Chapter.Linked.CurrentState = RssLinksStates.Normal;
+                await SaveChapterName();
+            }
         }
 
         private async Task SaveChapterName() {

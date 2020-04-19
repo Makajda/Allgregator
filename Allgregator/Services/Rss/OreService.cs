@@ -58,10 +58,10 @@ namespace Allgregator.Services.Rss {
                 IsRetrieving = true;
                 var lastRetrieve = DateTimeOffset.Now;
                 try {
-                    await Task.WhenAll(chapter.Linked.Links.Select(link => Task.Run(() => {
+                    await Task.WhenAll(chapter.Linked.Links.Select(link => new Task(() => {
                         retrieveService.Production(link, cutoffTime);
                         progressIndicator.Report(1);
-                    }, cancellationTokenSource.Token)));
+                    }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning)));
                 }
                 catch (OperationCanceledException) {
                 }
