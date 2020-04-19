@@ -2,7 +2,6 @@
 using Allgregator.Models.Rss;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.ServiceModel.Syndication;
@@ -29,6 +28,10 @@ namespace Allgregator.Services.Rss {
 
         public void Selected(Linked linked, Link link) {
             if (link?.XmlUrl != null) {
+                if (linked.Links == null) {
+                    linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
+                }
+
                 linked.Links.Insert(0, link);
                 linked.Address = null;
                 linked.DetectedLinks = null;
@@ -92,7 +95,7 @@ namespace Allgregator.Services.Rss {
                 links.Add(new Link() { Name = address, XmlUrl = address, HtmlUrl = address });
             }
             else {
-                links = links.Distinct(new LinkComparer()).OrderBy(n => n.XmlUrl.ToString().Length).ToList();
+                links = links.Distinct(EqualityComparer<Link>.Default).OrderBy(n => n.XmlUrl.ToString().Length).ToList();
             }
 
             links.Add(new Link());
@@ -204,19 +207,6 @@ namespace Allgregator.Services.Rss {
                 "feeds/posts/default",
                 "posts.rss"
             };
-        }
-
-        class LinkComparer : EqualityComparer<Link> {
-            public override bool Equals([AllowNull] Link x, [AllowNull] Link y) {
-                if (x == null || y == null)
-                    return true;
-
-                return x.Equals(y);
-            }
-
-            public override int GetHashCode([DisallowNull] Link obj) {
-                return obj.GetHashCode();
-            }
         }
     }
 }

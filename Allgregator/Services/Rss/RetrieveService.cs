@@ -2,47 +2,37 @@
 using Allgregator.Models.Rss;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 
 namespace Allgregator.Services.Rss {
     public class RetrieveService : IDisposable {
-        private object syncNewRecos = new object();
-        private object syncOldRecos = new object();
+        private object syncRecos = new object();
         private object syncErrors = new object();
 
-        public List<Reco> NewRecos { get; } = new List<Reco>();
-        public List<Reco> OldRecos { get; } = new List<Reco>();
+        public List<Reco> Recos { get; } = new List<Reco>();
         public List<Error> Errors { get; } = new List<Error>();
 
         public void Dispose() {
-            NewRecos.Clear();
-            OldRecos.Clear();
+            Recos.Clear();
             Errors.Clear();
         }
 
-        public void Production(Link link, DateTimeOffset acceptTime, DateTimeOffset cutoffTime, IEnumerable<Reco> outdated) {
+        public void Production(Link link, DateTimeOffset cutoffTime) {
             try {
                 var uri = new Uri(link.XmlUrl);
                 using var reader = XmlReader.Create(link.XmlUrl);
                 var feed = SyndicationFeed.Load(reader);
+                var recos = new List<Reco>();
                 foreach (var item in feed.Items) {
                     if (item.PublishDate > cutoffTime) {
                         var reco = GetRecoFromSyndication(feed, item);
-                        if (item.PublishDate > acceptTime) {
-                            if (outdated?.FirstOrDefault(n => n.Equals(reco)) == null) {
-                                lock (syncNewRecos) {
-                                    NewRecos.Add(reco);
-                                    continue;
-                                }
-                            }
-                        }
-
-                        lock (syncOldRecos) {
-                            OldRecos.Add(reco);
-                        }
+                        recos.Add(reco);
                     }
+                }
+
+                lock (syncRecos) {
+                    Recos.AddRange(recos);
                 }
             }
             catch (OperationCanceledException) { }

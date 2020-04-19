@@ -29,6 +29,10 @@ namespace Allgregator.Services.Rss {
         public async Task LinkMoved(Chapter chapter, (int Id, Link Link) obj) {
             if (obj.Id == chapter.Id) {
                 await LoadLinks(chapter);
+                if (chapter.Linked.Links == null) {
+                    chapter.Linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
+                }
+
                 chapter.Linked.Links.Add(obj.Link);
                 await SaveLinks(chapter);
             }
@@ -55,10 +59,6 @@ namespace Allgregator.Services.Rss {
                 chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);
                 if (chapter.Linked.CurrentState == RssLinksStates.Detection || chapter.Linked.CurrentState == RssLinksStates.Chapter) {
                     chapter.Linked.CurrentState = RssLinksStates.Normal;
-                }
-
-                if (chapter.Linked.Links == null) {
-                    chapter.Linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
                 }
             }
         }

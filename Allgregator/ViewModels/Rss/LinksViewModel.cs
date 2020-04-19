@@ -56,8 +56,10 @@ namespace Allgregator.ViewModels.Rss {
                 name => {
                     var newChapter = chapters.FirstOrDefault(n => n.Name == name);
                     eventAggregator.GetEvent<LinkMovedEvent>().Publish((newChapter.Id, link));
-                    Chapter.Linked.IsNeedToSave = true;
-                    Chapter.Linked.Links.Remove(link);
+                    if (Chapter?.Linked?.Links != null) {
+                        Chapter.Linked.IsNeedToSave = true;
+                        Chapter.Linked.Links.Remove(link);
+                    }
                 });
         }
 
@@ -65,8 +67,10 @@ namespace Allgregator.ViewModels.Rss {
             dialogService.Show($"{link.Name}?", DeleteReal, 20, true);
 
             void DeleteReal() {
-                Chapter.Linked.Links.Remove(link);
-                Chapter.Linked.IsNeedToSave = true;
+                if (Chapter?.Linked?.Links != null) {
+                    Chapter.Linked.Links.Remove(link);
+                    Chapter.Linked.IsNeedToSave = true;
+                }
             }
         }
 

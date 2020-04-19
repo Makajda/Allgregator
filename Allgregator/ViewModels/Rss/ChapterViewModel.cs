@@ -119,12 +119,15 @@ namespace Allgregator.ViewModels.Rss {
 
         private void Move() {
             if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
-                Chapter.Mined.IsNeedToSave = true;
-                var cache = Chapter.Mined.NewRecos.Reverse();
+                var mined = Chapter.Mined;
+                mined.IsNeedToSave = true;
+                var cache = mined.NewRecos.Reverse();
                 foreach (var reco in cache) {
-                    Chapter.Mined.NewRecos.Remove(reco);
-                    Chapter.Mined.OldRecos.Insert(0, reco);
+                    mined.NewRecos.Remove(reco);
+                    mined.OldRecos.Insert(0, reco);
                 }
+
+                mined.AcceptTime = mined.LastRetrieve;
             }
         }
 
