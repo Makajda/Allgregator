@@ -1,16 +1,18 @@
-﻿using DryIoc;
+﻿using Prism.Ioc;
 
 namespace Allgregator.Services {
     public class FactoryService {
-        private readonly IContainer container;
-        public FactoryService(
-            IContainer container
-            ) {
+        private readonly IContainerProvider container;
+        public FactoryService(IContainerProvider container) {
             this.container = container;
         }
 
-        public T Resolve<T>(params object[] parameters) {
-            return (T)container.Resolve(typeof(T), parameters);
+        public T Resolve<T>() {
+            return container.Resolve<T>();
+        }
+
+        public T Resolve<T1, T>(object parameter) {
+            return container.Resolve<T>((typeof(T1), parameter));
         }
     }
 }

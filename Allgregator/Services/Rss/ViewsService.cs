@@ -26,17 +26,17 @@ namespace Allgregator.Services.Rss {
                 object viewModel;
                 switch (currentView) {
                     case RssChapterViews.NewsView:
-                        view = factoryService.Resolve<RecosView>(true);
-                        viewModel = factoryService.Resolve<RecosViewModel>(chapter);
+                        view = factoryService.Resolve<bool, RecosView>(true);
+                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
                         break;
                     case RssChapterViews.OldsView:
-                        view = factoryService.Resolve<RecosView>(false);
-                        viewModel = factoryService.Resolve<RecosViewModel>(chapter);
+                        view = factoryService.Resolve<bool, RecosView>(false);
+                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
                         break;
                     case RssChapterViews.LinksView:
                     default:
                         view = factoryService.Resolve<LinksView>();
-                        viewModel = factoryService.Resolve<LinksViewModel>(chapter);
+                        viewModel = factoryService.Resolve<Chapter, LinksViewModel>(chapter);
                         break;
                 }
 

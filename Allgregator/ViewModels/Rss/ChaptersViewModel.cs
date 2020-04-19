@@ -50,7 +50,8 @@ namespace Allgregator.ViewModels.Rss {
         public async Task Load() {
             var chapters = await chapterRepository.GetOrDefault();
             if (chapters != null) {
-                Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => factoryService.Resolve<ChapterViewModel>(n)));
+                Chapters = new ObservableCollection<ChapterViewModel>(
+                    chapters.Select(n => factoryService.Resolve<Chapter, ChapterViewModel>(n)));
 
                 var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
                 if (currentChapter == null) {
@@ -67,7 +68,7 @@ namespace Allgregator.ViewModels.Rss {
                     newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));
                 }
 
-                Chapters.Add(factoryService.Resolve<ChapterViewModel>(newChapter));
+                Chapters.Add(factoryService.Resolve<Chapter, ChapterViewModel>(newChapter));
             }
 
             await Save();

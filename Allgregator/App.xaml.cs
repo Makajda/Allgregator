@@ -32,7 +32,8 @@ namespace Allgregator {
             var settingsRepository = Container.Resolve<SettingsRepository>();
             var settings = settingsRepository.GetOrDefault();
             containerRegistry.RegisterInstance<Settings>(settings);
-            containerRegistry.RegisterSingleton<FactoryService>();
+            var factoryService = new FactoryService(Container);
+            containerRegistry.RegisterInstance<FactoryService>(factoryService);
             containerRegistry.RegisterSingleton<ChapterService>();
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
