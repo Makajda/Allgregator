@@ -3,6 +3,7 @@ using Allgregator.Models.Rss;
 using Allgregator.ViewModels.Rss;
 using Allgregator.Views.Rss;
 using Prism.Regions;
+using System;
 using System.Windows;
 
 namespace Allgregator.Services.Rss {
@@ -17,10 +18,9 @@ namespace Allgregator.Services.Rss {
             this.regionManager = regionManager;
         }
 
-
         public void ManageMainViews(RssChapterViews currentView, Chapter chapter) {
             var region = regionManager.Regions[Given.MainRegion];
-            var viewName = $"{currentView}.{chapter.Id}";
+            var viewName = GetName(currentView.ToString(), chapter.Id);
             var view = region.GetView(viewName);
             if (view == null) {
                 object viewModel;
@@ -48,5 +48,19 @@ namespace Allgregator.Services.Rss {
 
             region.Activate(view);
         }
+
+        public void RemoveMainViews(Chapter chapter) {
+            var region = regionManager.Regions[Given.MainRegion];
+            foreach (var view in Enum.GetNames(typeof(RssChapterViews))) {
+                RemoveView(region, view, chapter.Id);
+            }
+        }
+
+        private void RemoveView(IRegion region, string currentView, int id) {
+            var view = region.GetView(GetName(currentView, id));
+            if (view != null) region.Remove(view);
+        }
+
+        private string GetName(string view, int id) => $"{view}.{id}";
     }
 }

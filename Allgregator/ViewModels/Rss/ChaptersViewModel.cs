@@ -3,11 +3,10 @@ using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services;
+using Allgregator.Services.Rss;
 using Allgregator.Views.Rss;
-using DryIoc;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -18,18 +17,21 @@ using System.Threading.Tasks;
 namespace Allgregator.ViewModels.Rss {
     public class ChaptersViewModel : BindableBase {
         private readonly FactoryService factoryService;
+        private readonly ViewsService viewsService;
         private readonly IRegionManager regionManager;
         private readonly ChapterRepository chapterRepository;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
             FactoryService factoryService,
+            ViewsService viewsService,
             ChapterRepository chapterRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
             ) {
             this.factoryService = factoryService;
+            this.viewsService = viewsService;
             this.regionManager = regionManager;
             this.chapterRepository = chapterRepository;
             startChapterId = settings.RssChapterId;
@@ -80,6 +82,8 @@ namespace Allgregator.ViewModels.Rss {
                 Chapters.Remove(chapter);
                 chapter.IsActive = false;
                 await Save();
+
+                viewsService.RemoveMainViews(chapter.Chapter);
             }
         }
 
