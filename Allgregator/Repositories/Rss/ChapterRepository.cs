@@ -17,7 +17,7 @@ namespace Allgregator.Repositories.Rss {
                 return await Get();
             }
             catch (Exception e) {
-                /*//TODO Log*/
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
             return CreateDefault();

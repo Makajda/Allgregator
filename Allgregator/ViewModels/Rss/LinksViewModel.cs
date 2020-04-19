@@ -117,7 +117,7 @@ namespace Allgregator.ViewModels.Rss {
                 return true;
             }
             catch (Exception e) {
-                /*//TODO Log*/
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
             return false;

@@ -33,7 +33,9 @@ namespace Allgregator.Common {
                 try {
                     settingsRepository.Save(settings);
                 }
-                catch (Exception ex) { /*//TODO Log*/ }
+                catch (Exception ex) {
+                    Serilog.Log.Error(ex, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                }
             }
         }
 

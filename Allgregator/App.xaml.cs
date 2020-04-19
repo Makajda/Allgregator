@@ -10,6 +10,7 @@ using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using Serilog;
 using System;
 using System.Reflection;
 using System.Windows;
@@ -29,6 +30,7 @@ namespace Allgregator {
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+            Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
             var settingsRepository = Container.Resolve<SettingsRepository>();
             var settings = settingsRepository.GetOrDefault();
             containerRegistry.RegisterInstance<Settings>(settings);

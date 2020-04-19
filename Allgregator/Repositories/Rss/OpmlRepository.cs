@@ -47,7 +47,9 @@ namespace Allgregator.Repositories.Rss {
                     await linkedRepository.Save(newId, linked);
                 }
             }
-            catch (Exception e) { /*//TODO Log*/ }
+            catch (Exception e) {
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            }
 
             eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
 

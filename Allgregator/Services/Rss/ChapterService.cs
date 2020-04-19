@@ -43,14 +43,14 @@ namespace Allgregator.Services.Rss {
                 linkedRepository.DeleteFile(id);
             }
             catch (Exception e) {
-                /*//TODO Log*/
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
             try {
                 minedRepository.DeleteFile(id);
             }
             catch (Exception e) {
-                /*//TODO Log*/
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -76,7 +76,9 @@ namespace Allgregator.Services.Rss {
                         await linkedRepository.Save(chapter.Id, chapter.Linked);
                         chapter.Linked.IsNeedToSave = false;
                     }
-                    catch (Exception e) { /*//TODO Log*/ }
+                    catch (Exception e) {
+                        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                    }
                 }
             }
         }
@@ -88,7 +90,9 @@ namespace Allgregator.Services.Rss {
                         await minedRepository.Save(chapter.Id, chapter.Mined);
                         chapter.Mined.IsNeedToSave = false;
                     }
-                    catch (Exception e) { /*//TODO Log*/ }
+                    catch (Exception e) {
+                        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                    }
                 }
             }
         }

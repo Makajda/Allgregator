@@ -92,7 +92,7 @@ namespace Allgregator.ViewModels.Rss {
                 await chapterRepository.Save(Chapters.Select(n => n.Chapter));
             }
             catch (Exception e) {
-                /*//TODO Log*/
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
         }
 
