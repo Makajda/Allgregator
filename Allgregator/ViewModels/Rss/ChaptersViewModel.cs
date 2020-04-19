@@ -4,7 +4,6 @@ using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using Allgregator.Views.Rss;
 using Prism.Commands;
-using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -16,16 +15,19 @@ using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChaptersViewModel : BindableBase {
+        private readonly IContainerProvider container;
         private readonly IRegionManager regionManager;
         private readonly ChapterRepository chapterRepository;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
+            IContainerProvider container,
             ChapterRepository chapterRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
             ) {
+            this.container = container;
             this.regionManager = regionManager;
             this.chapterRepository = chapterRepository;
             startChapterId = settings.RssChapterId;
@@ -46,7 +48,6 @@ namespace Allgregator.ViewModels.Rss {
         public async Task Load() {
             var chapters = await chapterRepository.GetOrDefault();
             if (chapters != null) {
-                var container = (App.Current as PrismApplication).Container;
                 Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
 
                 var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
@@ -61,10 +62,9 @@ namespace Allgregator.ViewModels.Rss {
         private async void ChapterAdded(Chapter[] chapters) {
             foreach (var newChapter in chapters) {
                 if (newChapter.Id == 0) {
-                    newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n=>n.Chapter));
+                    newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));
                 }
 
-                var container = (App.Current as PrismApplication).Container;
                 Chapters.Add(container.Resolve<ChapterViewModel>((typeof(Chapter), newChapter)));
             }
 
@@ -94,7 +94,6 @@ namespace Allgregator.ViewModels.Rss {
             var region = regionManager.Regions[Given.MainRegion];
             var view = region.GetView(Given.SettingsView);
             if (view == null) {
-                var container = (App.Current as PrismApplication).Container;
                 view = container.Resolve<SettingsView>();
                 region.Add(view, Given.SettingsView);
             }

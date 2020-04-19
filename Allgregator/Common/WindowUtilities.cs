@@ -2,7 +2,6 @@
 using Allgregator.Repositories.Rss;
 using Allgregator.Views;
 using DryIoc;
-using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;
 using System;
@@ -12,25 +11,16 @@ using System.Windows;
 
 namespace Allgregator.Common {
     public static class WindowUtilities {
-        public static Settings GetSettings() {
-            var container = (App.Current as PrismApplication).Container;
-            var settingsRepository = container.Resolve<SettingsRepository>();
-            var settings = settingsRepository.GetOrDefault();
-            return settings;
-        }
-
-        public static MainWindow GetMainWindow() {
-            var container = (App.Current as PrismApplication).Container;
+        public static MainWindow GetMainWindow(IContainerProvider container) {
             var window = container.Resolve<MainWindow>();
             var settings = container.Resolve<Settings>();
             SetWindowBoundsAndState(window, settings.MainWindowLeft, settings.MainWindowTop, settings.MainWindowWidth, settings.MainWindowHeight, settings.MainWindowState);
-            window.Closing += Window_Closing;
+            window.Closing += (s, e) => Window_Closing(s, e, container);
             return window;
         }
 
-        private static void Window_Closing(object sender, CancelEventArgs e) {
+        private static void Window_Closing(object sender, CancelEventArgs e, IContainerProvider container) {
             if (sender is MainWindow mainWindow) {
-                var container = (App.Current as PrismApplication).Container;
                 var eventAggregator = container.Resolve<IEventAggregator>();
                 eventAggregator.GetEvent<WindowClosingEvent>().Publish(e);
                 var settings = container.Resolve<Settings>();
