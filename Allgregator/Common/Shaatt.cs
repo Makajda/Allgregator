@@ -4,21 +4,21 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Allgregator.Common {
-    public class Pathatt {
+    public class Shaatt {
         public static bool GetRect(DependencyObject obj) => (bool)obj.GetValue(RectProperty);
         public static void SetRect(DependencyObject obj, bool value) => obj.SetValue(RectProperty, value);
         public static readonly DependencyProperty RectProperty = DependencyProperty.RegisterAttached(
-            "Rect", typeof(bool), typeof(Pathatt), new PropertyMetadata(false, OnRectChanged));
+            "Rect", typeof(bool), typeof(Shaatt), new PropertyMetadata(false, OnRectChanged));
 
         public static bool GetCircle(DependencyObject obj) => (bool)obj.GetValue(CircleProperty);
         public static void SetCircle(DependencyObject obj, bool value) => obj.SetValue(CircleProperty, value);
         public static readonly DependencyProperty CircleProperty = DependencyProperty.RegisterAttached(
-            "Circle", typeof(bool), typeof(Pathatt), new PropertyMetadata(false, OnCircleChanged));
+            "Circle", typeof(bool), typeof(Shaatt), new PropertyMetadata(false, OnCircleChanged));
 
         public static Geometry GetPath(DependencyObject obj) => (Geometry)obj.GetValue(PathProperty);
         public static void SetPath(DependencyObject obj, Geometry value) => obj.SetValue(PathProperty, value);
         public static readonly DependencyProperty PathProperty = DependencyProperty.RegisterAttached(
-            "Path", typeof(Geometry), typeof(Pathatt), new PropertyMetadata(null, OnPathChanged));
+            "Path", typeof(Geometry), typeof(Shaatt), new PropertyMetadata(null, OnPathChanged));
 
 
         private static void OnRectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -54,7 +54,7 @@ namespace Allgregator.Common {
         private static void SetGeometry(Control control) {
             var border = control?.Template?.FindName("border", control);
             if (border is Path path && path != null) {
-                path.Data = (Geometry)control.GetValue(Pathatt.PathProperty);
+                path.Data = (Geometry)control.GetValue(Shaatt.PathProperty);
             }
         }
     }

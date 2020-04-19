@@ -60,11 +60,11 @@
         </Style>
 
         <Style x:Key="rectButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
-            <Setter Property="common:Pathatt.Rect" Value="True"/>
+            <Setter Property="common:Shaatt.Rect" Value="True"/>
         </Style>
 
         <Style x:Key="circleButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
-            <Setter Property="common:Pathatt.Circle" Value="True"/>
+            <Setter Property="common:Shaatt.Circle" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="moveColumn">
@@ -202,7 +202,7 @@
                 </StackPanel>
 
                 <Button Content="delete all" Command="{Binding DeleteChapterCommand}"
-                        common:Pathatt.Circle="True"
+                        common:Shaatt.Circle="True"
                         Margin="20,60"
                         Padding="15"
                         Width="130"

@@ -25,7 +25,7 @@
 
         <DataTemplate x:Key="RecosItemTemplate">
             <Button Background="White" Width="246" Height="398" Padding="0"
-                    common:Pathatt.Rect="True"
+                    common:Shaatt.Rect="True"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
                 <Grid>
@@ -57,7 +57,7 @@
                     </Grid>
 
                     <Button Width="180" Height="180" Margin="-1" Opacity="0.5"
-                            common:Pathatt.Path="M0,1 L1,0 V1 Z"
+                            common:Shaatt.Path="M0,1 L1,0 V1 Z"
                             BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
                             Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
