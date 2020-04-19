@@ -52,28 +52,32 @@ namespace Allgregator.Services.Rss {
             ProgressValue = 1;
 
 
-            using (var retrieveService = new RetrieveService()) {
-                using (cancellationTokenSource = new CancellationTokenSource()) {
-                    IsRetrieving = true;
-                    var outdated = chapter.Mined?.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
-                    var lastRetrieve = DateTimeOffset.Now;
-                    try {
-                        await Task.WhenAll(chapter.Linked.Links.Select(link => Task.Run(() => {
-                            retrieveService.Production(link, chapter.Mined.AcceptTime, cutoffTime, outdated);
-                            progressIndicator.Report(1);
-                        }, cancellationTokenSource.Token)));
-                    }
-                    catch (OperationCanceledException) {
-                    }
+            using var retrieveService = new RetrieveService();
+            using (cancellationTokenSource = new CancellationTokenSource()) {
+                IsRetrieving = true;
+                var outdated = chapter.Mined?.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime).ToList();
+                var lastRetrieve = DateTimeOffset.Now;
+                try {
+                    await Task.WhenAll(chapter.Linked.Links.Select(link => Task.Run(() => {
+                        retrieveService.Production(link, chapter.Mined.AcceptTime, cutoffTime, outdated);
+                        progressIndicator.Report(1);
+                    }, cancellationTokenSource.Token)));
+                }
+                catch (OperationCanceledException) {
+                }
 
-                    if (IsRetrieving) {
-                        chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderByDescending(n => n.PublishDate));
-                        chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderByDescending(n => n.PublishDate));
-                        chapter.Mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();
-                        chapter.Mined.LastRetrieve = lastRetrieve;
-                        chapter.Mined.IsNeedToSave = true;
-                        IsRetrieving = false;
-                    }
+                if (IsRetrieving) {
+                    //var outdated = chapter.Mined?.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime).ToList();
+                    //if (outdated != null && outdated.Count > 0) {
+                    //
+                    //}
+
+                    chapter.Mined.NewRecos = new ObservableCollection<Reco>(retrieveService.NewRecos.OrderByDescending(n => n.PublishDate));
+                    chapter.Mined.OldRecos = new ObservableCollection<Reco>(retrieveService.OldRecos.OrderByDescending(n => n.PublishDate));
+                    chapter.Mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();
+                    chapter.Mined.LastRetrieve = lastRetrieve;
+                    chapter.Mined.IsNeedToSave = true;
+                    IsRetrieving = false;
                 }
             }
         }
