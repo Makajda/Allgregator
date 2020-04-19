@@ -2,7 +2,9 @@
 using Allgregator.Models;
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
+using Allgregator.Services;
 using Allgregator.Views.Rss;
+using DryIoc;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -15,19 +17,19 @@ using System.Threading.Tasks;
 
 namespace Allgregator.ViewModels.Rss {
     public class ChaptersViewModel : BindableBase {
-        private readonly IContainerProvider container;
+        private readonly FactoryService factoryService;
         private readonly IRegionManager regionManager;
         private readonly ChapterRepository chapterRepository;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
-            IContainerProvider container,
+            FactoryService factoryService,
             ChapterRepository chapterRepository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
             ) {
-            this.container = container;
+            this.factoryService = factoryService;
             this.regionManager = regionManager;
             this.chapterRepository = chapterRepository;
             startChapterId = settings.RssChapterId;
@@ -48,7 +50,7 @@ namespace Allgregator.ViewModels.Rss {
         public async Task Load() {
             var chapters = await chapterRepository.GetOrDefault();
             if (chapters != null) {
-                Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => container.Resolve<ChapterViewModel>((typeof(Chapter), n))));
+                Chapters = new ObservableCollection<ChapterViewModel>(chapters.Select(n => factoryService.Resolve<ChapterViewModel>(n)));
 
                 var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
                 if (currentChapter == null) {
@@ -65,7 +67,7 @@ namespace Allgregator.ViewModels.Rss {
                     newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));
                 }
 
-                Chapters.Add(container.Resolve<ChapterViewModel>((typeof(Chapter), newChapter)));
+                Chapters.Add(factoryService.Resolve<ChapterViewModel>(newChapter));
             }
 
             await Save();
@@ -94,7 +96,7 @@ namespace Allgregator.ViewModels.Rss {
             var region = regionManager.Regions[Given.MainRegion];
             var view = region.GetView(Given.SettingsView);
             if (view == null) {
-                view = container.Resolve<SettingsView>();
+                view = factoryService.Resolve<SettingsView>();
                 region.Add(view, Given.SettingsView);
             }
 

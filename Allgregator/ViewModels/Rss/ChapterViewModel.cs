@@ -36,8 +36,8 @@ namespace Allgregator.ViewModels.Rss {
             this.dialogService = dialogService;
 
             ViewsCommand = new DelegateCommand<RssChapterViews?>(async (view) => await ChangeView(view));
-            OpenCommand = new DelegateCommand(OpenAll);
-            MoveCommand = new DelegateCommand(MoveAll);
+            OpenCommand = new DelegateCommand(Open);
+            MoveCommand = new DelegateCommand(Move);
             UpdateCommand = new DelegateCommand(Update);
             CancelUpdateCommand = new DelegateCommand(OreService.CancelRetrieve);
 
@@ -62,7 +62,7 @@ namespace Allgregator.ViewModels.Rss {
             set => SetProperty(ref isActive, value);
         }
 
-        private RssChapterViews currentView;// = RssChapterViews.LinksView;//todo
+        private RssChapterViews currentView = RssChapterViews.LinksView;//todo
         public RssChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
@@ -95,7 +95,7 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private void OpenAll() {
+        private void Open() {
             if (IsActive && CurrentView != RssChapterViews.LinksView) {
                 var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
                 if (recos != null) {
@@ -120,7 +120,7 @@ namespace Allgregator.ViewModels.Rss {
             }
         }
 
-        private void MoveAll() {
+        private void Move() {
             if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
                 Chapter.Mined.IsNeedToSave = true;
                 var cache = Chapter.Mined.NewRecos.Reverse();

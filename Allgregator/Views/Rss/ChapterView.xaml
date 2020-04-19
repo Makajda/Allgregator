@@ -89,10 +89,10 @@
                     Background="LightBlue" 
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
                     HorizontalAlignment="Right" VerticalAlignment="Top"/>
-            <Button Content="&#x1F9F9;" Style="{StaticResource managerButton}"
+            <Button Content="&#x2B6E;" Style="{StaticResource managerButton}"
                     common:Pathatt.Path="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
-                    Background="SandyBrown"
-                    Command="{Binding MoveCommand}"
+                    Background="PaleGreen"
+                    Command="{Binding UpdateCommand}"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             <Button Content="&#x2630;" Style="{StaticResource managerButton}"
@@ -114,11 +114,11 @@
         </Grid>
 
         <DockPanel Grid.Row="1" Height="50">
-            <Grid DockPanel.Dock="Right" Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Button Content="&#x2B6E;" Command="{Binding UpdateCommand}" Style="{StaticResource updateCancelButton}" Opacity="0.5"
-                        Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanNotToVisibilityConverter}}">
+            <Grid DockPanel.Dock="Right">
+                <Button Content="&#x2630;" Command="{Binding MoveCommand}" Style="{StaticResource updateCancelButton}"
+                        Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Button.Resources>
-                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="PaleGreen"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
                     </Button.Resources>
                 </Button>
             </Grid>

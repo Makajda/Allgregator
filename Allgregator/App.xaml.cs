@@ -1,6 +1,7 @@
 ﻿using Allgregator.Common;
 using Allgregator.Models;
 using Allgregator.Repositories.Rss;
+using Allgregator.Services;
 using Allgregator.Services.Rss;
 using Allgregator.ViewModels;
 using Allgregator.Views;
@@ -31,6 +32,7 @@ namespace Allgregator {
             var settingsRepository = Container.Resolve<SettingsRepository>();
             var settings = settingsRepository.GetOrDefault();
             containerRegistry.RegisterInstance<Settings>(settings);
+            containerRegistry.RegisterSingleton<FactoryService>();
             containerRegistry.RegisterSingleton<ChapterService>();
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }

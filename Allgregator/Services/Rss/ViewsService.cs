@@ -2,19 +2,18 @@
 using Allgregator.Models.Rss;
 using Allgregator.ViewModels.Rss;
 using Allgregator.Views.Rss;
-using Prism.Ioc;
 using Prism.Regions;
 using System.Windows;
 
 namespace Allgregator.Services.Rss {
     public class ViewsService {
-        private readonly IContainerProvider container;
+        private readonly FactoryService factoryService;
         private readonly IRegionManager regionManager;
         public ViewsService(
-            IContainerProvider container,
+            FactoryService factoryService,
             IRegionManager regionManager
             ) {
-            this.container = container;
+            this.factoryService = factoryService;
             this.regionManager = regionManager;
         }
 
@@ -27,17 +26,17 @@ namespace Allgregator.Services.Rss {
                 object viewModel;
                 switch (currentView) {
                     case RssChapterViews.NewsView:
-                        view = container.Resolve<RecosView>((typeof(bool), true));
-                        viewModel = container.Resolve<RecosViewModel>((typeof(Chapter), chapter));
+                        view = factoryService.Resolve<RecosView>(true);
+                        viewModel = factoryService.Resolve<RecosViewModel>(chapter);
                         break;
                     case RssChapterViews.OldsView:
-                        view = container.Resolve<RecosView>((typeof(bool), false));
-                        viewModel = container.Resolve<RecosViewModel>((typeof(Chapter), chapter));
+                        view = factoryService.Resolve<RecosView>(false);
+                        viewModel = factoryService.Resolve<RecosViewModel>(chapter);
                         break;
                     case RssChapterViews.LinksView:
                     default:
-                        view = container.Resolve<LinksView>();
-                        viewModel = container.Resolve<LinksViewModel>((typeof(Chapter), chapter));
+                        view = factoryService.Resolve<LinksView>();
+                        viewModel = factoryService.Resolve<LinksViewModel>(chapter);
                         break;
                 }
 
