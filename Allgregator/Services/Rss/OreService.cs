@@ -1,6 +1,7 @@
 ﻿using Allgregator.Models.Rss;
 using Prism.Mvvm;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -56,12 +57,23 @@ namespace Allgregator.Services.Rss {
             using var retrieveService = new RetrieveService();
             using (cancellationTokenSource = new CancellationTokenSource()) {
                 IsRetrieving = true;
+                var cancellationToken = cancellationTokenSource.Token;
                 var lastRetrieve = DateTimeOffset.Now;
+
                 try {
-                    await Task.WhenAll(chapter.Linked.Links.Select(link => new Task(() => {
-                        retrieveService.Production(link, cutoffTime);
-                        progressIndicator.Report(1);
-                    }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning)));
+                    await Task.WhenAll(
+                        Partitioner.Create(chapter.Linked.Links).GetPartitions(9).Select(partition => {
+                            var task = new Task(() => {
+                                using (partition) {
+                                    while (partition.MoveNext()) {
+                                        retrieveService.Production(partition.Current, cutoffTime);
+                                        progressIndicator.Report(1);
+                                    }
+                                };
+                            }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
+                            task.Start();
+                            return task;
+                        }));
                 }
                 catch (OperationCanceledException) {
                 }
