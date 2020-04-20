@@ -41,6 +41,7 @@
         <Button Width="160" Height="100" Padding="0" BorderThickness="0"
                 common:Shaatt.Rect="True"
                 Background="LightSeaGreen" Foreground="Black"
+                ToolTip="Open"
                 Command="{Binding OpenCommand}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
@@ -69,18 +70,21 @@
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.OldsView}"
                     common:Shaatt.Path="M0,0 V13 H4 A10,10 0 0 1 13,4 V0 Z"
                     Background="SandyBrown"
+                    ToolTip="Outdated"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
                     HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.NewsView}"
                     common:Shaatt.Path="M0,0 V4 A10,10 0 0 1 9,13 H13 V0 Z"
-                    Background="LightBlue" 
+                    Background="LightBlue"
+                    ToolTip="News"
                     HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
                     HorizontalAlignment="Right" VerticalAlignment="Top"/>
             <Button Content="&#x2630;" Style="{StaticResource managerButton}"
                     Command="{Binding ViewsCommand}" CommandParameter="{x:Static common:RssChapterViews.LinksView}"
                     common:Shaatt.Path="M0,0 H4 A10,10 0 0 0 13,9 V13 H0 Z"
                     Background="LightGreen"
+                    ToolTip="Edit"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
             <Grid Visibility="{Binding Chapter.Mined, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
@@ -100,6 +104,7 @@
                     Width="50" Padding="0" Margin="0,0,-10,0"
                     FontSize="18" BorderThickness="0"
                     Background="Transparent" Foreground="White"
+                    ToolTip="Cleaning"
                     common:Shaatt.Circle="True"
                     Command="{Binding MoveCommand}"
                     Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
