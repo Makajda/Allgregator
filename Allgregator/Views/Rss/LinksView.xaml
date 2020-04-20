@@ -102,9 +102,9 @@
                         ToolTip="Options"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}"/>
+                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}" x:Name="address"/>
                 <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
-                        ToolTip="Paste"
+                        ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
                         Style="{StaticResource rectButton}"/>
                 <Button Grid.Column="3" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
                         ToolTip="Add new link"
