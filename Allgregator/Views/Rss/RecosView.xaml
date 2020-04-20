@@ -24,11 +24,11 @@
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
-            <Button Background="White" Width="246" Height="398" Padding="0"
+            <Grid>
+                <Button Background="White" Width="246" Height="398" Padding="0"
                     common:Shaatt.Rect="True"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
-                <Grid>
                     <Grid Margin="18">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -55,19 +55,19 @@
                         <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding SummaryText}" Margin="0,10,0,0" VerticalAlignment="Top"
                                     TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="16"/>
                     </Grid>
+                </Button>
 
-                    <Button Width="180" Height="180" Margin="-1" Opacity="0.5"
+                <Button Width="180" Height="180" Margin="-1" Opacity="0.5"
                             common:Shaatt.Path="M0,1 L1,0 V1 Z"
                             BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
                             Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
-                        <Button.Resources>
-                            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
-                        </Button.Resources>
-                    </Button>
-                </Grid>
-            </Button>
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
+                    </Button.Resources>
+                </Button>
+            </Grid>
         </DataTemplate>
     </UserControl.Resources>
 
