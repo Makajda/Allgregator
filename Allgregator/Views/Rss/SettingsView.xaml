@@ -40,13 +40,15 @@
                 <StackPanel>
                     <StackPanel>
                         <TextBlock Text="Maximum Open Tabs"/>
-                        <TextBox Text="{Binding Settings.RssMaxOpenTabs, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding Settings.RssMaxOpenTabs, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
 
                     <StackPanel>
                         <TextBlock Text="Cutoff Time"/>
                         <TextBox Text="{Binding Settings.RssCutoffTime, UpdateSourceTrigger=PropertyChanged,
-                                    Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                                    Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
@@ -55,7 +57,8 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel>
                         <TextBlock Text="Name"/>
-                        <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                     <Button Content = "add chapter" Command="{Binding AddChapterCommand}"/>
                 </StackPanel>

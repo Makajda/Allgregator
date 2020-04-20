@@ -40,7 +40,7 @@ namespace Allgregator.Common {
         private static void OnPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d is Control control) {
                 if (control.Template == null) {
-                    var templateObj = control.TryFindResource("ButtonPathTemplate");
+                    var templateObj = control.TryFindResource(Given.ButtonShapeTemplateKey);
                     if (templateObj is ControlTemplate template) {
                         control.Template = template;
                         control.ApplyTemplate();

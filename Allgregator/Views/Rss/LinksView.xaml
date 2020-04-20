@@ -13,18 +13,19 @@
         <Style TargetType="DataGridCell" >
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Green"/>
-                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="{StaticResource Links.Background}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
                 </Trigger>
                 <Trigger Property="IsEditing" Value="True">
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="DataGridCell"><!--//todo-->
+                            <ControlTemplate TargetType="DataGridCell">
                                 <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
-                                    Path=Content.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Path=Content.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                                          FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                         Padding="5" BorderThickness="0" Background="White" Foreground="Black"/>
+                                         Padding="5" BorderThickness="0" 
+                                         Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -41,8 +42,8 @@
         <Style x:Key="hstyle" TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="9"/>
-            <Setter Property="Background" Value="Green"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource Links.Background}"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
             <Setter Property="FontSize" Value="16"/>
         </Style>
 
@@ -78,7 +79,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="20">
+    <Grid Margin="20">        
         <!--Normal-->
         <Grid Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Normal}}">
@@ -98,11 +99,12 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="LightSeaGreen"
+                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="{StaticResource Chapter.Background}"
                         ToolTip="Options"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}" x:Name="address"/>
+                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}" x:Name="address"
+                         Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                 <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
                         ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
                         Style="{StaticResource rectButton}"/>
@@ -114,6 +116,7 @@
             <DataGrid Grid.Row="2"
                       x:Name="dg"
                       Margin="0,30,0,0"
+                      Background="{StaticResource Main.Background}"
                       BeginningEdit="dg_BeginningEdit" 
                       CellEditEnding="dg_CellEditEnding"
                       ItemsSource="{Binding Chapter.Linked.Links}"
@@ -122,8 +125,9 @@
                       CanUserDeleteRows="False"
                       CanUserAddRows="False"
                       AutoGenerateColumns="False"
-                      RowBackground="LightSteelBlue"
-                      AlternatingRowBackground="LightGray"
+                      RowBackground="{StaticResource Links.Background.Row}"
+                      AlternatingRowBackground="{StaticResource Links.Background.Alt}"
+                      BorderThickness="0"
                       GridLinesVisibility="None"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Center"
@@ -143,9 +147,13 @@
         <StackPanel VerticalAlignment="Center"
                     Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Detection}}">
-            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True"/>
+            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True">
+                <ProgressBar.Foreground>
+                    <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
+                </ProgressBar.Foreground>
+            </ProgressBar>
             <TextBlock Text="{Binding Chapter.Linked.Address}" 
-                       Foreground="White" FontSize="28" Margin="20"
+                       Foreground="{StaticResource Button.Manager.Foreground}" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
 
@@ -171,7 +179,7 @@
                       Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static common:RssLinksStates.Chapter}}">
             <StackPanel>
-                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="LightSeaGreen"
+                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="{StaticResource Chapter.Background}"
                         Style="{StaticResource circleButton}" HorizontalAlignment="Left"
                         Command="{Binding FromChapterCommand}"/>
 
@@ -191,16 +199,19 @@
                     <StackPanel>
                         <TextBlock Text="Last Retrieve"/>
                         <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Accept Time"/>
                         <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"/>
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Name"/>
-                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                 </StackPanel>
 

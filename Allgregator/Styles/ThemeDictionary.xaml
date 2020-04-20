@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+
+    <Color x:Key="Main.Background.Color">#91C9FF</Color>
+    <Color x:Key="News.Background.Color">LightGreen</Color>
+    <Color x:Key="Olds.Background.Color">SaddleBrown</Color>
+    <Color x:Key="Links.Background.Color">Green</Color>
+    <Color x:Key="Retrieving.Color">PaleGreen</Color>
+
+    <SolidColorBrush x:Key="Main.Background" Color="{StaticResource Main.Background.Color}"/>
+    <SolidColorBrush x:Key="Main.Foreground" Color="Green"/>
+    <SolidColorBrush x:Key="Button.Manager.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="Reco.Background" Color="White"/>
+    <SolidColorBrush x:Key="Reco.FeedTitle.Foreground" Color="Blue"/>
+    <SolidColorBrush x:Key="Reco.Title.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="Reco.Text.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="Error.Background" Color="Red"/>
+    <SolidColorBrush x:Key="Error.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="Chapter.Background" Color="LightSeaGreen"/>
+    <SolidColorBrush x:Key="Chapter.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="Update.Background" Color="LightCoral"/>
+    <SolidColorBrush x:Key="News.Background" Color="{StaticResource News.Background.Color}"/>
+    <SolidColorBrush x:Key="Olds.Background" Color="{StaticResource Olds.Background.Color}"/>
+    <SolidColorBrush x:Key="Links.Background" Color="{StaticResource Links.Background.Color}"/>
+    <SolidColorBrush x:Key="Links.Background.Row" Color="LightSlateGray"/>
+    <SolidColorBrush x:Key="Links.Background.Alt" Color="LightGray"/>
+    <SolidColorBrush x:Key="Edit.Background" Color="White"/>
+    <SolidColorBrush x:Key="Edit.Foreground" Color="Black"/>
+</ResourceDictionary>

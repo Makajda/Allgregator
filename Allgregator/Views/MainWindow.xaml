@@ -7,7 +7,7 @@
         Title="{Binding Title}"
         >
 
-    <Grid Background="#91C9FF">
+    <Grid Background="{StaticResource Main.Background}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />

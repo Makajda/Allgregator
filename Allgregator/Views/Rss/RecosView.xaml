@@ -11,21 +11,20 @@
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <LinearGradientBrush x:Key="MainBackgroundNew" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#91C9FF" Offset="0" />
-            <GradientStop Color="LightGreen" Offset="1" />
+            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
+            <GradientStop Color="{StaticResource News.Background.Color}" Offset="1" />
         </LinearGradientBrush>
 
-
         <LinearGradientBrush x:Key="MainBackgroundOld" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#91C9FF" Offset="0" />
-            <GradientStop Color="SaddleBrown" Offset="1" />
+            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
+            <GradientStop Color="{StaticResource Olds.Background.Color}" Offset="1" />
         </LinearGradientBrush>
         
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
             <Grid>
-                <Button Background="White" Width="246" Height="398" Padding="0"
+                <Button Background="{StaticResource Reco.Background}" Width="246" Height="398" Padding="0"
                     common:Shaatt.Rect="True"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
@@ -47,24 +46,26 @@
                         <TextBlock Grid.Column="1" Text="{Binding FeedTitle}" FontSize="14"
                                     TextTrimming="WordEllipsis" TextWrapping="Wrap"
                                     HorizontalAlignment="Right" VerticalAlignment="Top"
-                                    Foreground="Blue"/>
+                                    Foreground="{StaticResource Reco.FeedTitle.Foreground}"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ItemTitle}" VerticalAlignment="Top"
-                                    FontSize="16" FontWeight="Medium" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
+                                   Foreground="{StaticResource Reco.Title.Foreground}"
+                                   FontSize="16" FontWeight="Medium" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
 
                         <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding SummaryText}" Margin="0,10,0,0" VerticalAlignment="Top"
-                                    TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="16"/>
+                                   Foreground="{StaticResource Reco.Text.Foreground}"
+                                   TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="16"/>
                     </Grid>
                 </Button>
 
                 <Button Width="180" Height="180" Margin="-1" Opacity="0.5"
-                            common:Shaatt.Path="M0,1 L1,0 V1 Z"
-                            BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
-                            Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
+                        common:Shaatt.Path="M0,1 L1,0 V1 Z"
+                        BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
+                        Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
                     <Button.Resources>
-                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="SaddleBrown"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Olds.Background.Color}"/>
                     </Button.Resources>
                 </Button>
             </Grid>
