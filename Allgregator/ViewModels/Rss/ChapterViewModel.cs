@@ -111,22 +111,33 @@ namespace Allgregator.ViewModels.Rss {
         }
 
         private void OpenReal() {
-            var recos = CurrentView == RssChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
-            if (recos != null) {
-                foreach (var reco in recos) WindowUtilities.Run(reco.Uri.ToString());
+            var mined = Chapter?.Mined;
+            if (mined != null) {
+                if (CurrentView == RssChapterViews.NewsView) {
+                    if (mined.NewRecos != null && mined.OldRecos != null) {
+                        foreach (var reco in mined.NewRecos.Reverse()) {
+                            WindowUtilities.Run(reco.Uri.ToString());
+                            mined.OldRecos.Insert(0, reco);
+                        }
+                    }
+
+                    mined.NewRecos.Clear();
+                    mined.AcceptTime = mined.LastRetrieve;
+                }
+                else {
+                    if (mined.OldRecos != null) {
+                        foreach (var reco in mined.OldRecos) WindowUtilities.Run(reco.Uri.ToString());
+                    }
+                }
             }
         }
 
         private void Move() {
-            if (Chapter?.Mined?.NewRecos != null && Chapter.Mined?.OldRecos != null) {
-                var mined = Chapter.Mined;
+            var mined = Chapter?.Mined;
+            if (mined != null && mined.NewRecos != null && mined.OldRecos != null) {
                 mined.IsNeedToSave = true;
-                var cache = mined.NewRecos.Reverse();
-                foreach (var reco in cache) {
-                    mined.NewRecos.Remove(reco);
-                    mined.OldRecos.Insert(0, reco);
-                }
-
+                foreach (var reco in mined.NewRecos.Reverse()) mined.OldRecos.Insert(0, reco);
+                mined.NewRecos.Clear();
                 mined.AcceptTime = mined.LastRetrieve;
             }
         }
