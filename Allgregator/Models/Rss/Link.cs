@@ -37,9 +37,5 @@ namespace Allgregator.Models.Rss {
             Name == other.Name &&
             HtmlUrl == other.HtmlUrl &&
             XmlUrl == other.XmlUrl;
-
-        public override int GetHashCode() {
-            return $"{Name}.{XmlUrl}.{HtmlUrl}".GetHashCode();
-        }
     }
 }
