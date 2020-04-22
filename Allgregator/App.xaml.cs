@@ -1,5 +1,4 @@
 ﻿using Allgregator.Common;
-using Allgregator.Models;
 using Allgregator.Repositories.Rss;
 using Allgregator.Services;
 using Allgregator.Services.Rss;
@@ -16,9 +15,6 @@ using System.Reflection;
 using System.Windows;
 
 namespace Allgregator {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : PrismApplication {
         protected override Window CreateShell() => WindowUtilities.GetMainWindow(Container);
 
@@ -32,10 +28,8 @@ namespace Allgregator {
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
             var settingsRepository = Container.Resolve<SettingsRepository>();
-            var settings = settingsRepository.GetOrDefault();
-            containerRegistry.RegisterInstance<Settings>(settings);
-            var factoryService = new FactoryService(Container);
-            containerRegistry.RegisterInstance<FactoryService>(factoryService);
+            containerRegistry.RegisterInstance(settingsRepository.GetOrDefault());
+            containerRegistry.RegisterInstance(new FactoryService(Container));
             containerRegistry.RegisterSingleton<ChapterService>();
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
