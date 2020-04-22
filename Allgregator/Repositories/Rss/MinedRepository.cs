@@ -10,14 +10,16 @@ using System.Threading.Tasks;
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
         public async Task<Mined> GetOrDefault(int chapterId) {
+            Mined retval = null;
+
             try {
-                return await Get(chapterId);
+                retval = await Get(chapterId);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return new Mined();
+            return retval ?? new Mined();
         }
 
         public async Task Save(int chapterId, Mined mined) {

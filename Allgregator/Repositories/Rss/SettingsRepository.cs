@@ -10,14 +10,16 @@ namespace Allgregator.Repositories.Rss {
         private const string nameFile = "settings.json";
 
         public Settings GetOrDefault() {
+            Settings retval = null;
+
             try {
-                return Get();
+                retval = Get();
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return new Settings();
+            return retval ?? new Settings();
         }
 
         public void Save(Settings settings) {

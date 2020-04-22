@@ -124,34 +124,34 @@ namespace Allgregator.Repositories.Rss {
         }
 
         private List<Cink> OpmlParse(XDocument xdocument) {
-            var resval = new List<Cink>();
+            var retval = new List<Cink>();
             var xe = xdocument.Element("opml");
             if (xe == null) {
-                return resval;
+                return retval;
             }
 
             xe = xe.Element("body");
             if (xe == null) {
-                return resval;
+                return retval;
             }
 
             var outlines = xe.Elements();
             if (outlines == null) {
-                return resval;
+                return retval;
             }
 
-            resval.Add(new Cink() { Links = new ObservableCollection<Link>() }); // to current collection
+            retval.Add(new Cink() { Links = new ObservableCollection<Link>() }); // to current collection
 
             foreach (var outline in outlines) {
                 var link = LinkParse(outline);
                 if (link.XmlUrl != null) {
-                    resval[0].Links.Add(link);
+                    retval[0].Links.Add(link);
                 }
                 else {
                     var os = outline.Elements();
                     if (os != null) {
                         var links = new ObservableCollection<Link>();
-                        resval.Add(new Cink() { Name = link.Name, Links = links }); // to new collection
+                        retval.Add(new Cink() { Name = link.Name, Links = links }); // to new collection
                         foreach (var o in os) {
                             link = LinkParse(o);
                             if (link.XmlUrl != null) {
@@ -162,7 +162,7 @@ namespace Allgregator.Repositories.Rss {
                 }
             }
 
-            return resval;
+            return retval;
         }
 
         private Link LinkParse(XElement xe) {

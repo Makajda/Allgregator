@@ -13,14 +13,16 @@ namespace Allgregator.Repositories.Rss {
         private const string nameFile = "chapters.json";
 
         public async Task<IEnumerable<Chapter>> GetOrDefault() {
+            IEnumerable<Chapter> retval = null;
+
             try {
-                return await Get();
+                retval = await Get();
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return CreateDefault();
+            return retval ?? CreateDefault();
         }
 
         public async Task Save(IEnumerable<Chapter> chapters) {
@@ -39,7 +41,10 @@ namespace Allgregator.Repositories.Rss {
             var newId = 1;
             foreach (var chapter in chapters.OrderBy(n => n.Id)) {
                 var id = chapter.Id;
-                if (id != newId) break;
+                if (id != newId) {
+                    break;
+                }
+
                 newId++;
             }
 
@@ -55,7 +60,7 @@ namespace Allgregator.Repositories.Rss {
         private IEnumerable<Chapter> CreateDefault() {
             return new List<Chapter>() {
                 new Chapter() { Id = 10001, Name = "Try" },
-                new Chapter() { Id = 1, Name = "Empty" }
+                new Chapter() { Id = 1, Name = "Other" }
             };
         }
     }

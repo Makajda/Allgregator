@@ -12,14 +12,16 @@ namespace Allgregator.Repositories.Rss {
         private const string nameFile = "linked{0}.json";
 
         public async Task<Linked> GetOrDefault(int chapterId) {
+            Linked retval = null;
+
             try {
-                return await Get(chapterId);
+                retval = await Get(chapterId);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return CreateDefault(chapterId);
+            return retval ?? CreateDefault(chapterId);
         }
 
         public async Task Save(int chapterId, Linked linked) {
