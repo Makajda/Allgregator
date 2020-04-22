@@ -103,7 +103,7 @@
                         ToolTip="Options"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address}" x:Name="address"
+                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
                          Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                 <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
                         ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
