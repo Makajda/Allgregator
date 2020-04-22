@@ -7,7 +7,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -94,9 +93,12 @@ namespace Allgregator.ViewModels.Rss {
                 var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
                 if (chapter != null) {
                     chapter.Name = string.IsNullOrEmpty(Chapter.Name) ? null : Chapter.Name;
-                    var saved = await SaveChapters(chapters);
-                    if (saved) {
-                        savedName = default;
+                    try {
+                        await chapterRepository.Save(chapters);
+                        savedName = null;
+                    }
+                    catch (Exception e) {
+                        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
                     }
                 }
             }
@@ -113,18 +115,6 @@ namespace Allgregator.ViewModels.Rss {
             void DeleteChapterReal() {
                 eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(Chapter.Id);
             }
-        }
-
-        private async Task<bool> SaveChapters(IEnumerable<Chapter> chapters) {
-            try {
-                await chapterRepository.Save(chapters);
-                return true;
-            }
-            catch (Exception e) {
-                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-            }
-
-            return false;
         }
     }
 }
