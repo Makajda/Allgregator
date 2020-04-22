@@ -20,6 +20,7 @@ namespace Allgregator.Services {
                 var button = new Button() {
                     Content = '\u2714',
                     Background = Brushes.Yellow,
+                    Foreground=Brushes.Green,
                     FontStyle = FontStyles.Italic,
                     FontSize = 28,
                     Padding = new Thickness(20),
