@@ -20,16 +20,16 @@ namespace Allgregator.Common {
         }
 
         private static void Window_Closing(object sender, CancelEventArgs e, IContainerProvider container) {
-            if (sender is MainWindow mainWindow) {
+            if (sender is Window window) {
                 var eventAggregator = container.Resolve<IEventAggregator>();
                 eventAggregator.GetEvent<WindowClosingEvent>().Publish(e);
                 var settings = container.Resolve<Settings>();
                 var settingsRepository = container.Resolve<SettingsRepository>();
-                settings.MainWindowLeft = mainWindow.RestoreBounds.Left;
-                settings.MainWindowTop = mainWindow.RestoreBounds.Top;
-                settings.MainWindowWidth = mainWindow.RestoreBounds.Width;
-                settings.MainWindowHeight = mainWindow.RestoreBounds.Height;
-                settings.MainWindowState = mainWindow.WindowState;
+                settings.MainWindowLeft = window.RestoreBounds.Left;
+                settings.MainWindowTop = window.RestoreBounds.Top;
+                settings.MainWindowWidth = window.RestoreBounds.Width;
+                settings.MainWindowHeight = window.RestoreBounds.Height;
+                settings.MainWindowState = window.WindowState;
                 try {
                     settingsRepository.Save(settings);
                 }
