@@ -2,6 +2,7 @@
 using Allgregator.Models.Rss;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.ServiceModel.Syndication;
@@ -29,7 +30,7 @@ namespace Allgregator.Services.Rss {
         public void Selected(Linked linked, Link link) {
             if (link?.XmlUrl != null) {
                 if (linked.Links == null) {
-                    linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
+                    linked.Links = new ObservableCollection<Link>();
                 }
 
                 linked.Links.Insert(0, link);

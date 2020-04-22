@@ -2,6 +2,7 @@
 using Allgregator.Models.Rss;
 using Allgregator.Repositories.Rss;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Services.Rss {
@@ -30,7 +31,7 @@ namespace Allgregator.Services.Rss {
             if (obj.Id == chapter.Id) {
                 await LoadLinks(chapter);
                 if (chapter.Linked.Links == null) {
-                    chapter.Linked.Links = new System.Collections.ObjectModel.ObservableCollection<Link>();
+                    chapter.Linked.Links = new ObservableCollection<Link>();
                 }
 
                 chapter.Linked.Links.Add(obj.Link);
