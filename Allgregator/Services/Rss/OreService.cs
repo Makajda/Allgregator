@@ -62,18 +62,16 @@ namespace Allgregator.Services.Rss {
 
                 try {
                     await Task.WhenAll(
-                        Partitioner.Create(chapter.Linked.Links).GetPartitions(9).Select(partition => {
-                            var task = new Task(() => {
+                        Partitioner.Create(chapter.Linked.Links).GetPartitions(9).Select(partition =>
+                            Task.Factory.StartNew(() => {
                                 using (partition) {
                                     while (partition.MoveNext()) {
                                         retrieveService.Production(partition.Current, cutoffTime);
                                         progressIndicator.Report(1);
                                     }
                                 };
-                            }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning);
-                            task.Start();
-                            return task;
-                        }));
+                            }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+                        ));
                 }
                 catch (OperationCanceledException) {
                 }

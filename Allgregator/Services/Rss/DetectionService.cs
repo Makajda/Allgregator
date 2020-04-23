@@ -60,7 +60,7 @@ namespace Allgregator.Services.Rss {
                         catch (Exception) { }
                     }, cancellationTokenSource.Token);
                 }
-                catch (Exception) { }
+                catch (OperationCanceledException) { }
             }
 
             return link;
@@ -108,14 +108,14 @@ namespace Allgregator.Services.Rss {
             object sync = new object();
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try {
-                await Task.WhenAll(rsses.Select(n => Task.Run(async () => {
-                    var link = await GetLink(n);
+                await Task.WhenAll(rsses.Select(n => Task.Factory.StartNew(async () => {
+                    var link = await GetLink(n).ConfigureAwait(false);
                     if (link != null) {
                         lock (sync) {
                             links.Add(link);
                         }
                     }
-                }, cancellationTokenSource.Token)));
+                }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)));
             }
             catch (Exception) { }
 
