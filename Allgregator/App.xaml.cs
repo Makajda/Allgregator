@@ -11,9 +11,7 @@ using System.Windows;
 
 namespace Allgregator {
     public partial class App : PrismApplication {
-        protected override Window CreateShell() {
-            return WindowUtilities.CreateShell<MainWindow, MainWindowViewModel>(Container);
-        }
+        protected override Window CreateShell() => WindowUtilities.CreateShell<MainWindow, MainWindowViewModel>(Container);
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
@@ -33,12 +31,8 @@ namespace Allgregator {
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog) {
-            var moduleType = typeof(Allgregator.Rss.Module);
-            moduleCatalog.AddModule(
-                new ModuleInfo() {
-                    ModuleName = moduleType.Name,
-                    ModuleType = moduleType.AssemblyQualifiedName
-                });
+            moduleCatalog.AddModule<Rss.Module>("Rss");
+            moduleCatalog.AddModule<Fin.Module>("Fin");
         }
     }
 }

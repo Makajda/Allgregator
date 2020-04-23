@@ -12,8 +12,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <ContentControl Grid.Row="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}" />
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
+        <ContentControl Grid.Row="0" Grid.Column="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuFinRegion}" />
+        <ContentControl Grid.Row="0" Grid.Column="1" prism:RegionManager.RegionName="{x:Static common:Given.MenuRssRegion}" />
+        <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

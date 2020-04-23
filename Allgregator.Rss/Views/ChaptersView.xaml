@@ -7,37 +7,25 @@
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              >
 
-    <DockPanel>
-        <TextBlock DockPanel.Dock="Left"
-                   Text="Rss"
-                   FontSize="48" 
-                   FontStretch="ExtraExpanded"
-                   FontFamily="Comic"
-                   VerticalAlignment="Center" 
-                   Margin="50,0,5,0"
-                   Foreground="{StaticResource Main.Foreground}"
-                   />
+    <DockPanel HorizontalAlignment="Right">
+        <Button Content="&#x26B9;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}" Padding="0" Width="50" 
+                VerticalContentAlignment="Top" BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
+                Command="{Binding SettingsCommand}"/>
 
-        <DockPanel HorizontalAlignment="Right">
-            <Button Content="&#x26B9;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}" Padding="0" Width="50" 
-                    VerticalContentAlignment="Top" BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
-                    Command="{Binding SettingsCommand}"/>
+        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Chapters}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding Chapters}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <views:ChapterView />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-        </DockPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:ChapterView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>
