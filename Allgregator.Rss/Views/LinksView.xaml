@@ -1,0 +1,229 @@
+﻿<UserControl x:Class="Allgregator.Rss.Views.LinksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
+             xmlns:commonLoc="clr-namespace:Allgregator.Rss.Common"
+             x:Name="view"
+             >
+
+    <UserControl.Resources>
+        <converters:IntEqToVisibilityConverter x:Key="IntEqToVisibilityConverter"/>
+        <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
+
+        <Style TargetType="DataGridCell" >
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Links.Background}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
+                </Trigger>
+                <Trigger Property="IsEditing" Value="True">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <TextBox Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                         Path=Content.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                         Padding="5" BorderThickness="0" 
+                                         Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="estyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="9"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="hstyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="9"/>
+            <Setter Property="Background" Value="{StaticResource Links.Background}"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="9"/>
+            <Setter Property="Padding" Value="9"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style x:Key="pathButton" TargetType="ButtonBase">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="rectButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
+            <Setter Property="common:Shaatt.Rect" Value="True"/>
+        </Style>
+
+        <Style x:Key="circleButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
+            <Setter Property="common:Shaatt.Circle" Value="True"/>
+        </Style>
+
+        <DataTemplate x:Key="moveColumn">
+            <Button Content="&#x21B4;" Style="{StaticResource rectButton}"
+                    Command="{Binding DataContext.MoveCommand, ElementName=dg}" CommandParameter="{Binding}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="delColumn">
+            <Button Content="&#x2715;" FontSize="14" Style="{StaticResource rectButton}" 
+                    Command="{Binding DataContext.DeleteCommand, ElementName=dg}" CommandParameter="{Binding}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="20">        
+        <!--Normal-->
+        <Grid Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static commonLoc:LinksStates.Normal}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="New link:" Margin="120,0"/>
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="{StaticResource Chapter.Background}"
+                        ToolTip="Options"
+                        Style="{StaticResource circleButton}"
+                        Command="{Binding ToChapterCommand}"/>
+                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
+                         Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
+                        ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
+                        Style="{StaticResource rectButton}"/>
+                <Button Grid.Column="3" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
+                        ToolTip="Add new link"
+                        Command="{Binding AddCommand}"/>
+            </Grid>
+
+            <DataGrid Grid.Row="2"
+                      x:Name="dg"
+                      Margin="0,30,0,0"
+                      Background="{StaticResource Main.Background}"
+                      BeginningEdit="dg_BeginningEdit" 
+                      CellEditEnding="dg_CellEditEnding"
+                      ItemsSource="{Binding Chapter.Linked.Links}"
+                      SelectionMode="Single" 
+                      SelectionUnit="Cell"
+                      CanUserDeleteRows="False"
+                      CanUserAddRows="False"
+                      AutoGenerateColumns="False"
+                      RowBackground="{StaticResource Links.Background.Row}"
+                      AlternatingRowBackground="{StaticResource Links.Background.Alt}"
+                      BorderThickness="0"
+                      GridLinesVisibility="None"
+                      VerticalAlignment="Top"
+                      HorizontalAlignment="Center"
+                      ColumnWidth="*"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTextColumn Header="Url" Binding="{Binding Path=HtmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTextColumn Header="Xml" Binding="{Binding Path=XmlUrl, UpdateSourceTrigger=PropertyChanged}" HeaderStyle="{StaticResource hstyle}" ElementStyle="{StaticResource estyle}"/>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource moveColumn}" Width="50"/>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource delColumn}" Width="50"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!--Detection-->
+        <StackPanel VerticalAlignment="Center"
+                    Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static commonLoc:LinksStates.Detection}}">
+            <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True">
+                <ProgressBar.Foreground>
+                    <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
+                </ProgressBar.Foreground>
+            </ProgressBar>
+            <TextBlock Text="{Binding Chapter.Linked.Address}" 
+                       Foreground="{StaticResource Button.Manager.Foreground}" FontSize="28" Margin="20"
+                       TextWrapping="Wrap" TextAlignment="Center"/>
+        </StackPanel>
+
+        <!--DetectedLinks-->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static commonLoc:LinksStates.Selection}}">
+            <ItemsControl ItemsSource="{Binding Chapter.Linked.DetectedLinks}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource rectButton}"
+                                Margin="10" Padding="10"
+                                Command="{Binding DataContext.SelectionCommand, ElementName=view}"
+                                CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <!--Chapter-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+            ConverterParameter={x:Static commonLoc:LinksStates.Chapter}}">
+            <StackPanel>
+                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="{StaticResource Chapter.Background}"
+                        Style="{StaticResource circleButton}" HorizontalAlignment="Left"
+                        Command="{Binding FromChapterCommand}"/>
+
+                <StackPanel Margin="10" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="20,20,0,0"/>
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Width" Value="250"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <StackPanel>
+                        <TextBlock Text="Last Retrieve"/>
+                        <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Accept Time"/>
+                        <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
+                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Button Content="delete all" Command="{Binding DeleteChapterCommand}"
+                        common:Shaatt.Circle="True"
+                        Margin="20,60"
+                        Padding="15"
+                        Width="130"
+                        Height="90"
+                        HorizontalAlignment="Right"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

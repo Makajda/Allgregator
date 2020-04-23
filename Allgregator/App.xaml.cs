@@ -1,14 +1,9 @@
-﻿using Allgregator.Common;
-using Allgregator.Repositories.Rss;
-using Allgregator.Services;
-using Allgregator.Services.Rss;
-using Allgregator.ViewModels;
-using Allgregator.Views;
-using Allgregator.Views.Rss;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Services;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Modularity;
 using Prism.Mvvm;
-using Prism.Regions;
 using Serilog;
 using System;
 using System.Reflection;
@@ -16,13 +11,8 @@ using System.Windows;
 
 namespace Allgregator {
     public partial class App : PrismApplication {
-        protected override Window CreateShell() => WindowUtilities.GetMainWindow(Container);
-
-        protected override void OnInitialized() {
-            base.OnInitialized();
-
-            var regionManager = Container.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion(Given.MenuRegion, typeof(ChaptersView));
+        protected override Window CreateShell() {
+            return WindowUtilities.CreateShell<MainWindow, MainWindowViewModel>(Container);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {
@@ -30,8 +20,6 @@ namespace Allgregator {
             var settingsRepository = Container.Resolve<SettingsRepository>();
             containerRegistry.RegisterInstance(settingsRepository.GetOrDefault());
             containerRegistry.RegisterInstance(new FactoryService(Container));
-            containerRegistry.RegisterSingleton<ChapterService>();
-            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
         }
 
         protected override void ConfigureServiceLocator() {
@@ -42,6 +30,15 @@ namespace Allgregator {
                 var viewModelName = $"{viewName}Model, {viewAssemblyName}";
                 return Type.GetType(viewModelName);
             });
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog) {
+            var moduleType = typeof(Allgregator.Rss.Module);
+            moduleCatalog.AddModule(
+                new ModuleInfo() {
+                    ModuleName = moduleType.Name,
+                    ModuleType = moduleType.AssemblyQualifiedName
+                });
         }
     }
 }

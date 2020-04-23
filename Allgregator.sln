@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator", "Allgregator\Allgregator.csproj", "{62FC81BE-C81C-420F-B981-A7474D3A6F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Tests", "Allgregator.Tests\Allgregator.Tests.csproj", "{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Tests", "Allgregator.Tests\Allgregator.Tests.csproj", "{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Rss", "Allgregator.Rss\Allgregator.Rss.csproj", "{3CD09935-2B24-4D04-9D2E-ED76814F814F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Aux", "Allgregator.Aux\Allgregator.Aux.csproj", "{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
