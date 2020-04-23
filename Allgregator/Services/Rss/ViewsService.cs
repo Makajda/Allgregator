@@ -40,10 +40,11 @@ namespace Allgregator.Services.Rss {
                         break;
                 }
 
-                region.Add(view, viewName);
                 if (view is FrameworkElement frameworkElement) {
                     frameworkElement.DataContext = viewModel;
                 }
+
+                region.Add(view, viewName);
             }
 
             region.Activate(view);
