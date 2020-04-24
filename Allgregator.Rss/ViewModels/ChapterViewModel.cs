@@ -7,6 +7,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace Allgregator.Rss.ViewModels {
             MoveCommand = new DelegateCommand(Move);
             UpdateCommand = new DelegateCommand(Update);
 
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(async () => await chapterService.Save(Chapter)));
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(WindowClosing);
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await chapterService.LinkMoved(Chapter, n));
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(id => chapterService.DeleteFiles(id));
@@ -65,10 +66,7 @@ namespace Allgregator.Rss.ViewModels {
             private set => SetProperty(ref currentView, value);
         }
 
-        public void Activate() {
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
-            settings.RssChapterId = Chapter.Id;
-        }
+        public void Activate() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
@@ -83,25 +81,29 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private async void CurrentChapterChanged(Chapter chapter) {
+            if (IsActive) {
+                await chapterService.Save(Chapter);
+            }
+
             IsActive = chapter.Id == Chapter.Id;
+
             if (IsActive) {
                 await CurrentViewChanged();
-            }
-            else {
-                await chapterService.Save(Chapter);
             }
         }
 
         private void Open() {
-            if (IsActive && CurrentView != ChapterViews.LinksView) {
-                var recos = CurrentView == ChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
-                if (recos != null) {
-                    var count = recos.Count;
-                    if (count > settings.RssMaxOpenTabs) {
-                        dialogService.Show($"{count}?", OpenReal, 72d);
-                    }
-                    else {
-                        OpenReal();
+            if (IsActive) {
+                if (CurrentView != ChapterViews.LinksView) {
+                    var recos = CurrentView == ChapterViews.NewsView ? Chapter?.Mined?.NewRecos : Chapter?.Mined?.OldRecos;
+                    if (recos != null) {
+                        var count = recos.Count;
+                        if (count > settings.RssMaxOpenTabs) {
+                            dialogService.Show($"{count}?", OpenReal, 72d);
+                        }
+                        else {
+                            OpenReal();
+                        }
                     }
                 }
             }
@@ -150,6 +152,11 @@ namespace Allgregator.Rss.ViewModels {
                 await chapterService.Load(Chapter);
                 await OreService.Retrieve(Chapter, settings.RssCutoffTime);
             }
+        }
+
+        private void WindowClosing(CancelEventArgs e) {
+            settings.RssChapterId = Chapter.Id;
+            AsyncHelper.RunSync(async () => await chapterService.Save(Chapter));
         }
     }
 }
