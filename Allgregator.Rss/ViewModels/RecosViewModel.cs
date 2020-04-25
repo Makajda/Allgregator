@@ -10,13 +10,18 @@ namespace Allgregator.Rss.ViewModels {
             ) {
             Chapter = chapter;
 
-            OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri));
+            OpenCommand = new DelegateCommand<Reco>(Open);
             MoveCommand = new DelegateCommand<Reco>(Move);
         }
 
         public DelegateCommand<Reco> OpenCommand { get; private set; }
         public DelegateCommand<Reco> MoveCommand { get; private set; }
         public Chapter Chapter { get; private set; }
+
+        private void Open(Reco reco) {
+            WindowUtilities.Run(reco.Uri);
+            Move(reco);
+        }
 
         private void Move(Reco reco) {
             var mined = Chapter.Mined;
