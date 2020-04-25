@@ -5,7 +5,6 @@ using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
 using Allgregator.Rss.Views;
-using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -18,8 +17,8 @@ namespace Allgregator.Rss.ViewModels {
     internal class ChaptersViewModel : BindableBase {
         private readonly FactoryService factoryService;
         private readonly ViewsService viewsService;
-        private readonly IRegionManager regionManager;
         private readonly ChapterRepository chapterRepository;
+        private readonly IRegionManager regionManager;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
@@ -32,16 +31,14 @@ namespace Allgregator.Rss.ViewModels {
             ) {
             this.factoryService = factoryService;
             this.viewsService = viewsService;
-            this.regionManager = regionManager;
             this.chapterRepository = chapterRepository;
+            this.regionManager = regionManager;
             startChapterId = settings.RssChapterId;
-            SettingsCommand = new DelegateCommand(OnSettingsCommand);
 
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
             eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
+            eventAggregator.GetEvent<SettingsEvent>().Subscribe(OnSettingsCommand);
         }
-
-        public DelegateCommand SettingsCommand { get; private set; }
 
         private ObservableCollection<ChapterViewModel> chapters;
         public ObservableCollection<ChapterViewModel> Chapters {
@@ -99,10 +96,11 @@ namespace Allgregator.Rss.ViewModels {
         private void OnSettingsCommand() {
             foreach (var chapter in Chapters) chapter.IsActive = false;
             var region = regionManager.Regions[Given.MainRegion];
-            var view = region.GetView(Given.SettingsView);
+            var viewName = typeof(SettingsView).Name;
+            var view = region.GetView(viewName);
             if (view == null) {
                 view = factoryService.Resolve<SettingsView>();
-                region.Add(view, Given.SettingsView);
+                region.Add(view, viewName);
             }
 
             region.Activate(view);

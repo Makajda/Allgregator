@@ -10,6 +10,17 @@
 
     <Window.Resources>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>
+
+        <Style x:Key="button" TargetType="ButtonBase">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
+            <Setter Property="common:Shaatt.Circle" Value="True"/>
+        </Style>
     </Window.Resources>
     
     <Grid Background="{StaticResource Main.Background}">
@@ -23,11 +34,15 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToContentConverter}}"
-                      FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}"
-                      Padding="0" Width="60" Height="60" VerticalAlignment="Top"
-                      BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
-                      IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <StackPanel>
+            <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToContentConverter}}"
+                          Style="{StaticResource button}" ToolTip="Window is topmost"
+                          IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="&#x26B9;" 
+                    Style="{StaticResource button}" ToolTip="Settings"
+                    Command="{Binding SettingsCommand}"/>
+        </StackPanel>
+
         <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static common:Given.MenuFinRegion}" />
         <ContentControl Grid.Column="2" prism:RegionManager.RegionName="{x:Static common:Given.MenuRssRegion}" />
         <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
