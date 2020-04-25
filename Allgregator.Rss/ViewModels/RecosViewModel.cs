@@ -10,7 +10,7 @@ namespace Allgregator.Rss.ViewModels {
             ) {
             Chapter = chapter;
 
-            OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri.ToString()));
+            OpenCommand = new DelegateCommand<Reco>((reco) => WindowUtilities.Run(reco.Uri));
             MoveCommand = new DelegateCommand<Reco>(Move);
         }
 

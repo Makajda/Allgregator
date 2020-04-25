@@ -44,7 +44,7 @@ namespace Allgregator.Rss.Services {
 
         private Reco GetRecoFromSyndication(SyndicationFeed feed, SyndicationItem item) {
             var imageUri = feed.ImageUrl == null ? RegexUtilities.GetImage(item.Summary?.Text) : feed.ImageUrl;
-            var itemUri = item.Links == null || item.Links.Count == 0 ? null : item.Links[0]?.Uri;
+            var itemUri = item.Links == null || item.Links.Count == 0 ? null : item.Links[0]?.Uri.ToString();
 
             var reco = new Reco() {
                 ImageUri = imageUri,

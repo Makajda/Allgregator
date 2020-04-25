@@ -118,7 +118,7 @@ namespace Allgregator.Rss.ViewModels {
                 if (CurrentView == ChapterViews.NewsView) {
                     if (mined.NewRecos != null && mined.OldRecos != null) {
                         foreach (var reco in mined.NewRecos.Reverse()) {
-                            WindowUtilities.Run(reco.Uri.ToString());
+                            WindowUtilities.Run(reco.Uri);
                             mined.OldRecos.Insert(0, reco);
                         }
                     }
@@ -128,7 +128,7 @@ namespace Allgregator.Rss.ViewModels {
                 }
                 else {
                     if (mined.OldRecos != null) {
-                        foreach (var reco in mined.OldRecos) WindowUtilities.Run(reco.Uri.ToString());
+                        foreach (var reco in mined.OldRecos) WindowUtilities.Run(reco.Uri);
                     }
                 }
             }

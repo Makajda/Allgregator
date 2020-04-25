@@ -7,7 +7,7 @@ namespace Allgregator.Rss.Models {
     public class Reco : IEquatable<Reco> {
         private string summaryText;
 
-        public Uri Uri { get; set; }
+        public string Uri { get; set; }
         public Uri ImageUri { get; set; }
         public string FeedTitle { get; set; }
         public string ItemTitle { get; set; }
