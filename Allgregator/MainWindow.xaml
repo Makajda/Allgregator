@@ -4,9 +4,14 @@
         xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
         xmlns:prism="http://prismlibrary.com/"  
         prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
         Title="{Binding Title}"
         >
 
+    <Window.Resources>
+        <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>
+    </Window.Resources>
+    
     <Grid Background="{StaticResource Main.Background}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,7 +23,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ToggleButton Content="&#x25B4;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}"
+        <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToContentConverter}}"
+                      FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}"
                       Padding="0" Width="60" Height="60" VerticalAlignment="Top"
                       BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
                       IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
