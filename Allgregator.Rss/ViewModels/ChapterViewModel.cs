@@ -155,7 +155,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void WindowClosing(CancelEventArgs e) {
-            settings.RssChapterId = Chapter.Id;
+            if (IsActive) settings.RssChapterId = Chapter.Id;
             AsyncHelper.RunSync(async () => await chapterService.Save(Chapter));
         }
     }

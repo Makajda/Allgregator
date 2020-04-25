@@ -38,6 +38,7 @@ namespace Allgregator.Aux.Common {
                 settings.MainWindowWidth = window.RestoreBounds.Width;
                 settings.MainWindowHeight = window.RestoreBounds.Height;
                 settings.MainWindowState = window.WindowState;
+                settings.MainWindowTopmost = window.Topmost;
                 try {
                     settingsRepository.Save(settings);
                 }
