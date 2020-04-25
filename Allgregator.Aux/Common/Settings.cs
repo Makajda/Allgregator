@@ -9,6 +9,7 @@ namespace Allgregator.Aux.Common {
         public double MainWindowWidth { get; set; }
         public double MainWindowHeight { get; set; }
         public WindowState MainWindowState { get; set; }
+        public bool MainWindowTopmost { get; set; }
         public int RssChapterId { get; set; }
 
         private int rssMaxOpenTabs = 12;

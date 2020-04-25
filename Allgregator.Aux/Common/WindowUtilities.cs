@@ -22,7 +22,8 @@ namespace Allgregator.Aux.Common {
                 settings.MainWindowTop,
                 settings.MainWindowWidth,
                 settings.MainWindowHeight,
-                settings.MainWindowState);
+                settings.MainWindowState,
+                settings.MainWindowTopmost);
             return window;
         }
 
@@ -46,7 +47,9 @@ namespace Allgregator.Aux.Common {
             }
         }
 
-        private static void SetWindowBoundsAndState(Window window, double left, double top, double width, double height, WindowState state) {
+        private static void SetWindowBoundsAndState(Window window, double left, double top, double width, double height,
+            WindowState state, bool topmost) {
+            window.Topmost = topmost;
             window.Left = double.IsInfinity(left) ? 0d : left;
             window.Top = double.IsInfinity(top) ? 0d : top;
             if (width > double.Epsilon && !double.IsInfinity(width))

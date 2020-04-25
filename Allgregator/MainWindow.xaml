@@ -14,11 +14,16 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ContentControl Grid.Row="0" Grid.Column="0" prism:RegionManager.RegionName="{x:Static common:Given.MenuFinRegion}" />
-        <ContentControl Grid.Row="0" Grid.Column="1" prism:RegionManager.RegionName="{x:Static common:Given.MenuRssRegion}" />
-        <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
+        <ToggleButton Content="&#x25B4;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}"
+                      Padding="0" Width="60" Height="60" VerticalAlignment="Top"
+                      BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
+                      IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static common:Given.MenuFinRegion}" />
+        <ContentControl Grid.Column="2" prism:RegionManager.RegionName="{x:Static common:Given.MenuRssRegion}" />
+        <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

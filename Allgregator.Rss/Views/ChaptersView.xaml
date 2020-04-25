@@ -8,8 +8,9 @@
              >
 
     <DockPanel HorizontalAlignment="Right">
-        <Button Content="&#x26B9;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}" Padding="0" Width="50" 
-                VerticalContentAlignment="Top" BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
+        <Button Content="&#x26B9;" FontSize="32" Foreground="{StaticResource Button.Manager.Foreground}" Padding="0"
+                Width="60" Height="60" VerticalAlignment="Top"
+                BorderThickness="0" Background="Transparent" common:Shaatt.Circle="True"
                 Command="{Binding SettingsCommand}"/>
 
         <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
