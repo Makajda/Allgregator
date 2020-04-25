@@ -11,11 +11,10 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Allgregator.Repositories.Rss {
-    public class OpmlRepository {
+    internal class OpmlRepository {
         private readonly ChapterRepository chapterRepository;
         private readonly LinkedRepository linkedRepository;
         private readonly IEventAggregator eventAggregator;
-
         public OpmlRepository(
             ChapterRepository chapterRepository,
             LinkedRepository linkedRepository,
@@ -26,7 +25,7 @@ namespace Allgregator.Repositories.Rss {
             this.eventAggregator = eventAggregator;
         }
 
-        public async Task<(int Chapters, int Links)> Import() {
+        internal async Task<(int Chapters, int Links)> Import() {
             var cinks = await ImportPicker();
             if (cinks == null || cinks.Count == 0) {
                 return default;
@@ -56,7 +55,7 @@ namespace Allgregator.Repositories.Rss {
             return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
         }
 
-        public async Task Export() {
+        internal async Task Export() {
             var chapters = await chapterRepository.GetOrDefault();
             var cinks = new List<Cink>();
             foreach (var chapter in chapters) {
@@ -68,8 +67,10 @@ namespace Allgregator.Repositories.Rss {
         }
 
         private async Task<List<Cink>> ImportPicker() {
-            var picker = new OpenFileDialog();
-            picker.Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*";
+            var picker = new OpenFileDialog {
+                Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*"
+            };
+
             if (picker.ShowDialog() == true) {
                 using var fileStream = picker.OpenFile();
                 using var cancellationTokenSource = new CancellationTokenSource();
@@ -82,9 +83,11 @@ namespace Allgregator.Repositories.Rss {
 
         private async Task ExportPicker(List<Cink> cinks) {
             const string filename = "allgregator";
-            var picker = new SaveFileDialog();
-            picker.Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*";
-            picker.FileName = filename;
+            var picker = new SaveFileDialog {
+                Filter = "opml files (*.opml)|*.opml|All files (*.*)|*.*",
+                FileName = filename
+            };
+
             if (picker.ShowDialog() == true) {
                 using var fileStream = picker.OpenFile();
                 using var cancellationTokenSource = new CancellationTokenSource();
@@ -98,7 +101,7 @@ namespace Allgregator.Repositories.Rss {
             var root = new XElement("opml");
             root.Add(new XAttribute("version", "1.0"));
             var head = new XElement("head");
-            var title = new XElement("title") { Value = $"from infeed {DateTime.Now.ToString()}" };
+            var title = new XElement("title") { Value = $"from infeed {DateTime.Now}" };
             head.Add(title);
             root.Add(head);
             var body = new XElement("body");

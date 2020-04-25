@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
-    public class LinksViewModel : BindableBase {
+    internal class LinksViewModel : BindableBase {
         private readonly ChapterRepository chapterRepository;
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
-    public class ChapterViewModel : BindableBase {
+    internal class ChapterViewModel : BindableBase {
         private readonly Settings settings;
         private readonly IEventAggregator eventAggregator;
         private readonly ChapterService chapterService;
@@ -66,7 +66,7 @@ namespace Allgregator.Rss.ViewModels {
             private set => SetProperty(ref currentView, value);
         }
 
-        public void Activate() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
+        internal void Activate() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {

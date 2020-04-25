@@ -4,7 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 
 namespace Allgregator.Rss.ViewModels {
-    public class RecosViewModel : BindableBase {
+    internal class RecosViewModel : BindableBase {
         public RecosViewModel(
             Chapter chapter
             ) {

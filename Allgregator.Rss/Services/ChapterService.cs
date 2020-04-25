@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.Services {
-    public class ChapterService {
+    internal class ChapterService {
         private readonly LinkedRepository linkedRepository;
         private readonly MinedRepository minedRepository;
         public ChapterService(
@@ -17,17 +17,17 @@ namespace Allgregator.Rss.Services {
             this.minedRepository = minedRepository;
         }
 
-        public async Task Load(Chapter chapter, bool force = true) {
+        internal async Task Load(Chapter chapter, bool force = true) {
             await LoadMined(chapter);
             await LoadLinks(chapter, force);
         }
 
-        public async Task Save(Chapter chapter) {
+        internal async Task Save(Chapter chapter) {
             await SaveLinks(chapter);
             await SaveMined(chapter);
         }
 
-        public async Task LinkMoved(Chapter chapter, (int Id, Link Link) obj) {
+        internal async Task LinkMoved(Chapter chapter, (int Id, Link Link) obj) {
             if (obj.Id == chapter.Id) {
                 await LoadLinks(chapter);
                 if (chapter.Linked.Links == null) {
@@ -39,7 +39,7 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        public void DeleteFiles(int id) {
+        internal void DeleteFiles(int id) {
             try {
                 linkedRepository.DeleteFile(id);
             }

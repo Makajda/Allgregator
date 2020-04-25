@@ -8,10 +8,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
-    public class LinkedRepository {
+    internal class LinkedRepository {
         private const string nameFile = "linked{0}.json";
 
-        public async Task<Linked> GetOrDefault(int chapterId) {
+        internal async Task<Linked> GetOrDefault(int chapterId) {
             Linked retval = null;
 
             try {
@@ -24,7 +24,7 @@ namespace Allgregator.Repositories.Rss {
             return retval ?? CreateDefault(chapterId);
         }
 
-        public async Task Save(int chapterId, Linked linked) {
+        internal async Task Save(int chapterId, Linked linked) {
             var json = JsonSerializer.Serialize<Linked>(linked,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -36,7 +36,7 @@ namespace Allgregator.Repositories.Rss {
             await File.WriteAllTextAsync(name, json);
         }
 
-        public void DeleteFile(int id) {
+        internal void DeleteFile(int id) {
             var name = GetName(id);
             File.Delete(name);
         }

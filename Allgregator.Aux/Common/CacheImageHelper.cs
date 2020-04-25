@@ -4,7 +4,7 @@ using System.Windows.Media.Imaging;
 
 namespace Allgregator.Aux.Common {
     public static class CacheImageHelper {
-        private static Dictionary<Uri, BitmapImage> store = new Dictionary<Uri, BitmapImage>();
+        private static readonly Dictionary<Uri, BitmapImage> store = new Dictionary<Uri, BitmapImage>();
         public static BitmapImage Get(Uri key) {
             if (key == null) {
                 return null;

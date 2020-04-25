@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Repositories.Rss {
     public class MinedRepository {
-        public async Task<Mined> GetOrDefault(int chapterId) {
+        internal async Task<Mined> GetOrDefault(int chapterId) {
             Mined retval = null;
 
             try {
@@ -22,48 +22,42 @@ namespace Allgregator.Repositories.Rss {
             return retval ?? new Mined();
         }
 
-        public async Task Save(int chapterId, Mined mined) {
+        internal async Task Save(int chapterId, Mined mined) {
             var (entryName, fileName) = GetNames(chapterId);
 
-            using (var fileStream = new FileStream(fileName, FileMode.Create)) {
-                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create)) {
-                    var entry = archive.CreateEntry(entryName);
-                    using (var streamEntry = entry.Open()) {
-                        using (var writer = new StreamWriter(streamEntry)) {
-                            var json = JsonSerializer.Serialize<Mined>(mined,
-                                new JsonSerializerOptions() {
-                                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                                    IgnoreNullValues = true,
-                                    WriteIndented = false
-                                });
+            using var fileStream = new FileStream(fileName, FileMode.Create);
+            using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
+            var entry = archive.CreateEntry(entryName);
+            using var streamEntry = entry.Open();
+            using var writer = new StreamWriter(streamEntry);
+            var json = JsonSerializer.Serialize<Mined>(
+                mined,
+                new JsonSerializerOptions() {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    IgnoreNullValues = true,
+                    WriteIndented = false
+                });
 
-                            await writer.WriteLineAsync(json);
-                        }
-                    }
-                }
-            }
+            await writer.WriteLineAsync(json);
         }
 
-        public void DeleteFile(int id) {
+        internal void DeleteFile(int id) {
             var (_, name) = GetNames(id);
             File.Delete(name);
         }
 
         private async Task<Mined> Get(int chapterId) {
-            var (entryName, fileName) = GetNames(chapterId);
+            var (_, fileName) = GetNames(chapterId);
             Mined mined = null;
 
-            using (var archive = ZipFile.OpenRead(fileName)) {
-                if (archive.Entries.Count > 0) {
-                    var entry = archive.Entries[0];
-                    if (entry != null) {
-                        using (var stream = entry.Open()) {
-                            using (var reader = new StreamReader(entry.Open())) {
-                                var json = await reader.ReadToEndAsync();
-                                mined = JsonSerializer.Deserialize<Mined>(json);
-                            }
-                        }
-                    }
+            using var archive = ZipFile.OpenRead(fileName);
+            if (archive.Entries.Count > 0) {
+                var entry = archive.Entries[0];
+                if (entry != null) {
+                    using var stream = entry.Open();
+                    using var reader = new StreamReader(entry.Open());
+                    var json = await reader.ReadToEndAsync();
+                    mined = JsonSerializer.Deserialize<Mined>(json);
                 }
             }
 

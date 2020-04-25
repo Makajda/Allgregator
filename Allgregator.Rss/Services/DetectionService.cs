@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 using System.Xml;
 
 namespace Allgregator.Rss.Services {
-    public class DetectionService {
+    internal class DetectionService {
         private const int timeout = 45_000;
 
-        public async Task SetAddress(Linked linked) {
+        internal async Task SetAddress(Linked linked) {
             linked.CurrentState = LinksStates.Detection;
             var link = await GetLink(linked.Address);
             if (link != null) {
@@ -28,7 +28,7 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        public void Selected(Linked linked, Link link) {
+        internal void Selected(Linked linked, Link link) {
             if (link?.XmlUrl != null) {
                 if (linked.Links == null) {
                     linked.Links = new ObservableCollection<Link>();
@@ -145,17 +145,16 @@ namespace Allgregator.Rss.Services {
         }
 
         private async Task<string> GetHtml(string address) {
-            using (var httpClient = new HttpClient()) {
-                string html;
-                try {
-                    html = await httpClient.GetStringAsync(address);
-                }
-                catch (Exception) {
-                    html = null;
-                }
-
-                return html;
+            using var httpClient = new HttpClient();
+            string html;
+            try {
+                html = await httpClient.GetStringAsync(address);
             }
+            catch (Exception) {
+                html = null;
+            }
+
+            return html;
         }
 
         private List<string> GetAdditionalUris(string address) {

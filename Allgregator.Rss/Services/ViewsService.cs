@@ -9,7 +9,7 @@ using System;
 using System.Windows;
 
 namespace Allgregator.Rss.Services {
-    public class ViewsService {
+    internal class ViewsService {
         private readonly FactoryService factoryService;
         private readonly IRegionManager regionManager;
         public ViewsService(
@@ -20,7 +20,7 @@ namespace Allgregator.Rss.Services {
             this.regionManager = regionManager;
         }
 
-        public void ManageMainViews(ChapterViews currentView, Chapter chapter) {
+        internal void ManageMainViews(ChapterViews currentView, Chapter chapter) {
             var region = regionManager.Regions[Given.MainRegion];
             var viewName = GetName(currentView.ToString(), chapter.Id);
             var view = region.GetView(viewName);
@@ -52,7 +52,7 @@ namespace Allgregator.Rss.Services {
             region.Activate(view);
         }
 
-        public void RemoveMainViews(Chapter chapter) {
+        internal void RemoveMainViews(Chapter chapter) {
             var region = regionManager.Regions[Given.MainRegion];
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
                 RemoveView(region, view, chapter.Id);

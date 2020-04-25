@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
-    public class ChaptersViewModel : BindableBase {
+    internal class ChaptersViewModel : BindableBase {
         private readonly FactoryService factoryService;
         private readonly ViewsService viewsService;
         private readonly IRegionManager regionManager;
@@ -49,7 +49,7 @@ namespace Allgregator.Rss.ViewModels {
             set => SetProperty(ref chapters, value);
         }
 
-        public async Task Load() {
+        internal async Task Load() {
             var chapters = await chapterRepository.GetOrDefault();
             if (chapters != null) {
                 Chapters = new ObservableCollection<ChapterViewModel>(

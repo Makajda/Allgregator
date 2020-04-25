@@ -9,9 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.Services {
-    public class OreService : BindableBase {
+    internal class OreService : BindableBase {
         private CancellationTokenSource cancellationTokenSource;
-        private IProgress<int> progressIndicator;
+        private readonly IProgress<int> progressIndicator;
         private int progressValue;
         private int progressMaximum;
 
@@ -35,7 +35,7 @@ namespace Allgregator.Rss.Services {
             private set => SetProperty(ref progressMaximum, value);
         }
 
-        public void CancelRetrieve() {
+        internal void CancelRetrieve() {
             try {
                 if (cancellationTokenSource != null && cancellationTokenSource.Token.CanBeCanceled) {
                     IsRetrieving = false;
@@ -45,7 +45,7 @@ namespace Allgregator.Rss.Services {
             catch (ObjectDisposedException) { }
         }
 
-        public async Task Retrieve(Chapter chapter, DateTimeOffset cutoffTime) {
+        internal async Task Retrieve(Chapter chapter, DateTimeOffset cutoffTime) {
             if (chapter?.Linked?.Links == null || chapter.Mined == null) {
                 return;
             }
