@@ -3,22 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:t="clr-namespace:System;assembly=System.Runtime"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              >
 
     <UserControl.Resources>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
+        <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
+        
+        <t:Double x:Key="ElWidth">97</t:Double>
+        <t:Double x:Key="ElHeight">60</t:Double>
+        <t:Double x:Key="2xElWidth">194</t:Double>
+        <t:Double x:Key="2xElHeight">120</t:Double>
+
         <Style TargetType="Button">
             <Setter Property="common:Shaatt.Rect" Value="True"/>
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="{StaticResource 2xElWidth}"/>
+            <Setter Property="Height" Value="{StaticResource 2xElHeight}"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
+            <Setter Property="Foreground" Value="{StaticResource Chapter.Foreground}"/>
+        </Style>
+
+        <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Height" Value="80"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Width" Value="{StaticResource ElWidth}"/>
+            <Setter Property="Height" Value="{StaticResource ElHeight}"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </UserControl.Resources>
-    
-    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-        <Button Content="Bloomberg"/>
-        <Button Content="Cbr"/>
-        <Button Content="Sber"/>
-    </StackPanel>
+
+    <Grid Margin="3,6,3,0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="Bloomberg, Cbr"/>
+
+        <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
+                Style="{StaticResource managerButton}"
+                common:Shaatt.Path="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
+                Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
+                Command="{Binding UpdateCommand}"
+                HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
+            </Button.Resources>
+        </Button>
+
+        <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
+                Style="{StaticResource managerButton}"
+                common:Shaatt.Path="M0,0 H4 A10,10 0 0 0 13,9 V13 H0 Z"
+                Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
+                Command="{Binding UpdateCommand}"
+                HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
+                HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
+            </Button.Resources>
+        </Button>
+
+        <DockPanel Grid.Row="1" Height="{StaticResource ElHeight}"/>
+    </Grid>
 </UserControl>
