@@ -1,11 +1,11 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,13 @@ using System.Xml;
 
 namespace Allgregator.Rss.Services {
     internal class DetectionService {
+        private readonly WebService webService;
         private const int timeout = 45_000;
+        public DetectionService(
+            WebService webService
+            ) {
+            this.webService = webService;
+        }
 
         internal async Task SetAddress(Linked linked) {
             linked.CurrentState = LinksStates.Detection;
@@ -129,7 +135,7 @@ namespace Allgregator.Rss.Services {
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try {
                 await Task.WhenAll(addresses.Select(n => Task.Run(async () => {
-                    var html = await GetHtml(n);
+                    var html = await webService.TryGetHtml(n);
                     if (html != null) {
                         var hrefs = RegexUtilities.GetHrefs(html);
                         var rsses = hrefs.Where(n => n != null && (n.Contains("rss") || n.Contains("atom") || n.Contains("feed"))).Distinct();
@@ -142,19 +148,6 @@ namespace Allgregator.Rss.Services {
             catch (Exception) { }
 
             return result;
-        }
-
-        private async Task<string> GetHtml(string address) {
-            using var httpClient = new HttpClient();
-            string html;
-            try {
-                html = await httpClient.GetStringAsync(address);
-            }
-            catch (Exception) {
-                html = null;
-            }
-
-            return html;
         }
 
         private List<string> GetAdditionalUris(string address) {

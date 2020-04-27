@@ -52,13 +52,12 @@ namespace Allgregator.Rss.Services {
 
             ProgressMaximum = chapter.Linked.Links.Count + 1;
             ProgressValue = 1;
-
+            var lastRetrieve = DateTimeOffset.Now;
 
             using var retrieveService = new RetrieveService();
             using (cancellationTokenSource = new CancellationTokenSource()) {
                 IsRetrieving = true;
                 var cancellationToken = cancellationTokenSource.Token;
-                var lastRetrieve = DateTimeOffset.Now;
 
                 try {
                     await Task.WhenAll(
@@ -70,36 +69,36 @@ namespace Allgregator.Rss.Services {
                                         progressIndicator.Report(1);
                                     }
                                 };
-                            }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+                            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
                         ));
                 }
                 catch (OperationCanceledException) {
                 }
+            }
 
-                if (IsRetrieving) {
-                    var mined = chapter.Mined;
-                    var newRecos = new List<Reco>();
-                    var oldRecos = new List<Reco>();
-                    var outdated = mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
+            if (IsRetrieving) {
+                var mined = chapter.Mined;
+                var newRecos = new List<Reco>();
+                var oldRecos = new List<Reco>();
+                var outdated = mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
 
-                    foreach (var reco in retrieveService.Recos) {
-                        if (reco.PublishDate > mined.AcceptTime) {
-                            if (outdated?.FirstOrDefault(n => n.Equals(reco)) == null) {
-                                newRecos.Add(reco);
-                                continue;
-                            }
+                foreach (var reco in retrieveService.Recos) {
+                    if (reco.PublishDate > mined.AcceptTime) {
+                        if (outdated?.FirstOrDefault(n => n.Equals(reco)) == null) {
+                            newRecos.Add(reco);
+                            continue;
                         }
-
-                        oldRecos.Add(reco);
                     }
 
-                    mined.NewRecos = new ObservableCollection<Reco>(newRecos.OrderByDescending(n => n.PublishDate));
-                    mined.OldRecos = new ObservableCollection<Reco>(oldRecos.OrderByDescending(n => n.PublishDate));
-                    mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
-                    mined.LastRetrieve = lastRetrieve;
-                    mined.IsNeedToSave = true;
-                    IsRetrieving = false;
+                    oldRecos.Add(reco);
                 }
+
+                mined.NewRecos = new ObservableCollection<Reco>(newRecos.OrderByDescending(n => n.PublishDate));
+                mined.OldRecos = new ObservableCollection<Reco>(oldRecos.OrderByDescending(n => n.PublishDate));
+                mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
+                mined.LastRetrieve = lastRetrieve;
+                mined.IsNeedToSave = true;
+                IsRetrieving = false;
             }
         }
     }

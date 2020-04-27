@@ -44,7 +44,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Button Content="Bloomberg, Cbr" Command="{Binding OpenCommand}"/>
+        <Button Content="Cbr" Command="{Binding OpenCommand}"/>
 
         <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
                 Style="{StaticResource managerButton}"

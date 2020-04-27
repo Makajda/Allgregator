@@ -1,5 +1,7 @@
 ﻿1,6180339887 
 
 cbr - начальная дата в settings, кэшировать, загружать недостающие даты до сегодня и показывать графики 4-5 валют
-bloomberg - последний снимок по основным валютам и кнопка обновить https://www.bloomberg.com/markets/currencies/europe-africa-middle-east
 всё это на одном view с возможностью обновлять вместе по параметрам
+
+OreService - base
+ChapterViewModel - base

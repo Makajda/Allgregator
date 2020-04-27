@@ -10,9 +10,10 @@ namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : BindableBase {
         private readonly Settings settings;
         private readonly IEventAggregator eventAggregator;
+
         public ChapterViewModel(
-            OreService oreService,
             Settings settings,
+            OreService oreService,
             IEventAggregator eventAggregator
             ) {
             OreService = oreService;
@@ -20,6 +21,7 @@ namespace Allgregator.Fin.ViewModels {
             this.eventAggregator = eventAggregator;
 
             OpenCommand = new DelegateCommand(Open);
+            UpdateCommand = new DelegateCommand(Update);
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(WindowClosing);
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
@@ -27,6 +29,7 @@ namespace Allgregator.Fin.ViewModels {
 
         public OreService OreService { get; private set; }
         public DelegateCommand OpenCommand { get; private set; }
+        public DelegateCommand UpdateCommand { get; private set; }
 
         private bool isActive;
         public bool IsActive {
@@ -45,6 +48,15 @@ namespace Allgregator.Fin.ViewModels {
 
         private void Open() {
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.FinChapter);
+        }
+
+        private async void Update() {
+            if (OreService.IsRetrieving) {
+                OreService.CancelRetrieve();
+            }
+            else {
+                await OreService.Retrieve();
+            }
         }
     }
 }
