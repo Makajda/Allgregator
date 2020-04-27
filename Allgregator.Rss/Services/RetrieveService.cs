@@ -1,4 +1,5 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Aux.Models;
+using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,14 @@ using System.Xml;
 
 namespace Allgregator.Rss.Services {
     internal class RetrieveService : IDisposable {
-        private readonly object syncRecos = new object();
+        private readonly object syncItems = new object();
         private readonly object syncErrors = new object();
 
-        internal List<Reco> Recos { get; } = new List<Reco>();
+        internal List<Reco> Items { get; } = new List<Reco>();
         internal List<Error> Errors { get; } = new List<Error>();
 
         public void Dispose() {
-            Recos.Clear();
+            Items.Clear();
             Errors.Clear();
         }
 
@@ -30,14 +31,14 @@ namespace Allgregator.Rss.Services {
                     }
                 }
 
-                lock (syncRecos) {
-                    Recos.AddRange(recos);
+                lock (syncItems) {
+                    Items.AddRange(recos);
                 }
             }
             catch (OperationCanceledException) { }
             catch (Exception exception) {
                 lock (syncErrors) {
-                    Errors.Add(new Error() { Link = link.Name, Message = exception.Message });
+                    Errors.Add(new Error() { Source = link.Name, Message = exception.Message });
                 }
             }
         }

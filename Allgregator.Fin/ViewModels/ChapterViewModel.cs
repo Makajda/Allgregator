@@ -1,5 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Fin.Models;
 using Allgregator.Fin.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -55,7 +56,8 @@ namespace Allgregator.Fin.ViewModels {
                 OreService.CancelRetrieve();
             }
             else {
-                await OreService.Retrieve();
+                var mined = new Mined();//todo from repository
+                await OreService.Retrieve(mined);
             }
         }
     }

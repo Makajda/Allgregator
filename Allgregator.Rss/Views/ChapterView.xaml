@@ -33,7 +33,7 @@
 
         <DataTemplate x:Key="errorItemTemplate">
             <StackPanel Orientation="Horizontal" Background="{StaticResource Error.Background}">
-                <TextBlock Text="{Binding Link}" Width="150" Margin="20" Foreground="{StaticResource Error.Foreground}" FontSize="14"/>
+                <TextBlock Text="{Binding Source}" Width="150" Margin="20" Foreground="{StaticResource Error.Foreground}" FontSize="14"/>
                 <TextBlock Text="{Binding Message}" Width="450" Margin="0,20,20,20" Foreground="{StaticResource Error.Foreground}" FontSize="14"/>
             </StackPanel>
         </DataTemplate>

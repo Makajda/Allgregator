@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Allgregator.Aux.Common {
+namespace Allgregator.Rss.Common {
     public class RegexUtilities {
         private const int SummaryMax = 399;
 

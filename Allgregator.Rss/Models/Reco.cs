@@ -1,4 +1,4 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Rss.Common;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;

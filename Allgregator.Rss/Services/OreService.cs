@@ -82,7 +82,7 @@ namespace Allgregator.Rss.Services {
                 var oldRecos = new List<Reco>();
                 var outdated = mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
 
-                foreach (var reco in retrieveService.Recos) {
+                foreach (var reco in retrieveService.Items) {
                     if (reco.PublishDate > mined.AcceptTime) {
                         if (outdated?.FirstOrDefault(n => n.Equals(reco)) == null) {
                             newRecos.Add(reco);

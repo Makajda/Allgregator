@@ -21,6 +21,7 @@ namespace Allgregator.Rss.ViewModels {
             DialogService dialogService
             ) {
             this.opmlRepository = opmlRepository;
+            this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.Settings = settings;
 

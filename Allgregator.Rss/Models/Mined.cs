@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Aux.Models;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

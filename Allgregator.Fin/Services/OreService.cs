@@ -1,9 +1,10 @@
 ﻿using Allgregator.Aux.Services;
+using Allgregator.Fin.Models;
 using Prism.Mvvm;
 using System;
-using System.IO;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,52 +49,57 @@ namespace Allgregator.Fin.Services {
             catch (ObjectDisposedException) { }
         }
 
-        internal async Task Retrieve() {
+        internal async Task Retrieve(Mined mined) {
+            //todo строить недостающие даты на основании mined.Currensies
+            var startDate = new DateTimeOffset(2020, 4, 10, 0, 0, 0, TimeSpan.Zero);
+            var endDate = new DateTimeOffset(2020, 4, 27, 0, 0, 0, TimeSpan.Zero);
+
+            var date = startDate.Date;
+            var toDate = endDate.Date;
+            var dates = new List<DateTimeOffset>();
+
+            while (date <= toDate) {
+                dates.Add(new DateTimeOffset(date));//todo filter for there are
+                date = date.AddDays(1);
+            }
+
             IsRetrieving = true;
 
-
-            ProgressMaximum = 3;//todo посчитать количество недостающих дней
+            ProgressMaximum = dates.Count;
             ProgressValue = 1;
             var lastRetrieve = DateTimeOffset.Now;//todo
 
+            using var retrieveService = new RetrieveService();
             using (cancellationTokenSource = new CancellationTokenSource()) {
                 IsRetrieving = true;
                 var cancellationToken = cancellationTokenSource.Token;
 
                 try {
                     await Task.WhenAll(
-                        Task.Factory.StartNew(async () => await RetrieveCbr(), cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
-                        );
+                        Partitioner.Create(dates).GetPartitions(9).Select(partition =>
+                            Task.Factory.StartNew(async () => {
+                                using (partition) {
+                                    while (partition.MoveNext()) {
+                                        await retrieveService.Production(partition.Current, webService);
+                                        progressIndicator.Report(1);
+                                    }
+                                };
+                            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+                        ));
                 }
                 catch (OperationCanceledException) {
                 }
             }
 
             if (IsRetrieving) {
+                //var name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "cbr.txt");
+                //File.WriteAllText(name, html);
+                //var html = File.ReadAllText(name);
+                mined.Currencies = retrieveService.Items.OrderByDescending(n => n.Date);
+                mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
+                mined.IsNeedToSave = true;
                 IsRetrieving = false;
             }
-        }
-
-        private async Task RetrieveCbr() {
-            var name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "cbr.txt");
-            //try {
-            //    const string address = "https://www.cbr.ru/currency_base/daily/?UniDbQuery.Posted=True&UniDbQuery.To=27.04.2020";
-            //    var html = await webService.GetHtml(address);
-            //    File.WriteAllText(name, html);
-            //}
-            //catch (Exception e) {
-            //    //todo return e
-            //}
-
-            var html = File.ReadAllText(name);
-            var regexTr = new Regex("(?<=<tr>).*?(?=</tr>)", RegexOptions.Singleline);
-            var matchesTr = regexTr.Matches(html);
-            var usd = matchesTr.FirstOrDefault(n => n.Value.Contains("USD"));
-            var regexTd = new Regex("(?<=<td>).*?(?=</td>)", RegexOptions.Singleline);
-            var matchesTd = regexTd.Matches(usd.Value);
-            var s = matchesTd.Last();
-            var b = decimal.TryParse(s.Value, out decimal res);
-            progressIndicator.Report(1);
         }
     }
 }

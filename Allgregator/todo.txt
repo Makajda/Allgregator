@@ -5,3 +5,4 @@ cbr - начальная дата в settings, кэшировать, загру�
 
 OreService - base
 ChapterViewModel - base
+RetrieveService - base
