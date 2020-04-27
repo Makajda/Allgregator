@@ -4,6 +4,7 @@ using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.ViewModels;
 using Allgregator.Rss.Views;
+using Prism.Events;
 using Prism.Regions;
 using System;
 using System.Windows;
@@ -12,12 +13,17 @@ namespace Allgregator.Rss.Services {
     internal class ViewsService {
         private readonly FactoryService factoryService;
         private readonly IRegionManager regionManager;
+        private readonly IEventAggregator eventAggregator;
         public ViewsService(
             FactoryService factoryService,
-            IRegionManager regionManager
+            IRegionManager regionManager,
+            IEventAggregator eventAggregator
             ) {
             this.factoryService = factoryService;
             this.regionManager = regionManager;
+            this.eventAggregator = eventAggregator;
+
+            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(OnSettingsCommand);
         }
 
         internal void ManageMainViews(ChapterViews currentView, Chapter chapter) {
@@ -65,5 +71,19 @@ namespace Allgregator.Rss.Services {
         }
 
         private string GetName(string view, int id) => $"{view}.{id}";
+
+        private void OnSettingsCommand(int chapterId) {
+            if (chapterId == Given.SettingsChapter) {
+                var region = regionManager.Regions[Given.MainRegion];
+                var viewName = typeof(SettingsView).Name;
+                var view = region.GetView(viewName);
+                if (view == null) {
+                    view = factoryService.Resolve<SettingsView>();
+                    region.Add(view, viewName);
+                }
+
+                region.Activate(view);
+            }
+        }
     }
 }

@@ -4,8 +4,8 @@ namespace Allgregator.Fin.Views {
     /// <summary>
     /// Interaction logic for ChaptersView
     /// </summary>
-    public partial class ChaptersView : UserControl {
-        public ChaptersView() {
+    public partial class ChapterView : UserControl {
+        public ChapterView() {
             InitializeComponent();
         }
     }

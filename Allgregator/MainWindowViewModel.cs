@@ -9,7 +9,7 @@ namespace Allgregator {
             IEventAggregator eventAggregator
             ) {
 
-            SettingsCommand = new DelegateCommand(eventAggregator.GetEvent<SettingsEvent>().Publish);
+            SettingsCommand = new DelegateCommand(() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.SettingsChapter));
         }
 
         public DelegateCommand SettingsCommand { get; private set; }

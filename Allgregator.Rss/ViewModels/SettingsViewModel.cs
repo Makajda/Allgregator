@@ -1,4 +1,4 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Repositories.Rss;
 using Allgregator.Rss.Common;
@@ -21,7 +21,6 @@ namespace Allgregator.Rss.ViewModels {
             DialogService dialogService
             ) {
             this.opmlRepository = opmlRepository;
-            this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.Settings = settings;
 

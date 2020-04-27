@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
@@ -66,8 +67,6 @@ namespace Allgregator.Rss.ViewModels {
             private set => SetProperty(ref currentView, value);
         }
 
-        internal void Activate() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter);
-
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
                 CurrentView = CurrentView = view ?? ChapterViews.NewsView;
@@ -80,12 +79,12 @@ namespace Allgregator.Rss.ViewModels {
             await chapterService.Load(Chapter, CurrentView == ChapterViews.LinksView);
         }
 
-        private async void CurrentChapterChanged(Chapter chapter) {
+        private async void CurrentChapterChanged(int chapterId) {
             if (IsActive) {
                 await chapterService.Save(Chapter);
             }
 
-            IsActive = chapter.Id == Chapter.Id;
+            IsActive = chapterId == Chapter.Id;
 
             if (IsActive) {
                 await CurrentViewChanged();
@@ -108,7 +107,7 @@ namespace Allgregator.Rss.ViewModels {
                 }
             }
             else {
-                Activate();
+                eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Chapter.Id);
             }
         }
 
@@ -155,7 +154,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void WindowClosing(CancelEventArgs e) {
-            if (IsActive) settings.RssChapterId = Chapter.Id;
+            if (IsActive) settings.CurrentChapterId = Chapter.Id;
             AsyncHelper.RunSync(async () => await chapterService.Save(Chapter));
         }
     }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Allgregator.Fin.Views.ChaptersView"
+﻿<UserControl x:Class="Allgregator.Fin.Views.ChapterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
@@ -9,6 +9,7 @@
              >
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
         
@@ -43,7 +44,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Button Content="Bloomberg, Cbr"/>
+        <Button Content="Bloomberg, Cbr" Command="{Binding OpenCommand}"/>
 
         <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
                 Style="{StaticResource managerButton}"
@@ -57,17 +58,19 @@
             </Button.Resources>
         </Button>
 
-        <Button Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
-                Style="{StaticResource managerButton}"
-                common:Shaatt.Path="M0,0 H4 A10,10 0 0 0 13,9 V13 H0 Z"
-                Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
-                Command="{Binding UpdateCommand}"
-                HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
-                HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <Button.Resources>
-                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
-            </Button.Resources>
-        </Button>
+        <Grid Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button Content="&#x2630;"
+                    Style="{StaticResource managerButton}"
+                    common:Shaatt.Path="M0,0 H4 A10,10 0 0 0 13,9 V13 H0 Z"
+                    Background="{StaticResource Links.Background}"
+                    Command="{Binding UpdateCommand}"
+                    HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <Button.Resources>
+                    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
+                </Button.Resources>
+            </Button>
+        </Grid>
 
         <DockPanel Grid.Row="1" Height="{StaticResource ElHeight}"/>
     </Grid>

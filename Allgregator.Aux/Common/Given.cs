@@ -8,6 +8,11 @@ namespace Allgregator.Aux.Common {
         public const string MenuRssRegion = "MenuRssRegion";
         public const string MenuFinRegion = "MenuFinRegion";
         public const string MainRegion = "MainRegion";
+
+        public const int TryChapter = 10010;
+        public const int FinChapter = 10020;
+        public const int SettingsChapter = 10030;
     }
-    public class SettingsEvent : PubSubEvent { }
+
+    public class CurrentChapterChangedEvent : PubSubEvent<int> { }
 }

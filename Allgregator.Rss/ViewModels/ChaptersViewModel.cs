@@ -1,13 +1,11 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Repositories.Rss;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
-using Allgregator.Rss.Views;
 using Prism.Events;
 using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,26 +16,22 @@ namespace Allgregator.Rss.ViewModels {
         private readonly FactoryService factoryService;
         private readonly ViewsService viewsService;
         private readonly ChapterRepository chapterRepository;
-        private readonly IRegionManager regionManager;
         private readonly int startChapterId;
 
         public ChaptersViewModel(
             FactoryService factoryService,
             ViewsService viewsService,
             ChapterRepository chapterRepository,
-            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
             ) {
             this.factoryService = factoryService;
             this.viewsService = viewsService;
             this.chapterRepository = chapterRepository;
-            this.regionManager = regionManager;
-            startChapterId = settings.RssChapterId;
+            startChapterId = settings.CurrentChapterId;
 
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
             eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
-            eventAggregator.GetEvent<SettingsEvent>().Subscribe(OnSettingsCommand);
         }
 
         private ObservableCollection<ChapterViewModel> chapters;
@@ -51,13 +45,6 @@ namespace Allgregator.Rss.ViewModels {
             if (chapters != null) {
                 Chapters = new ObservableCollection<ChapterViewModel>(
                     chapters.Select(n => factoryService.Resolve<Chapter, ChapterViewModel>(n)));
-
-                var currentChapter = Chapters.FirstOrDefault(n => n.Chapter.Id == startChapterId);
-                if (currentChapter == null) {
-                    currentChapter = Chapters.FirstOrDefault();
-                }
-
-                currentChapter?.Activate();
             }
         }
 
@@ -91,19 +78,6 @@ namespace Allgregator.Rss.ViewModels {
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
-        }
-
-        private void OnSettingsCommand() {
-            foreach (var chapter in Chapters) chapter.IsActive = false;
-            var region = regionManager.Regions[Given.MainRegion];
-            var viewName = typeof(SettingsView).Name;
-            var view = region.GetView(viewName);
-            if (view == null) {
-                view = factoryService.Resolve<SettingsView>();
-                region.Add(view, viewName);
-            }
-
-            region.Activate(view);
         }
     }
 }
