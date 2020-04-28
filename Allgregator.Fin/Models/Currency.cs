@@ -9,16 +9,41 @@ namespace Allgregator.Fin.Models {
             set { SetProperty(ref date, value); }
         }
 
-        private string country;
-        public string Country {
-            get { return country; }
-            set { SetProperty(ref country, value); }
+        //todo убрать setProperty
+        private decimal usd;
+        public decimal Usd {
+            get { return usd; }
+            set { SetProperty(ref usd, value); }
         }
 
-        private decimal val;
-        public decimal Val {
-            get { return val; }
-            set { SetProperty(ref val, value); }
+        private decimal eur;
+        public decimal Eur {
+            get { return eur; }
+            set { SetProperty(ref eur, value); }
+        }
+
+        private decimal gbp;
+        public decimal Gbp {
+            get { return gbp; }
+            set { SetProperty(ref gbp, value); }
+        }
+
+        private decimal chf;
+        public decimal Chf {
+            get { return chf; }
+            set { SetProperty(ref chf, value); }
+        }
+
+        private decimal cny;
+        public decimal Cny {
+            get { return cny; }
+            set { SetProperty(ref cny, value); }
+        }
+
+        private decimal uah;
+        public decimal Uah {
+            get { return uah; }
+            set { SetProperty(ref uah, value); }
         }
     }
 }

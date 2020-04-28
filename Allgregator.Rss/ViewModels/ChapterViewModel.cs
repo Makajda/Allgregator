@@ -17,14 +17,14 @@ namespace Allgregator.Rss.ViewModels {
         private readonly Settings settings;
         private readonly IEventAggregator eventAggregator;
         private readonly ChapterService chapterService;
-        private readonly ViewsService viewsService;
+        private readonly ViewService viewService;
         private readonly DialogService dialogService;
 
         public ChapterViewModel(
             Chapter chapter,
             OreService oreService,
             ChapterService chapterService,
-            ViewsService viewsService,
+            ViewService viewService,
             Settings settings,
             IEventAggregator eventAggregator,
             DialogService dialogService
@@ -32,7 +32,7 @@ namespace Allgregator.Rss.ViewModels {
             Chapter = chapter;
             OreService = oreService;
             this.chapterService = chapterService;
-            this.viewsService = viewsService;
+            this.viewService = viewService;
             this.settings = settings;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
@@ -75,7 +75,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private async Task CurrentViewChanged() {
-            viewsService.ManageMainViews(CurrentView, Chapter);
+            viewService.ManageMainViews(CurrentView, Chapter);
             await chapterService.Load(Chapter, CurrentView == ChapterViews.LinksView);
         }
 

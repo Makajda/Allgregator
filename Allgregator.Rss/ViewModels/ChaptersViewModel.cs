@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 namespace Allgregator.Rss.ViewModels {
     internal class ChaptersViewModel : BindableBase {
         private readonly FactoryService factoryService;
-        private readonly ViewsService viewsService;
+        private readonly ViewService viewsService;
         private readonly ChapterRepository chapterRepository;
 
         public ChaptersViewModel(
             FactoryService factoryService,
-            ViewsService viewsService,
+            ViewService viewsService,
             ChapterRepository chapterRepository,
             IEventAggregator eventAggregator
             ) {

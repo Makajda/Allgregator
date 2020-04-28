@@ -3,7 +3,6 @@ using Allgregator.Aux.Services;
 using Allgregator.Fin.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,24 +21,22 @@ namespace Allgregator.Fin.Services {
         }
 
         internal async Task Production(DateTimeOffset date, WebService webService) {
-            const string country = "USD";
             var stringDate = $"{date.Day:D2}.{date.Month:D2}.{date.Year:D4}";
             var address = $"https://www.cbr.ru/currency_base/daily/?UniDbQuery.Posted=True&UniDbQuery.To={stringDate}";
 
             try {
                 var html = await webService.GetHtml(address);
 
-                var regexTr = new Regex("(?<=<tr>).*?(?=</tr>)", RegexOptions.Singleline);
-                var matchesTr = regexTr.Matches(html);
-                var usd = matchesTr.FirstOrDefault(n => n.Value.Contains(country));
-                var regexTd = new Regex("(?<=<td>).*?(?=</td>)", RegexOptions.Singleline);
-                var matchesTd = regexTd.Matches(usd.Value);
-                var s = matchesTd.Last();
-                var res = decimal.Parse(s.Value);
+                var regex = new Regex("(?<=<tr>).*?(?=</tr>)", RegexOptions.Singleline);
+                var matches = regex.Matches(html);
                 var currency = new Currency() {
                     Date = date,
-                    Country = country,
-                    Val = res
+                    Usd = GetValue(matches, "USD"),
+                    Eur = GetValue(matches, "EUR"),
+                    Gbp = GetValue(matches, "GBP"),
+                    Chf = GetValue(matches, "CHF"),
+                    Cny = GetValue(matches, "CNY"),
+                    Uah = GetValue(matches, "UAH")
                 };
 
                 lock (syncItems) {
@@ -52,6 +49,15 @@ namespace Allgregator.Fin.Services {
                     Errors.Add(new Error() { Source = stringDate, Message = exception.Message });
                 }
             }
+        }
+
+        private decimal GetValue(MatchCollection matches, string country) {
+            var tr = matches.FirstOrDefault(n => n.Value.Contains(country));
+            var regexTd = new Regex("(?<=<td>).*?(?=</td>)", RegexOptions.Singleline);
+            var matchesTd = regexTd.Matches(tr.Value);
+            var s = matchesTd.Last();
+            var res = decimal.Parse(s.Value);
+            return res;//todo
         }
     }
 }

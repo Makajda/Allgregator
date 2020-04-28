@@ -9,6 +9,7 @@ namespace Allgregator {
             IEventAggregator eventAggregator
             ) {
 
+            //todo temp here
             SettingsCommand = new DelegateCommand(() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.SettingsChapter));
         }
 

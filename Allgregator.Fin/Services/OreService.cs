@@ -49,25 +49,38 @@ namespace Allgregator.Fin.Services {
             catch (ObjectDisposedException) { }
         }
 
-        internal async Task Retrieve(Mined mined) {
-            //todo строить недостающие даты на основании mined.Currensies
-            var startDate = new DateTimeOffset(2020, 4, 10, 0, 0, 0, TimeSpan.Zero);
-            var endDate = new DateTimeOffset(2020, 4, 27, 0, 0, 0, TimeSpan.Zero);
-
+        internal async Task Retrieve(Mined mined, DateTimeOffset startDate) {
+            //недостающие даты на основании имеющихся mined.Currensies
             var date = startDate.Date;
-            var toDate = endDate.Date;
+            var toDate = DateTimeOffset.Now.Date;
             var dates = new List<DateTimeOffset>();
 
+            if (mined.Currencies != null) {
+                foreach (var currency in mined.Currencies) {
+                    while (date <= toDate && date < currency.Date) {
+                        dates.Add(date);
+                        date = date.AddDays(1);
+                    }
+
+                    date = date.AddDays(1);
+                }
+            }
+
+            //todo поменять на просто дату
             while (date <= toDate) {
-                dates.Add(new DateTimeOffset(date));//todo filter for there are
+                dates.Add(date);
                 date = date.AddDays(1);
+            }
+
+            if (dates.Count == 0) {
+                dates.Add(toDate);
             }
 
             IsRetrieving = true;
 
             ProgressMaximum = dates.Count;
             ProgressValue = 1;
-            var lastRetrieve = DateTimeOffset.Now;//todo
+            var lastRetrieve = DateTimeOffset.Now;
 
             using var retrieveService = new RetrieveService();
             using (cancellationTokenSource = new CancellationTokenSource()) {
@@ -77,14 +90,14 @@ namespace Allgregator.Fin.Services {
                 try {
                     await Task.WhenAll(
                         Partitioner.Create(dates).GetPartitions(9).Select(partition =>
-                            Task.Factory.StartNew(async () => {
+                            Task.Run(async () => {
                                 using (partition) {
                                     while (partition.MoveNext()) {
                                         await retrieveService.Production(partition.Current, webService);
                                         progressIndicator.Report(1);
                                     }
                                 };
-                            }, cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+                            }, cancellationToken)
                         ));
                 }
                 catch (OperationCanceledException) {
@@ -92,11 +105,14 @@ namespace Allgregator.Fin.Services {
             }
 
             if (IsRetrieving) {
-                //var name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "cbr.txt");
-                //File.WriteAllText(name, html);
-                //var html = File.ReadAllText(name);
-                mined.Currencies = retrieveService.Items.OrderByDescending(n => n.Date);
+                if(mined.Currencies == null) {
+                    mined.Currencies = retrieveService.Items.OrderBy(n => n.Date).ToList();
+                }
+                else {
+                    mined.Currencies = mined.Currencies.Union(retrieveService.Items).OrderBy(n => n.Date).ToList();
+                }
                 mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
+                mined.LastRetrieve = lastRetrieve;
                 mined.IsNeedToSave = true;
                 IsRetrieving = false;
             }

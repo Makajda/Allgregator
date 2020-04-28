@@ -10,19 +10,18 @@ using System;
 using System.Windows;
 
 namespace Allgregator.Rss.Services {
-    internal class ViewsService {
+    internal class ViewService {
         private readonly FactoryService factoryService;
         private readonly IRegionManager regionManager;
-        private readonly IEventAggregator eventAggregator;
-        public ViewsService(
+        public ViewService(
             FactoryService factoryService,
-            IRegionManager regionManager,
-            IEventAggregator eventAggregator
+            IEventAggregator eventAggregator,
+            IRegionManager regionManager
             ) {
             this.factoryService = factoryService;
             this.regionManager = regionManager;
-            this.eventAggregator = eventAggregator;
-
+        
+            //todo temp here
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(OnSettingsCommand);
         }
 

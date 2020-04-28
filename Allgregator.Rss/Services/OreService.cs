@@ -65,7 +65,7 @@ namespace Allgregator.Rss.Services {
                             Task.Factory.StartNew(() => {
                                 using (partition) {
                                     while (partition.MoveNext()) {
-                                        retrieveService.Production(partition.Current, cutoffTime);
+                                        retrieveService.Production(partition.Current, cutoffTime);//todo to ctor
                                         progressIndicator.Report(1);
                                     }
                                 };

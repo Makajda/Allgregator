@@ -23,5 +23,11 @@ namespace Allgregator.Aux.Models {
             get => rssCutoffTime;
             set => SetProperty(ref rssCutoffTime, value);
         }
+
+        private DateTimeOffset finStartDate;
+        public DateTimeOffset FinStartDate {
+            get { return finStartDate; }
+            set { SetProperty(ref finStartDate, value); }
+        }
     }
 }

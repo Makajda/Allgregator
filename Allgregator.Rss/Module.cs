@@ -1,6 +1,8 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Services;
 using Allgregator.Rss.Services;
 using Allgregator.Rss.Views;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;

@@ -61,7 +61,6 @@ namespace Allgregator.Rss.Repositories {
                 }
             }
 
-            mined.IsNeedToSave = false;
             return mined;
         }
 

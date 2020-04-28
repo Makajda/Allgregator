@@ -1,25 +1,41 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Aux.Services;
 using Allgregator.Fin.Models;
+using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
+using Allgregator.Fin.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : BindableBase {
         private readonly Settings settings;
+        private readonly FactoryService factoryService;
         private readonly IEventAggregator eventAggregator;
+        private readonly IRegionManager regionManager;
+        private readonly MinedRepository minedRepository;
 
         public ChapterViewModel(
             Settings settings,
             OreService oreService,
-            IEventAggregator eventAggregator
+            FactoryService factoryService,
+            IEventAggregator eventAggregator,
+            IRegionManager regionManager,
+            MinedRepository minedRepository
             ) {
             OreService = oreService;
             this.settings = settings;
+            this.factoryService = factoryService;
             this.eventAggregator = eventAggregator;
+            this.regionManager = regionManager;
+            this.minedRepository = minedRepository;
 
             OpenCommand = new DelegateCommand(Open);
             UpdateCommand = new DelegateCommand(Update);
@@ -38,13 +54,37 @@ namespace Allgregator.Fin.ViewModels {
             set => SetProperty(ref isActive, value);
         }
 
-        private void CurrentChapterChanged(int chapterId) {
+        private Mined mined;
+        public Mined Mined {
+            get { return mined; }
+            set { SetProperty(ref mined, value); }
+        }
+
+        private async void CurrentChapterChanged(int chapterId) {
             IsActive = chapterId == Given.FinChapter;
+
+            if (IsActive) {
+                await LoadMined();
+                var region = regionManager.Regions[Given.MainRegion];
+                var viewName = typeof(CurrencyView).Name;
+                var view = region.GetView(viewName);
+                if (view == null) {
+                    view = factoryService.Resolve<CurrencyView>();
+                    var viewModel = factoryService.Resolve<Mined, CurrencyViewModel>(Mined);
+                    if (view is FrameworkElement frameworkElement) {
+                        frameworkElement.DataContext = viewModel;
+                    }
+
+                    region.Add(view, viewName);
+                }
+
+                region.Activate(view);
+            }
         }
 
         private void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = Given.FinChapter;
-            //todo AsyncHelper.RunSync(async () => await chapterService.Save(Chapter));
+            AsyncHelper.RunSync(async () => await SaveMined());
         }
 
         private void Open() {
@@ -56,8 +96,24 @@ namespace Allgregator.Fin.ViewModels {
                 OreService.CancelRetrieve();
             }
             else {
-                var mined = new Mined();//todo from repository
-                await OreService.Retrieve(mined);
+                await LoadMined();
+                settings.FinStartDate = new DateTimeOffset(2020, 3, 18, 0, 0, 0, TimeSpan.Zero);
+                await OreService.Retrieve(Mined, settings.FinStartDate);
+            }
+        }
+
+        private async Task LoadMined() {
+            if (Mined == null) {
+                Mined = await minedRepository.GetOrDefault();
+            }
+        }
+
+        private async Task SaveMined() {
+            try {
+                await minedRepository.Save(Mined);
+            }
+            catch (Exception e) {
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
         }
     }
