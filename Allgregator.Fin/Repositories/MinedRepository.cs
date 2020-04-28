@@ -1,5 +1,5 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Rss.Models;
+using Allgregator.Fin.Models;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -7,13 +7,13 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Allgregator.Rss.Repositories {
+namespace Allgregator.Fin.Repositories {
     public class MinedRepository {
-        internal async Task<Mined> GetOrDefault(int chapterId) {
+        internal async Task<Mined> GetOrDefault() {
             Mined retval = null;
 
             try {
-                retval = await Get(chapterId);
+                retval = await Get();
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -22,8 +22,8 @@ namespace Allgregator.Rss.Repositories {
             return retval ?? new Mined();
         }
 
-        internal async Task Save(int chapterId, Mined mined) {
-            var (entryName, fileName) = GetNames(chapterId);
+        internal async Task Save(Mined mined) {
+            var (entryName, fileName) = GetNames();
 
             using var fileStream = new FileStream(fileName, FileMode.Create);
             using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
@@ -41,13 +41,13 @@ namespace Allgregator.Rss.Repositories {
             await writer.WriteLineAsync(json);
         }
 
-        internal void DeleteFile(int id) {
-            var (_, name) = GetNames(id);
+        internal void DeleteFile() {
+            var (_, name) = GetNames();
             File.Delete(name);
         }
 
-        private async Task<Mined> Get(int chapterId) {
-            var (_, fileName) = GetNames(chapterId);
+        private async Task<Mined> Get() {
+            var (_, fileName) = GetNames();
             Mined mined = null;
 
             using var archive = ZipFile.OpenRead(fileName);
@@ -65,9 +65,8 @@ namespace Allgregator.Rss.Repositories {
             return mined;
         }
 
-        private (string EntryName, string FileName) GetNames(int chapterId) {
-            const string nameFile = "rssMined{0}";
-            var name = string.Format(nameFile, chapterId);
+        private (string EntryName, string FileName) GetNames() {
+            const string name = "finMined";
             var entryName = Path.ChangeExtension(name, "json");
             var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
             return (entryName, fileName);

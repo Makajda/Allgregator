@@ -1,8 +1,7 @@
-﻿using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
-using Allgregator.Repositories.Rss;
+﻿using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
+using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Events;
 using Prism.Mvvm;
@@ -16,19 +15,16 @@ namespace Allgregator.Rss.ViewModels {
         private readonly FactoryService factoryService;
         private readonly ViewsService viewsService;
         private readonly ChapterRepository chapterRepository;
-        private readonly int startChapterId;
 
         public ChaptersViewModel(
             FactoryService factoryService,
             ViewsService viewsService,
             ChapterRepository chapterRepository,
-            IEventAggregator eventAggregator,
-            Settings settings
+            IEventAggregator eventAggregator
             ) {
             this.factoryService = factoryService;
             this.viewsService = viewsService;
             this.chapterRepository = chapterRepository;
-            startChapterId = settings.CurrentChapterId;
 
             eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
             eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);

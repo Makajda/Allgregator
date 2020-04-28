@@ -1,6 +1,6 @@
-﻿using Allgregator.Repositories.Rss;
-using Allgregator.Rss.Common;
+﻿using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
+using Allgregator.Rss.Repositories;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

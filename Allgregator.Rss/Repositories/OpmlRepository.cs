@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Allgregator.Repositories.Rss {
+namespace Allgregator.Rss.Repositories {
     internal class OpmlRepository {
         private readonly ChapterRepository chapterRepository;
         private readonly LinkedRepository linkedRepository;

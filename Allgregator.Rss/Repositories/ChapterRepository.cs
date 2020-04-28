@@ -8,7 +8,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Allgregator.Repositories.Rss {
+namespace Allgregator.Rss.Repositories {
     internal class ChapterRepository {
         private const string nameFile = "chapters.json";
 

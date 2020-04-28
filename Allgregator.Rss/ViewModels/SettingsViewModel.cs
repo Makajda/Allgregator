@@ -1,8 +1,8 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
-using Allgregator.Repositories.Rss;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
+using Allgregator.Rss.Repositories;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
