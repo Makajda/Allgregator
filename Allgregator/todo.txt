@@ -6,3 +6,101 @@ cbr - начальная дата в settings, кэшировать, загру�
 OreService - base
 ChapterViewModel - base
 RetrieveService - base
+
+
+private void Draw(IEnumerable<Currency> currencies) {
+            if (currencies == null) return;
+            if (currencies.Any(n => n.Values == null)) return;
+
+            var max = new Dictionary<string, double>();
+            var min = new Dictionary<string, double>();
+
+            foreach (var currency in currencies) {
+                foreach(var kp in currency.Values) {
+                    if (!max.ContainsKey(kp.Key)) max.Add(kp.Key, 0);
+                    if ((double)kp.Value > max[kp.Key]) max[kp.Key] = (double)kp.Value;
+                    if (!min.ContainsKey(kp.Key)) min.Add(kp.Key, 0);
+                    if ((double)kp.Value < min[kp.Key]) min[kp.Key] = (double)kp.Value;
+                }
+            }
+
+            var ellipses = new GeometryGroup();
+            var prevs = new Dictionary<string, Point>();
+            foreach (var name in Currency.CurrencyNames) prevs.Add(name, new Point());
+            var day = 0;
+            foreach (var currency in currencies) {
+                foreach (var kp in currency.Values) {
+                    var nextPoint = new Point(day * 30, ((double)kp.Value - min[kp.Key]) *
+                        (scroll.ActualHeight - 50) / (max[kp.Key] - min[kp.Key]));//todo Zero div
+                    if (day > 0) ellipses.Children.Add(new LineGeometry(prevs[kp.Key], nextPoint));
+                    ellipses.Children.Add(new EllipseGeometry(nextPoint, 8, 8));
+                    prevs[kp.Key] = nextPoint;
+                }
+
+                day++;
+            }
+
+            GeometryDrawing aGeometryDrawing = new GeometryDrawing();
+            aGeometryDrawing.Geometry = ellipses;
+
+            aGeometryDrawing.Brush = Brushes.Blue;
+            aGeometryDrawing.Pen = new Pen(Brushes.Blue, 3);
+
+            DrawingImage geometryImage = new DrawingImage(aGeometryDrawing);
+
+            geometryImage.Freeze();
+
+            Image anImage = new Image();
+            anImage.Source = geometryImage;
+            anImage.Stretch = Stretch.None;
+            anImage.HorizontalAlignment = HorizontalAlignment.Left;
+
+            scroll.Content = anImage;
+        }
+
+
+
+        private void Draw(IEnumerable<Currency> currencies) {
+            if (currencies == null) return;
+            if (currencies.Any(n => n.Values == null)) return;
+
+            var max = new Dictionary<string, double>();
+            var min = new Dictionary<string, double>();
+
+            foreach (var currency in currencies) {
+                foreach (var kp in currency.Values) {
+                    if (!max.ContainsKey(kp.Key)) max.Add(kp.Key, double.MinValue);
+                    if ((double)kp.Value > max[kp.Key]) max[kp.Key] = (double)kp.Value;
+                    if (!min.ContainsKey(kp.Key)) min.Add(kp.Key, double.MaxValue);
+                    if ((double)kp.Value < min[kp.Key]) min[kp.Key] = (double)kp.Value;
+                }
+            }
+
+            var prevs = new Dictionary<string, Point>();
+            foreach (var name in Currency.CurrencyNames) prevs.Add(name, new Point());
+            var day = 0;
+            foreach (var currency in currencies) {
+                foreach (var kp in currency.Values) {
+                    var scale = (canvas.ActualHeight - 50) / (max[kp.Key] - min[kp.Key]);
+                    var nextPoint = new Point(day * 30, ((double)kp.Value - min[kp.Key]) * scale);//todo Zero div
+                    if (day > 0) {
+                        var line = new Line() { X1 = prevs[kp.Key].X, Y1 = prevs[kp.Key].Y, X2 = nextPoint.X, Y2 = nextPoint.Y };
+                        line.Stroke = Currency.CurrencyBrushes[0];
+                        line.StrokeThickness = 3;
+                        canvas.Children.Add(line);
+                    }
+
+                    var ellipse = new Ellipse() { Width = 8, Height = 8 };
+                    Canvas.SetLeft(ellipse, nextPoint.X);
+                    Canvas.SetTop(ellipse, nextPoint.Y);
+                    ellipse.Fill = Currency.CurrencyBrushes[1];
+                    ellipse.ToolTip = currency.Date;
+                    canvas.Children.Add(ellipse);
+
+                    prevs[kp.Key] = nextPoint;
+                    if (nextPoint.X > canvas.ActualWidth) canvas.Width = nextPoint.X;
+                }
+
+                day++;
+            }
+        }

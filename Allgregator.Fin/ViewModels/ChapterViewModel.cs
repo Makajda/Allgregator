@@ -70,9 +70,8 @@ namespace Allgregator.Fin.ViewModels {
                 var view = region.GetView(viewName);
                 if (view == null) {
                     view = factoryService.Resolve<CurrencyView>();
-                    var viewModel = factoryService.Resolve<Mined, CurrencyViewModel>(Mined);
                     if (view is FrameworkElement frameworkElement) {
-                        frameworkElement.DataContext = viewModel;
+                        frameworkElement.DataContext = this;
                     }
 
                     region.Add(view, viewName);

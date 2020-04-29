@@ -1,5 +1,6 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
+using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
 using System;
 using System.Collections.Generic;
@@ -29,15 +30,12 @@ namespace Allgregator.Fin.Services {
 
                 var regex = new Regex("(?<=<tr>).*?(?=</tr>)", RegexOptions.Singleline);
                 var matches = regex.Matches(html);
-                var currency = new Currency() {
-                    Date = date,
-                    Usd = GetValue(matches, "USD"),
-                    Eur = GetValue(matches, "EUR"),
-                    Gbp = GetValue(matches, "GBP"),
-                    Chf = GetValue(matches, "CHF"),
-                    Cny = GetValue(matches, "CNY"),
-                    Uah = GetValue(matches, "UAH")
-                };
+                var currency = new Currency() { Date = date };
+                currency.Values = new Dictionary<string, decimal>();
+                foreach (var data in Given.CurrencyData) {
+                    var value = GetValue(matches, data.Key);
+                    currency.Values.Add(data.Key, value);
+                }
 
                 lock (syncItems) {
                     Items.Add(currency);

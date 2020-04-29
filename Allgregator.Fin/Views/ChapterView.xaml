@@ -13,6 +13,7 @@
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
         
+        <!--//todo to dictionary-->
         <t:Double x:Key="ElWidth">97</t:Double>
         <t:Double x:Key="ElHeight">60</t:Double>
         <t:Double x:Key="2xElWidth">194</t:Double>
