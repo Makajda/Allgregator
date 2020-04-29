@@ -53,7 +53,7 @@ namespace Allgregator.Repositories.Rss {
         }
 
         private Linked CreateDefault(int id) {
-            if (id == 10001) {
+            if (id == Given.TryChapter) {
                 var links = new ObservableCollection<Link>() {
                     new Link() {
                         HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",
