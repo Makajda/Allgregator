@@ -32,9 +32,9 @@ namespace Allgregator.Fin.Services {
                 var matches = regex.Matches(html);
                 var currency = new Currency() { Date = date };
                 currency.Values = new Dictionary<string, decimal>();
-                foreach (var data in Given.CurrencyData) {
-                    var value = GetValue(matches, data.Key);
-                    currency.Values.Add(data.Key, value);
+                foreach (var key in Given.CurrencyNames) {
+                    var value = GetValue(matches, key);
+                    currency.Values.Add(key, value);
                 }
 
                 lock (syncItems) {
