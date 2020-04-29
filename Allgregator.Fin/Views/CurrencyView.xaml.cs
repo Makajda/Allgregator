@@ -1,5 +1,6 @@
 ﻿using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -54,39 +55,71 @@ namespace Allgregator.Fin.Views {
             }
 
             const double dayWidth = 30d;
-            var marginHost = 50d;
+            const double marginHost = 50d;
+            const int lineIndent = 11;
+            const double ellipseSize = 18;
+
             var heightHost = canvas.ActualHeight - marginHost * 2;
             if (heightHost <= 0) return;
 
             var prevs = new Dictionary<string, Point>();
-            foreach (var data in Given.CurrencyData) prevs.Add(data.Key, new Point());
+            foreach (var name in Given.CurrencyNames) prevs.Add(name, new Point());
             var day = 0;
             foreach (var currency in currencies) {
                 foreach (var (key, value) in currency.Values) {
-                    var delta = max[key] - min[key];
-                    var y = marginHost + (delta == 0m ?
-                        heightHost / 2d :
-                        (double)(value - min[key]) * heightHost / (double)delta);
-                    var nextPoint = new Point(day * dayWidth + marginHost, y);
-                    if (day > 0) {
-                        var line = new Line() { X1 = prevs[key].X, Y1 = prevs[key].Y, X2 = nextPoint.X, Y2 = nextPoint.Y };
-                        line.Stroke = Given.CurrencyData[key];
-                        line.StrokeThickness = key == Given.CurrencyData.First().Key ? 3 : 1;
-                        canvas.Children.Add(line);
+                    if (Given.CurrencyNames.Contains(key)) {
+                        if (Given.CurrencyBrushes.TryGetValue(key, out Brush brush)) {
+                            var delta = max[key] - min[key];
+                            var y = delta == 0m ?
+                                heightHost / 2d :
+                                (double)(value - min[key]) * heightHost / (double)delta;
+                            var nextPoint = new Point(day * dayWidth + marginHost, heightHost - y + marginHost);
+
+                            if (day > 0) {
+                                var x1 = prevs[key].X;
+                                var y1 = prevs[key].Y;
+                                var x2 = nextPoint.X;
+                                var y2 = nextPoint.Y;
+                                var diagonal = Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                                var sinx = (x2 - x1) / diagonal;
+                                var siny = (y2 - y1) / diagonal;
+                                var dxIndend = lineIndent * sinx;
+                                var dyIndent = lineIndent * siny;
+                                var line = new Line() {
+                                    X1 = x1 + dxIndend,
+                                    Y1 = y1 + dyIndent,
+                                    X2 = x2 - dxIndend,
+                                    Y2 = y2 - dyIndent,
+                                    Stroke = brush,
+                                    StrokeThickness = key == Given.CurrencyNames.FirstOrDefault() ? 3 : 1
+                                };
+                                canvas.Children.Add(line);
+                            }
+
+                            var ellipse = new Ellipse() {
+                                Width = ellipseSize,
+                                Height = ellipseSize,
+                                Fill = Brushes.Transparent,
+                                Stroke = brush,
+                                ToolTip = $"{currency.Date.Day} - {value}"
+                            };
+                            Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
+                            Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
+                            canvas.Children.Add(ellipse);
+                            if (nextPoint.X > canvas.ActualWidth) canvas.Width = nextPoint.X + marginHost;
+
+                            prevs[key] = nextPoint;
+                        }
                     }
-
-                    const double ellipseSize = 18;
-                    var ellipse = new Ellipse() { Width = ellipseSize, Height = ellipseSize };
-                    Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
-                    Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
-                    ellipse.Fill = Brushes.Transparent;
-                    ellipse.Stroke = Given.CurrencyData[key];
-                    ellipse.ToolTip = value;
-                    canvas.Children.Add(ellipse);
-                    if (nextPoint.X > canvas.ActualWidth) canvas.Width = nextPoint.X + marginHost;
-
-                    prevs[key] = nextPoint;
                 }
+
+                var textBlock = new TextBlock() {
+                    Text = $"{currency.Date.Day:D2}",
+                    TextAlignment = TextAlignment.Left,
+                    Width = dayWidth
+                };
+                Canvas.SetLeft(textBlock, day * dayWidth + marginHost - ellipseSize / 2d);
+                canvas.Children.Add(textBlock);
 
                 day++;
             }
