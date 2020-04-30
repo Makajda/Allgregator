@@ -15,20 +15,20 @@ namespace Allgregator.Rss.Services {
             this.retrieveService = retrieveService;
         }
 
-        internal async Task Retrieve(Chapter chapter, DateTimeOffset cutoffTime) {
-            if (chapter?.Linked?.Links == null || chapter.Mined == null) {
+        internal async Task Retrieve(Data data, DateTimeOffset cutoffTime) {
+            if (data.Linked?.Links == null || data.Mined == null) {
                 return;
             }
 
             using (retrieveService) {
                 retrieveService.CutoffTime = cutoffTime;
-                var lastRetrieve = await Retrieve(chapter.Linked.Links, retrieveService.Production);
+                var lastRetrieve = await Retrieve(data.Linked.Links, retrieveService.Production);
 
                 if (IsRetrieving) {
-                    var mined = chapter.Mined;
+                    var mined = data.Mined;
                     var newRecos = new List<Reco>();
                     var oldRecos = new List<Reco>();
-                    var outdated = mined.OldRecos?.Where(n => n.PublishDate >= chapter.Mined.AcceptTime);
+                    var outdated = mined.OldRecos?.Where(n => n.PublishDate >= data.Mined.AcceptTime);
 
                     foreach (var reco in retrieveService.Items) {
                         if (reco.PublishDate > mined.AcceptTime) {

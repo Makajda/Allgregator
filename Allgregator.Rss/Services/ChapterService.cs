@@ -17,25 +17,25 @@ namespace Allgregator.Rss.Services {
             this.minedRepository = minedRepository;
         }
 
-        internal async Task Load(Chapter chapter, bool force = true) {
-            await LoadMined(chapter);
-            await LoadLinks(chapter, force);
+        internal async Task Load(Data data, bool force = true) {
+            await LoadMined(data);
+            await LoadLinks(data, force);
         }
 
-        internal async Task Save(Chapter chapter) {
-            await SaveLinks(chapter);
-            await SaveMined(chapter);
+        internal async Task Save(Data data) {
+            await SaveLinks(data);
+            await SaveMined(data);
         }
 
-        internal async Task LinkMoved(Chapter chapter, (int Id, Link Link) obj) {
-            if (obj.Id == chapter.Id) {
-                await LoadLinks(chapter);
-                if (chapter.Linked.Links == null) {
-                    chapter.Linked.Links = new ObservableCollection<Link>();
+        internal async Task LinkMoved(Data data, (int Id, Link Link) obj) {
+            if (obj.Id == data.Id) {
+                await LoadLinks(data);
+                if (data.Linked.Links == null) {
+                    data.Linked.Links = new ObservableCollection<Link>();
                 }
 
-                chapter.Linked.Links.Add(obj.Link);
-                await SaveLinks(chapter);
+                data.Linked.Links.Add(obj.Link);
+                await SaveLinks(data);
             }
         }
 
@@ -55,27 +55,27 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        private async Task LoadLinks(Chapter chapter, bool force = true) {
-            if (chapter != null && chapter.Linked == null && force) {
-                chapter.Linked = await linkedRepository.GetOrDefault(chapter.Id);
-                if (chapter.Linked.CurrentState == LinksStates.Detection || chapter.Linked.CurrentState == LinksStates.Chapter) {
-                    chapter.Linked.CurrentState = LinksStates.Normal;
+        private async Task LoadLinks(Data data, bool force = true) {
+            if (data.Linked == null && force) {
+                data.Linked = await linkedRepository.GetOrDefault(data.Id);
+                if (data.Linked.CurrentState == LinksStates.Detection || data.Linked.CurrentState == LinksStates.Chapter) {
+                    data.Linked.CurrentState = LinksStates.Normal;
                 }
             }
         }
 
-        private async Task LoadMined(Chapter chapter) {
-            if (chapter != null && chapter.Mined == null) {
-                chapter.Mined = await minedRepository.GetOrDefault(chapter.Id);
+        private async Task LoadMined(Data data) {
+            if (data.Mined == null) {
+                data.Mined = await minedRepository.GetOrDefault(data.Id);
             }
         }
 
-        private async Task SaveLinks(Chapter chapter) {
-            if (chapter?.Linked?.Links != null) {
-                if (chapter.Linked.IsNeedToSave) {
+        private async Task SaveLinks(Data data) {
+            if (data.Linked?.Links != null) {
+                if (data.Linked.IsNeedToSave) {
                     try {
-                        await linkedRepository.Save(chapter.Id, chapter.Linked);
-                        chapter.Linked.IsNeedToSave = false;
+                        await linkedRepository.Save(data.Id, data.Linked);
+                        data.Linked.IsNeedToSave = false;
                     }
                     catch (Exception e) {
                         Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -84,12 +84,12 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        private async Task SaveMined(Chapter chapter) {
-            if (chapter?.Mined != null) {
-                if (chapter.Mined.IsNeedToSave) {
+        private async Task SaveMined(Data data) {
+            if (data.Mined != null) {
+                if (data.Mined.IsNeedToSave) {
                     try {
-                        await minedRepository.Save(chapter.Id, chapter.Mined);
-                        chapter.Mined.IsNeedToSave = false;
+                        await minedRepository.Save(data.Id, data.Mined);
+                        data.Mined.IsNeedToSave = false;
                     }
                     catch (Exception e) {
                         Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

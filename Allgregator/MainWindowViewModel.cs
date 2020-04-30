@@ -27,7 +27,9 @@ namespace Allgregator {
             //todo temp here
             SettingsCommand = new DelegateCommand(() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.SettingsChapter));
             //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
-            //eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
+            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
+            //todo internal class ChapterDeletedEvent : PubSubEvent<int> { }
+            //todo internal class ChapterAddedEvent : PubSubEvent<Chapter[]> { }
         }
 
         public DelegateCommand LoadCommand { get; private set; }
@@ -50,7 +52,7 @@ namespace Allgregator {
             }
         }
 
-        private async void ChapterAdded(ChapterBase[] chapters) {
+        private async void ChapterAdded(Chapter[] chapters) {
             foreach (var newChapter in chapters) {
                 if (newChapter.Id == 0) {
                     //todo newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));

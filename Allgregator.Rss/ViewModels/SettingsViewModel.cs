@@ -1,7 +1,5 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
-using Allgregator.Rss.Common;
-using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
 using Prism.Commands;
 using Prism.Events;
@@ -42,7 +40,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void AddChapter() {
-            eventAggregator.GetEvent<ChapterAddedEvent>().Publish(new Chapter[] { new Chapter() { Name = AddedName } });
+            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Publish(new Chapter[] { new Chapter() { Name = AddedName } });
             AddedName = null;
         }
 

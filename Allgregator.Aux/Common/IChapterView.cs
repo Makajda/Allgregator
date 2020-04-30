@@ -2,6 +2,6 @@
 
 namespace Allgregator.Aux.Common {
     public interface IChapterView {
-        void SetChapter(ChapterBase chapter);
+        void SetChapter(Chapter chapter);
     }
 }

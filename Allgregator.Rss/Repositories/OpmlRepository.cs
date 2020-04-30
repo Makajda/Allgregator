@@ -1,5 +1,4 @@
 ﻿using Allgregator.Aux.Repositories;
-using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using Prism.Events;
@@ -33,8 +32,8 @@ namespace Allgregator.Rss.Repositories {
             }
 
             var chapters = (await chapterRepository.GetOrDefault()).ToList();
-            var newChapters = new Chapter[cinks.Count];
-            var indexChapters = 0;
+            //todo var newChapters = new Chapter[cinks.Count];
+            //todo var indexChapters = 0;
 
             try {
                 //foreach (var cink in cinks) {//todo
@@ -51,7 +50,7 @@ namespace Allgregator.Rss.Repositories {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
+            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
 
             return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
         }

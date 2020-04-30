@@ -12,9 +12,9 @@ namespace Allgregator.Rss.Views {
             InitializeComponent();
         }
 
-        public void SetChapter(ChapterBase chapter) {
+        public void SetChapter(Chapter chapter) {
             if (DataContext is ChapterViewModel viewModel) {
-                viewModel.SetSpec(chapter.Id, chapter.Name);
+                viewModel.SetIdAndName(chapter.Id, chapter.Name);
             }
         }
     }

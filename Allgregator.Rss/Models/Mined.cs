@@ -7,9 +7,6 @@ using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
     public class Mined : BindableBase {
-        [JsonIgnore]
-        public int Id { get; internal set; }
-
         private DateTimeOffset lastRetrieve;
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;

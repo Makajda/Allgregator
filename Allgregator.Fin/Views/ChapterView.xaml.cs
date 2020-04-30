@@ -11,6 +11,6 @@ namespace Allgregator.Fin.Views {
             InitializeComponent();
         }
 
-        public void SetChapter(ChapterBase chapter) { }
+        public void SetChapter(Chapter chapter) { }
     }
 }

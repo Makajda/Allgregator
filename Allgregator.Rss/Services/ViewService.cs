@@ -20,30 +20,30 @@ namespace Allgregator.Rss.Services {
             ) {
             this.factoryService = factoryService;
             this.regionManager = regionManager;
-        
+
             //todo temp here
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(OnSettingsCommand);
         }
 
-        internal void ManageMainViews(ChapterViews currentView, Chapter chapter) {
+        internal void ManageMainViews(ChapterViews currentView, Data data) {
             var region = regionManager.Regions[Given.MainRegion];
-            var viewName = GetName(currentView.ToString(), chapter.Id);
+            var viewName = GetName(currentView.ToString(), data.Id);
             var view = region.GetView(viewName);
             if (view == null) {
                 object viewModel;
                 switch (currentView) {
                     case ChapterViews.NewsView:
                         view = factoryService.Resolve<bool, RecosView>(true);
-                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
+                        viewModel = factoryService.Resolve<Data, RecosViewModel>(data);
                         break;
                     case ChapterViews.OldsView:
                         view = factoryService.Resolve<bool, RecosView>(false);
-                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
+                        viewModel = factoryService.Resolve<Data, RecosViewModel>(data);
                         break;
                     case ChapterViews.LinksView:
                     default:
                         view = factoryService.Resolve<LinksView>();
-                        viewModel = factoryService.Resolve<Chapter, LinksViewModel>(chapter);
+                        viewModel = factoryService.Resolve<Data, LinksViewModel>(data);
                         break;
                 }
 
@@ -57,10 +57,10 @@ namespace Allgregator.Rss.Services {
             region.Activate(view);
         }
 
-        internal void RemoveMainViews(Chapter chapter) {
+        internal void RemoveMainViews(int id) {//todo
             var region = regionManager.Regions[Given.MainRegion];
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
-                RemoveView(region, view, chapter.Id);
+                RemoveView(region, view, id);
             }
         }
 

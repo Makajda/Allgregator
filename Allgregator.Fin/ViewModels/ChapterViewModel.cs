@@ -54,12 +54,6 @@ namespace Allgregator.Fin.ViewModels {
             set => SetProperty(ref isActive, value);
         }
 
-        private ChapterBase chapter;
-        public ChapterBase Chapter {
-            get { return chapter; }
-            set { SetProperty(ref chapter, value); }
-        }
-
         private Mined mined;
         public Mined Mined {
             get { return mined; }

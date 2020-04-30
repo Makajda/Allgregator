@@ -12,7 +12,7 @@ namespace Allgregator.Rss.Views {
 
             InitializeComponent();
 
-            var path = string.Format("{0}.{1}.{2}", nameof(Chapter), nameof(Mined), IsNew ? nameof(Mined.NewRecos) : nameof(Mined.OldRecos));
+            var path = string.Format("{0}.{1}.{2}", nameof(Data), nameof(Mined), IsNew ? nameof(Mined.NewRecos) : nameof(Mined.OldRecos));
             list.SetBinding(ItemsControl.ItemsSourceProperty, new Binding(path));
         }
 

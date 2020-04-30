@@ -1,7 +1,7 @@
 ﻿using Prism.Mvvm;
 
 namespace Allgregator.Aux.Models {
-    public class ChapterBase : BindableBase {
+    public class Chapter : BindableBase {
         public int Id { get; set; }
         public string Spec { get; set; }
 

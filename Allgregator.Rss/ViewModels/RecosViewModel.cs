@@ -6,9 +6,9 @@ using Prism.Mvvm;
 namespace Allgregator.Rss.ViewModels {
     internal class RecosViewModel : BindableBase {
         public RecosViewModel(
-            Chapter chapter
+            Data data
             ) {
-            Chapter = chapter;
+            Data = data;
 
             OpenCommand = new DelegateCommand<Reco>(Open);
             MoveCommand = new DelegateCommand<Reco>(Move);
@@ -16,7 +16,7 @@ namespace Allgregator.Rss.ViewModels {
 
         public DelegateCommand<Reco> OpenCommand { get; private set; }
         public DelegateCommand<Reco> MoveCommand { get; private set; }
-        public Chapter Chapter { get; private set; }
+        public Data Data { get; private set; }
 
         private void Open(Reco reco) {
             WindowUtilities.Run(reco.Uri);
@@ -24,14 +24,15 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void Move(Reco reco) {
-            var mined = Chapter.Mined;
-            mined.NewRecos.Remove(reco);
-            mined.OldRecos.Insert(0, reco);
-            if (mined.NewRecos.Count == 0) {
-                mined.AcceptTime = mined.LastRetrieve;
-            }
+            if (Data.Mined != null) {
+                Data.Mined.NewRecos.Remove(reco);
+                Data.Mined.OldRecos.Insert(0, reco);
+                if (Data.Mined.NewRecos.Count == 0) {
+                    Data.Mined.AcceptTime = Data.Mined.LastRetrieve;
+                }
 
-            Chapter.Mined.IsNeedToSave = true;
+                Data.Mined.IsNeedToSave = true;
+            }
         }
     }
 }

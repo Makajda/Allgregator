@@ -10,6 +10,5 @@ namespace Allgregator.Aux.Services {
         public T Resolve<T>() => container.Resolve<T>();
         public T Resolve<T>(string name) => container.Resolve<T>(name);
         public T Resolve<T1, T>(object parameter) => container.Resolve<T>((typeof(T1), parameter));
-        public T Resolve<T1, T>(string name, object parameter) => container.Resolve<T>(name, (typeof(T1), parameter));
     }
 }

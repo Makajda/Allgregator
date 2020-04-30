@@ -12,8 +12,8 @@ namespace Allgregator.Aux.Repositories {
     public class ChapterRepository {
         private const string nameFile = "chapters.json";
 
-        public async Task<IEnumerable<ChapterBase>> GetOrDefault() {
-            IEnumerable<ChapterBase> retval = null;
+        public async Task<IEnumerable<Chapter>> GetOrDefault() {
+            IEnumerable<Chapter> retval = null;
 
             try {
                 retval = await Get();
@@ -25,9 +25,9 @@ namespace Allgregator.Aux.Repositories {
             return retval ?? CreateDefault();
         }
 
-        public async Task Save(IEnumerable<ChapterBase> chapters) {
+        public async Task Save(IEnumerable<Chapter> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<ChapterBase>>(chapters.OrderBy(n => n.Name),
+            var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters.OrderBy(n => n.Name),
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
@@ -37,7 +37,7 @@ namespace Allgregator.Aux.Repositories {
             await File.WriteAllTextAsync(name, json);
         }
 
-        public int GetNewId(IEnumerable<ChapterBase> chapters) {
+        public int GetNewId(IEnumerable<Chapter> chapters) {
             var newId = 1;
             foreach (var chapter in chapters.OrderBy(n => n.Id)) {
                 var id = chapter.Id;
@@ -51,17 +51,17 @@ namespace Allgregator.Aux.Repositories {
             return newId;
         }
 
-        private async Task<IEnumerable<ChapterBase>> Get() {
+        private async Task<IEnumerable<Chapter>> Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<IEnumerable<ChapterBase>>(json);
+            return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);
         }
 
-        private IEnumerable<ChapterBase> CreateDefault() {
-            return new List<ChapterBase>() {
-                new ChapterBase() { Id = Given.TryChapter, Spec=Given.SpecRss, Name = "Try" },
-                new ChapterBase() { Id = 1, Spec=Given.SpecRss, Name = "Other" },
-                new ChapterBase() { Id = 2, Spec=Given.SpecFin, Name = "Cbr" }
+        private IEnumerable<Chapter> CreateDefault() {
+            return new List<Chapter>() {
+                new Chapter() { Id = Given.TryChapter, Spec=Given.SpecRss, Name = "Try" },
+                new Chapter() { Id = 1, Spec=Given.SpecRss, Name = "Other" },
+                new Chapter() { Id = 2, Spec=Given.SpecFin, Name = "Cbr" }
             };
         }
     }
