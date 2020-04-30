@@ -68,6 +68,8 @@ namespace Allgregator.Fin.Views {
             var heightHost = canvas.ActualHeight - marginHost * 2;
             if (heightHost <= 0) return;
 
+            canvas.Children.Clear();
+
             var prevs = new Dictionary<string, Point>();
             foreach (var name in Given.CurrencyNames) prevs.Add(name, new Point());
             var day = 0;
