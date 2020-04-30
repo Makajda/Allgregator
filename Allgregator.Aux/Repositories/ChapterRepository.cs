@@ -1,5 +1,5 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Rss.Models;
+using Allgregator.Aux.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,12 +8,12 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Allgregator.Rss.Repositories {
-    internal class ChapterRepository {
+namespace Allgregator.Aux.Repositories {
+    public class ChapterRepository {
         private const string nameFile = "chapters.json";
 
-        public async Task<IEnumerable<Chapter>> GetOrDefault() {
-            IEnumerable<Chapter> retval = null;
+        public async Task<IEnumerable<ChapterBase>> GetOrDefault() {
+            IEnumerable<ChapterBase> retval = null;
 
             try {
                 retval = await Get();
@@ -25,9 +25,9 @@ namespace Allgregator.Rss.Repositories {
             return retval ?? CreateDefault();
         }
 
-        internal async Task Save(IEnumerable<Chapter> chapters) {
+        public async Task Save(IEnumerable<ChapterBase> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters.OrderBy(n => n.Name),
+            var json = JsonSerializer.Serialize<IEnumerable<ChapterBase>>(chapters.OrderBy(n => n.Name),
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
@@ -37,7 +37,7 @@ namespace Allgregator.Rss.Repositories {
             await File.WriteAllTextAsync(name, json);
         }
 
-        internal int GetNewId(IEnumerable<Chapter> chapters) {
+        public int GetNewId(IEnumerable<ChapterBase> chapters) {
             var newId = 1;
             foreach (var chapter in chapters.OrderBy(n => n.Id)) {
                 var id = chapter.Id;
@@ -51,16 +51,17 @@ namespace Allgregator.Rss.Repositories {
             return newId;
         }
 
-        private async Task<IEnumerable<Chapter>> Get() {
+        private async Task<IEnumerable<ChapterBase>> Get() {
             var name = Path.Combine(Given.PathData, nameFile);
             var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);
+            return JsonSerializer.Deserialize<IEnumerable<ChapterBase>>(json);
         }
 
-        private IEnumerable<Chapter> CreateDefault() {
-            return new List<Chapter>() {
-                new Chapter() { Id = Given.TryChapter, Name = "Try" },
-                new Chapter() { Id = 1, Name = "Other" }
+        private IEnumerable<ChapterBase> CreateDefault() {
+            return new List<ChapterBase>() {
+                new ChapterBase() { Id = Given.TryChapter, Spec=Given.SpecRss, Name = "Try" },
+                new ChapterBase() { Id = 1, Spec=Given.SpecRss, Name = "Other" },
+                new ChapterBase() { Id = 2, Spec=Given.SpecFin, Name = "Cbr" }
             };
         }
     }

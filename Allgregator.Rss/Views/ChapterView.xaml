@@ -1,6 +1,8 @@
 ﻿<UserControl x:Class="Allgregator.Rss.Views.ChapterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:t="clr-namespace:System;assembly=System.Runtime"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
@@ -17,10 +19,10 @@
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
 
-        <t:Double x:Key="ElWidth">97</t:Double>
-        <t:Double x:Key="ElHeight">60</t:Double>
-        <t:Double x:Key="2xElWidth">194</t:Double>
-        <t:Double x:Key="2xElHeight">120</t:Double>
+        <t:Double x:Key="ElWidth">81</t:Double>
+        <t:Double x:Key="ElHeight">50</t:Double>
+        <t:Double x:Key="2xElWidth">162</t:Double>
+        <t:Double x:Key="2xElHeight">100</t:Double>
         
         <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Padding" Value="10"/>

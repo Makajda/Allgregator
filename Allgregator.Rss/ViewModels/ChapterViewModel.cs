@@ -16,12 +16,12 @@ namespace Allgregator.Rss.ViewModels {
     internal class ChapterViewModel : BindableBase {
         private readonly Settings settings;
         private readonly IEventAggregator eventAggregator;
+
         private readonly ChapterService chapterService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
 
         public ChapterViewModel(
-            Chapter chapter,
             OreService oreService,
             ChapterService chapterService,
             ViewService viewService,
@@ -29,13 +29,14 @@ namespace Allgregator.Rss.ViewModels {
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
-            Chapter = chapter;
             OreService = oreService;
             this.chapterService = chapterService;
             this.viewService = viewService;
             this.settings = settings;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
+
+            Chapter = new Chapter();
 
             ViewsCommand = new DelegateCommand<ChapterViews?>(async (view) => await ChangeView(view));
             OpenCommand = new DelegateCommand(Open);
@@ -65,6 +66,11 @@ namespace Allgregator.Rss.ViewModels {
         public ChapterViews CurrentView {
             get => currentView;
             private set => SetProperty(ref currentView, value);
+        }
+
+        internal void SetSpec(int id, string name) {
+            Chapter.Id = id;
+            Chapter.Name = name;
         }
 
         private async Task ChangeView(ChapterViews? view) {

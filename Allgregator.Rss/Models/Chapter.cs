@@ -2,13 +2,13 @@
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
-    public class Chapter : BindableBase {
-        public int Id { get; set; }
+    public class Chapter : BindableBase {//todo разделить на два класса
+        public int Id { get; internal set; }
 
-        private string name;
+        private string name;//todo связать с ChapterBase для правки
         public string Name {
-            get => name;
-            set => SetProperty(ref name, value);
+            get { return name; }
+            set { SetProperty(ref name, value); }
         }
 
         private Linked linked;

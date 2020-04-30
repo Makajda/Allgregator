@@ -1,4 +1,5 @@
-﻿using Allgregator.Rss.Common;
+﻿using Allgregator.Aux.Repositories;
+using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using Prism.Events;
@@ -12,7 +13,7 @@ using System.Xml.Linq;
 
 namespace Allgregator.Rss.Repositories {
     internal class OpmlRepository {
-        private readonly ChapterRepository chapterRepository;
+        private readonly ChapterRepository chapterRepository;//todo filter rss
         private readonly LinkedRepository linkedRepository;
         private readonly IEventAggregator eventAggregator;
         public OpmlRepository(
@@ -36,15 +37,15 @@ namespace Allgregator.Rss.Repositories {
             var indexChapters = 0;
 
             try {
-                foreach (var cink in cinks) {
-                    var newId = chapterRepository.GetNewId(chapters);
-                    var newChapter = new Chapter() { Id = newId, Name = cink.Name };
-                    newChapters[indexChapters++] = newChapter;
-                    chapters.Add(newChapter);
-                    var linked = await linkedRepository.GetOrDefault(newId);
-                    linked.Links = cink.Links;
-                    await linkedRepository.Save(newId, linked);
-                }
+                //foreach (var cink in cinks) {//todo
+                //    var newId = chapterRepository.GetNewId(chapters);
+                //    var newChapter = new Chapter() { Id = newId, Name = cink.Name };
+                //    newChapters[indexChapters++] = newChapter;
+                //    chapters.Add(newChapter);
+                //    var linked = await linkedRepository.GetOrDefault(newId);
+                //    linked.Links = cink.Links;
+                //    await linkedRepository.Save(newId, linked);
+                //}
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

@@ -6,6 +6,9 @@ using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
     public class Linked : BindableBase {
+        [JsonIgnore]
+        public int Id { get; internal set; }
+
         private ObservableCollection<Link> links;
         public ObservableCollection<Link> Links {
             get => links;

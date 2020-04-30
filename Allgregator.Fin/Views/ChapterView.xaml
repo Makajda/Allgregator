@@ -14,10 +14,10 @@
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
         
         <!--//todo to dictionary-->
-        <t:Double x:Key="ElWidth">97</t:Double>
-        <t:Double x:Key="ElHeight">60</t:Double>
-        <t:Double x:Key="2xElWidth">194</t:Double>
-        <t:Double x:Key="2xElHeight">120</t:Double>
+        <t:Double x:Key="ElWidth">81</t:Double>
+        <t:Double x:Key="ElHeight">50</t:Double>
+        <t:Double x:Key="2xElWidth">162</t:Double>
+        <t:Double x:Key="2xElHeight">100</t:Double>
 
         <Style TargetType="Button">
             <Setter Property="common:Shaatt.Rect" Value="True"/>
@@ -73,6 +73,16 @@
             </Button>
         </Grid>
 
-        <DockPanel Grid.Row="1" Height="{StaticResource ElHeight}"/>
+        <DockPanel Grid.Row="1" Height="{StaticResource ElHeight}">
+            <ProgressBar Height="10"
+                         Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
+                         Value="{Binding OreService.ProgressValue, Mode=OneWay}"
+                         ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
+                         Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ProgressBar.Foreground>
+                    <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
+                </ProgressBar.Foreground>
+            </ProgressBar>
+        </DockPanel>
     </Grid>
 </UserControl>

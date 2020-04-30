@@ -1,8 +1,11 @@
 ﻿1,6180339887 
 
-progress fin
 ChapterViewModel - base
 ChapterBase
 list of chapter is common
 common elSize to dicrionary
 todo
+
+при добавлении chapter учитывать id и fin
+добавление-удаление-правка chapter отдельно в SettingsView
+opml 1 event to rss с передачей имён, тогда имя в rssChapter не надо и chapterRepository в opml тоже

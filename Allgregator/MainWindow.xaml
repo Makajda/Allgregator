@@ -5,9 +5,16 @@
         xmlns:prism="http://prismlibrary.com/"  
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
+        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
         Title="{Binding Title}"
         >
-
+    
+    <interactivity:Interaction.Triggers>
+        <interactivity:EventTrigger EventName="Loaded">
+            <interactivity:InvokeCommandAction Command="{Binding LoadCommand}"/>
+        </interactivity:EventTrigger>
+    </interactivity:Interaction.Triggers>
+    
     <Window.Resources>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>
 
@@ -30,7 +37,6 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -43,8 +49,15 @@
                     Command="{Binding SettingsCommand}"/>
         </StackPanel>
 
-        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static common:Given.MenuFinRegion}" />
-        <ContentControl Grid.Column="2" prism:RegionManager.RegionName="{x:Static common:Given.MenuRssRegion}" />
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right">
+            <ItemsControl prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
         <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

@@ -1,8 +1,8 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Repositories;
 using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
-using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
     internal class LinksViewModel : BindableBase {
-        private readonly ChapterRepository chapterRepository;
+        private readonly ChapterRepository chapterRepository;//todo filter rss
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;
         string savedName;
