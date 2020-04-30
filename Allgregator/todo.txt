@@ -1,10 +1,8 @@
 ﻿1,6180339887 
 
-OreService - base
+progress fin
 ChapterViewModel - base
-RetrieveService - base
 ChapterBase
 list of chapter is common
-brushes currency to dictionary
 common elSize to dicrionary
 todo

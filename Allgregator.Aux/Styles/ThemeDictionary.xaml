@@ -27,4 +27,12 @@
     <SolidColorBrush x:Key="Links.Background.Alt" Color="LightGray"/>
     <SolidColorBrush x:Key="Edit.Background" Color="White"/>
     <SolidColorBrush x:Key="Edit.Foreground" Color="Black"/>
+
+    <SolidColorBrush x:Key="Fin.USD" Color="Blue"/>
+    <SolidColorBrush x:Key="Fin.EUR" Color="White"/>
+    <SolidColorBrush x:Key="Fin.GBP" Color="Red"/>
+    <SolidColorBrush x:Key="Fin.CHF" Color="Brown"/>
+    <SolidColorBrush x:Key="Fin.CNY" Color="PaleVioletRed"/>
+    <SolidColorBrush x:Key="Fin.UAH" Color="Yellow"/>
+    <SolidColorBrush x:Key="Fin.Foreground" Color="Black"/>
 </ResourceDictionary>

@@ -70,11 +70,10 @@ namespace Allgregator.Fin.ViewModels {
                 var view = region.GetView(viewName);
                 if (view == null) {
                     view = factoryService.Resolve<CurrencyView>();
+                    region.Add(view, viewName);
                     if (view is FrameworkElement frameworkElement) {
                         frameworkElement.DataContext = this;
                     }
-
-                    region.Add(view, viewName);
                 }
 
                 region.Activate(view);

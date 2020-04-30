@@ -14,11 +14,17 @@ namespace Allgregator.Fin.Views {
     /// Interaction logic for CurrencyView
     /// </summary>
     public partial class CurrencyView : UserControl {
+        private readonly Lazy<Dictionary<string, Brush>> curBrushes;
+        private readonly Lazy<Brush> foreground;
+
         public CurrencyView() {
             InitializeComponent();
 
             var path = $"{nameof(Mined)}.{nameof(Mined.Currencies)}";
             SetBinding(ItemsSourceProperty, new Binding(path));
+
+            curBrushes = new Lazy<Dictionary<string, Brush>>(BrushesFactory);
+            foreground = new Lazy<Brush>(ForegroundFactory);
         }
 
         public IEnumerable<Currency> ItemsSource {
@@ -68,54 +74,54 @@ namespace Allgregator.Fin.Views {
             foreach (var currency in currencies) {
                 foreach (var (key, value) in currency.Values) {
                     if (Given.CurrencyNames.Contains(key)) {
-                        if (Given.CurrencyBrushes.TryGetValue(key, out Brush brush)) {
-                            var delta = max[key] - min[key];
-                            var y = delta == 0m ?
-                                heightHost / 2d :
-                                (double)(value - min[key]) * heightHost / (double)delta;
-                            var nextPoint = new Point(day * dayWidth + marginHost, heightHost - y + marginHost);
+                        var brush = curBrushes.Value[key];
+                        var delta = max[key] - min[key];
+                        var y = delta == 0m ?
+                            heightHost / 2d :
+                            (double)(value - min[key]) * heightHost / (double)delta;
+                        var nextPoint = new Point(day * dayWidth + marginHost, heightHost - y + marginHost);
 
-                            if (day > 0) {
-                                var x1 = prevs[key].X;
-                                var y1 = prevs[key].Y;
-                                var x2 = nextPoint.X;
-                                var y2 = nextPoint.Y;
-                                var diagonal = Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-                                var sinx = (x2 - x1) / diagonal;
-                                var siny = (y2 - y1) / diagonal;
-                                var dxIndend = lineIndent * sinx;
-                                var dyIndent = lineIndent * siny;
-                                var line = new Line() {
-                                    X1 = x1 + dxIndend,
-                                    Y1 = y1 + dyIndent,
-                                    X2 = x2 - dxIndend,
-                                    Y2 = y2 - dyIndent,
-                                    Stroke = brush,
-                                    StrokeThickness = key == Given.CurrencyNames.FirstOrDefault() ? 3 : 1
-                                };
-                                canvas.Children.Add(line);
-                            }
-
-                            var ellipse = new Ellipse() {
-                                Width = ellipseSize,
-                                Height = ellipseSize,
-                                Fill = Brushes.Transparent,
+                        if (day > 0) {
+                            var x1 = prevs[key].X;
+                            var y1 = prevs[key].Y;
+                            var x2 = nextPoint.X;
+                            var y2 = nextPoint.Y;
+                            var diagonal = Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                            var sinx = (x2 - x1) / diagonal;
+                            var siny = (y2 - y1) / diagonal;
+                            var dxIndend = lineIndent * sinx;
+                            var dyIndent = lineIndent * siny;
+                            var line = new Line() {
+                                X1 = x1 + dxIndend,
+                                Y1 = y1 + dyIndent,
+                                X2 = x2 - dxIndend,
+                                Y2 = y2 - dyIndent,
                                 Stroke = brush,
-                                ToolTip = $"{currency.Date.Day} - {value}"
+                                StrokeThickness = key == Given.CurrencyNames.FirstOrDefault() ? 3 : 1
                             };
-                            Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
-                            Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
-                            canvas.Children.Add(ellipse);
-                            if (nextPoint.X > canvas.ActualWidth) canvas.Width = nextPoint.X + marginHost;
-
-                            prevs[key] = nextPoint;
+                            canvas.Children.Add(line);
                         }
+
+                        var ellipse = new Ellipse() {
+                            Width = ellipseSize,
+                            Height = ellipseSize,
+                            Fill = Brushes.Transparent,
+                            Stroke = brush,
+                            ToolTip = $"{currency.Date.Day} - {value}"
+                        };
+                        Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
+                        Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
+                        canvas.Children.Add(ellipse);
+                        if (nextPoint.X > canvas.ActualWidth) canvas.Width = nextPoint.X + marginHost;
+
+                        prevs[key] = nextPoint;
                     }
                 }
 
                 var textBlock = new TextBlock() {
                     Text = $"{currency.Date.Day:D2}",
                     TextAlignment = TextAlignment.Left,
+                    Foreground = foreground.Value,
                     Width = dayWidth
                 };
                 Canvas.SetLeft(textBlock, day * dayWidth + marginHost - ellipseSize / 2d);
@@ -125,6 +131,20 @@ namespace Allgregator.Fin.Views {
             }
 
             scroll.ScrollToHorizontalOffset(double.MaxValue);
+        }
+
+        private Dictionary<string, Brush> BrushesFactory() {
+            var result = new Dictionary<string, Brush>();
+            foreach (var name in Given.CurrencyNames) {
+                var brush = (Brush)TryFindResource($"Fin.{name}");
+                result.Add(name, brush ?? Brushes.Black);
+            }
+
+            return result;
+        }
+
+        private Brush ForegroundFactory() {
+            return (Brush)TryFindResource("Fin.Foreground") ?? Brushes.Black;
         }
     }
 }

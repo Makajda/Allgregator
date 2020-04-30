@@ -9,19 +9,16 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Fin.Services {
-    internal class RetrieveService : IDisposable {
-        private readonly object syncItems = new object();
-        private readonly object syncErrors = new object();
+    internal class RetrieveService : RetrieveServiceBase<DateTimeOffset, Currency> {
+        private readonly WebService webService;
 
-        internal List<Currency> Items { get; } = new List<Currency>();
-        internal List<Error> Errors { get; } = new List<Error>();
-
-        public void Dispose() {
-            Items.Clear();
-            Errors.Clear();
+        public RetrieveService(
+            WebService webService
+            ) {
+            this.webService = webService;
         }
 
-        internal async Task Production(DateTimeOffset date, WebService webService) {
+        public override async Task ProductionAsync(DateTimeOffset date) {
             var stringDate = $"{date.Day:D2}.{date.Month:D2}.{date.Year:D4}";
             var address = $"https://www.cbr.ru/currency_base/daily/?UniDbQuery.Posted=True&UniDbQuery.To={stringDate}";
 
