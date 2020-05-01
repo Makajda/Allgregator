@@ -4,8 +4,8 @@ using Prism.Commands;
 using Prism.Mvvm;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class RecosViewModel : BindableBase {
-        public RecosViewModel(
+    public class NewsViewModel : BindableBase {
+        public NewsViewModel(
             Data data
             ) {
             Data = data;

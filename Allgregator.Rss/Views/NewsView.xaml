@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Allgregator.Rss.Views.RecosView"
+﻿<UserControl x:Class="Allgregator.Rss.Views.NewsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:t="clr-namespace:System;assembly=System.Runtime"
@@ -8,7 +8,6 @@
              >
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:UriToImageConverter x:Key="UriToImageConverter"/>
 
         <t:Double x:Key="ElWidth">246</t:Double>
@@ -17,16 +16,11 @@
         <t:Double x:Key="ElWidthMargin">266</t:Double>
         <t:Double x:Key="ElHeightMargin">418</t:Double>
 
-        <LinearGradientBrush x:Key="MainBackgroundNew" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="MainBackground" StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
             <GradientStop Color="{StaticResource News.Background.Color}" Offset="1" />
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="MainBackgroundOld" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
-            <GradientStop Color="{StaticResource Olds.Background.Color}" Offset="1" />
-        </LinearGradientBrush>
-        
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
 
         <DataTemplate x:Key="RecosItemTemplate">
@@ -69,7 +63,6 @@
                         common:Shaatt.Path="M0,1 L1,0 V1 Z"
                         BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
                         VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
-                        Visibility="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
                     <Button.Resources>
                         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Olds.Background.Color}"/>
@@ -79,9 +72,10 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <ListView x:Name="list" BorderThickness="0"
+    <ListView BorderThickness="0"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
-              Background="{Binding IsNew, Mode=OneTime, ElementName=view, Converter={StaticResource BooleanToBrushConverter}}"
+              Background="{StaticResource MainBackground}"
+              ItemsSource="{Binding Data.Mined.NewRecos}"
               ItemTemplate="{StaticResource RecosItemTemplate}"
               >
         <ListView.ItemContainerStyle>
@@ -90,10 +84,9 @@
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
         </ListView.ItemContainerStyle>
-        
+
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
-                <!-- 246+20,398+20  for margin 10 ListViewItem-->
                 <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWidthMargin}" ItemHeight="{StaticResource ElHeightMargin}"/>
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
