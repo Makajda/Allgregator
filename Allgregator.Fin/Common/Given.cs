@@ -3,10 +3,10 @@
         public static readonly string[] CurrencyNames = {
             "USD",
             "EUR",
-            "GBP",
-            "CHF",
-            "CNY",
-            "UAH"
-        };
+            "GBP", };
+        //    "CHF",
+        //    "CNY",
+        //    "UAH"
+        //};
     }
 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace Allgregator.Fin.ViewModels {
-    internal class ChapterViewModel : BindableBase {
+    internal class ChapterViewModel : ChapterViewModelBase {
         private readonly Settings settings;
         private readonly FactoryService factoryService;
         private readonly IEventAggregator eventAggregator;
@@ -29,30 +29,16 @@ namespace Allgregator.Fin.ViewModels {
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             MinedRepository minedRepository
-            ) {
+            ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
             this.factoryService = factoryService;
             this.eventAggregator = eventAggregator;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
-
-            OpenCommand = new DelegateCommand(Open);
-            UpdateCommand = new DelegateCommand(Update);
-
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(WindowClosing);
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
         }
 
         public OreService OreService { get; private set; }
-        public DelegateCommand OpenCommand { get; private set; }
-        public DelegateCommand UpdateCommand { get; private set; }
-
-        private bool isActive;
-        public bool IsActive {
-            get => isActive;
-            set => SetProperty(ref isActive, value);
-        }
 
         private Mined mined;
         public Mined Mined {
@@ -60,7 +46,7 @@ namespace Allgregator.Fin.ViewModels {
             set { SetProperty(ref mined, value); }
         }
 
-        private async void CurrentChapterChanged(int chapterId) {
+        protected override async Task CurrentChapterChanged(int chapterId) {
             IsActive = chapterId == Given.FinChapter;
 
             if (IsActive) {
@@ -80,16 +66,17 @@ namespace Allgregator.Fin.ViewModels {
             }
         }
 
-        private void WindowClosing(CancelEventArgs args) {
+        protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = Given.FinChapter;
             AsyncHelper.RunSync(async () => await SaveMined());
         }
 
-        private void Open() {
+        protected override Task Open() {
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.FinChapter);
+            return Task.CompletedTask;
         }
 
-        private async void Update() {
+        protected override async Task Update() {
             if (OreService.IsRetrieving) {
                 OreService.CancelRetrieve();
             }
