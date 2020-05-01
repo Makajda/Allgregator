@@ -1,25 +1,13 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Prism.Regions;
 
 namespace Allgregator {
     public class MainWindowViewModel : BindableBase {
-        private readonly IEventAggregator eventAggregator;
-        private readonly IRegionManager regionManager;
-        private readonly FactoryService factoryService;
-
         public MainWindowViewModel(
-            IRegionManager regionManager,
-            FactoryService factoryService,
             IEventAggregator eventAggregator
             ) {
-            this.eventAggregator = eventAggregator;
-            this.regionManager = regionManager;
-            this.factoryService = factoryService;
-
             //todo temp here
             SettingsCommand = new DelegateCommand(() => eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.SettingsChapter));
             //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
