@@ -1,5 +1,4 @@
-﻿using Allgregator.Aux.Repositories;
-using Allgregator.Rss.Models;
+﻿using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using Prism.Events;
 using System;
@@ -31,7 +30,7 @@ namespace Allgregator.Rss.Repositories {
                 return default;
             }
 
-            var chapters = (await chapterRepository.GetOrDefault()).ToList();
+            //var chapters = (await chapterRepository.GetOrDefault()).ToList();
             //todo var newChapters = new Chapter[cinks.Count];
             //todo var indexChapters = 0;
 
@@ -56,7 +55,7 @@ namespace Allgregator.Rss.Repositories {
         }
 
         internal async Task Export() {
-            var chapters = await chapterRepository.GetOrDefault();
+            var chapters = chapterRepository.GetOrDefault();
             var cinks = new List<Cink>();
             foreach (var chapter in chapters) {
                 var linked = await linkedRepository.GetOrDefault(chapter.Id);

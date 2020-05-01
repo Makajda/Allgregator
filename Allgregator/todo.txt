@@ -7,3 +7,5 @@ todo
 при добавлении chapter учитывать id и fin
 добавление-удаление-правка chapter отдельно в SettingsView
 opml 1 event to rss с передачей имён, тогда имя в rssChapter не надо и chapterRepository в opml тоже
+
+this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

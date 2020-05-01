@@ -5,15 +5,8 @@
         xmlns:prism="http://prismlibrary.com/"  
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
-        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
         Title="{Binding Title}"
         >
-    
-    <interactivity:Interaction.Triggers>
-        <interactivity:EventTrigger EventName="Loaded">
-            <interactivity:InvokeCommandAction Command="{Binding LoadCommand}"/>
-        </interactivity:EventTrigger>
-    </interactivity:Interaction.Triggers>
     
     <Window.Resources>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>

@@ -1,22 +1,21 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
+using Allgregator.Rss.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace Allgregator.Aux.Repositories {
+namespace Allgregator.Rss.Repositories {
     public class ChapterRepository {
-        private const string nameFile = "chapters.json";
+        private const string nameFile = "rssChapters.json";
 
-        public async Task<IEnumerable<Chapter>> GetOrDefault() {
-            IEnumerable<Chapter> retval = null;
+        public IEnumerable<Data> GetOrDefault() {
+            IEnumerable<Data> retval = null;
 
             try {
-                retval = await Get();
+                retval = Get();
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -25,19 +24,19 @@ namespace Allgregator.Aux.Repositories {
             return retval ?? CreateDefault();
         }
 
-        public async Task Save(IEnumerable<Chapter> chapters) {
+        public void Save(IEnumerable<Data> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Chapter>>(chapters.OrderBy(n => n.Name),
+            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters.OrderBy(n => n.Name),
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
                     WriteIndented = true
                 });
 
-            await File.WriteAllTextAsync(name, json);
+            File.WriteAllText(name, json);
         }
 
-        public int GetNewId(IEnumerable<Chapter> chapters) {
+        public int GetNewId(IEnumerable<Data> chapters) {
             var newId = 1;
             foreach (var chapter in chapters.OrderBy(n => n.Id)) {
                 var id = chapter.Id;
@@ -51,17 +50,16 @@ namespace Allgregator.Aux.Repositories {
             return newId;
         }
 
-        private async Task<IEnumerable<Chapter>> Get() {
+        private IEnumerable<Data> Get() {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = await File.ReadAllTextAsync(name);
-            return JsonSerializer.Deserialize<IEnumerable<Chapter>>(json);
+            var json = File.ReadAllText(name);
+            return JsonSerializer.Deserialize<IEnumerable<Data>>(json);
         }
 
-        private IEnumerable<Chapter> CreateDefault() {
-            return new List<Chapter>() {
-                new Chapter() { Id = Given.TryChapter, Spec=Given.SpecRss, Name = "Try" },
-                new Chapter() { Id = 1, Spec=Given.SpecRss, Name = "Other" },
-                new Chapter() { Id = 2, Spec=Given.SpecFin, Name = "Cbr" }
+        private IEnumerable<Data> CreateDefault() {
+            return new List<Data>() {
+                new Data() { Id = Given.TryChapter, Name = "Try" },
+                new Data() { Id = 1, Name = "Other" }
             };
         }
     }

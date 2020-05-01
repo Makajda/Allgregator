@@ -1,8 +1,8 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Repositories;
 using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
+using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
@@ -48,8 +48,8 @@ namespace Allgregator.Rss.ViewModels {
         public DelegateCommand DeleteChapterCommand { get; private set; }
         public Data Data { get; private set; }
 
-        private async void Move(Link link) {
-            var chapters = await chapterRepository.GetOrDefault();
+        private void Move(Link link) {
+            var chapters = chapterRepository.GetOrDefault();
             dialogService.Show(chapters.Where(n => n.Id != Data.Id).Select(n => n.Name),
                 name => {
                     var newChapter = chapters.FirstOrDefault(n => n.Name == name);

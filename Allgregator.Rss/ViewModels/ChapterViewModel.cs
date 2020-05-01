@@ -6,7 +6,6 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -52,11 +51,6 @@ namespace Allgregator.Rss.ViewModels {
             private set => SetProperty(ref currentView, value);
         }
 
-        internal void SetIdAndName(int id, string name) {
-            Data.Id = id;
-            Data.Name = name;
-        }
-        
         protected override async Task CurrentChapterChanged(int chapterId) {
             var savedIsActive = IsActive;
 

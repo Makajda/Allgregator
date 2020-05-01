@@ -1,20 +1,19 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
-using Allgregator.Rss.ViewModels;
+﻿using Allgregator.Rss.ViewModels;
 using System.Windows.Controls;
 
 namespace Allgregator.Rss.Views {
     /// <summary>
     /// Interaction logic for ChapterView.xaml
     /// </summary>
-    public partial class ChapterView : UserControl, IChapterView {
+    public partial class ChapterView : UserControl {
         public ChapterView() {
             InitializeComponent();
         }
 
-        public void SetChapter(Chapter chapter) {
+        public void SetIdAndName(int id, string name) {
             if (DataContext is ChapterViewModel viewModel) {
-                viewModel.SetIdAndName(chapter.Id, chapter.Name);
+                viewModel.Data.Id = id;
+                viewModel.Data.Name = name;
             }
         }
     }
