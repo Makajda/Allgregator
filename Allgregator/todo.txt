@@ -3,6 +3,7 @@
 add-del-edit rssChapter and todo-add-opml
 linksView: правка параметров главы сразу под списком ссылок
 
+прятать веник, когда нечего убирать и не news
 rss viewService remove?
 show errors update
 fin links
