@@ -8,7 +8,8 @@ namespace Allgregator.Fin {
     public class Module : IModule {
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
-            regionManager.RegisterViewWithRegion(Given.MenuFinRegion, typeof(ChapterView));
+            var region = regionManager.Regions[Given.MenuRegion];
+            region.Add(containerProvider.Resolve<ChapterView>());
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {

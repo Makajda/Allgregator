@@ -26,7 +26,6 @@ namespace Allgregator {
             Log.Logger = new LoggerConfiguration().WriteTo.Debug().CreateLogger();
             var settingsRepository = Container.Resolve<SettingsRepository>();
             containerRegistry.RegisterInstance(settingsRepository.GetOrDefault());
-            containerRegistry.RegisterInstance(new FactoryService(Container));
         }
 
         protected override void ConfigureServiceLocator() {

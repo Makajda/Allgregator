@@ -1,0 +1,9 @@
+﻿<UserControl x:Class="Allgregator.Fin.Views.CurrencyChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             >
+
+    <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+        <Canvas x:Name="canvas"/>
+    </ScrollViewer>
+</UserControl>

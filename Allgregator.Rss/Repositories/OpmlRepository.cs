@@ -1,5 +1,4 @@
-﻿using Allgregator.Rss.Common;
-using Allgregator.Rss.Models;
+﻿using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using Prism.Events;
 using System;
@@ -31,14 +30,14 @@ namespace Allgregator.Rss.Repositories {
                 return default;
             }
 
-            var chapters = (await chapterRepository.GetOrDefault()).ToList();
-            var newChapters = new Chapter[cinks.Count];
+            var chapters = chapterRepository.GetOrDefault().ToList();
+            var newChapters = new Data[cinks.Count];
             var indexChapters = 0;
 
             try {
                 foreach (var cink in cinks) {
                     var newId = chapterRepository.GetNewId(chapters);
-                    var newChapter = new Chapter() { Id = newId, Name = cink.Name };
+                    var newChapter = new Data() { Id = newId, Name = cink.Name };
                     newChapters[indexChapters++] = newChapter;
                     chapters.Add(newChapter);
                     var linked = await linkedRepository.GetOrDefault(newId);
@@ -50,13 +49,13 @@ namespace Allgregator.Rss.Repositories {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
+            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
 
             return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
         }
 
         internal async Task Export() {
-            var chapters = await chapterRepository.GetOrDefault();
+            var chapters = chapterRepository.GetOrDefault();
             var cinks = new List<Cink>();
             foreach (var chapter in chapters) {
                 var linked = await linkedRepository.GetOrDefault(chapter.Id);

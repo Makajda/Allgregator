@@ -1,6 +1,8 @@
 ﻿<UserControl x:Class="Allgregator.Rss.Views.LinksView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              xmlns:commonLoc="clr-namespace:Allgregator.Rss.Common"
@@ -82,7 +84,7 @@
 
     <Grid Margin="20">        
         <!--Normal-->
-        <Grid Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+        <Grid Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static commonLoc:LinksStates.Normal}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -104,7 +106,7 @@
                         ToolTip="Options"
                         Style="{StaticResource circleButton}"
                         Command="{Binding ToChapterCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Chapter.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
+                <TextBox Grid.Column="1" Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
                          Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                 <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
                         ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
@@ -118,9 +120,9 @@
                       x:Name="dg"
                       Margin="0,30,0,0"
                       Background="{StaticResource Main.Background}"
-                      BeginningEdit="dg_BeginningEdit" 
-                      CellEditEnding="dg_CellEditEnding"
-                      ItemsSource="{Binding Chapter.Linked.Links}"
+                      BeginningEdit="Dg_BeginningEdit" 
+                      CellEditEnding="Dg_CellEditEnding"
+                      ItemsSource="{Binding Data.Linked.Links}"
                       SelectionMode="Single" 
                       SelectionUnit="Cell"
                       CanUserDeleteRows="False"
@@ -146,14 +148,14 @@
 
         <!--Detection-->
         <StackPanel VerticalAlignment="Center"
-                    Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+                    Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static commonLoc:LinksStates.Detection}}">
             <ProgressBar Margin="5" Background="Transparent" BorderThickness="0" Height="90" IsIndeterminate="True">
                 <ProgressBar.Foreground>
                     <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
                 </ProgressBar.Foreground>
             </ProgressBar>
-            <TextBlock Text="{Binding Chapter.Linked.Address}" 
+            <TextBlock Text="{Binding Data.Linked.Address}" 
                        Foreground="{StaticResource Button.Manager.Foreground}" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
@@ -161,9 +163,9 @@
         <!--DetectedLinks-->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+                      Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static commonLoc:LinksStates.Selection}}">
-            <ItemsControl ItemsSource="{Binding Chapter.Linked.DetectedLinks}">
+            <ItemsControl ItemsSource="{Binding Data.Linked.DetectedLinks}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Content="{Binding XmlUrl, TargetNullValue=&#x2715;}" Style="{StaticResource rectButton}"
@@ -177,7 +179,7 @@
         
         <!--Chapter-->
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                      Visibility="{Binding Chapter.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
+                      Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static commonLoc:LinksStates.Chapter}}">
             <StackPanel>
                 <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="{StaticResource Chapter.Background}"
@@ -199,19 +201,20 @@
 
                     <StackPanel>
                         <TextBlock Text="Last Retrieve"/>
-                        <TextBox Text="{Binding Chapter.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
+                        <TextBox Text="{Binding Data.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
                             Converter={StaticResource DateTimeOffsetToStringConverter}}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Accept Time"/>
-                        <TextBox Text="{Binding Chapter.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
+                        <TextBox Text="{Binding Data.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
                             Converter={StaticResource DateTimeOffsetToStringConverter}}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Text="Name"/>
-                        <TextBox Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}"
+                        <!--//todo-->
+                        <TextBox Text="{Binding Data.Name, UpdateSourceTrigger=PropertyChanged}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                 </StackPanel>

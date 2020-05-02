@@ -1,10 +1,17 @@
 ﻿1,6180339887 
 
-OreService - base
-ChapterViewModel - base
-RetrieveService - base
-ChapterBase
-list of chapter is common
-brushes currency to dictionary
+add-del-edit rssChapter and todo-add-opml
+linksView: правка параметров главы сразу под списком ссылок
+
+прятать веник, когда нечего убирать и не news
+rss viewService remove?
+show errors update
+fin links
 common elSize to dicrionary
 todo
+
+при добавлении chapter учитывать id и fin
+добавление-удаление-правка chapter отдельно в SettingsView
+opml 1 event to rss с передачей имён, тогда имя в rssChapter не надо и chapterRepository в opml тоже
+
+this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

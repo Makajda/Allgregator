@@ -1,54 +1,45 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
-using Allgregator.Rss.ViewModels;
 using Allgregator.Rss.Views;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Regions;
 using System;
-using System.Windows;
 
 namespace Allgregator.Rss.Services {
     internal class ViewService {
-        private readonly FactoryService factoryService;
+        private readonly IContainerExtension container;
         private readonly IRegionManager regionManager;
         public ViewService(
-            FactoryService factoryService,
+            IContainerExtension container,
             IEventAggregator eventAggregator,
             IRegionManager regionManager
             ) {
-            this.factoryService = factoryService;
+            this.container = container;
             this.regionManager = regionManager;
-        
+
             //todo temp here
             eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(OnSettingsCommand);
         }
 
-        internal void ManageMainViews(ChapterViews currentView, Chapter chapter) {
+        internal void ManageMainViews(ChapterViews currentView, Data data) {
             var region = regionManager.Regions[Given.MainRegion];
-            var viewName = GetName(currentView.ToString(), chapter.Id);
+            var viewName = GetName(currentView.ToString(), data.Id);
             var view = region.GetView(viewName);
             if (view == null) {
-                object viewModel;
-                switch (currentView) {
+                region.Context = data;
+                switch (currentView) {//todo expression
                     case ChapterViews.NewsView:
-                        view = factoryService.Resolve<bool, RecosView>(true);
-                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
+                        view = container.Resolve<NewsView>();
                         break;
                     case ChapterViews.OldsView:
-                        view = factoryService.Resolve<bool, RecosView>(false);
-                        viewModel = factoryService.Resolve<Chapter, RecosViewModel>(chapter);
+                        view = container.Resolve<OldsView>();
                         break;
                     case ChapterViews.LinksView:
                     default:
-                        view = factoryService.Resolve<LinksView>();
-                        viewModel = factoryService.Resolve<Chapter, LinksViewModel>(chapter);
+                        view = container.Resolve<LinksView>();
                         break;
-                }
-
-                if (view is FrameworkElement frameworkElement) {
-                    frameworkElement.DataContext = viewModel;
                 }
 
                 region.Add(view, viewName);
@@ -57,10 +48,10 @@ namespace Allgregator.Rss.Services {
             region.Activate(view);
         }
 
-        internal void RemoveMainViews(Chapter chapter) {
+        internal void RemoveMainViews(int id) {//todo
             var region = regionManager.Regions[Given.MainRegion];
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
-                RemoveView(region, view, chapter.Id);
+                RemoveView(region, view, id);
             }
         }
 
@@ -77,7 +68,7 @@ namespace Allgregator.Rss.Services {
                 var viewName = typeof(SettingsView).Name;
                 var view = region.GetView(viewName);
                 if (view == null) {
-                    view = factoryService.Resolve<SettingsView>();
+                    view = container.Resolve<SettingsView>();
                     region.Add(view, viewName);
                 }
 

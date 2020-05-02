@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Models;
+using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using System;
@@ -7,25 +8,16 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 
 namespace Allgregator.Rss.Services {
-    internal class RetrieveService : IDisposable {
-        private readonly object syncItems = new object();
-        private readonly object syncErrors = new object();
+    internal class RetrieveService : RetrieveServiceBase<Link, Reco> {
+        public DateTimeOffset CutoffTime { get; set; }
 
-        internal List<Reco> Items { get; } = new List<Reco>();
-        internal List<Error> Errors { get; } = new List<Error>();
-
-        public void Dispose() {
-            Items.Clear();
-            Errors.Clear();
-        }
-
-        internal void Production(Link link, DateTimeOffset cutoffTime) {
+        public override void Production(Link link) {
             try {
                 using var reader = XmlReader.Create(link.XmlUrl);
                 var feed = SyndicationFeed.Load(reader);
                 var recos = new List<Reco>();
                 foreach (var item in feed.Items) {
-                    if (item.PublishDate > cutoffTime) {
+                    if (item.PublishDate > CutoffTime) {
                         var reco = GetRecoFromSyndication(feed, item);
                         recos.Add(reco);
                     }

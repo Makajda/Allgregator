@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace Allgregator.Fin.Models {
     public class Mined : BindableBase {
         private DateTimeOffset lastRetrieve;
-        public DateTimeOffset LastRetrieve {
+        public DateTimeOffset LastRetrieve {//todo where view
             get => lastRetrieve;
             set => SetProperty(ref lastRetrieve, value, () => IsNeedToSave = true);
         }
