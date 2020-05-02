@@ -7,6 +7,7 @@ using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,13 +18,16 @@ namespace Allgregator.Rss.ViewModels {
         private readonly IEventAggregator eventAggregator;
 
         public LinksViewModel(
-            Data data,
+            IRegionManager regionManager,
             ChapterRepository chapterRepository,
             DialogService dialogService,
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
-            Data = data;
+            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+                Data = data;
+            }
+
             this.chapterRepository = chapterRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;

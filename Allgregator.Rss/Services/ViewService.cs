@@ -1,14 +1,11 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
-using Allgregator.Rss.ViewModels;
 using Allgregator.Rss.Views;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
 using System;
-using System.Windows;
 
 namespace Allgregator.Rss.Services {
     internal class ViewService {
@@ -31,25 +28,18 @@ namespace Allgregator.Rss.Services {
             var viewName = GetName(currentView.ToString(), data.Id);
             var view = region.GetView(viewName);
             if (view == null) {
-                object viewModel;
-                switch (currentView) {
+                region.Context = data;
+                switch (currentView) {//todo expression
                     case ChapterViews.NewsView:
                         view = container.Resolve<NewsView>();
-                        viewModel = container.Resolve<NewsViewModel>((typeof(Data), data));
                         break;
                     case ChapterViews.OldsView:
                         view = container.Resolve<OldsView>();
-                        viewModel = container.Resolve<OldsViewModel>((typeof(Data), data));
                         break;
                     case ChapterViews.LinksView:
                     default:
                         view = container.Resolve<LinksView>();
-                        viewModel = container.Resolve<LinksViewModel>((typeof(Data), data));
                         break;
-                }
-
-                if (view is FrameworkElement frameworkElement) {
-                    frameworkElement.DataContext = viewModel;
                 }
 
                 region.Add(view, viewName);

@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Allgregator.Rss.Repositories {
     internal class OpmlRepository {
-        private readonly ChapterRepository chapterRepository;//todo filter rss
+        private readonly ChapterRepository chapterRepository;
         private readonly LinkedRepository linkedRepository;
         private readonly IEventAggregator eventAggregator;
         public OpmlRepository(
@@ -30,20 +30,20 @@ namespace Allgregator.Rss.Repositories {
                 return default;
             }
 
-            //var chapters = (await chapterRepository.GetOrDefault()).ToList();
-            //todo var newChapters = new Chapter[cinks.Count];
-            //todo var indexChapters = 0;
+            var chapters = chapterRepository.GetOrDefault().ToList();
+            var newChapters = new Data[cinks.Count];
+            var indexChapters = 0;
 
             try {
-                //foreach (var cink in cinks) {//todo
-                //    var newId = chapterRepository.GetNewId(chapters);
-                //    var newChapter = new Chapter() { Id = newId, Name = cink.Name };
-                //    newChapters[indexChapters++] = newChapter;
-                //    chapters.Add(newChapter);
-                //    var linked = await linkedRepository.GetOrDefault(newId);
-                //    linked.Links = cink.Links;
-                //    await linkedRepository.Save(newId, linked);
-                //}
+                foreach (var cink in cinks) {
+                    var newId = chapterRepository.GetNewId(chapters);
+                    var newChapter = new Data() { Id = newId, Name = cink.Name };
+                    newChapters[indexChapters++] = newChapter;
+                    chapters.Add(newChapter);
+                    var linked = await linkedRepository.GetOrDefault(newId);
+                    linked.Links = cink.Links;
+                    await linkedRepository.Save(newId, linked);
+                }
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

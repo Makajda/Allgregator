@@ -2,13 +2,16 @@
 using Allgregator.Rss.Models;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 
 namespace Allgregator.Rss.ViewModels {
     public class NewsViewModel : BindableBase {
         public NewsViewModel(
-            Data data
+            IRegionManager regionManager
             ) {
-            Data = data;
+            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+                Data = data;
+            }
 
             OpenCommand = new DelegateCommand<Reco>(Open);
             MoveCommand = new DelegateCommand<Reco>(Move);

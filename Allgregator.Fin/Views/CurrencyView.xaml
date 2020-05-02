@@ -1,9 +1,10 @@
 ﻿<UserControl x:Class="Allgregator.Fin.Views.CurrencyView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:views="clr-namespace:Allgregator.Fin.Views"
              >
 
-    <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-        <Canvas x:Name="canvas"/>
-    </ScrollViewer>
+    <views:CurrencyChart ItemsSource="{Binding Data.Mined.Currencies}"/>
 </UserControl>

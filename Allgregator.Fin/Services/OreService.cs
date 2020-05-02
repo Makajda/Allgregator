@@ -15,6 +15,10 @@ namespace Allgregator.Fin.Services {
         }
 
         internal async Task Retrieve(Mined mined, DateTimeOffset startDate) {
+            if (mined == null) {
+                return;
+            }
+
             // dates - недостающие даты на основании имеющихся mined.Currensies
             var date = startDate.Date;
             var toDate = DateTimeOffset.Now.Date;
