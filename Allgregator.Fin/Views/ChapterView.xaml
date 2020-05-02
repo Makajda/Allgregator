@@ -14,10 +14,10 @@
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
         
         <!--//todo to dictionary-->
-        <t:Double x:Key="ElWidth">81</t:Double>
-        <t:Double x:Key="ElHeight">50</t:Double>
-        <t:Double x:Key="2xElWidth">162</t:Double>
-        <t:Double x:Key="2xElHeight">100</t:Double>
+        <t:Double x:Key="ElWidth">86</t:Double>
+        <t:Double x:Key="ElHeight">53</t:Double>
+        <t:Double x:Key="2xElWidth">178</t:Double>
+        <t:Double x:Key="2xElHeight">110</t:Double>
 
         <Style TargetType="Button">
             <Setter Property="common:Shaatt.Rect" Value="True"/>
@@ -25,7 +25,8 @@
             <Setter Property="Width" Value="{StaticResource 2xElWidth}"/>
             <Setter Property="Height" Value="{StaticResource 2xElHeight}"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource Chapter.Foreground}"/>
         </Style>
 
@@ -52,6 +53,7 @@
                 common:Shaatt.Path="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
                 Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
                 Command="{Binding UpdateCommand}"
+                ToolTip="Update"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button.Resources>
@@ -65,6 +67,7 @@
                     common:Shaatt.Path="M0,0 H4 A10,10 0 0 0 13,9 V13 H0 Z"
                     Background="{StaticResource Links.Background}"
                     Command="{Binding UpdateCommand}"
+                    ToolTip="//todo"
                     HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom">
                 <Button.Resources>

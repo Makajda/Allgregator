@@ -19,11 +19,11 @@
         <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
 
-        <t:Double x:Key="ElWidth">81</t:Double>
-        <t:Double x:Key="ElHeight">50</t:Double>
-        <t:Double x:Key="2xElWidth">162</t:Double>
-        <t:Double x:Key="2xElHeight">100</t:Double>
-        
+        <t:Double x:Key="ElWidth">86</t:Double>
+        <t:Double x:Key="ElHeight">53</t:Double>
+        <t:Double x:Key="2xElWidth">178</t:Double>
+        <t:Double x:Key="2xElHeight">110</t:Double>
+
         <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="FontSize" Value="18"/>
@@ -49,16 +49,16 @@
 
         <Button Width="{StaticResource 2xElWidth}" Height="{StaticResource 2xElHeight}" Padding="0" BorderThickness="0"
                 common:Shaatt.Rect="True"
-                Background="{StaticResource Chapter.Background}" Foreground="{StaticResource Chapter.Foreground}"
+                Background="Transparent" Foreground="{StaticResource Chapter.Foreground}"
                 ToolTip="Open"
                 Command="{Binding OpenCommand}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
-                            Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3" HorizontalAlignment="Center"
-                            Text="{Binding Data.Mined.AcceptTime, Converter={StaticResource TodayConverter}}"/>
-                <TextBlock Text="{Binding Data.Name}" FontSize="18" FontStyle="Italic" TextTrimming="WordEllipsis" 
-                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                           Text="{Binding Data.Mined.AcceptTime, Converter={StaticResource TodayConverter}}"/>
+                <TextBlock Text="{Binding Data.Name}" FontSize="16" TextTrimming="WordEllipsis" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,20,0"/>
             </DockPanel>
         </Button>
 
@@ -67,6 +67,7 @@
                 common:Shaatt.Path="M0,9 A10,10 0 0 0 9,0 H13 V13 H0 Z"
                 Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}"
                 Command="{Binding UpdateCommand}"
+                ToolTip="Update"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button.Resources>
