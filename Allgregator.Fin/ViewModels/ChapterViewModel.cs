@@ -7,6 +7,7 @@ using Allgregator.Fin.Services;
 using Allgregator.Fin.Views;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -17,24 +18,24 @@ using System.Windows;
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly Settings settings;
-        private readonly FactoryService factoryService;
         private readonly IEventAggregator eventAggregator;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
+        private readonly IContainerExtension container;
 
         public ChapterViewModel(
             Settings settings,
             OreService oreService,
-            FactoryService factoryService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
+            IContainerExtension container,
             MinedRepository minedRepository
             ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
-            this.factoryService = factoryService;
             this.eventAggregator = eventAggregator;
             this.regionManager = regionManager;
+            this.container = container;
             this.minedRepository = minedRepository;
         }
 
@@ -55,7 +56,7 @@ namespace Allgregator.Fin.ViewModels {
                 var viewName = typeof(CurrencyView).Name;
                 var view = region.GetView(viewName);
                 if (view == null) {
-                    view = factoryService.Resolve<CurrencyView>();
+                    view = container.Resolve<CurrencyView>();
                     region.Add(view, viewName);
                     if (view is FrameworkElement frameworkElement) {
                         frameworkElement.DataContext = this;

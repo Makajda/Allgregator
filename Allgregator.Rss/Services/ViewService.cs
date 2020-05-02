@@ -5,20 +5,21 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.ViewModels;
 using Allgregator.Rss.Views;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.Windows;
 
 namespace Allgregator.Rss.Services {
     internal class ViewService {
-        private readonly FactoryService factoryService;
+        private readonly IContainerExtension container;
         private readonly IRegionManager regionManager;
         public ViewService(
-            FactoryService factoryService,
+            IContainerExtension container,
             IEventAggregator eventAggregator,
             IRegionManager regionManager
             ) {
-            this.factoryService = factoryService;
+            this.container = container;
             this.regionManager = regionManager;
 
             //todo temp here
@@ -33,17 +34,17 @@ namespace Allgregator.Rss.Services {
                 object viewModel;
                 switch (currentView) {
                     case ChapterViews.NewsView:
-                        view = factoryService.Resolve<NewsView>();
-                        viewModel = factoryService.Resolve<Data, NewsViewModel>(data);
+                        view = container.Resolve<NewsView>();
+                        viewModel = container.Resolve<NewsViewModel>((typeof(Data), data));
                         break;
                     case ChapterViews.OldsView:
-                        view = factoryService.Resolve<OldsView>();
-                        viewModel = factoryService.Resolve<Data, OldsViewModel>(data);
+                        view = container.Resolve<OldsView>();
+                        viewModel = container.Resolve<OldsViewModel>((typeof(Data), data));
                         break;
                     case ChapterViews.LinksView:
                     default:
-                        view = factoryService.Resolve<LinksView>();
-                        viewModel = factoryService.Resolve<Data, LinksViewModel>(data);
+                        view = container.Resolve<LinksView>();
+                        viewModel = container.Resolve<LinksViewModel>((typeof(Data), data));
                         break;
                 }
 
@@ -77,7 +78,7 @@ namespace Allgregator.Rss.Services {
                 var viewName = typeof(SettingsView).Name;
                 var view = region.GetView(viewName);
                 if (view == null) {
-                    view = factoryService.Resolve<SettingsView>();
+                    view = container.Resolve<SettingsView>();
                     region.Add(view, viewName);
                 }
 
