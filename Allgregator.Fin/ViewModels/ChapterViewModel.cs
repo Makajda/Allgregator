@@ -53,7 +53,7 @@ namespace Allgregator.Fin.ViewModels {
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = Given.FinChapter;
+            if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
         }
 
