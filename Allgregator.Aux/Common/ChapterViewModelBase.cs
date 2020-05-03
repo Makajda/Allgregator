@@ -14,7 +14,7 @@ namespace Allgregator.Aux.Common {
             UpdateCommand = new DelegateCommand(async () => await Update());
 
             eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(WindowClosing);
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(async id => await CurrentChapterChanged(id));
+            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Subscribe(CurrentChapterChanged);
         }
 
         public DelegateCommand OpenCommand { get; private set; }
@@ -26,9 +26,10 @@ namespace Allgregator.Aux.Common {
             set => SetProperty(ref isActive, value);
         }
 
-        protected abstract Task CurrentChapterChanged(int chapterId);
-        protected abstract void WindowClosing(CancelEventArgs args);
+        protected abstract Task OnChapterChanged(int chapterId, bool wasActive);
         protected abstract Task Open();
         protected abstract Task Update();
+        protected abstract void WindowClosing(CancelEventArgs args);
+        private async void CurrentChapterChanged(int chapterId) => await OnChapterChanged(chapterId, IsActive);
     }
 }

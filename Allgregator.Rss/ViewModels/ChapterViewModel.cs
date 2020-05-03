@@ -18,6 +18,7 @@ namespace Allgregator.Rss.ViewModels {
         private readonly ChapterService chapterService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
+        private ChapterViews currentView = ChapterViews.LinksView;//todo
 
         public ChapterViewModel(
             OreService oreService,
@@ -45,18 +46,9 @@ namespace Allgregator.Rss.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
-        private ChapterViews currentView;// = ChapterViews.LinksView;//todo
-        public ChapterViews CurrentView {
-            get => currentView;
-            private set => SetProperty(ref currentView, value);
-        }
-
-        protected override async Task CurrentChapterChanged(int chapterId) {
-            var savedIsActive = IsActive;
-
+        protected override async Task OnChapterChanged(int chapterId, bool wasActive) {
             IsActive = chapterId == Data.Id;
-
-            if (savedIsActive) {
+            if (wasActive) {
                 await chapterService.Save(Data);
             }
 
@@ -67,8 +59,8 @@ namespace Allgregator.Rss.ViewModels {
 
         protected override Task Open() {
             if (IsActive) {
-                if (CurrentView != ChapterViews.LinksView) {
-                    var recos = CurrentView == ChapterViews.NewsView ? Data.Mined?.NewRecos : Data.Mined?.OldRecos;
+                if (currentView != ChapterViews.LinksView) {
+                    var recos = currentView == ChapterViews.NewsView ? Data.Mined?.NewRecos : Data.Mined?.OldRecos;
                     if (recos != null) {
                         var count = recos.Count;
                         if (count > settings.RssMaxOpenTabs) {
@@ -104,20 +96,20 @@ namespace Allgregator.Rss.ViewModels {
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
-                CurrentView = CurrentView = view ?? ChapterViews.NewsView;
+                currentView = currentView = view ?? ChapterViews.NewsView;
                 await CurrentViewChanged();
             }
         }
 
         private async Task CurrentViewChanged() {
-            viewService.ManageMainViews(CurrentView, Data);
-            await chapterService.Load(Data, CurrentView == ChapterViews.LinksView);
+            viewService.ManageMainViews(currentView, Data);
+            await chapterService.Load(Data, currentView == ChapterViews.LinksView);
         }
 
         private void OpenReal() {
             var mined = Data.Mined;
             if (mined != null) {
-                if (CurrentView == ChapterViews.NewsView) {
+                if (currentView == ChapterViews.NewsView) {
                     if (mined.NewRecos != null && mined.OldRecos != null) {
                         foreach (var reco in mined.NewRecos.Reverse()) {
                             WindowUtilities.Run(reco.Uri);

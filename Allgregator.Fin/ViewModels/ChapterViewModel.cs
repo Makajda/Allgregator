@@ -38,7 +38,7 @@ namespace Allgregator.Fin.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
-        protected override async Task CurrentChapterChanged(int chapterId) {
+        protected override async Task OnChapterChanged(int chapterId, bool _) {
             IsActive = chapterId == Given.FinChapter;
 
             if (IsActive) {

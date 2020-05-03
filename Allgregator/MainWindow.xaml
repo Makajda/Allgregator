@@ -12,14 +12,15 @@
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>
 
         <Style x:Key="button" TargetType="ButtonBase">
-            <Setter Property="Width" Value="60"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="81"/>
+            <Setter Property="Padding" Value="0,0,10,10"/>
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
-            <Setter Property="common:Shaatt.Circle" Value="True"/>
+            <Setter Property="common:Shaatt.Path" Value="M0,0 H1 A1,1 0 0 1 0,1 Z"/>
         </Style>
     </Window.Resources>
     
@@ -33,16 +34,13 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel>
-            <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToContentConverter}}"
-                          Style="{StaticResource button}" ToolTip="Window is topmost"
-                          IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            <Button Content="&#x26B9;" 
-                    Style="{StaticResource button}" ToolTip="Settings"
-                    Command="{Binding SettingsCommand}"/>
-        </StackPanel>
+        <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, 
+            Converter={StaticResource BooleanToContentConverter}}"
+                      Style="{StaticResource button}" ToolTip="Window is topmost"
+                      IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right">
+        <ScrollViewer Grid.Column="1" HorizontalAlignment="Right"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
             <ItemsControl prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -51,6 +49,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
+        
+        <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>

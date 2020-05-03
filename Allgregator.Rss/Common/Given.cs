@@ -13,7 +13,6 @@ namespace Allgregator.Rss.Common {
     public enum LinksStates {
         Normal,
         Detection,
-        Selection,
-        Chapter
+        Selection
     }
 }

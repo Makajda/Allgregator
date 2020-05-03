@@ -23,8 +23,6 @@
             <GradientStop Color="{StaticResource Olds.Background.Color}" Offset="1" />
         </LinearGradientBrush>
 
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
-
         <DataTemplate x:Key="RecosItemTemplate">
             <Button Background="{StaticResource Reco.Background}" Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}" Padding="0"
                     common:Shaatt.Rect="True"

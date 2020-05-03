@@ -2,10 +2,10 @@
 
 namespace Allgregator.Rss.Views {
     /// <summary>
-    /// Interaction logic for SettingsView
+    /// Interaction logic for SettingView
     /// </summary>
-    public partial class SettingsView : UserControl {
-        public SettingsView() {
+    public partial class SettingView : UserControl {
+        public SettingView() {
             InitializeComponent();
         }
     }

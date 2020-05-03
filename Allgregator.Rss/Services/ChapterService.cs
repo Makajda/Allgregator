@@ -58,9 +58,9 @@ namespace Allgregator.Rss.Services {
         private async Task LoadLinks(Data data, bool force = true) {
             if (data.Linked == null && force) {
                 data.Linked = await linkedRepository.GetOrDefault(data.Id);
-                if (data.Linked.CurrentState == LinksStates.Detection || data.Linked.CurrentState == LinksStates.Chapter) {
-                    data.Linked.CurrentState = LinksStates.Normal;
-                }
+                //if (data.Linked.CurrentState == LinksStates.Detection || data.Linked.CurrentState == LinksStates.Chapter) {
+                //    data.Linked.CurrentState = LinksStates.Normal;
+                //}//todo
             }
         }
 

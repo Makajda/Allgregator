@@ -7,12 +7,12 @@ using Prism.Mvvm;
 using System;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class SettingsViewModel : BindableBase {
+    internal class SettingViewModel : BindableBase {
         private readonly OpmlRepository opmlRepository;
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;
 
-        public SettingsViewModel(
+        public SettingViewModel(
             Settings settings,
             OpmlRepository opmlRepository,
             IEventAggregator eventAggregator,

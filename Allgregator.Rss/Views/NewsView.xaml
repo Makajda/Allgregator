@@ -23,8 +23,6 @@
             <GradientStop Color="{StaticResource News.Background.Color}" Offset="1" />
         </LinearGradientBrush>
 
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource MainBackgroundNew}" FalseBrush="{StaticResource MainBackgroundOld}"/>
-
         <DataTemplate x:Key="RecosItemTemplate">
             <Grid>
                 <Button Background="{StaticResource Reco.Background}" Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}" Padding="0"

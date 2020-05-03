@@ -10,7 +10,6 @@ namespace Allgregator.Aux.Common {
 
         public const int TryChapter = 10010;
         public const int FinChapter = 10020;
-        public const int SettingsChapter = 10030;
     }
 
     public class CurrentChapterChangedEvent : PubSubEvent<int> { }
