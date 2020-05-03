@@ -29,7 +29,7 @@ namespace Allgregator.Rss.Services {
                     ChapterViews.NewsView => typeof(NewsView),
                     ChapterViews.OldsView => typeof(OldsView),
                     ChapterViews.LinksView => typeof(LinksView),
-                    _ => typeof(NewsView)
+                    _ => typeof(SettingsView)
                 };
 
                 view = container.Resolve(type);
@@ -44,18 +44,6 @@ namespace Allgregator.Rss.Services {
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
                 RemoveView(region, view, id);
             }
-        }
-
-        internal void Settings() {
-            var region = regionManager.Regions[Given.MainRegion];
-            var viewName = typeof(SettingView).Name;
-            var view = region.GetView(viewName);
-            if (view == null) {
-                view = container.Resolve<SettingView>();
-                region.Add(view, viewName);
-            }
-
-            region.Activate(view);
         }
 
         private void RemoveView(IRegion region, string currentView, int id) {

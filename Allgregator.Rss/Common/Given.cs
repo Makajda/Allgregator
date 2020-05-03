@@ -7,7 +7,8 @@ namespace Allgregator.Rss.Common {
     public enum ChapterViews {
         NewsView,
         OldsView,
-        LinksView
+        LinksView,
+        SettingsView
     }
 
     public enum LinksStates {

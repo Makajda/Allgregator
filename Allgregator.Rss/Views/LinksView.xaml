@@ -102,7 +102,7 @@
                         ToolTip="Options"
                         Style="{StaticResource pathButton}"
                         common:Shaatt.Circle="True"
-                        Command="{Binding ToChapterCommand}"/>
+                        Command="{Binding SettingsCommand}"/>
                 <TextBox Grid.Column="1" Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
                          Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                 <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 

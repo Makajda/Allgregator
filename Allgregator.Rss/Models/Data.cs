@@ -8,7 +8,7 @@ namespace Allgregator.Rss.Models {
         private string name;
         public string Name {
             get { return name; }
-            set { SetProperty(ref name, value); }
+            set { SetProperty(ref name, value, () => IsNeedToSave = true); }
         }
 
         private Linked linked;
@@ -24,5 +24,8 @@ namespace Allgregator.Rss.Models {
             get { return mined; }
             set { SetProperty(ref mined, value); }
         }
+
+        [JsonIgnore]
+        public bool IsNeedToSave { get; set; }
     }
 }

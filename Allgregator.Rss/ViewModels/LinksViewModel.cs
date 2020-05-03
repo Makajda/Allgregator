@@ -4,27 +4,23 @@ using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
-using Allgregator.Rss.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
     internal class LinksViewModel : BindableBase {
-        private readonly ChapterRepository chapterRepository;//todo filter rss
+        private readonly ChapterRepository chapterRepository;
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;
-        private readonly ViewService viewService;
 
         public LinksViewModel(
             IRegionManager regionManager,
             ChapterRepository chapterRepository,
             DialogService dialogService,
             DetectionService detectionService,
-            ViewService viewService,
             IEventAggregator eventAggregator
             ) {
             if (regionManager.Regions[Given.MainRegion].Context is Data data) {
@@ -34,32 +30,19 @@ namespace Allgregator.Rss.ViewModels {
             this.chapterRepository = chapterRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
-            this.viewService = viewService;
 
             AddCommand = new DelegateCommand(async () => await detectionService.SetAddress(Data.Linked));
             MoveCommand = new DelegateCommand<Link>(Move);
             DeleteCommand = new DelegateCommand<Link>(Delete);
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Data.Linked, link));
-            ToChapterCommand = new DelegateCommand(ToChapter);
-            FromChapterCommand = new DelegateCommand(FromChapter);
-            DeleteChapterCommand = new DelegateCommand(DeleteChapter);
-            SettingCommand = new DelegateCommand(Setting);
-            //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
-            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
-            //todo internal class ChapterDeletedEvent : PubSubEvent<int> { }
-            //todo internal class ChapterAddedEvent : PubSubEvent<Chapter[]> { }
-
-            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapterName));
+            //todo SettingsCommand = new DelegateCommand(() => viewService.ManageMainViews(ChapterViews.SettingsView, Data));
         }
 
         public DelegateCommand AddCommand { get; private set; }
         public DelegateCommand<Link> MoveCommand { get; private set; }
         public DelegateCommand<Link> DeleteCommand { get; private set; }
         public DelegateCommand<Link> SelectionCommand { get; private set; }
-        public DelegateCommand ToChapterCommand { get; private set; }
-        public DelegateCommand FromChapterCommand { get; private set; }
-        public DelegateCommand DeleteChapterCommand { get; private set; }
-        public DelegateCommand SettingCommand { get; private set; }
+        public DelegateCommand SettingsCommand { get; private set; }
         public Data Data { get; private set; }
 
         private void Move(Link link) {
@@ -85,89 +68,5 @@ namespace Allgregator.Rss.ViewModels {
                 }
             }
         }
-
-        private void ToChapter() {
-            Setting();
-            if (Data.Linked != null) {
-                //todo savedName = Chapter.Name ?? string.Empty;
-                //todo Data.Linked.CurrentState = LinksStates.Chapter;
-            }
-        }
-
-        private async void FromChapter() {
-            if (Data.Linked != null) {
-                Data.Linked.CurrentState = LinksStates.Normal;
-                await SaveChapterName();
-            }
-        }
-
-        private async Task SaveChapterName() {
-            //todo if (savedName != null && Chapter.Name != savedName) {
-            //    var chapters = await chapterRepository.GetOrDefault();
-            //    var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
-            //    if (chapter != null) {
-            //        chapter.Name = string.IsNullOrEmpty(Chapter.Name) ? null : Chapter.Name;
-            //        try {
-            //            await chapterRepository.Save(chapters);
-            //            savedName = null;
-            //        }
-            //        catch (Exception e) {
-            //            Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-            //        }
-            //    }
-            //}
-        }
-
-        private void DeleteChapter() {
-            if (Data.Linked?.Links != null && Data.Linked.Links.Count > 0) {
-                dialogService.Show($"{Data.Linked.Links.Count} addresses?", DeleteChapterReal, 20, true);
-            }
-            else {
-                DeleteChapterReal();
-            }
-
-            void DeleteChapterReal() {
-                //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(id);
-            }
-        }
-
-        private void Setting() {
-            viewService.Settings();
-        }
-        ///////
-
-        //private async void ChapterAdded(Chapter[] chapters) {
-        //    foreach (var newChapter in chapters) {
-        //        if (newChapter.Id == 0) {
-        //            newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));
-        //        }
-
-        //        Chapters.Add(factoryService.Resolve<Chapter, ChapterViewModel>(newChapter));
-        //    }
-
-        //    await Save();
-        //}
-
-        //private async void ChapterDeleted(int id) {
-        //    var chapter = Chapters.FirstOrDefault(n => n.Chapter.Id == id);
-        //    if (chapter != null) {
-        //        Chapters.Remove(chapter);
-        //        chapter.IsActive = false;
-        //        await Save();
-
-        //        viewsService.RemoveMainViews(chapter.Chapter);
-        //    }
-        //}
-
-        //private async Task Save() {
-        //    try {
-        //        await chapterRepository.Save(Chapters.Select(n => n.Chapter));
-        //    }
-        //    catch (Exception e) {
-        //        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-        //    }
-        //}
-        ///////
-
     }
 }

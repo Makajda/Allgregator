@@ -17,7 +17,6 @@ namespace Allgregator.Rss.ViewModels {
         private readonly RepoService repoService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
-        private ChapterViews currentView = ChapterViews.LinksView;//todo
 
         public ChapterViewModel(
             OreService oreService,
@@ -44,20 +43,30 @@ namespace Allgregator.Rss.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
+        private ChapterViews currentView = ChapterViews.SettingsView;//todo
+        public ChapterViews CurrentView {
+            get { return currentView; }
+            set { SetProperty(ref currentView, value); }
+        }
+
         protected override int ChapterId => Data.Id;
         protected override async Task Activate() => await CurrentViewChanged();
         protected override async Task Deactivate() => await repoService.Save(Data);
         protected override void Run() {
-            if (currentView != ChapterViews.LinksView) {
-                var recos = currentView == ChapterViews.NewsView ? Data.Mined?.NewRecos : Data.Mined?.OldRecos;
-                if (recos != null) {
-                    var count = recos.Count;
-                    if (count > settings.RssMaxOpenTabs) {
-                        dialogService.Show($"{count}?", OpenReal, 72d);
-                    }
-                    else {
-                        OpenReal();
-                    }
+            var recos = CurrentView switch
+            {
+                ChapterViews.NewsView => Data.Mined?.NewRecos,
+                ChapterViews.OldsView => Data.Mined?.OldRecos,
+                _ => null
+            };
+
+            if (recos != null) {
+                var count = recos.Count;
+                if (count > settings.RssMaxOpenTabs) {
+                    dialogService.Show($"{count}?", OpenReal, 72d);
+                }
+                else {
+                    OpenReal();
                 }
             }
         }
@@ -79,20 +88,20 @@ namespace Allgregator.Rss.ViewModels {
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
-                currentView = currentView = view ?? ChapterViews.NewsView;
+                CurrentView = CurrentView = view ?? ChapterViews.NewsView;
                 await CurrentViewChanged();
             }
         }
 
         private async Task CurrentViewChanged() {
-            viewService.ManageMainViews(currentView, Data);
-            await repoService.Load(Data, currentView == ChapterViews.LinksView);
+            viewService.ManageMainViews(CurrentView, Data);
+            await repoService.Load(Data, CurrentView == ChapterViews.LinksView);
         }
 
         private void OpenReal() {
             var mined = Data.Mined;
             if (mined != null) {
-                if (currentView == ChapterViews.NewsView) {
+                if (CurrentView == ChapterViews.NewsView) {
                     if (mined.NewRecos != null && mined.OldRecos != null) {
                         foreach (var reco in mined.NewRecos.Reverse()) {
                             WindowUtilities.Run(reco.Uri);

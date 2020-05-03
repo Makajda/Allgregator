@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Allgregator.Rss.Views.SettingView"
+﻿<UserControl x:Class="Allgregator.Rss.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
@@ -84,7 +84,7 @@
                     <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="{StaticResource Chapter.Background}"
                                 Style="{StaticResource pathButton}" HorizontalAlignment="Left"
                                 common:Shaatt.Circle="True"
-                                Command="{Binding FromChapterCommand}"/>
+                                Command="{Binding LinksCommand}"/>
 
                     <StackPanel Margin="10" HorizontalAlignment="Center">
                         <StackPanel.Resources>
