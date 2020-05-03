@@ -6,10 +6,10 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.Services {
-    internal class ChapterService {
+    internal class RepoService {
         private readonly LinkedRepository linkedRepository;
         private readonly MinedRepository minedRepository;
-        public ChapterService(
+        public RepoService(
             LinkedRepository linkedRepository,
             MinedRepository minedRepository
             ) {

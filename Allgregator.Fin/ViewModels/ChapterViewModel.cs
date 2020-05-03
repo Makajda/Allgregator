@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly Settings settings;
-        private readonly IEventAggregator eventAggregator;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
         private readonly IContainerExtension container;
@@ -29,7 +28,6 @@ namespace Allgregator.Fin.ViewModels {
             ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
-            this.eventAggregator = eventAggregator;
             this.regionManager = regionManager;
             this.container = container;
             this.minedRepository = minedRepository;
@@ -38,32 +36,25 @@ namespace Allgregator.Fin.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
-        protected override async Task OnChapterChanged(int chapterId, bool _) {
-            IsActive = chapterId == Given.FinChapter;
+        protected override int ChapterId => Given.FinChapter;
 
-            if (IsActive) {
-                await LoadMined();
-                var region = regionManager.Regions[Given.MainRegion];
-                var viewName = typeof(CurrencyView).Name;
-                var view = region.GetView(viewName);
-                if (view == null) {
-                    region.Context = Data;
-                    view = container.Resolve<CurrencyView>();
-                    region.Add(view, viewName);
-                }
-
-                region.Activate(view);
+        protected override async Task Activate() {
+            await LoadMined();
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewName = typeof(CurrencyView).Name;
+            var view = region.GetView(viewName);
+            if (view == null) {
+                region.Context = Data;
+                view = container.Resolve<CurrencyView>();
+                region.Add(view, viewName);
             }
+
+            region.Activate(view);
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = Given.FinChapter;
             AsyncHelper.RunSync(async () => await SaveMined());
-        }
-
-        protected override Task Open() {
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.FinChapter);
-            return Task.CompletedTask;
         }
 
         protected override async Task Update() {
