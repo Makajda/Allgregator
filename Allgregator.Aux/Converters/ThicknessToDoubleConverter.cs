@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class ThicknessToDoubleConverter : IValueConverter {
+    public sealed class ThicknessToDoubleConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is Thickness t) {
                 return t.Left;

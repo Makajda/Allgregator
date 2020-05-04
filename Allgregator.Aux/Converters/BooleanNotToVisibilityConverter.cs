@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class BooleanNotToVisibilityConverter : IValueConverter {
+    public sealed class BooleanNotToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is bool b && b) {
                 return Visibility.Collapsed;

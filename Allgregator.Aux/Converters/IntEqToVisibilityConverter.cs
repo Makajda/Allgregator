@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class IntEqToVisibilityConverter : IValueConverter {
+    public sealed class IntEqToVisibilityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             return (int)value == (int)parameter ? Visibility.Visible : Visibility.Collapsed;
         }

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class DateTimeOffsetToStringConverter : IValueConverter {
+    public sealed class DateTimeOffsetToStringConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is DateTimeOffset dt) {
                 return dt.ToString();

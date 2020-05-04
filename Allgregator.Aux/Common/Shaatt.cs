@@ -29,8 +29,17 @@ namespace Allgregator.Aux.Common {
         public static readonly DependencyProperty QrTopProperty = DependencyProperty.RegisterAttached(
             "QrTop", typeof(Tops), typeof(Shaatt), new PropertyMetadata(Tops.None, OnQrChanged));
 
+        /// <summary>
+        /// Width Percent Size
+        /// </summary>
         public static double GetQrThick1(DependencyObject obj) => (double)obj.GetValue(QrThick1Property);
+        /// <summary>
+        /// Width Percent Size
+        /// </summary>
         public static void SetQrThick1(DependencyObject obj, double value) => obj.SetValue(QrThick1Property, value);
+        /// <summary>
+        /// Width Percent Size
+        /// </summary>
         public static readonly DependencyProperty QrThick1Property = DependencyProperty.RegisterAttached(
             "QrThick1", typeof(double), typeof(Shaatt), new PropertyMetadata(0d, OnQrChanged));
 

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class BooleanToContentConverter : IValueConverter {
+    public sealed class BooleanToContentConverter : IValueConverter {
         public object TrueContent { get; set; }
         public object FalseContent { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {

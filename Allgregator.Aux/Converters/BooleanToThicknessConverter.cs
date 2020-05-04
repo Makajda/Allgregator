@@ -4,9 +4,17 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public sealed class IntNqToVisibilityConverter : IValueConverter {
+    public sealed class BooleanToThicknessConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (int)value == (int)parameter ? Visibility.Collapsed : Visibility.Visible;
+            if (value is bool b && b) {
+                if (parameter != null && double.TryParse(parameter.ToString(), out double t)) {
+                    return new Thickness(t);
+                }
+
+                return new Thickness(1);
+            }
+
+            return default(Thickness);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

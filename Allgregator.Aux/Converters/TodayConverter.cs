@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class TodayConverter : IValueConverter {
+    public sealed class TodayConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is DateTimeOffset d) {
                 if (d != DateTimeOffset.MinValue) {
