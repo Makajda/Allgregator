@@ -15,8 +15,8 @@
         <converters:IntNqToVisibilityConverter x:Key="IntNqToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:TodayConverter x:Key="TodayConverter"/>
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="Transparent" FalseBrush="Transparent"/>
         <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
+        <converters:BooleanToThicknessConverter x:Key="BooleanToThicknessConverter"/>
 
         <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Margin" Value="3"/>
@@ -49,19 +49,22 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.RowSpan="2" Grid.ColumnSpan="3" BorderBrush="White"
-                Padding="0" BorderThickness="0" Margin="20,50,20,50"
-                Background="{Binding IsActive, Converter={StaticResource BooleanToBrushConverter}}" Foreground="{StaticResource Chapter.Foreground}"
+        <Button Grid.RowSpan="2" Grid.ColumnSpan="3" 
+                Margin="20,50,20,50"
+                Padding="0"
+                BorderThickness="0" 
+                Foreground="{StaticResource Chapter.Foreground}"
+                Background="Transparent"
                 common:Shaatt.Circle="True"
                 ToolTip="Open"
                 Command="{Binding OpenCommand}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
-                               Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3" HorizontalAlignment="Center"
-                               Text="{Binding Data.Mined.AcceptTime, Converter={StaticResource TodayConverter}}"/>
+                           Text="{Binding Data.Mined.AcceptTime, Converter={StaticResource TodayConverter}}"/>
                 <TextBlock Text="{Binding Data.Name}" FontSize="16" TextTrimming="WordEllipsis" 
-                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
             </DockPanel>
         </Button>
 
@@ -71,7 +74,7 @@
                 common:Shaatt.QrTop="BottomRight"
                 Command="{Binding UpdateCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                BorderThickness="{StaticResource IsActive}"
+                BorderThickness="{Binding IsActive, Converter={StaticResource BooleanToThicknessConverter}, ConverterParameter=2}"
                 ToolTip="Update">
             <Button.Resources>
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
@@ -83,27 +86,43 @@
                 common:Shaatt.QrTop="TopLeft"
                 ToolTip="Outdated"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Olds.Background.Color}"/>
+            </Button.Resources>
+        </Button>
         <Button Grid.Row="1" Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
                 common:Shaatt.QrTop="BottomLeft"
                 ToolTip="News"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
-                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource News.Background.Color}"/>
+            </Button.Resources>
+        </Button>
         <Button Grid.Row="1" Grid.Column="1" Content="&#x2630;" Style="{StaticResource managerButton}"
                 Height="41"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
                 common:Shaatt.Rect="True"
                 ToolTip="Links"
                 VerticalAlignment="Bottom"
-                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Links.Background.Color}"/>
+            </Button.Resources>
+        </Button>
         <Button Grid.Column="1" Content="&#x2630;" Style="{StaticResource managerButton}"
                 Height="41"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.SettingsView}"
                 common:Shaatt.Rect="True"
                 ToolTip="Settings"
                 VerticalAlignment="Top"
-                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Button.Resources>
+                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Settings.Background.Color}"/>
+            </Button.Resources>
+        </Button>
         <Button Grid.Column="2" Content="&#x1F9F9;" 
                 Style="{StaticResource managerButton}"
                 ToolTip="Cleaning"
