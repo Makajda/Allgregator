@@ -1,9 +1,18 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Allgregator.Aux.Common {
+    public enum Tops {
+        None,
+        TopLeft,
+        TopRight,
+        BottomRight,
+        BottomLeft
+    }
+
     public class Shaatt {
         public static bool GetRect(DependencyObject obj) => (bool)obj.GetValue(RectProperty);
         public static void SetRect(DependencyObject obj, bool value) => obj.SetValue(RectProperty, value);
@@ -14,6 +23,21 @@ namespace Allgregator.Aux.Common {
         public static void SetCircle(DependencyObject obj, bool value) => obj.SetValue(CircleProperty, value);
         public static readonly DependencyProperty CircleProperty = DependencyProperty.RegisterAttached(
             "Circle", typeof(bool), typeof(Shaatt), new PropertyMetadata(false, OnCircleChanged));
+
+        public static Tops GetQrTop(DependencyObject obj) => (Tops)obj.GetValue(QrTopProperty);
+        public static void SetQrTop(DependencyObject obj, Tops value) => obj.SetValue(QrTopProperty, value);
+        public static readonly DependencyProperty QrTopProperty = DependencyProperty.RegisterAttached(
+            "QrTop", typeof(Tops), typeof(Shaatt), new PropertyMetadata(Tops.None, OnQrChanged));
+
+        public static double GetQrThick1(DependencyObject obj) => (double)obj.GetValue(QrThick1Property);
+        public static void SetQrThick1(DependencyObject obj, double value) => obj.SetValue(QrThick1Property, value);
+        public static readonly DependencyProperty QrThick1Property = DependencyProperty.RegisterAttached(
+            "QrThick1", typeof(double), typeof(Shaatt), new PropertyMetadata(0d, OnQrChanged));
+
+        public static double GetQrThick2(DependencyObject obj) => (double)obj.GetValue(QrThick2Property);
+        public static void SetQrThick2(DependencyObject obj, double value) => obj.SetValue(QrThick2Property, value);
+        public static readonly DependencyProperty QrThick2Property = DependencyProperty.RegisterAttached(
+            "QrThick2", typeof(double), typeof(Shaatt), new PropertyMetadata(0d, OnQrChanged));
 
         public static Geometry GetPath(DependencyObject obj) => (Geometry)obj.GetValue(PathProperty);
         public static void SetPath(DependencyObject obj, Geometry value) => obj.SetValue(PathProperty, value);
@@ -35,6 +59,57 @@ namespace Allgregator.Aux.Common {
                 var geometry = new EllipseGeometry() { RadiusX = 1d, RadiusY = 1d };
                 SetPath(d, geometry);
             }
+        }
+
+        private static void OnQrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            const double size = 100d;
+            var top = (Tops)d.GetValue(QrTopProperty);
+            var thick1 = (double)d.GetValue(QrThick1Property);
+            var thick2 = (double)d.GetValue(QrThick2Property);
+            var segments = new PathSegment[4];
+            Point start;
+            switch (top) {
+                case Tops.TopLeft:
+                    start = new Point();
+                    segments[0] = new LineSegment(new Point(size, 0), true);
+                    segments[1] = new LineSegment(new Point(size, thick1), true);
+                    segments[2] = new ArcSegment(new Point(thick2, size), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
+                    segments[3] = new LineSegment(new Point(0, size), true);
+                    break;
+                case Tops.TopRight:
+                    start = new Point();
+                    segments[0] = new LineSegment(new Point(size, 0), true);
+                    segments[1] = new LineSegment(new Point(size, size), true);
+                    segments[2] = new LineSegment(new Point(size - thick2, size), true);
+                    segments[3] = new ArcSegment(new Point(0, thick1), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
+                    break;
+                case Tops.BottomRight:
+                    start = new Point(size - thick2, 0);
+                    segments[0] = new ArcSegment(new Point(0, size - thick1), new Size(size, size), 0, false, SweepDirection.Clockwise, true);
+                    segments[1] = new LineSegment(new Point(0, size), true);
+                    segments[2] = new LineSegment(new Point(size, size), true);
+                    segments[3] = new LineSegment(new Point(size, 0), true);
+                    break;
+                case Tops.BottomLeft:
+                    start = new Point();
+                    segments[0] = new LineSegment(new Point(thick2, 0), true);
+                    segments[1] = new ArcSegment(new Point(size, size - thick1), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
+                    segments[2] = new LineSegment(new Point(size, size), true);
+                    segments[3] = new LineSegment(new Point(0, size), true);
+                    break;
+                default:
+                    start = new Point();
+                    segments[0] = new LineSegment(new Point(size, 0), true);
+                    segments[1] = new LineSegment(new Point(size, size), true);
+                    segments[2] = new LineSegment(new Point(0, size), true);
+                    segments[3] = new LineSegment(new Point(0, 0), true);
+                    break;
+            }
+
+            var figures = new List<PathFigure> {
+                new PathFigure(start, segments, true)
+            };
+            SetPath(d, new PathGeometry(figures));
         }
 
         private static void OnPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
