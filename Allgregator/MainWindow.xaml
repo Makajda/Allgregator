@@ -9,7 +9,7 @@
         >
     
     <Window.Resources>
-        <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x25B4;" FalseContent="&#x25B5;"/>
+        <converters:BooleanToObjectConverter x:Key="BooleanToObjectConverter" True="&#x25B4;" False="&#x25B5;"/>
 
         <Style x:Key="button" TargetType="ButtonBase">
             <Setter Property="Width" Value="50"/>
@@ -35,7 +35,7 @@
         </Grid.ColumnDefinitions>
 
         <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, 
-            Converter={StaticResource BooleanToContentConverter}}"
+            Converter={StaticResource BooleanToObjectConverter}}"
                       Style="{StaticResource button}" ToolTip="Window is topmost"
                       IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
 

@@ -26,7 +26,7 @@
         <DataTemplate x:Key="RecosItemTemplate">
             <Grid>
                 <Button Background="{StaticResource Reco.Background}" Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}" Padding="0"
-                    common:Shaatt.Rect="True"
+                    common:Shaatt.Shape="Rect"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
                     <Grid Margin="18">
@@ -60,7 +60,7 @@
                 </Button>
 
                 <Button Height="310" Margin="-1" Opacity="0.5"
-                        common:Shaatt.QrPeak="BottomRight"
+                        common:Shaatt.Shape="BottomRight"
                         BorderBrush="LightGray" BorderThickness="1" Background="Transparent"
                         VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
                         Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">

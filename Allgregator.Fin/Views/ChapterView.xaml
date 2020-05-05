@@ -9,23 +9,15 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" TrueBrush="{StaticResource Update.Background}" FalseBrush="Transparent"/>
-        <converters:BooleanToContentConverter x:Key="BooleanToContentConverter" TrueContent="&#x2715;" FalseContent="&#x2B6E;"/>
+        <converters:BooleanToObjectConverter x:Key="BooleanToObjectConverter" True="&#x2715;" False="&#x2B6E;"/>
         <converters:TodayConverter x:Key="TodayConverter"/>
-        <converters:BooleanToThicknessConverter x:Key="BooleanToThicknessConverter"/>
+        <converters:BooleanToObjectConverter x:Key="BooleanToMenuButtonStyleConverter"
+                                             True="{StaticResource Menu.Main.Button.Active}"
+                                             False="{StaticResource Menu.Main.Button}"/>
 
-        <Style x:Key="managerButton" TargetType="ButtonBase">
+        <Style x:Key="peekButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
             <Setter Property="Margin" Value="2,15,2,2"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
-            <Setter Property="BorderBrush" Value="White"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-
-        <Style x:Key="topsButton" TargetType="ButtonBase" BasedOn="{StaticResource managerButton}">
-            <Setter Property="common:Shaatt.QrThick1" Value="50"/>
-            <Setter Property="common:Shaatt.QrThick2" Value="15"/>
+            <Setter Property="common:Shaatt.Thick" Value="50,15"/>
         </Style>
     </UserControl.Resources>
 
@@ -41,14 +33,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.RowSpan="2" Grid.ColumnSpan="2"
-                Margin="20,50,20,50"
-                Padding="0"
-                BorderThickness="0" 
-                Foreground="{StaticResource Chapter.Foreground}"
-                Background="Transparent"
-                common:Shaatt.Circle="True"
-                ToolTip="Open"
-                Command="{Binding OpenCommand}">
+                Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
                            Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
@@ -58,12 +43,11 @@
         </Button>
 
         <Button Grid.Row="1" Grid.Column="1"
-                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
-                Style="{StaticResource topsButton}"
-                common:Shaatt.QrPeak="BottomRight"
+                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToObjectConverter}}"
+                Style="{StaticResource peekButton}"
+                common:Shaatt.Shape="BottomRight"
                 Command="{Binding UpdateCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                BorderThickness="{Binding IsActive, Converter={StaticResource BooleanToThicknessConverter}, ConverterParameter=1}"
                 ToolTip="Update">
             <Button.Resources>
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
@@ -72,8 +56,8 @@
 
         <Button Grid.Row="1"
                 Content="&#x2630;"
-                Style="{StaticResource topsButton}"
-                common:Shaatt.QrPeak="BottomLeft"
+                Style="{StaticResource peekButton}"
+                common:Shaatt.Shape="BottomLeft"
                 Command="{Binding SettingCommand}"
                 ToolTip="//todo"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"

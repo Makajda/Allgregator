@@ -25,7 +25,7 @@
 
         <DataTemplate x:Key="RecosItemTemplate">
             <Button Background="{StaticResource Reco.Background}" Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}" Padding="0"
-                    common:Shaatt.Rect="True"
+                    common:Shaatt.Shape="Rect"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
                 <Grid Margin="18">

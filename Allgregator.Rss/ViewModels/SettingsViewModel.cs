@@ -20,7 +20,6 @@ namespace Allgregator.Rss.ViewModels {
         public SettingsViewModel(
             Settings settings,
             OpmlRepository opmlRepository,
-            ViewService viewService,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
