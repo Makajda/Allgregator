@@ -36,7 +36,7 @@ namespace Allgregator.Rss.Repositories {
             File.WriteAllText(name, json);
         }
 
-        public int GetNewId(IEnumerable<Data> chapters) {
+        public Data GetNewChapter(IEnumerable<Data> chapters, string name) {
             var newId = 1;
             foreach (var chapter in chapters.OrderBy(n => n.Id)) {
                 var id = chapter.Id;
@@ -47,7 +47,7 @@ namespace Allgregator.Rss.Repositories {
                 newId++;
             }
 
-            return newId;
+            return new Data() { Id = newId, Name = name };
         }
 
         private IEnumerable<Data> Get() {

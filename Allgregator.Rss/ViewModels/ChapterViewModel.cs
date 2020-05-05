@@ -37,7 +37,6 @@ namespace Allgregator.Rss.ViewModels {
             MoveCommand = new DelegateCommand(Move);
 
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
-            //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(id => repoService.DeleteFiles(id));
         }
         public DelegateCommand<ChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }

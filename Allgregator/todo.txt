@@ -1,13 +1,13 @@
 ﻿1,6180339887 
 
-при отключении сети проверить ещё раз
-add-del-edit rssChapter and todo-add-opml
-rss viewService remove?
+проверить ещё раз
+opml import
+AddChapter
+DeleteChapter
+
 fin links
+при отключении сети проверить ещё раз
 todo
 
-при добавлении chapter учитывать id и fin
-добавление-удаление-правка chapter отдельно в SettingsView
-opml 1 event to rss с передачей имён, тогда имя в rssChapter не надо и chapterRepository в opml тоже
 
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

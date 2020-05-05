@@ -36,19 +36,12 @@
         <Style x:Key="updateButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Update.Button}">
             <Setter Property="Grid.RowSpan" Value="2"/>
             <Setter Property="Grid.ColumnSpan" Value="3"/>
-            <Setter Property="Width" Value="73"/>
-            <Setter Property="Height" Value="45"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
         </Style>
 
-        <Style x:Key="updateButtonActive" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Update.Button}">
+        <Style x:Key="updateButtonActive" TargetType="ButtonBase" BasedOn="{StaticResource peekButton}">
             <Setter Property="Grid.Row" Value="1"/>
             <Setter Property="Grid.Column" Value="2"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="common:Shaatt.Thick" Value="50,15"/>
             <Setter Property="common:Shaatt.Shape" Value="BottomRight"/>
-            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Bottom"/>
         </Style>
@@ -90,7 +83,9 @@
         </Button>
 
         <Button Style="{Binding IsActive, Converter={StaticResource BooleanToUpdateButtonStyleConverter}}"
-                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentUpdateConverter}}">
+                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentUpdateConverter}}"
+                ToolTip="Update"
+                Command="{Binding UpdateCommand}">
             <Button.Resources>
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
             </Button.Resources>

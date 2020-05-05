@@ -68,7 +68,9 @@
 
     <Style x:Key="Menu.Update.Button" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
         <Setter Property="common:Shaatt.Shape" Value="Rect"/>
-        <Setter Property="ToolTip" Value="Update"/>
-        <Setter Property="Command" Value="{Binding UpdateCommand}"/>
+        <Setter Property="Width" Value="73"/>
+        <Setter Property="Height" Value="45"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>
 </ResourceDictionary>

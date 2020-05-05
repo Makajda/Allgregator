@@ -1,7 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
-using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
@@ -10,16 +9,25 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Allgregator.Rss.ViewModels {
     internal class SettingsViewModel : BindableBase {
         private readonly OpmlRepository opmlRepository;
+        private readonly ChapterRepository chapterRepository;
+        private readonly RepoService repoService;
+        private readonly ViewService viewService;
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;//todo
 
         public SettingsViewModel(
             Settings settings,
             OpmlRepository opmlRepository,
+            ChapterRepository chapterRepository,
+            RepoService repoService,
+            ViewService viewService,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
@@ -29,25 +37,25 @@ namespace Allgregator.Rss.ViewModels {
             }
 
             this.opmlRepository = opmlRepository;
+            this.chapterRepository = chapterRepository;
+            this.repoService = repoService;
+            this.viewService = viewService;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.Settings = settings;
 
             AddChapterCommand = new DelegateCommand(AddChapter);
-            //DeleteChapterCommand = new DelegateCommand(DeleteChapter);
-            ToOpmlCommand = new DelegateCommand(ToOpml);
-            FromOpmlCommand = new DelegateCommand(FromOpml);
-            //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(ChapterDeleted);
-            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Subscribe(ChapterAdded);
-            //todo internal class ChapterDeletedEvent : PubSubEvent<int> { }
-            //todo internal class ChapterAddedEvent : PubSubEvent<Chapter[]> { }
-            //eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(e => AsyncHelper.RunSync(SaveChapterName));
+            DeleteChapterCommand = new DelegateCommand(DeleteChapter);
+            ExportOpmlCommand = new DelegateCommand(ExportOpml);
+            ImportOpmlCommand = new DelegateCommand(ImportOpml);
+
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(SaveChapterName);
         }
 
         public DelegateCommand AddChapterCommand { get; private set; }
         public DelegateCommand DeleteChapterCommand { get; private set; }
-        public DelegateCommand ToOpmlCommand { get; private set; }
-        public DelegateCommand FromOpmlCommand { get; private set; }
+        public DelegateCommand ExportOpmlCommand { get; private set; }
+        public DelegateCommand ImportOpmlCommand { get; private set; }
         public Settings Settings { get; private set; }
         public Data Data { get; private set; }
 
@@ -58,74 +66,45 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void AddChapter() {
-            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Publish(new Chapter[] { new Chapter() { Name = AddedName } });
-            AddedName = null;
+            var chapters = chapterRepository.GetOrDefault().ToList();
+            var chapter = chapterRepository.GetNewChapter(chapters, AddedName);
+            chapters.Add(chapter);
+            Save(chapters);
+            viewService.AddMenuView(new[] { chapter });
         }
 
-        //private async Task SaveChapterName() {
-        //todo if (savedName != null && Chapter.Name != savedName) {
-        //    var chapters = await chapterRepository.GetOrDefault();
-        //    var chapter = chapters.FirstOrDefault(n => n.Id == Chapter.Id);
-        //    if (chapter != null) {
-        //        chapter.Name = string.IsNullOrEmpty(Chapter.Name) ? null : Chapter.Name;
-        //        try {
-        //            await chapterRepository.Save(chapters);
-        //            savedName = null;
-        //        }
-        //        catch (Exception e) {
-        //            Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-        //        }
-        //    }
-        //}
-        //}
+        private void SaveChapterName(CancelEventArgs obj) {
+            if (Data.IsNeedToSave) {
+                var chapters = chapterRepository.GetOrDefault();
+                var chapter = chapters.FirstOrDefault(n => n.Id == Data.Id);
+                if (chapter != null) {
+                    chapter.Name = string.IsNullOrEmpty(Data.Name) ? null : Data.Name;
+                    Save(chapters);
+                }
+            }
+        }
 
-        //private void DeleteChapter() {
-        //    if (Data.Linked?.Links != null && Data.Linked.Links.Count > 0) {
-        //        dialogService.Show($"{Data.Linked.Links.Count} addresses?", DeleteChapterReal, 20, true);
-        //    }
-        //    else {
-        //        DeleteChapterReal();
-        //    }
+        private async void DeleteChapter() {
+            await repoService.LoadLinks(Data);
+            dialogService.Show($"{Data.Linked.Links.Count} addresses?", DeleteChapterReal, 20, true);
 
-        //    void DeleteChapterReal() {
-        //        //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Publish(id);
-        //    }
-        //}
+            void DeleteChapterReal() {
+                var chapters = chapterRepository.GetOrDefault().Where(n => n.Id != Data.Id);
+                Save(chapters);
+                repoService.DeleteFiles(Data.Id);
+            }
+        }
 
-        //private async void ChapterAdded(Chapter[] chapters) {
-        //    foreach (var newChapter in chapters) {
-        //        if (newChapter.Id == 0) {
-        //            newChapter.Id = chapterRepository.GetNewId(Chapters.Select(n => n.Chapter));
-        //        }
+        private void Save(IEnumerable<Data> chapters) {
+            try {
+                chapterRepository.Save(chapters);
+            }
+            catch (Exception e) {
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            }
+        }
 
-        //        Chapters.Add(factoryService.Resolve<Chapter, ChapterViewModel>(newChapter));
-        //    }
-
-        //    await Save();
-        //}
-
-        //private async void ChapterDeleted(int id) {
-        //    var chapter = Chapters.FirstOrDefault(n => n.Chapter.Id == id);
-        //    if (chapter != null) {
-        //        Chapters.Remove(chapter);
-        //        chapter.IsActive = false;
-        //        await Save();
-
-        //        viewsService.RemoveMainViews(chapter.Chapter);
-        //    }
-        //}
-
-        //private async Task Save() {
-        //    try {
-        //        await chapterRepository.Save(Chapters.Select(n => n.Chapter));
-        //    }
-        //    catch (Exception e) {
-        //        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-        //    }
-        //}
-
-
-        private async void ToOpml() {
+        private async void ExportOpml() {
             try {
                 await opmlRepository.Export();
             }
@@ -134,11 +113,15 @@ namespace Allgregator.Rss.ViewModels {
             }
         }
 
-        private async void FromOpml() {
+        private async void ImportOpml() {
             try {
-                var (chapters, links) = await opmlRepository.Import();
-                var str = $"+++ collections: {chapters},  RSS: {links}";
-                dialogService.Show(str);
+                var chapters = await opmlRepository.Import();
+                if (chapters != null) {
+                    viewService.AddMenuView(chapters);
+
+                    var str = $"added {chapters.Length} collections";
+                    dialogService.Show(str);
+                }
             }
             catch (Exception exception) {
                 dialogService.Show(exception.Message);

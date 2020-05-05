@@ -5,6 +5,7 @@ using Allgregator.Rss.Views;
 using Prism.Ioc;
 using Prism.Regions;
 using System;
+using System.Collections.Generic;
 
 namespace Allgregator.Rss.Services {
     internal class ViewService {
@@ -43,6 +44,15 @@ namespace Allgregator.Rss.Services {
             var region = regionManager.Regions[Given.MainRegion];
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
                 RemoveView(region, view, id);
+            }
+        }
+
+        internal void AddMenuView(IEnumerable<Data> chapters) {
+            var region = regionManager.Regions[Given.MenuRegion];
+            foreach (var chapter in chapters) {
+                var view = container.Resolve<ChapterView>();
+                view.SetIdAndName(chapter.Id, chapter.Name);
+                region.Add(view);
             }
         }
 

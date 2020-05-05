@@ -9,8 +9,8 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:BooleanToObjectConverter x:Key="BooleanToObjectConverter" True="&#x2715;" False="&#x2B6E;"/>
         <converters:TodayConverter x:Key="TodayConverter"/>
+        <converters:BooleanToObjectConverter x:Key="BooleanToContentUpdateConverter" True="&#x2715;" False="&#x2B6E;"/>
         <converters:BooleanToObjectConverter x:Key="BooleanToMenuButtonStyleConverter"
                                              True="{StaticResource Menu.Main.Button.Active}"
                                              False="{StaticResource Menu.Main.Button}"/>
@@ -18,7 +18,25 @@
         <Style x:Key="peekButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
             <Setter Property="Margin" Value="2,15,2,2"/>
             <Setter Property="common:Shaatt.Thick" Value="50,15"/>
+            <Setter Property="BorderThickness" Value="1"/>
         </Style>
+
+        <Style x:Key="updateButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Update.Button}">
+            <Setter Property="Grid.RowSpan" Value="2"/>
+            <Setter Property="Grid.ColumnSpan" Value="2"/>
+        </Style>
+
+        <Style x:Key="updateButtonActive" TargetType="ButtonBase" BasedOn="{StaticResource peekButton}">
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="common:Shaatt.Shape" Value="BottomRight"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+        </Style>
+
+        <converters:BooleanToObjectConverter x:Key="BooleanToUpdateButtonStyleConverter"
+                                             True="{StaticResource updateButtonActive}" 
+                                             False="{StaticResource updateButton}"/>
     </UserControl.Resources>
 
     <Grid Width="{StaticResource MenuSize}" Height="{StaticResource MenuSize}">
@@ -42,13 +60,10 @@
             </DockPanel>
         </Button>
 
-        <Button Grid.Row="1" Grid.Column="1"
-                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToObjectConverter}}"
-                Style="{StaticResource peekButton}"
-                common:Shaatt.Shape="BottomRight"
-                Command="{Binding UpdateCommand}"
-                HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                ToolTip="Update">
+        <Button Style="{Binding IsActive, Converter={StaticResource BooleanToUpdateButtonStyleConverter}}"
+                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentUpdateConverter}}"
+                ToolTip="Update"
+                Command="{Binding UpdateCommand}">
             <Button.Resources>
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
             </Button.Resources>

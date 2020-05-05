@@ -1,6 +1,5 @@
 ﻿using Allgregator.Rss.Models;
 using Microsoft.Win32;
-using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,18 +12,15 @@ namespace Allgregator.Rss.Repositories {
     internal class OpmlRepository {
         private readonly ChapterRepository chapterRepository;
         private readonly LinkedRepository linkedRepository;
-        private readonly IEventAggregator eventAggregator;
         public OpmlRepository(
             ChapterRepository chapterRepository,
-            LinkedRepository linkedRepository,
-            IEventAggregator eventAggregator
+            LinkedRepository linkedRepository
             ) {
             this.chapterRepository = chapterRepository;
             this.linkedRepository = linkedRepository;
-            this.eventAggregator = eventAggregator;
         }
 
-        internal async Task<(int Chapters, int Links)> Import() {
+        internal async Task<Data[]> Import() {
             var cinks = await ImportPicker();
             if (cinks == null || cinks.Count == 0) {
                 return default;
@@ -36,22 +32,21 @@ namespace Allgregator.Rss.Repositories {
 
             try {
                 foreach (var cink in cinks) {
-                    var newId = chapterRepository.GetNewId(chapters);
-                    var newChapter = new Data() { Id = newId, Name = cink.Name };
+                    var newChapter = chapterRepository.GetNewChapter(chapters, cink.Name);
                     newChapters[indexChapters++] = newChapter;
                     chapters.Add(newChapter);
-                    var linked = await linkedRepository.GetOrDefault(newId);
+                    var linked = await linkedRepository.GetOrDefault(newChapter.Id);
                     linked.Links = cink.Links;
-                    await linkedRepository.Save(newId, linked);
+                    await linkedRepository.Save(newChapter.Id, linked);
                 }
+
+                chapterRepository.Save(chapters);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            //todo eventAggregator.GetEvent<ChapterAddedEvent>().Publish(newChapters);
-
-            return (cinks.Count, cinks.SelectMany(n => n.Links).Count());
+            return newChapters;
         }
 
         internal async Task Export() {
