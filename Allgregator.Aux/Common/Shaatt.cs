@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Allgregator.Aux.Common {
-    public enum Tops {
+    public enum Peaks {
         None,
         TopLeft,
         TopRight,
@@ -24,10 +24,10 @@ namespace Allgregator.Aux.Common {
         public static readonly DependencyProperty CircleProperty = DependencyProperty.RegisterAttached(
             "Circle", typeof(bool), typeof(Shaatt), new PropertyMetadata(false, OnCircleChanged));
 
-        public static Tops GetQrTop(DependencyObject obj) => (Tops)obj.GetValue(QrTopProperty);
-        public static void SetQrTop(DependencyObject obj, Tops value) => obj.SetValue(QrTopProperty, value);
-        public static readonly DependencyProperty QrTopProperty = DependencyProperty.RegisterAttached(
-            "QrTop", typeof(Tops), typeof(Shaatt), new PropertyMetadata(Tops.None, OnQrChanged));
+        public static Peaks GetQrPeak(DependencyObject obj) => (Peaks)obj.GetValue(QrPeakProperty);
+        public static void SetQrPeak(DependencyObject obj, Peaks value) => obj.SetValue(QrPeakProperty, value);
+        public static readonly DependencyProperty QrPeakProperty = DependencyProperty.RegisterAttached(
+            "QrPeak", typeof(Peaks), typeof(Shaatt), new PropertyMetadata(Peaks.None, OnQrChanged));
 
         /// <summary>
         /// Width Percent Size
@@ -72,46 +72,44 @@ namespace Allgregator.Aux.Common {
 
         private static void OnQrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             const double size = 100d;
-            var top = (Tops)d.GetValue(QrTopProperty);
+            var peak = (Peaks)d.GetValue(QrPeakProperty);
+            if (peak == Peaks.None) {
+                return;
+            }
+
             var thick1 = (double)d.GetValue(QrThick1Property);
             var thick2 = (double)d.GetValue(QrThick2Property);
             var segments = new PathSegment[4];
             Point start;
-            switch (top) {
-                case Tops.TopLeft:
+            switch (peak) {
+                case Peaks.TopLeft:
                     start = new Point();
                     segments[0] = new LineSegment(new Point(size, 0), true);
                     segments[1] = new LineSegment(new Point(size, thick1), true);
                     segments[2] = new ArcSegment(new Point(thick2, size), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
                     segments[3] = new LineSegment(new Point(0, size), true);
                     break;
-                case Tops.TopRight:
+                case Peaks.TopRight:
                     start = new Point();
                     segments[0] = new LineSegment(new Point(size, 0), true);
                     segments[1] = new LineSegment(new Point(size, size), true);
                     segments[2] = new LineSegment(new Point(size - thick2, size), true);
                     segments[3] = new ArcSegment(new Point(0, thick1), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
                     break;
-                case Tops.BottomRight:
+                case Peaks.BottomRight:
                     start = new Point(size - thick2, 0);
                     segments[0] = new ArcSegment(new Point(0, size - thick1), new Size(size, size), 0, false, SweepDirection.Clockwise, true);
                     segments[1] = new LineSegment(new Point(0, size), true);
                     segments[2] = new LineSegment(new Point(size, size), true);
                     segments[3] = new LineSegment(new Point(size, 0), true);
                     break;
-                case Tops.BottomLeft:
+                case Peaks.BottomLeft:
+                default:
                     start = new Point();
                     segments[0] = new LineSegment(new Point(thick2, 0), true);
                     segments[1] = new ArcSegment(new Point(size, size - thick1), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true);
                     segments[2] = new LineSegment(new Point(size, size), true);
                     segments[3] = new LineSegment(new Point(0, size), true);
-                    break;
-                default:
-                    start = new Point();
-                    segments[0] = new LineSegment(new Point(size, 0), true);
-                    segments[1] = new LineSegment(new Point(size, size), true);
-                    segments[2] = new LineSegment(new Point(0, size), true);
-                    segments[3] = new LineSegment(new Point(0, 0), true);
                     break;
             }
 
@@ -139,6 +137,9 @@ namespace Allgregator.Aux.Common {
             var border = control?.Template?.FindName("border", control);
             if (border is Path path && path != null) {
                 path.Data = (Geometry)control.GetValue(Shaatt.PathProperty);
+                control.SetValue(Shaatt.CircleProperty, false);
+                control.SetValue(Shaatt.RectProperty, false);
+                control.SetValue(Shaatt.QrPeakProperty, Peaks.None);
             }
         }
     }

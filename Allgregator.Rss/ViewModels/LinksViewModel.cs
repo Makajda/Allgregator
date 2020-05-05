@@ -35,14 +35,12 @@ namespace Allgregator.Rss.ViewModels {
             MoveCommand = new DelegateCommand<Link>(Move);
             DeleteCommand = new DelegateCommand<Link>(Delete);
             SelectionCommand = new DelegateCommand<Link>(link => detectionService.Selected(Data.Linked, link));
-            //todo SettingsCommand = new DelegateCommand(() => viewService.ManageMainViews(ChapterViews.SettingsView, Data));
         }
 
         public DelegateCommand AddCommand { get; private set; }
         public DelegateCommand<Link> MoveCommand { get; private set; }
         public DelegateCommand<Link> DeleteCommand { get; private set; }
         public DelegateCommand<Link> SelectionCommand { get; private set; }
-        public DelegateCommand SettingsCommand { get; private set; }
         public Data Data { get; private set; }
 
         private void Move(Link link) {

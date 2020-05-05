@@ -88,27 +88,21 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="New link:" Margin="120,0"/>
+            <TextBlock Text="New link:" Margin="30,0"/>
             
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="{StaticResource Chapter.Background}"
-                        ToolTip="Options"
-                        Style="{StaticResource pathButton}"
-                        common:Shaatt.Circle="True"
-                        Command="{Binding SettingsCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
+                <TextBox Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
                          Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
+                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
                         ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
                         Style="{StaticResource rectButton}"/>
-                <Button Grid.Column="3" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
+                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
                         ToolTip="Add new link"
                         Command="{Binding AddCommand}"/>
             </Grid>

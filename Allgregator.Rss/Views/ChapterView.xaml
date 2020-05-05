@@ -79,7 +79,7 @@
         <Button Grid.Row="1" Grid.Column="2"
                 Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
                 Style="{StaticResource topsButton}"
-                common:Shaatt.QrTop="BottomRight"
+                common:Shaatt.QrPeak="BottomRight"
                 Command="{Binding UpdateCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
                 BorderThickness="{Binding IsActive, Converter={StaticResource BooleanToThicknessConverter}, ConverterParameter=1}"
@@ -91,7 +91,7 @@
 
         <Button Content="&#x1F5C3;" Style="{StaticResource topsButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.OldsView}"
-                common:Shaatt.QrTop="TopLeft"
+                common:Shaatt.QrPeak="TopLeft"
                 ToolTip="Outdated"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -101,7 +101,7 @@
         </Button>
         <Button Grid.Row="1" Content="&#x1F4C4;" Style="{StaticResource topsButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
-                common:Shaatt.QrTop="BottomLeft"
+                common:Shaatt.QrPeak="BottomLeft"
                 ToolTip="News"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -130,7 +130,7 @@
         <Button Grid.Column="2" Content="&#x1F9F9;" 
                 Style="{StaticResource topsButton}"
                 ToolTip="Cleaning"
-                common:Shaatt.QrTop="TopRight"
+                common:Shaatt.QrPeak="TopRight"
                 Command="{Binding MoveCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Top"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
