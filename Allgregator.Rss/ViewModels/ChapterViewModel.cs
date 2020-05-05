@@ -17,6 +17,7 @@ namespace Allgregator.Rss.ViewModels {
         private readonly RepoService repoService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
+        private ChapterViews currentView;// = ChapterViews.SettingsView;//todo
 
         public ChapterViewModel(
             OreService oreService,
@@ -43,17 +44,11 @@ namespace Allgregator.Rss.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
-        private ChapterViews currentView = ChapterViews.SettingsView;//todo
-        public ChapterViews CurrentView {
-            get { return currentView; }
-            set { SetProperty(ref currentView, value); }
-        }
-
         protected override int ChapterId => Data.Id;
         protected override async Task Activate() => await CurrentViewChanged();
         protected override async Task Deactivate() => await repoService.Save(Data);
         protected override void Run() {
-            var recos = CurrentView switch
+            var recos = currentView switch
             {
                 ChapterViews.NewsView => Data.Mined?.NewRecos,
                 ChapterViews.OldsView => Data.Mined?.OldRecos,
@@ -88,20 +83,20 @@ namespace Allgregator.Rss.ViewModels {
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
-                CurrentView = CurrentView = view ?? ChapterViews.NewsView;
+                currentView = currentView = view ?? ChapterViews.NewsView;
                 await CurrentViewChanged();
             }
         }
 
         private async Task CurrentViewChanged() {
-            viewService.ManageMainViews(CurrentView, Data);
-            await repoService.Load(Data, CurrentView == ChapterViews.LinksView);
+            viewService.ManageMainViews(currentView, Data);
+            await repoService.Load(Data, currentView == ChapterViews.LinksView);
         }
 
         private void OpenReal() {
             var mined = Data.Mined;
             if (mined != null) {
-                if (CurrentView == ChapterViews.NewsView) {
+                if (currentView == ChapterViews.NewsView) {
                     if (mined.NewRecos != null && mined.OldRecos != null) {
                         foreach (var reco in mined.NewRecos.Reverse()) {
                             WindowUtilities.Run(reco.Uri);

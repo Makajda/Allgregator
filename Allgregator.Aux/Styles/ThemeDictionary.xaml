@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:t="clr-namespace:System;assembly=System.Runtime"
                     >
+
+    <t:Double x:Key="MenuSize">180</t:Double>
 
     <Color x:Key="Main.Background.Color">#91C9FF</Color>
     <Color x:Key="News.Background.Color">LightGreen</Color>

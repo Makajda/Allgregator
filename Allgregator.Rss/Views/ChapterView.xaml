@@ -19,15 +19,22 @@
         <converters:BooleanToThicknessConverter x:Key="BooleanToThicknessConverter"/>
 
         <Style x:Key="managerButton" TargetType="ButtonBase">
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="2"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="FontSize" Value="18"/>
-            <Setter Property="common:Shaatt.QrThick1" Value="50"/>
-            <Setter Property="common:Shaatt.QrThick2" Value="15"/>
             <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
-            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="White"/>
             <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style x:Key="topsButton" TargetType="ButtonBase" BasedOn="{StaticResource managerButton}">
+            <Setter Property="common:Shaatt.QrThick1" Value="50"/>
+            <Setter Property="common:Shaatt.QrThick2" Value="15"/>
+        </Style>
+
+        <Style x:Key="centerButton" TargetType="ButtonBase" BasedOn="{StaticResource managerButton}">
+            <Setter Property="Height" Value="39"/>
+            <Setter Property="common:Shaatt.Rect" Value="True"/>
         </Style>
 
         <DataTemplate x:Key="errorItemTemplate">
@@ -38,10 +45,11 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Width="180" Height="180">
+    <Grid Width="{StaticResource MenuSize}" Height="{StaticResource MenuSize}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -70,18 +78,18 @@
 
         <Button Grid.Row="1" Grid.Column="2"
                 Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentConverter}}"
-                Style="{StaticResource managerButton}"
+                Style="{StaticResource topsButton}"
                 common:Shaatt.QrTop="BottomRight"
                 Command="{Binding UpdateCommand}"
                 HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"
-                BorderThickness="{Binding IsActive, Converter={StaticResource BooleanToThicknessConverter}, ConverterParameter=2}"
+                BorderThickness="{Binding IsActive, Converter={StaticResource BooleanToThicknessConverter}, ConverterParameter=1}"
                 ToolTip="Update">
             <Button.Resources>
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
             </Button.Resources>
         </Button>
 
-        <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
+        <Button Content="&#x1F5C3;" Style="{StaticResource topsButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.OldsView}"
                 common:Shaatt.QrTop="TopLeft"
                 ToolTip="Outdated"
@@ -91,7 +99,7 @@
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Olds.Background.Color}"/>
             </Button.Resources>
         </Button>
-        <Button Grid.Row="1" Content="&#x1F4C4;" Style="{StaticResource managerButton}"
+        <Button Grid.Row="1" Content="&#x1F4C4;" Style="{StaticResource topsButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
                 common:Shaatt.QrTop="BottomLeft"
                 ToolTip="News"
@@ -101,10 +109,8 @@
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource News.Background.Color}"/>
             </Button.Resources>
         </Button>
-        <Button Grid.Row="1" Grid.Column="1" Content="&#x2630;" Style="{StaticResource managerButton}"
-                Height="41"
+        <Button Grid.Row="1" Grid.Column="1" Content="&#x2630;" Style="{StaticResource centerButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
-                common:Shaatt.Rect="True"
                 ToolTip="Links"
                 VerticalAlignment="Bottom"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -112,10 +118,8 @@
                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Links.Background.Color}"/>
             </Button.Resources>
         </Button>
-        <Button Grid.Column="1" Content="&#x2630;" Style="{StaticResource managerButton}"
-                Height="41"
+        <Button Grid.Column="1" Content="&#x2630;" Style="{StaticResource centerButton}"
                 Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.SettingsView}"
-                common:Shaatt.Rect="True"
                 ToolTip="Settings"
                 VerticalAlignment="Top"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -124,7 +128,7 @@
             </Button.Resources>
         </Button>
         <Button Grid.Column="2" Content="&#x1F9F9;" 
-                Style="{StaticResource managerButton}"
+                Style="{StaticResource topsButton}"
                 ToolTip="Cleaning"
                 common:Shaatt.QrTop="TopRight"
                 Command="{Binding MoveCommand}"
@@ -135,23 +139,28 @@
             </Button.Resources>
         </Button>
 
-        <!--<ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" Width="30" Height="30"
-                      common:Shaatt.Circle="True"
-                      x:Name="errorsButton" Background="{StaticResource Error.Background}"
-                      Visibility="{Binding Data.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
-                      HorizontalAlignment="Right"/>
-        <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
-            <ListBox ItemsSource="{Binding Data.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
-        </Popup>-->
-
-            <!--<ProgressBar Height="10"
-                             Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
-                             Value="{Binding OreService.ProgressValue, Mode=OneWay}"
-                             ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
-                             Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ProgressBar.Foreground>
-                        <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
-                    </ProgressBar.Foreground>
-                </ProgressBar>-->
+        <Grid Grid.RowSpan="2" Grid.Column="2"
+              Visibility="{Binding Data.Mined, Converter={StaticResource NullToVisibilityConverter}}">
+            <ToggleButton Content="&#x1D166;" Style="{StaticResource managerButton}" 
+                          Width="30" Height="30"
+                          common:Shaatt.Circle="True"
+                          x:Name="errorsButton" Background="{StaticResource Error.Background}"
+                          Visibility="{Binding Data.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"
+                          HorizontalAlignment="Right"/>
+            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
+                <ListBox ItemsSource="{Binding Data.Mined.Errors}" ItemTemplate="{StaticResource errorItemTemplate}"/>
+            </Popup>
+        </Grid>
+        
+        <ProgressBar Grid.Row="2" Grid.ColumnSpan="3"
+                     Margin="2" 
+                     Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
+                     Value="{Binding OreService.ProgressValue, Mode=OneWay}"
+                     ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
+                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ProgressBar.Foreground>
+                <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
+            </ProgressBar.Foreground>
+        </ProgressBar>
     </Grid>
 </UserControl>

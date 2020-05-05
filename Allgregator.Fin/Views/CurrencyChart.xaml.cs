@@ -33,14 +33,20 @@ namespace Allgregator.Fin.Views {
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d is CurrencyChart view) {
-                if (e.NewValue is IEnumerable<Currency> currencies) {
-                    view.UpdateLayout();
-                    view.Draw(currencies);
-                }
+                view.Draw();
             }
         }
 
-        private void Draw(IEnumerable<Currency> currencies) {
+        private void Draw() {
+            const double dayWidth = 30d;
+            const double marginHost = 50d;
+            const int lineIndent = 11;
+            const double ellipseSize = 18;
+
+            var heightHost = canvas.ActualHeight - marginHost * 2d;
+            if (heightHost <= 0) return;
+
+            var currencies = ItemsSource;
             if (currencies == null) return;
             if (currencies.Any(n => n.Values == null)) return;
 
@@ -55,14 +61,6 @@ namespace Allgregator.Fin.Views {
                     if (value < min[key]) min[key] = value;
                 }
             }
-
-            const double dayWidth = 30d;
-            const double marginHost = 50d;
-            const int lineIndent = 11;
-            const double ellipseSize = 18;
-
-            var heightHost = canvas.ActualHeight - marginHost * 2;
-            if (heightHost <= 0) return;
 
             canvas.Children.Clear();
 
@@ -95,7 +93,7 @@ namespace Allgregator.Fin.Views {
                                 X2 = x2 - dxIndend,
                                 Y2 = y2 - dyIndent,
                                 Stroke = brush,
-                                StrokeThickness = key == Given.CurrencyNames.FirstOrDefault() ? 3 : 1
+                                StrokeThickness = 3
                             };
                             canvas.Children.Add(line);
                         }
@@ -143,6 +141,10 @@ namespace Allgregator.Fin.Views {
 
         private Brush ForegroundFactory() {
             return (Brush)TryFindResource("Fin.Foreground") ?? Brushes.Black;
+        }
+
+        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
+            Draw();
         }
     }
 }

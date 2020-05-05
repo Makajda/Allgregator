@@ -1,11 +1,8 @@
 ﻿1,6180339887 
 
+при отключении сети проверить ещё раз
 add-del-edit rssChapter and todo-add-opml
-linksView: правка параметров главы сразу под списком ссылок
-
-прятать веник, когда нечего убирать и не news
 rss viewService remove?
-show errors update
 fin links
 common elSize to dicrionary
 todo

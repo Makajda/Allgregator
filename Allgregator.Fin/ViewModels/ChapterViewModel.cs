@@ -4,6 +4,7 @@ using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
 using Allgregator.Fin.Views;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
@@ -31,8 +32,11 @@ namespace Allgregator.Fin.ViewModels {
             this.regionManager = regionManager;
             this.container = container;
             this.minedRepository = minedRepository;
+
+            SettingCommand = new DelegateCommand(Setting);
         }
 
+        public DelegateCommand SettingCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
@@ -66,6 +70,10 @@ namespace Allgregator.Fin.ViewModels {
                 settings.FinStartDate = new DateTimeOffset(2020, 3, 18, 0, 0, 0, TimeSpan.Zero);
                 await OreService.Retrieve(Data.Mined, settings.FinStartDate);
             }
+        }
+
+        private void Setting() {
+            //todo
         }
 
         private async Task LoadMined() {
