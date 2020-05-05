@@ -4,7 +4,6 @@
 add-del-edit rssChapter and todo-add-opml
 rss viewService remove?
 fin links
-common elSize to dicrionary
 todo
 
 при добавлении chapter учитывать id и fin
