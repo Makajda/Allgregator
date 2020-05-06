@@ -5,7 +5,6 @@ opml import
 AddChapter
 DeleteChapter
 
-fin links
 при отключении сети проверить ещё раз
 todo
 

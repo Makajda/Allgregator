@@ -19,7 +19,7 @@ namespace Allgregator.Fin.Services {
                 return;
             }
 
-            // dates - недостающие даты на основании имеющихся mined.Currensies
+            // dates - недостающие даты
             var date = startDate.Date;
             var toDate = DateTimeOffset.Now.Date;
             var dates = new List<DateTimeOffset>();
@@ -45,7 +45,6 @@ namespace Allgregator.Fin.Services {
             }
 
             using (retrieveService) {
-                retrieveService.SetNames(mined.Currencies.Where(n => n.IsOn).Select(n => n.Key));
                 var lastRetrieve = await Retrieve(dates, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {
@@ -53,7 +52,17 @@ namespace Allgregator.Fin.Services {
                         mined.Terms = retrieveService.Items.OrderBy(n => n.Date).ToList();
                     }
                     else {
-                        mined.Terms = mined.Terms.Union(retrieveService.Items).OrderBy(n => n.Date).ToList();
+                        foreach (var item in retrieveService.Items) {
+                            var term = mined.Terms.FirstOrDefault(n => n.Date == item.Date);
+                            if (term == null) {
+                                mined.Terms.Add(item);
+                            }
+                            else {
+                                term.Values = item.Values;
+                            }
+
+                            mined.Terms = mined.Terms.OrderBy(n => n.Date).ToList();
+                        }
                     }
                     mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
                     mined.LastRetrieve = lastRetrieve;

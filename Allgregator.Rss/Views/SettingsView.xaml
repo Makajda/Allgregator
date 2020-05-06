@@ -10,15 +10,12 @@
     <UserControl.Resources>
         <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
 
-        <Style x:Key="pathButton" TargetType="ButtonBase">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="20"/>
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="Margin" Value="20"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="20,0,0,0"/>
@@ -62,8 +59,7 @@
                     </StackPanel>
 
                     <Button Content="Delete all" Command="{Binding DeleteChapterCommand}"
-                            common:Shaatt.Shape="Circle"
-                            Background="{StaticResource Chapter.Background}"/>
+                            common:Shaatt.Shape="Circle"/>
                 </StackPanel>
             </GroupBox>
 
@@ -91,7 +87,7 @@
                     <StackPanel>
                         <TextBlock Text="Cutoff Time"/>
                         <TextBox Text="{Binding Settings.RssCutoffTime, UpdateSourceTrigger=PropertyChanged,
-                                    Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Converter={StaticResource DateTimeOffsetToStringConverter}}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                 </StackPanel>

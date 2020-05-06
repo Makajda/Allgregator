@@ -40,7 +40,7 @@ namespace Allgregator.Rss.Services {
             region.Activate(view);
         }
 
-        internal void RemoveMainViews(int id) {//todo
+        internal void RemoveMainViews(int id) {
             var region = regionManager.Regions[Given.MainRegion];
             foreach (var view in Enum.GetNames(typeof(ChapterViews))) {
                 RemoveView(region, view, id);

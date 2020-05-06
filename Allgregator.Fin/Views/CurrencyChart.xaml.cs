@@ -47,6 +47,8 @@ namespace Allgregator.Fin.Views {
             var heightHost = canvas.ActualHeight - marginHost * 2d;
             if (heightHost <= 0) return;
 
+            canvas.Children.Clear();
+
             var terms = (IEnumerable<Term>)GetValue(ItemsSourceProperty);
             var currencies = (IEnumerable<Currency>)currenciesControl.ItemsSource;
             if (terms == null || currencies == null) return;
@@ -63,8 +65,6 @@ namespace Allgregator.Fin.Views {
                     if (value < min[key]) min[key] = value;
                 }
             }
-
-            canvas.Children.Clear();
 
             var prevs = new Dictionary<string, Point>();
             foreach (var name in Given.CurrencyNames) prevs.Add(name, new Point());

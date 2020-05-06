@@ -74,7 +74,7 @@
                 Style="{StaticResource peekButton}"
                 common:Shaatt.Shape="BottomLeft"
                 Command="{Binding SettingCommand}"
-                ToolTip="//todo"
+                ToolTip="Chart"
                 HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom"
                 Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Button.Resources>

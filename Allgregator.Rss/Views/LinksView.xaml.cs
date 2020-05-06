@@ -17,7 +17,7 @@ namespace Allgregator.Rss.Views {
             originalLink = (e.Row.Item as Link)?.Clone();
         }
 
-        private void Dg_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e) {//todo mvvm
+        private void Dg_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e) {
             if (originalLink != null && e.Row.Item is Link link) {
                 if (DataContext is LinksViewModel viewModel && viewModel.Data != null && !viewModel.Data.Linked.IsNeedToSave) {
                     viewModel.Data.Linked.IsNeedToSave = !originalLink.Equals(link);
