@@ -41,20 +41,16 @@ namespace Allgregator.Fin.ViewModels {
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
         protected override int ChapterId => Given.FinChapter;
-
         protected override async Task Activate() {
             await LoadMined();
             ViewActivate<CurrencyView>();
         }
-
         protected override async Task Deactivate() => await SaveMined();
         protected override void Run() => ViewActivate<CurrencyView>();
-
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
         }
-
         protected override async Task Update() {
             if (OreService.IsRetrieving) {
                 OreService.CancelRetrieve();

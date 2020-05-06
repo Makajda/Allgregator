@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Rss", "Allgrega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Aux", "Allgregator.Aux\Allgregator.Aux.csproj", "{AC6A9F5D-D762-4507-9978-A5FF1DDA8E91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Fin", "Allgregator.Fin\Allgregator.Fin.csproj", "{A596A90A-F5FE-4372-8A76-6544EF783B17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Fin", "Allgregator.Fin\Allgregator.Fin.csproj", "{A596A90A-F5FE-4372-8A76-6544EF783B17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Sts", "Allgregator.Sts\Allgregator.Sts.csproj", "{47AFC458-0129-4969-8DA2-07D61E7211D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A596A90A-F5FE-4372-8A76-6544EF783B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A596A90A-F5FE-4372-8A76-6544EF783B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A596A90A-F5FE-4372-8A76-6544EF783B17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47AFC458-0129-4969-8DA2-07D61E7211D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47AFC458-0129-4969-8DA2-07D61E7211D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47AFC458-0129-4969-8DA2-07D61E7211D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47AFC458-0129-4969-8DA2-07D61E7211D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
