@@ -1,17 +1,12 @@
 ﻿1,6180339887 
 
-add-del-edit rssChapter and todo-add-opml
-linksView: правка параметров главы сразу под списком ссылок
+проверить ещё раз
+opml import
+AddChapter
+DeleteChapter
 
-прятать веник, когда нечего убирать и не news
-rss viewService remove?
-show errors update
-fin links
-common elSize to dicrionary
+при отключении сети проверить ещё раз
 todo
 
-при добавлении chapter учитывать id и fin
-добавление-удаление-правка chapter отдельно в SettingsView
-opml 1 event to rss с передачей имён, тогда имя в rssChapter не надо и chapterRepository в opml тоже
 
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

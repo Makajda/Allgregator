@@ -6,10 +6,10 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Rss.Services {
-    internal class ChapterService {
+    internal class RepoService {
         private readonly LinkedRepository linkedRepository;
         private readonly MinedRepository minedRepository;
-        public ChapterService(
+        public RepoService(
             LinkedRepository linkedRepository,
             MinedRepository minedRepository
             ) {
@@ -55,10 +55,10 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        private async Task LoadLinks(Data data, bool force = true) {
+        internal async Task LoadLinks(Data data, bool force = true) {
             if (data.Linked == null && force) {
                 data.Linked = await linkedRepository.GetOrDefault(data.Id);
-                if (data.Linked.CurrentState == LinksStates.Detection || data.Linked.CurrentState == LinksStates.Chapter) {
+                if (data.Linked.CurrentState == LinksStates.Detection) {
                     data.Linked.CurrentState = LinksStates.Normal;
                 }
             }

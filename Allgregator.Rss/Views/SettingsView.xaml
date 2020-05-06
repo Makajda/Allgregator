@@ -3,16 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              >
 
     <UserControl.Resources>
         <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="20"/>
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="Margin" Value="20"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="20,0,0,0"/>
@@ -36,6 +39,43 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel HorizontalAlignment="Center">
+            <!--Collection-->
+            <GroupBox Header="Collection">
+                <StackPanel>
+                    <StackPanel Margin="10" HorizontalAlignment="Center">
+                        <StackPanel>
+                            <TextBlock Text="Name"/>
+                            <TextBox Text="{Binding Data.Name, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="{StaticResource Edit.Background}" 
+                                     Foreground="{StaticResource Edit.Foreground}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="Accept Time"/>
+                            <TextBox Text="{Binding Data.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
+                                Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                     Background="{StaticResource Edit.Background}" 
+                                     Foreground="{StaticResource Edit.Foreground}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button Content="Delete all" Command="{Binding DeleteChapterCommand}"
+                            common:Shaatt.Shape="Circle"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!--New Collection-->
+            <GroupBox Header="New">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Text="Name"/>
+                        <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
+                    </StackPanel>
+                    <Button Content = "add collection" Command="{Binding AddChapterCommand}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!--Settings-->
             <GroupBox Header="Options" Margin="10,0,10,10">
                 <StackPanel>
                     <StackPanel>
@@ -47,29 +87,21 @@
                     <StackPanel>
                         <TextBlock Text="Cutoff Time"/>
                         <TextBox Text="{Binding Settings.RssCutoffTime, UpdateSourceTrigger=PropertyChanged,
-                                    Converter={StaticResource DateTimeOffsetToStringConverter}}"
+                                 Converter={StaticResource DateTimeOffsetToStringConverter}}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="New Chapter">
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel>
-                        <TextBlock Text="Name"/>
-                        <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                    </StackPanel>
-                    <Button Content = "add chapter" Command="{Binding AddChapterCommand}"/>
-                </StackPanel>
-            </GroupBox>
-
+            <!--Export-Import OPML-->
             <GroupBox Header="Opml">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content = "Export" Command="{Binding ToOpmlCommand}"/>
-                    <Button Content = "Import" Command="{Binding FromOpmlCommand}"/>
+                    <Button Content = "Export" Command="{Binding ExportOpmlCommand}"/>
+                    <Button Content = "Import" Command="{Binding ImportOpmlCommand}"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
     </ScrollViewer>
+
+
 </UserControl>

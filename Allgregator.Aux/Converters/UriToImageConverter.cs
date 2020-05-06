@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public class UriToImageConverter : IValueConverter {
+    public sealed class UriToImageConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             return CacheImageHelper.Get(value as Uri);
         }

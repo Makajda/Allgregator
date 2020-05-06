@@ -3,7 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              >
 
-    <ScrollViewer x:Name="scroll" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-        <Canvas x:Name="canvas"/>
-    </ScrollViewer>
+    <DockPanel>
+        <ScrollViewer DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Center"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="currenciesControl" ItemsSource="{Binding Data.Mined.Currencies}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton Content="{Binding Key}"
+                                      Width="100"
+                                      Padding="20" 
+                                      Margin="2"
+                                      Checked="ToggleButton_Checked"
+                                      Unchecked="ToggleButton_Checked"
+                                      IsChecked="{Binding IsOn, Mode=TwoWay}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <ScrollViewer x:Name="scroll" SizeChanged="Scroll_SizeChanged"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <Canvas x:Name="canvas"/>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

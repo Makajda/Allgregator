@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Fin.Services {
-    internal class RetrieveService : RetrieveServiceBase<DateTimeOffset, Currency> {
+    internal class RetrieveService : RetrieveServiceBase<DateTimeOffset, Term> {
         private readonly WebService webService;
 
         public RetrieveService(
@@ -27,15 +27,15 @@ namespace Allgregator.Fin.Services {
 
                 var regex = new Regex("(?<=<tr>).*?(?=</tr>)", RegexOptions.Singleline);
                 var matches = regex.Matches(html);
-                var currency = new Currency() { Date = date };
-                currency.Values = new Dictionary<string, decimal>();
+                var term = new Term() { Date = date };
+                term.Values = new Dictionary<string, decimal>();
                 foreach (var key in Given.CurrencyNames) {
                     var value = GetValue(matches, key);
-                    currency.Values.Add(key, value);
+                    term.Values.Add(key, value);
                 }
 
                 lock (syncItems) {
-                    Items.Add(currency);
+                    Items.Add(term);
                 }
             }
             catch (OperationCanceledException) { }

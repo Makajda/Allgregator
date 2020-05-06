@@ -14,77 +14,55 @@ using System.Threading.Tasks;
 namespace Allgregator.Rss.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly Settings settings;
-        private readonly IEventAggregator eventAggregator;
-        private readonly ChapterService chapterService;
+        private readonly RepoService repoService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
+        private ChapterViews currentView;// = ChapterViews.SettingsView;//todo
 
         public ChapterViewModel(
             OreService oreService,
-            ChapterService chapterService,
+            RepoService repoService,
             ViewService viewService,
             Settings settings,
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) : base(eventAggregator) {
             OreService = oreService;
-            this.chapterService = chapterService;
+            this.repoService = repoService;
             this.viewService = viewService;
             this.settings = settings;
-            this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
 
             ViewsCommand = new DelegateCommand<ChapterViews?>(async (view) => await ChangeView(view));
             MoveCommand = new DelegateCommand(Move);
 
-            eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await chapterService.LinkMoved(Data, n));
-            //todo eventAggregator.GetEvent<ChapterDeletedEvent>().Subscribe(id => chapterService.DeleteFiles(id));
+            eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
         }
         public DelegateCommand<ChapterViews?> ViewsCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
 
-        private ChapterViews currentView;// = ChapterViews.LinksView;//todo
-        public ChapterViews CurrentView {
-            get => currentView;
-            private set => SetProperty(ref currentView, value);
-        }
+        protected override int ChapterId => Data.Id;
+        protected override async Task Activate() => await CurrentViewChanged();
+        protected override async Task Deactivate() => await repoService.Save(Data);
+        protected override void Run() {
+            var recos = currentView switch
+            {
+                ChapterViews.NewsView => Data.Mined?.NewRecos,
+                ChapterViews.OldsView => Data.Mined?.OldRecos,
+                _ => null
+            };
 
-        protected override async Task CurrentChapterChanged(int chapterId) {
-            var savedIsActive = IsActive;
-
-            IsActive = chapterId == Data.Id;
-
-            if (savedIsActive) {
-                await chapterService.Save(Data);
-            }
-
-            if (IsActive) {
-                await CurrentViewChanged();
-            }
-        }
-
-        protected override Task Open() {
-            if (IsActive) {
-                if (CurrentView != ChapterViews.LinksView) {
-                    var recos = CurrentView == ChapterViews.NewsView ? Data.Mined?.NewRecos : Data.Mined?.OldRecos;
-                    if (recos != null) {
-                        var count = recos.Count;
-                        if (count > settings.RssMaxOpenTabs) {
-                            dialogService.Show($"{count}?", OpenReal, 72d);
-                        }
-                        else {
-                            OpenReal();
-                        }
-                    }
+            if (recos != null) {
+                var count = recos.Count;
+                if (count > settings.RssMaxOpenTabs) {
+                    dialogService.Show($"{count}?", OpenReal, 72d);
+                }
+                else {
+                    OpenReal();
                 }
             }
-            else {
-                eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Data.Id);
-            }
-
-            return Task.CompletedTask;
         }
 
         protected override async Task Update() {
@@ -92,32 +70,32 @@ namespace Allgregator.Rss.ViewModels {
                 OreService.CancelRetrieve();
             }
             else {
-                await chapterService.Load(Data);
+                await repoService.Load(Data);
                 await OreService.Retrieve(Data, settings.RssCutoffTime);
             }
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = Data.Id;
-            AsyncHelper.RunSync(async () => await chapterService.Save(Data));
+            AsyncHelper.RunSync(async () => await repoService.Save(Data));
         }
 
         private async Task ChangeView(ChapterViews? view) {
             if (IsActive) {
-                CurrentView = CurrentView = view ?? ChapterViews.NewsView;
+                currentView = currentView = view ?? ChapterViews.NewsView;
                 await CurrentViewChanged();
             }
         }
 
         private async Task CurrentViewChanged() {
-            viewService.ManageMainViews(CurrentView, Data);
-            await chapterService.Load(Data, CurrentView == ChapterViews.LinksView);
+            viewService.ManageMainViews(currentView, Data);
+            await repoService.Load(Data, currentView == ChapterViews.LinksView);
         }
 
         private void OpenReal() {
             var mined = Data.Mined;
             if (mined != null) {
-                if (CurrentView == ChapterViews.NewsView) {
+                if (currentView == ChapterViews.NewsView) {
                     if (mined.NewRecos != null && mined.OldRecos != null) {
                         foreach (var reco in mined.NewRecos.Reverse()) {
                             WindowUtilities.Run(reco.Uri);

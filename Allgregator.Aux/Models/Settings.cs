@@ -24,7 +24,7 @@ namespace Allgregator.Aux.Models {
             set => SetProperty(ref rssCutoffTime, value);
         }
 
-        private DateTimeOffset finStartDate;
+        private DateTimeOffset finStartDate = DateTimeOffset.Now.Date.Date.AddMonths(-1);
         public DateTimeOffset FinStartDate {
             get { return finStartDate; }
             set { SetProperty(ref finStartDate, value); }

@@ -1,5 +1,6 @@
 ﻿using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
+using Allgregator.Fin.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,32 +24,41 @@ namespace Allgregator.Fin.Views {
             foreground = new Lazy<Brush>(ForegroundFactory);
         }
 
-        public IEnumerable<Currency> ItemsSource {
-            get { return (IEnumerable<Currency>)GetValue(ItemsSourceProperty); }
+        public IEnumerable<Term> ItemsSource {
+            get { return (IEnumerable<Term>)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
         }
 
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<Currency>), typeof(CurrencyChart), new PropertyMetadata(null, OnItemsSourceChanged));
+            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<Term>), typeof(CurrencyChart), new PropertyMetadata(null, OnItemsSourceChanged));
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d is CurrencyChart view) {
-                if (e.NewValue is IEnumerable<Currency> currencies) {
-                    view.UpdateLayout();
-                    view.Draw(currencies);
-                }
+                view.Draw();
             }
         }
 
-        private void Draw(IEnumerable<Currency> currencies) {
-            if (currencies == null) return;
-            if (currencies.Any(n => n.Values == null)) return;
+        private void Draw() {
+            const double dayWidth = 30d;
+            const double marginHost = 50d;
+            const int lineIndent = 11;
+            const double ellipseSize = 18;
+
+            var heightHost = canvas.ActualHeight - marginHost * 2d;
+            if (heightHost <= 0) return;
+
+            canvas.Children.Clear();
+
+            var terms = (IEnumerable<Term>)GetValue(ItemsSourceProperty);
+            var currencies = (IEnumerable<Currency>)currenciesControl.ItemsSource;
+            if (terms == null || currencies == null) return;
+            if (terms.Any(n => n.Values == null)) return;
 
             var max = new Dictionary<string, decimal>();
             var min = new Dictionary<string, decimal>();
 
-            foreach (var currency in currencies) {
-                foreach (var (key, value) in currency.Values) {
+            foreach (var term in terms) {
+                foreach (var (key, value) in term.Values) {
                     if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
                     if (value > max[key]) max[key] = value;
                     if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
@@ -56,22 +66,12 @@ namespace Allgregator.Fin.Views {
                 }
             }
 
-            const double dayWidth = 30d;
-            const double marginHost = 50d;
-            const int lineIndent = 11;
-            const double ellipseSize = 18;
-
-            var heightHost = canvas.ActualHeight - marginHost * 2;
-            if (heightHost <= 0) return;
-
-            canvas.Children.Clear();
-
             var prevs = new Dictionary<string, Point>();
             foreach (var name in Given.CurrencyNames) prevs.Add(name, new Point());
             var day = 0;
-            foreach (var currency in currencies) {
-                foreach (var (key, value) in currency.Values) {
-                    if (Given.CurrencyNames.Contains(key)) {
+            foreach (var term in terms) {
+                foreach (var (key, value) in term.Values) {
+                    if (currencies.FirstOrDefault(n => n.Key == key && n.IsOn) != null) {
                         var brush = curBrushes.Value[key];
                         var delta = max[key] - min[key];
                         var y = delta == 0m ?
@@ -95,7 +95,7 @@ namespace Allgregator.Fin.Views {
                                 X2 = x2 - dxIndend,
                                 Y2 = y2 - dyIndent,
                                 Stroke = brush,
-                                StrokeThickness = key == Given.CurrencyNames.FirstOrDefault() ? 3 : 1
+                                StrokeThickness = 3
                             };
                             canvas.Children.Add(line);
                         }
@@ -105,7 +105,7 @@ namespace Allgregator.Fin.Views {
                             Height = ellipseSize,
                             Fill = Brushes.Transparent,
                             Stroke = brush,
-                            ToolTip = $"{currency.Date.Day} - {value}"
+                            ToolTip = $"{term.Date.Day} - {value}"
                         };
                         Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
                         Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
@@ -117,7 +117,7 @@ namespace Allgregator.Fin.Views {
                 }
 
                 var textBlock = new TextBlock() {
-                    Text = $"{currency.Date.Day:D2}",
+                    Text = $"{term.Date.Day:D2}",
                     TextAlignment = TextAlignment.Left,
                     Foreground = foreground.Value,
                     Width = dayWidth
@@ -143,6 +143,14 @@ namespace Allgregator.Fin.Views {
 
         private Brush ForegroundFactory() {
             return (Brush)TryFindResource("Fin.Foreground") ?? Brushes.Black;
+        }
+
+        private void Scroll_SizeChanged(object sender, SizeChangedEventArgs e) {
+            Draw();
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
+            Draw();
         }
     }
 }

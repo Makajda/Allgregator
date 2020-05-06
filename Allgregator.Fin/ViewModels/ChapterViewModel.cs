@@ -4,17 +4,18 @@ using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
 using Allgregator.Fin.Views;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly Settings settings;
-        private readonly IEventAggregator eventAggregator;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
         private readonly IContainerExtension container;
@@ -29,41 +30,29 @@ namespace Allgregator.Fin.ViewModels {
             ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
-            this.eventAggregator = eventAggregator;
             this.regionManager = regionManager;
             this.container = container;
             this.minedRepository = minedRepository;
+
+            SettingCommand = new DelegateCommand(ViewActivate<SettingsView>);
         }
 
+        public DelegateCommand SettingCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
+        protected override int ChapterId => Given.FinChapter;
 
-        protected override async Task CurrentChapterChanged(int chapterId) {
-            IsActive = chapterId == Given.FinChapter;
-
-            if (IsActive) {
-                await LoadMined();
-                var region = regionManager.Regions[Given.MainRegion];
-                var viewName = typeof(CurrencyView).Name;
-                var view = region.GetView(viewName);
-                if (view == null) {
-                    region.Context = Data;
-                    view = container.Resolve<CurrencyView>();
-                    region.Add(view, viewName);
-                }
-
-                region.Activate(view);
-            }
+        protected override async Task Activate() {
+            await LoadMined();
+            ViewActivate<CurrencyView>();
         }
+
+        protected override async Task Deactivate() => await SaveMined();
+        protected override void Run() => ViewActivate<CurrencyView>();
 
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = Given.FinChapter;
+            if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
-        }
-
-        protected override Task Open() {
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(Given.FinChapter);
-            return Task.CompletedTask;
         }
 
         protected override async Task Update() {
@@ -72,14 +61,30 @@ namespace Allgregator.Fin.ViewModels {
             }
             else {
                 await LoadMined();
-                settings.FinStartDate = new DateTimeOffset(2020, 3, 18, 0, 0, 0, TimeSpan.Zero);
                 await OreService.Retrieve(Data.Mined, settings.FinStartDate);
             }
+        }
+
+        private void ViewActivate<TView>() {
+            var region = regionManager.Regions[Given.MainRegion];
+            var viewName = typeof(TView).Name;
+            var view = region.GetView(viewName);
+            if (view == null) {
+                region.Context = Data;
+                view = container.Resolve<TView>();
+                region.Add(view, viewName);
+            }
+
+            region.Activate(view);
         }
 
         private async Task LoadMined() {
             if (Data.Mined == null) {
                 Data.Mined = await minedRepository.GetOrDefault();
+
+                if (Data.Mined.Currencies == null) {
+                    Data.Mined.Currencies = Fin.Common.Given.CurrencyNames.Select(n => new Currency() { Key = n });
+                }
             }
         }
 
@@ -87,6 +92,7 @@ namespace Allgregator.Fin.ViewModels {
             if (Data.Mined != null && Data.Mined.IsNeedToSave) {
                 try {
                     await minedRepository.Save(Data.Mined);
+                    Data.Mined.IsNeedToSave = false;
                 }
                 catch (Exception e) {
                     Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

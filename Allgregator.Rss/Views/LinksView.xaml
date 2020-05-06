@@ -64,11 +64,7 @@
         </Style>
 
         <Style x:Key="rectButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
-            <Setter Property="common:Shaatt.Rect" Value="True"/>
-        </Style>
-
-        <Style x:Key="circleButton" TargetType="ButtonBase" BasedOn="{StaticResource pathButton}">
-            <Setter Property="common:Shaatt.Circle" Value="True"/>
+            <Setter Property="common:Shaatt.Shape" Value="Rect"/>
         </Style>
 
         <DataTemplate x:Key="moveColumn">
@@ -92,26 +88,21 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="New link:" Margin="120,0"/>
+            <TextBlock Text="New link:" Margin="30,0"/>
             
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="&#x213F;" Margin="5" Width="80" FontSize="14" Background="{StaticResource Chapter.Background}"
-                        ToolTip="Options"
-                        Style="{StaticResource circleButton}"
-                        Command="{Binding ToChapterCommand}"/>
-                <TextBox Grid.Column="1" Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
+                <TextBox Text="{Binding Data.Linked.Address, UpdateSourceTrigger=PropertyChanged}" x:Name="address"
                          Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                <Button Grid.Column="2" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
+                <Button Grid.Column="1" Content="&#x1F4CB;" Margin="5,5,0,5" Width="33" FontSize="14" 
                         ToolTip="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=address}"
                         Style="{StaticResource rectButton}"/>
-                <Button Grid.Column="3" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
+                <Button Grid.Column="2" Content="&#xFF0B;" Width="100" Margin="5" Style="{StaticResource rectButton}"
                         ToolTip="Add new link"
                         Command="{Binding AddCommand}"/>
             </Grid>
@@ -160,7 +151,7 @@
                        TextWrapping="Wrap" TextAlignment="Center"/>
         </StackPanel>
 
-        <!--DetectedLinks-->
+        <!--Selection-->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
@@ -175,58 +166,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
-        
-        <!--Chapter-->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                      Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
-            ConverterParameter={x:Static commonLoc:LinksStates.Chapter}}">
-            <StackPanel>
-                <Button Content="&#x1F8A8;" Width="80" Height="50" Margin="20" Background="{StaticResource Chapter.Background}"
-                        Style="{StaticResource circleButton}" HorizontalAlignment="Left"
-                        Command="{Binding FromChapterCommand}"/>
-
-                <StackPanel Margin="10" HorizontalAlignment="Center">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="20,20,0,0"/>
-                        </Style>
-                        <Style TargetType="TextBox">
-                            <Setter Property="Margin" Value="5"/>
-                            <Setter Property="Padding" Value="10"/>
-                            <Setter Property="FontSize" Value="16"/>
-                            <Setter Property="Width" Value="250"/>
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <StackPanel>
-                        <TextBlock Text="Last Retrieve"/>
-                        <TextBox Text="{Binding Data.Mined.LastRetrieve, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
-                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Accept Time"/>
-                        <TextBox Text="{Binding Data.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource DateTimeOffsetToStringConverter}}"
-                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Text="Name"/>
-                        <!--//todo-->
-                        <TextBox Text="{Binding Data.Name, UpdateSourceTrigger=PropertyChanged}"
-                                 Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <Button Content="delete all" Command="{Binding DeleteChapterCommand}"
-                        common:Shaatt.Circle="True"
-                        Margin="20,60"
-                        Padding="15"
-                        Width="130"
-                        Height="90"
-                        HorizontalAlignment="Right"/>
-            </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>
