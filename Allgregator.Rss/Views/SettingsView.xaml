@@ -9,9 +9,7 @@
 
     <UserControl.Resources>
         <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
-        <!--//todo-->
         <Style x:Key="pathButton" TargetType="ButtonBase">
             <Setter Property="Padding" Value="0"/>
             <Setter Property="FontSize" Value="20"/>

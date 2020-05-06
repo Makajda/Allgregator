@@ -17,7 +17,7 @@ namespace Allgregator.Rss.ViewModels {
         private readonly RepoService repoService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
-        private ChapterViews currentView = ChapterViews.SettingsView;//todo
+        private ChapterViews currentView;// = ChapterViews.SettingsView;//todo
 
         public ChapterViewModel(
             OreService oreService,
