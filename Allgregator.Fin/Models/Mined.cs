@@ -12,6 +12,12 @@ namespace Allgregator.Fin.Models {
             set => SetProperty(ref lastRetrieve, value, () => IsNeedToSave = true);
         }
 
+        private IEnumerable<Term> terms;
+        public IEnumerable<Term> Terms {
+            get => terms;
+            set => SetProperty(ref terms, value);
+        }
+
         private IEnumerable<Currency> currencies;
         public IEnumerable<Currency> Currencies {
             get => currencies;

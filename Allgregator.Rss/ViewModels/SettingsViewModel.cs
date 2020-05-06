@@ -20,7 +20,6 @@ namespace Allgregator.Rss.ViewModels {
         private readonly RepoService repoService;
         private readonly ViewService viewService;
         private readonly DialogService dialogService;
-        private readonly IEventAggregator eventAggregator;//todo
 
         public SettingsViewModel(
             Settings settings,
@@ -40,7 +39,6 @@ namespace Allgregator.Rss.ViewModels {
             this.chapterRepository = chapterRepository;
             this.repoService = repoService;
             this.viewService = viewService;
-            this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
             this.Settings = settings;
 

@@ -15,7 +15,7 @@ namespace Allgregator.Fin.Services {
         }
 
         internal async Task Retrieve(Mined mined, DateTimeOffset startDate) {
-            if (mined == null) {
+            if (mined == null || mined.Currencies == null) {
                 return;
             }
 
@@ -24,9 +24,9 @@ namespace Allgregator.Fin.Services {
             var toDate = DateTimeOffset.Now.Date;
             var dates = new List<DateTimeOffset>();
 
-            if (mined.Currencies != null) {
-                foreach (var currency in mined.Currencies) {
-                    while (date <= toDate && date < currency.Date) {
+            if (mined.Terms != null) {
+                foreach (var term in mined.Terms) {
+                    while (date <= toDate && date < term.Date) {
                         dates.Add(date);
                         date = date.AddDays(1);
                     }
@@ -45,14 +45,15 @@ namespace Allgregator.Fin.Services {
             }
 
             using (retrieveService) {
+                retrieveService.SetNames(mined.Currencies.Where(n => n.IsOn).Select(n => n.Key));
                 var lastRetrieve = await Retrieve(dates, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {
-                    if (mined.Currencies == null) {
-                        mined.Currencies = retrieveService.Items.OrderBy(n => n.Date).ToList();
+                    if (mined.Terms == null) {
+                        mined.Terms = retrieveService.Items.OrderBy(n => n.Date).ToList();
                     }
                     else {
-                        mined.Currencies = mined.Currencies.Union(retrieveService.Items).OrderBy(n => n.Date).ToList();
+                        mined.Terms = mined.Terms.Union(retrieveService.Items).OrderBy(n => n.Date).ToList();
                     }
                     mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
                     mined.LastRetrieve = lastRetrieve;

@@ -10,6 +10,7 @@ using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Fin.ViewModels {
@@ -79,6 +80,10 @@ namespace Allgregator.Fin.ViewModels {
         private async Task LoadMined() {
             if (Data.Mined == null) {
                 Data.Mined = await minedRepository.GetOrDefault();
+
+                if (Data.Mined.Currencies == null) {
+                    Data.Mined.Currencies = Fin.Common.Given.CurrencyNames.Select(n => new Currency() { Key = n });
+                }
             }
         }
 
