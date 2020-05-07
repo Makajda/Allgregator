@@ -90,7 +90,7 @@ namespace Allgregator.Rss.ViewModels {
                 var chapters = chapterRepository.GetOrDefault().Where(n => n.Id != Data.Id);
                 Save(chapters);
                 repoService.DeleteFiles(Data.Id);
-                viewService.RemoveMainViews(Data.Id);
+                viewService.RemoveMainView(Data.Id);
             }
         }
 

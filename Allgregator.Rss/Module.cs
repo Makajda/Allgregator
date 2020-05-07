@@ -16,6 +16,7 @@ namespace Allgregator.Rss {
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
+            containerRegistry.RegisterForNavigation<MainView>("MainView");
         }
     }
 }

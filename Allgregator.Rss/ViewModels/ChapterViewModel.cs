@@ -4,8 +4,10 @@ using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
+using Allgregator.Rss.Views;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Regions;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace Allgregator.Rss.ViewModels {
         private readonly Settings settings;
         private readonly RepoService repoService;
         private readonly ViewService viewService;
+        private readonly IRegionManager regionManager;
         private readonly DialogService dialogService;
 
         public ChapterViewModel(
@@ -23,6 +26,7 @@ namespace Allgregator.Rss.ViewModels {
             RepoService repoService,
             ViewService viewService,
             Settings settings,
+            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) : base(eventAggregator) {
@@ -31,6 +35,7 @@ namespace Allgregator.Rss.ViewModels {
             this.viewService = viewService;
             this.settings = settings;
             this.dialogService = dialogService;
+            this.regionManager = regionManager;
 
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
         }
@@ -39,7 +44,13 @@ namespace Allgregator.Rss.ViewModels {
 
         protected override int ChapterId => Data.Id;
         protected override async Task Activate() {
-            viewService.ActivateMainView(Data.Id);
+            //viewService.ActivateMainView(Data);
+
+            var p = new NavigationParameters();
+            p.Add("Data", Data);
+            //regionManager.Regions[Aux.Common.Given.RegionMain].Context = Data;
+            regionManager.RequestNavigate(Aux.Common.Given.RegionMain, "MainView", p);
+            await repoService.Load(Data);
         }
         protected override async Task Deactivate() => await repoService.Save(Data);
 

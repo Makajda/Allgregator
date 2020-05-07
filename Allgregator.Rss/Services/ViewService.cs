@@ -3,14 +3,12 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.Views;
 using Prism.Ioc;
 using Prism.Regions;
-using System;
 using System.Collections.Generic;
 
 namespace Allgregator.Rss.Services {
     internal class ViewService {
         private readonly IContainerExtension container;
         private readonly IRegionManager regionManager;
-        private IRegionManager regionManagerLoc;
         public ViewService(
             IContainerExtension container,
             IRegionManager regionManager
@@ -19,22 +17,22 @@ namespace Allgregator.Rss.Services {
             this.regionManager = regionManager;
         }
 
-        internal void ActivateMainView(int id) {
-            const string name = "RssView";
+        internal void ActivateMainView(Data data) {
             var region = regionManager.Regions[Aux.Common.Given.RegionMain];
-            var viewName = GetName(name, id);
+            var viewName = GetName(data.Id);
             var view = region.GetView(viewName);
             if (view == null) {
+                region.Context = data;
                 view = container.Resolve<MainView>();
-                regionManagerLoc = region.Add(view, viewName, true);
+                var regionManagerLoc = region.Add(view, viewName, true);
             }
 
             region.Activate(view);
         }
 
-        internal void ManageMainViews(ChapterViews currentView, Data data) {
-            var region = regionManagerLoc.Regions[Rss.Common.Given.RegionSubmain];
-            var viewName = GetName(currentView.ToString(), data.Id);
+        internal void ManageMainViews(ChapterViews currentView, Data data, string regionName) {
+            var region = regionManager.Regions[regionName];
+            var viewName = currentView.ToString();
             var view = region.GetView(viewName);
             if (view == null) {
                 var regionMain = regionManager.Regions[Aux.Common.Given.RegionMain];
@@ -54,11 +52,10 @@ namespace Allgregator.Rss.Services {
             region.Activate(view);
         }
 
-        internal void RemoveMainViews(int id) {
+        internal void RemoveMainView(int id) {
             var region = regionManager.Regions[Aux.Common.Given.RegionMain];
-            foreach (var view in Enum.GetNames(typeof(ChapterViews))) {//todo MainView
-                RemoveView(region, view, id);
-            }
+            var view = region.GetView(GetName(id));
+            if (view != null) region.Remove(view);
         }
 
         internal void AddModuleViews(IEnumerable<Data> chapters) {
@@ -70,11 +67,9 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        private void RemoveView(IRegion region, string currentView, int id) {
-            var view = region.GetView(GetName(currentView, id));
-            if (view != null) region.Remove(view);
+        private string GetName(int id) {
+            const string name = "RssView";
+            return $"{name}.{id}";
         }
-
-        private string GetName(string view, int id) => $"{view}.{id}";
     }
 }
