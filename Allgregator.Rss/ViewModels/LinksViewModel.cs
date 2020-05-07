@@ -1,5 +1,4 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
+﻿using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
@@ -23,7 +22,7 @@ namespace Allgregator.Rss.ViewModels {
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+            if (regionManager.Regions[Aux.Common.Given.RegionMain].Context is Data data) {
                 Data = data;
             }
 

@@ -8,7 +8,7 @@ namespace Allgregator.Fin.ViewModels {
         public CurrencyViewModel(
             IRegionManager regionManager
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
                 Data = data;
             }
         }

@@ -14,7 +14,7 @@ namespace Allgregator.Fin.ViewModels {
             IRegionManager regionManager,
             DialogService dialogService
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
                 Data = data;
             }
 

@@ -31,7 +31,7 @@ namespace Allgregator.Rss.ViewModels {
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
                 Data = data;
             }
 
@@ -68,7 +68,7 @@ namespace Allgregator.Rss.ViewModels {
             var chapter = chapterRepository.GetNewChapter(chapters, AddedName);
             chapters.Add(chapter);
             Save(chapters);
-            viewService.AddMenuView(new[] { chapter });
+            viewService.AddModuleViews(new[] { chapter });
         }
 
         private void SaveChapterName(CancelEventArgs obj) {
@@ -116,7 +116,7 @@ namespace Allgregator.Rss.ViewModels {
             try {
                 var chapters = await opmlRepository.Import();
                 if (chapters != null) {
-                    viewService.AddMenuView(chapters);
+                    viewService.AddModuleViews(chapters);
 
                     var str = $"added {chapters.Length} collections";
                     dialogService.Show(str);

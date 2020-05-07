@@ -9,7 +9,7 @@ namespace Allgregator.Rss.ViewModels {
         public NewsViewModel(
             IRegionManager regionManager
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
+            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
                 Data = data;
             }
 

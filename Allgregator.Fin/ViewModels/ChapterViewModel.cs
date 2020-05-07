@@ -46,7 +46,7 @@ namespace Allgregator.Fin.ViewModels {
             ViewActivate<CurrencyView>();
         }
         protected override async Task Deactivate() => await SaveMined();
-        protected override void Run() => ViewActivate<CurrencyView>();
+        //todo back protected override void Run() => ViewActivate<CurrencyView>();
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
@@ -62,7 +62,7 @@ namespace Allgregator.Fin.ViewModels {
         }
 
         private void ViewActivate<TView>() {
-            var region = regionManager.Regions[Given.MainRegion];
+            var region = regionManager.Regions[Given.RegionMain];
             var viewName = typeof(TView).Name;
             var view = region.GetView(viewName);
             if (view == null) {

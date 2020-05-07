@@ -30,10 +30,10 @@ namespace Allgregator.Aux.Common {
 
         protected abstract int ChapterId { get; }
         protected abstract Task Activate();
-        protected abstract void Run();
         protected abstract Task Update();
         protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
+        protected virtual void Run() { }
 
         private async void CurrentChapterChanged(int chapterId) {
             var savedIsActive = IsActive;

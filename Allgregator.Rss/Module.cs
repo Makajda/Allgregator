@@ -1,7 +1,10 @@
-﻿using Allgregator.Rss.Repositories;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
+using Allgregator.Rss.Views;
 using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Regions;
 
 namespace Allgregator.Rss {
     public class Module : IModule {
@@ -9,7 +12,7 @@ namespace Allgregator.Rss {
             var viewService = containerProvider.Resolve<ViewService>();
             var chapterRepository = new ChapterRepository();
             var chapters = chapterRepository.GetOrDefault();
-            viewService.AddMenuView(chapters);
+            viewService.AddModuleViews(chapters);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
