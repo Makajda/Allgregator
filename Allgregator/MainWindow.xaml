@@ -39,14 +39,20 @@
                       Style="{StaticResource button}" ToolTip="Window is topmost"
                       IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-        <ItemsControl Grid.Column="1" HorizontalAlignment="Center" prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-
+        <ScrollViewer Grid.Column="1"
+                      MaxHeight="230"
+                      HorizontalAlignment="Center"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        
         <ContentControl Grid.Row="2" Grid.ColumnSpan="2" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>
