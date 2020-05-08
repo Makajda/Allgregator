@@ -1,6 +1,5 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
 using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;
@@ -41,6 +40,7 @@ namespace Allgregator {
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog) {
             moduleCatalog.AddModule<Rss.Module>("Rss");
             moduleCatalog.AddModule<Fin.Module>("Fin");
+            moduleCatalog.AddModule<Sts.Module>("Sts");
         }
     }
 }
