@@ -1,49 +1,49 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Fin.Common;
-using Allgregator.Fin.Models;
-using Allgregator.Fin.Repositories;
-using Allgregator.Fin.Services;
-using Allgregator.Fin.Views;
+using Allgregator.Sts.Model;
+using Allgregator.Sts.Repositories;
+using Allgregator.Sts.Services;
+using Allgregator.Sts.Views;
+using Prism.Commands;
 using Prism.Events;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Allgregator.Fin.ViewModels {
+namespace Allgregator.Sts.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
-        private readonly Settings settings;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
-        private bool isSettings;
-
+        private readonly Settings settings;
         public ChapterViewModel(
-            Settings settings,
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
-            MinedRepository minedRepository
+            MinedRepository minedRepository,
+            Settings settings
             ) : base(eventAggregator) {
             OreService = oreService;
-            this.settings = settings;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
+            this.settings = settings;
         }
 
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
-        protected override int ChapterId => Given.FinChapter;
+        protected override int ChapterId => Given.StsChapter;
         protected override async Task Activate() {
             await LoadMined();
-            ViewActivate();
+            var view = typeof(UnicodeView).FullName;
+            var parameters = new NavigationParameters {
+                { Given.DataParameter, Data }
+            };
+            regionManager.RequestNavigate(Given.MainRegion, view, parameters);
         }
         protected override async Task Deactivate() => await SaveMined();
-        protected override void Run() {
-            isSettings = !isSettings;
-            ViewActivate();
-        }
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
@@ -54,25 +54,13 @@ namespace Allgregator.Fin.ViewModels {
             }
             else {
                 await LoadMined();
-                await OreService.Retrieve(Data.Mined, settings.FinStartDate);
+                //await OreService.Retrieve(Data.Mined);
             }
-        }
-
-        private void ViewActivate() {
-            var view = isSettings ? typeof(SettingsView).FullName : typeof(CurrencyView).FullName;
-            var parameters = new NavigationParameters {
-                { Given.DataParameter, Data }
-            };
-            regionManager.RequestNavigate(Given.MainRegion, view, parameters);
         }
 
         private async Task LoadMined() {
             if (Data.Mined == null) {
                 Data.Mined = await minedRepository.GetOrDefault();
-
-                if (Data.Mined.Currencies == null) {
-                    Data.Mined.Currencies = Fin.Common.Givenloc.CurrencyNames.Select(n => new Currency() { Key = n });
-                }
             }
         }
 

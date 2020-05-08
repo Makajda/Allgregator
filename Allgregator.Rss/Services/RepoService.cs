@@ -17,9 +17,9 @@ namespace Allgregator.Rss.Services {
             this.minedRepository = minedRepository;
         }
 
-        internal async Task Load(Data data, bool force = true) {
+        internal async Task Load(Data data) {
             await LoadMined(data);
-            await LoadLinks(data, force);
+            await LoadLinks(data);
         }
 
         internal async Task Save(Data data) {
@@ -55,8 +55,8 @@ namespace Allgregator.Rss.Services {
             }
         }
 
-        internal async Task LoadLinks(Data data, bool force = true) {
-            if (data.Linked == null && force) {
+        internal async Task LoadLinks(Data data) {
+            if (data.Linked == null) {
                 data.Linked = await linkedRepository.GetOrDefault(data.Id);
                 if (data.Linked.CurrentState == LinksStates.Detection) {
                     data.Linked.CurrentState = LinksStates.Normal;

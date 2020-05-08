@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Allgregator.Rss.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             xmlns:commonLoc="clr-namespace:Allgregator.Rss.Common"
+             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             >
+
+    <UserControl.Resources>
+        <Style x:Key="managerButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid Background="{StaticResource Main.Background}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <UniformGrid Rows="1" Columns="6">
+                <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
+                        ToolTip="News"
+                        Background="{StaticResource News.Background}"/>
+                <Button Content="&#x1F5C3;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.OldsView}"
+                        ToolTip="Outdated"
+                        Background="{StaticResource Olds.Background}"/>
+                <Button Content="&#x2630;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
+                        ToolTip="Links"
+                        Background="{StaticResource Links.Background}"/>
+                <Button Content="&#x283F;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.SettingsView}"
+                        ToolTip="Settings"
+                        Background="{StaticResource Settings.Background}"/>
+                <Button Content="&#x1F310;"
+                        Style="{StaticResource managerButton}"
+                        ToolTip="Browse"
+                        Command="{Binding BrowseCommand}"
+                        Background="{StaticResource Chapter.Background}"/>
+                <Button Content="&#x1F9F9;" 
+                        Style="{StaticResource managerButton}"
+                        ToolTip="Clean"
+                        Command="{Binding MoveCommand}"
+                        Background="{StaticResource Olds.Background}"/>
+            </UniformGrid>
+        </ScrollViewer>
+
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static commonLoc:Givenloc.SubmainRegion}" />
+    </Grid>
+</UserControl>

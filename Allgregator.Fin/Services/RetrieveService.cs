@@ -29,7 +29,7 @@ namespace Allgregator.Fin.Services {
                 var matches = regex.Matches(html);
                 var term = new Term() { Date = date };
                 term.Values = new Dictionary<string, decimal>();
-                foreach (var key in Given.CurrencyNames) {
+                foreach (var key in Givenloc.CurrencyNames) {
                     var value = GetValue(matches, key);
                     term.Values.Add(key, value);
                 }
@@ -48,11 +48,16 @@ namespace Allgregator.Fin.Services {
 
         private decimal GetValue(MatchCollection matches, string country) {
             var tr = matches.FirstOrDefault(n => n.Value.Contains(country));
-            var regexTd = new Regex("(?<=<td>).*?(?=</td>)", RegexOptions.Singleline);
-            var matchesTd = regexTd.Matches(tr.Value);
-            var s = matchesTd.Last();
-            var res = decimal.Parse(s.Value);
-            return res;//todo
+            if (tr != null) {
+                var regexTd = new Regex("(?<=<td>).*?(?=</td>)", RegexOptions.Singleline);
+                var matchesTd = regexTd.Matches(tr.Value);
+                var s = matchesTd.LastOrDefault();
+                if (decimal.TryParse(s.Value, out decimal result)) {
+                    return result;
+                }
+            }
+
+            return decimal.Zero;
         }
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Allgregator.Rss.Views {
     /// <summary>
-    /// Interaction logic for ChapterView.xaml
+    /// Interaction logic for MainView
     /// </summary>
-    public partial class ChapterView : UserControl {
-        public ChapterView() {
+    public partial class MainView : UserControl {
+        public MainView() {
             InitializeComponent();
         }
     }

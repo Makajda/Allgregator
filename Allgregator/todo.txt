@@ -5,8 +5,11 @@ opml import
 AddChapter
 DeleteChapter
 
-при отключении сети проверить ещё раз
 todo
+
+MinedRepository - base!
+Data - base? no!
+Mined - base? no!
 
 
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

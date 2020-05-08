@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 
-namespace Allgregator.Rss.Views {
+namespace Allgregator.Sts.Views {
     /// <summary>
-    /// Interaction logic for ChapterView.xaml
+    /// Interaction logic for ChapterView
     /// </summary>
     public partial class ChapterView : UserControl {
         public ChapterView() {

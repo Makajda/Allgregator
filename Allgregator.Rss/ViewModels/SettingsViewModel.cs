@@ -6,15 +6,13 @@ using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class SettingsViewModel : BindableBase {
+    internal class SettingsViewModel : DataViewModelBase<Data> {
         private readonly OpmlRepository opmlRepository;
         private readonly ChapterRepository chapterRepository;
         private readonly RepoService repoService;
@@ -27,14 +25,9 @@ namespace Allgregator.Rss.ViewModels {
             ChapterRepository chapterRepository,
             RepoService repoService,
             ViewService viewService,
-            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
-                Data = data;
-            }
-
             this.opmlRepository = opmlRepository;
             this.chapterRepository = chapterRepository;
             this.repoService = repoService;
@@ -55,12 +48,11 @@ namespace Allgregator.Rss.ViewModels {
         public DelegateCommand ExportOpmlCommand { get; private set; }
         public DelegateCommand ImportOpmlCommand { get; private set; }
         public Settings Settings { get; private set; }
-        public Data Data { get; private set; }
 
         private string addedName;
         public string AddedName {
-            get { return addedName; }
-            set { SetProperty(ref addedName, value); }
+            get => addedName;
+            set => SetProperty(ref addedName, value);
         }
 
         private void AddChapter() {
@@ -68,7 +60,7 @@ namespace Allgregator.Rss.ViewModels {
             var chapter = chapterRepository.GetNewChapter(chapters, AddedName);
             chapters.Add(chapter);
             Save(chapters);
-            viewService.AddMenuView(new[] { chapter });
+            viewService.AddModuleViews(new[] { chapter });
         }
 
         private void SaveChapterName(CancelEventArgs obj) {
@@ -90,7 +82,7 @@ namespace Allgregator.Rss.ViewModels {
                 var chapters = chapterRepository.GetOrDefault().Where(n => n.Id != Data.Id);
                 Save(chapters);
                 repoService.DeleteFiles(Data.Id);
-                viewService.RemoveMainViews(Data.Id);
+                viewService.RemoveMainView(Data.Id);
             }
         }
 
@@ -116,7 +108,7 @@ namespace Allgregator.Rss.ViewModels {
             try {
                 var chapters = await opmlRepository.Import();
                 if (chapters != null) {
-                    viewService.AddMenuView(chapters);
+                    viewService.AddModuleViews(chapters);
 
                     var str = $"added {chapters.Length} collections";
                     dialogService.Show(str);

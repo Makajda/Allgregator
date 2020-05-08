@@ -1,11 +1,10 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Fin.Common;
-using Allgregator.Fin.Views;
+using Allgregator.Sts.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
-namespace Allgregator.Fin {
+namespace Allgregator.Sts {
     public class Module : IModule {
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
@@ -14,8 +13,7 @@ namespace Allgregator.Fin {
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterForNavigation<ChapterView>(typeof(ChapterView).FullName);
-            containerRegistry.RegisterForNavigation<CurrencyView>(typeof(CurrencyView).FullName);
-            containerRegistry.RegisterForNavigation<SettingsView>(typeof(SettingsView).FullName);
+            containerRegistry.RegisterForNavigation<UnicodeView>(typeof(UnicodeView).FullName);
         }
     }
 }

@@ -6,27 +6,20 @@ using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
-using Prism.Regions;
 using System.Linq;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class LinksViewModel : BindableBase {
+    internal class LinksViewModel : DataViewModelBase<Data> {
         private readonly ChapterRepository chapterRepository;
         private readonly DialogService dialogService;
         private readonly IEventAggregator eventAggregator;
 
         public LinksViewModel(
-            IRegionManager regionManager,
             ChapterRepository chapterRepository,
             DialogService dialogService,
             DetectionService detectionService,
             IEventAggregator eventAggregator
             ) {
-            if (regionManager.Regions[Given.MainRegion].Context is Data data) {
-                Data = data;
-            }
-
             this.chapterRepository = chapterRepository;
             this.eventAggregator = eventAggregator;
             this.dialogService = dialogService;
@@ -41,7 +34,6 @@ namespace Allgregator.Rss.ViewModels {
         public DelegateCommand<Link> MoveCommand { get; private set; }
         public DelegateCommand<Link> DeleteCommand { get; private set; }
         public DelegateCommand<Link> SelectionCommand { get; private set; }
-        public Data Data { get; private set; }
 
         private void Move(Link link) {
             var chapters = chapterRepository.GetOrDefault();
