@@ -6,15 +6,13 @@ using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
-using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class SettingsViewModel : BindableBase {
+    internal class SettingsViewModel : DataViewModelBase<Data> {
         private readonly OpmlRepository opmlRepository;
         private readonly ChapterRepository chapterRepository;
         private readonly RepoService repoService;
@@ -27,14 +25,9 @@ namespace Allgregator.Rss.ViewModels {
             ChapterRepository chapterRepository,
             RepoService repoService,
             ViewService viewService,
-            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             DialogService dialogService
             ) {
-            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
-                Data = data;
-            }
-
             this.opmlRepository = opmlRepository;
             this.chapterRepository = chapterRepository;
             this.repoService = repoService;
@@ -55,12 +48,11 @@ namespace Allgregator.Rss.ViewModels {
         public DelegateCommand ExportOpmlCommand { get; private set; }
         public DelegateCommand ImportOpmlCommand { get; private set; }
         public Settings Settings { get; private set; }
-        public Data Data { get; private set; }
 
         private string addedName;
         public string AddedName {
-            get { return addedName; }
-            set { SetProperty(ref addedName, value); }
+            get => addedName;
+            set => SetProperty(ref addedName, value);
         }
 
         private void AddChapter() {

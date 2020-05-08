@@ -1,11 +1,12 @@
 ﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Common {
-    public abstract class ChapterViewModelBase : BindableBase {
+    public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
         protected readonly IEventAggregator eventAggregator;
         public ChapterViewModelBase(
             IEventAggregator eventAggregator
@@ -55,5 +56,9 @@ namespace Allgregator.Aux.Common {
                 eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(ChapterId);
             }
         }
+
+        public virtual void OnNavigatedTo(NavigationContext navigationContext) { }
+        public virtual bool IsNavigationTarget(NavigationContext navigationContext) => false;
+        public virtual void OnNavigatedFrom(NavigationContext navigationContext) { }
     }
 }

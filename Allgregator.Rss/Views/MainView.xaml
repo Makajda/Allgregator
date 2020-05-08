@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Allgregator.Rss.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/"             
-             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="False"
              xmlns:commonLoc="clr-namespace:Allgregator.Rss.Common"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              >
@@ -40,7 +40,7 @@
                 <Button Content="&#x1F310;"
                         Style="{StaticResource managerButton}"
                         ToolTip="Browse"
-                        Command="{Binding OpenCommand}"
+                        Command="{Binding BrowseCommand}"
                         Background="{StaticResource Chapter.Background}"/>
                 <Button Content="&#x1F9F9;" 
                         Style="{StaticResource managerButton}"
@@ -50,7 +50,6 @@
             </UniformGrid>
         </ScrollViewer>
 
-        <!--<ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static commonLoc:Given.RegionSubmain}" />-->
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{Binding RegionName, Mode=OneWay}" />
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static commonLoc:Givenloc.SubmainRegion}" />
     </Grid>
 </UserControl>

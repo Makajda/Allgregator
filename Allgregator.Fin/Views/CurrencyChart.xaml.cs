@@ -67,7 +67,7 @@ namespace Allgregator.Fin.Views {
             }
 
             var prevs = new Dictionary<string, Point>();
-            foreach (var name in Given.CurrencyNames) prevs.Add(name, new Point());
+            foreach (var name in Givenloc.CurrencyNames) prevs.Add(name, new Point());
             var day = 0;
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
@@ -133,7 +133,7 @@ namespace Allgregator.Fin.Views {
 
         private Dictionary<string, Brush> BrushesFactory() {
             var result = new Dictionary<string, Brush>();
-            foreach (var name in Given.CurrencyNames) {
+            foreach (var name in Givenloc.CurrencyNames) {
                 var brush = (Brush)TryFindResource($"Fin.{name}");
                 result.Add(name, brush ?? Brushes.Black);
             }

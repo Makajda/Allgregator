@@ -1,24 +1,13 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
 using Allgregator.Fin.Models;
 using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Regions;
 
 namespace Allgregator.Fin.ViewModels {
-    public class SettingsViewModel : BindableBase {
-        private readonly DialogService dialogService;
+    public class SettingsViewModel : DataViewModelBase<Data> {
         public SettingsViewModel(
-            Settings settings,
-            IRegionManager regionManager,
-            DialogService dialogService
+            Settings settings
             ) {
-            if (regionManager.Regions[Given.RegionMain].Context is Data data) {
-                Data = data;
-            }
-
-            this.dialogService = dialogService;
             this.Settings = settings;
 
             DeleteCommand = new DelegateCommand(Delete);
@@ -26,7 +15,6 @@ namespace Allgregator.Fin.ViewModels {
 
         public DelegateCommand DeleteCommand { get; private set; }
         public Settings Settings { get; private set; }
-        public Data Data { get; private set; }
 
         private void Delete() {
             Data.Mined.Terms = null;

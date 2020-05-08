@@ -1,6 +1,6 @@
 ﻿namespace Allgregator.Fin.Common {
-    static class Given {
-        public static readonly string[] CurrencyNames = {
+    static class Givenloc {
+        internal static readonly string[] CurrencyNames = {
             "USD",
             "EUR",
             "GBP",

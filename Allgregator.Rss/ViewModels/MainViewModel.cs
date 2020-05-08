@@ -3,7 +3,7 @@ using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
-using Allgregator.Rss.Services;
+using Allgregator.Rss.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -11,40 +11,51 @@ using System;
 using System.Linq;
 
 namespace Allgregator.Rss.ViewModels {
-    internal class MainViewModel : BindableBase, INavigationAware {
+    internal class MainViewModel : BindableBase {
         private readonly Settings settings;
-        private readonly ViewService viewService;
         private readonly DialogService dialogService;
-        private ChapterViews currentView;// = ChapterViews.SettingsView;//todo
-        private Data data;
+        private readonly IRegionManager regionManager;
+        private readonly Data data;
+        private ChapterViews currentView;
 
         public MainViewModel(
-            RepoService repoService,
-            ViewService viewService,
             IRegionManager regionManager,
+            Data data,
             Settings settings,
             DialogService dialogService
             ) {
-            this.viewService = viewService;
+            this.regionManager = regionManager;
+            this.data = data;
             this.settings = settings;
             this.dialogService = dialogService;
 
-            //if (regionManager.Regions[Aux.Common.Given.RegionMain].Context is Data data) {
-            //    this.data = data;
-            //}
-
             ViewsCommand = new DelegateCommand<ChapterViews?>(ChangeView);
             MoveCommand = new DelegateCommand(Move);
+            BrowseCommand = new DelegateCommand(Browse);
+
+            ChangeView(ChapterViews.NewsView);
         }
         public DelegateCommand<ChapterViews?> ViewsCommand { get; private set; }
+        public DelegateCommand BrowseCommand { get; private set; }
         public DelegateCommand MoveCommand { get; private set; }
 
-        private void ChangeView(ChapterViews? view) {
-            currentView = view ?? ChapterViews.NewsView;
-            viewService.ManageMainViews(currentView, data, RegionName);
+        private void ChangeView(ChapterViews? chapterView) {
+            currentView = chapterView ?? ChapterViews.NewsView;
+            var viewName = currentView switch
+            {
+                ChapterViews.NewsView => typeof(NewsView).FullName,
+                ChapterViews.OldsView => typeof(OldsView).FullName,
+                ChapterViews.LinksView => typeof(LinksView).FullName,
+                ChapterViews.SettingsView => typeof(SettingsView).FullName,
+                _ => typeof(NewsView).FullName
+            };
+            var parameters = new NavigationParameters {
+                { Given.DataParameter, data }
+            };
+            regionManager.RequestNavigate(Givenloc.SubmainRegion, viewName, parameters);
         }
 
-        private void Run() {
+        private void Browse() {
             var recos = currentView switch
             {
                 ChapterViews.NewsView => data.Mined?.NewRecos,
@@ -93,26 +104,6 @@ namespace Allgregator.Rss.ViewModels {
                 mined.NewRecos.Clear();
                 mined.AcceptTime = mined.LastRetrieve;
             }
-        }
-
-        private string regionName;
-        public string RegionName {
-            get { return regionName; }
-            set { SetProperty(ref regionName, value); }
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext) {
-            var p = navigationContext.Parameters.GetValue<Data>("Data");
-            data = p;
-            RegionName = p.Id.ToString();
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext) {
-            var p = navigationContext.Parameters.GetValue<Data>("Data");
-            return data.Id == p.Id;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext) {
         }
     }
 }

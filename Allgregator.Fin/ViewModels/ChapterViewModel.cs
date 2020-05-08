@@ -1,12 +1,11 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
 using Allgregator.Fin.Views;
-using Prism.Commands;
 using Prism.Events;
-using Prism.Ioc;
 using Prism.Regions;
 using System;
 using System.ComponentModel;
@@ -18,35 +17,33 @@ namespace Allgregator.Fin.ViewModels {
         private readonly Settings settings;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
-        private readonly IContainerExtension container;
+        private bool isSettings;
 
         public ChapterViewModel(
             Settings settings,
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
-            IContainerExtension container,
             MinedRepository minedRepository
             ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
             this.regionManager = regionManager;
-            this.container = container;
             this.minedRepository = minedRepository;
-
-            SettingCommand = new DelegateCommand(ViewActivate<SettingsView>);
         }
 
-        public DelegateCommand SettingCommand { get; private set; }
         public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
         protected override int ChapterId => Given.FinChapter;
         protected override async Task Activate() {
             await LoadMined();
-            ViewActivate<CurrencyView>();
+            ViewActivate();
         }
         protected override async Task Deactivate() => await SaveMined();
-        //todo back protected override void Run() => ViewActivate<CurrencyView>();
+        protected override void Run() {
+            isSettings = !isSettings;
+            ViewActivate();
+        }
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await SaveMined());
@@ -61,17 +58,12 @@ namespace Allgregator.Fin.ViewModels {
             }
         }
 
-        private void ViewActivate<TView>() {
-            var region = regionManager.Regions[Given.RegionMain];
-            var viewName = typeof(TView).Name;
-            var view = region.GetView(viewName);
-            if (view == null) {
-                region.Context = Data;
-                view = container.Resolve<TView>();
-                region.Add(view, viewName);
-            }
-
-            region.Activate(view);
+        private void ViewActivate() {
+            var view = isSettings ? typeof(SettingsView).FullName : typeof(CurrencyView).FullName;
+            var parameters = new NavigationParameters {
+                { Given.DataParameter, Data }
+            };
+            regionManager.RequestNavigate(Given.MainRegion, view, parameters);
         }
 
         private async Task LoadMined() {
@@ -79,7 +71,7 @@ namespace Allgregator.Fin.ViewModels {
                 Data.Mined = await minedRepository.GetOrDefault();
 
                 if (Data.Mined.Currencies == null) {
-                    Data.Mined.Currencies = Fin.Common.Given.CurrencyNames.Select(n => new Currency() { Key = n });
+                    Data.Mined.Currencies = Fin.Common.Givenloc.CurrencyNames.Select(n => new Currency() { Key = n });
                 }
             }
         }

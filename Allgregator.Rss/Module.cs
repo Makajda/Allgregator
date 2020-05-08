@@ -1,10 +1,9 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Rss.Common;
 using Allgregator.Rss.Repositories;
 using Allgregator.Rss.Services;
 using Allgregator.Rss.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace Allgregator.Rss {
     public class Module : IModule {
@@ -16,7 +15,11 @@ namespace Allgregator.Rss {
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<MainView>("MainView");
+            containerRegistry.RegisterForNavigation<ChapterView>(typeof(ChapterView).FullName);
+            containerRegistry.RegisterForNavigation<NewsView>(typeof(NewsView).FullName);
+            containerRegistry.RegisterForNavigation<OldsView>(typeof(OldsView).FullName);
+            containerRegistry.RegisterForNavigation<LinksView>(typeof(LinksView).FullName);
+            containerRegistry.RegisterForNavigation<SettingsView>(typeof(SettingsView).FullName);
         }
     }
 }
