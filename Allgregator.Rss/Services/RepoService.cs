@@ -88,7 +88,7 @@ namespace Allgregator.Rss.Services {
             if (data.Mined != null) {
                 if (data.Mined.IsNeedToSave) {
                     try {
-                        await minedRepository.Save(data.Id, data.Mined);
+                        await minedRepository.Save(data.Mined, data.Id);
                         data.Mined.IsNeedToSave = false;
                     }
                     catch (Exception e) {

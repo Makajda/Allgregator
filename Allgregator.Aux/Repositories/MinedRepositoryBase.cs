@@ -10,11 +10,11 @@ namespace Allgregator.Aux.Repositories {
     public class MinedRepositoryBase<TMined> where TMined : new() {
         protected string name;
 
-        internal async Task<TMined> GetOrDefault() {
+        public async Task<TMined> GetOrDefault(int id = 0) {
             TMined retval = default;
 
             try {
-                retval = await Get();
+                retval = await Get(id);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -23,8 +23,8 @@ namespace Allgregator.Aux.Repositories {
             return retval ?? new TMined();
         }
 
-        internal async Task Save(TMined mined) {
-            var (entryName, fileName) = GetNames();
+        public async Task Save(TMined mined, int id = 0) {
+            var (entryName, fileName) = GetNames(id);
 
             using var fileStream = new FileStream(fileName, FileMode.Create);
             using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
@@ -42,13 +42,13 @@ namespace Allgregator.Aux.Repositories {
             await writer.WriteLineAsync(json);
         }
 
-        internal void DeleteFile() {
-            var (_, name) = GetNames();
+        public void DeleteFile(int id = 0) {
+            var (_, name) = GetNames(id);
             File.Delete(name);
         }
 
-        private async Task<TMined> Get() {
-            var (_, fileName) = GetNames();
+        private async Task<TMined> Get(int id = 0) {
+            var (_, fileName) = GetNames(id);
             TMined mined = default;
 
             using var archive = ZipFile.OpenRead(fileName);
@@ -65,8 +65,8 @@ namespace Allgregator.Aux.Repositories {
             return mined;
         }
 
-        private (string EntryName, string FileName) GetNames() {
-            string n = $"{name}Mined";
+        private (string EntryName, string FileName) GetNames(int id) {
+            string n = id == 0 ? $"{name}Mined" : $"{name}Mined{id}";
             var entryName = Path.ChangeExtension(n, "json");
             var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(n, "zip"));
             return (entryName, fileName);
