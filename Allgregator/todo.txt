@@ -9,9 +9,4 @@ DeleteChapter
 
 todo
 
-MinedRepository - base!
-Data - base? no!
-Mined - base? no!
-
-
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

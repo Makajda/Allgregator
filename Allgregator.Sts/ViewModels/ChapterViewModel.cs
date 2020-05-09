@@ -1,6 +1,5 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
 using Allgregator.Sts.Repositories;
@@ -9,7 +8,6 @@ using Allgregator.Sts.Views;
 using Prism.Events;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -17,7 +15,6 @@ namespace Allgregator.Sts.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
-        private readonly OreService oreService;
         private readonly Settings settings;
         public ChapterViewModel(
             OreService oreService,
@@ -26,19 +23,17 @@ namespace Allgregator.Sts.ViewModels {
             MinedRepository minedRepository,
             Settings settings
             ) : base(eventAggregator) {
-            this.oreService = oreService;
+            OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
             this.settings = settings;
         }
 
         public Data Data { get; } = new Data();
+        public OreService OreService { get; private set; }
         protected override int ChapterId => Given.StsChapter;
-        public override OreServiceBase OreService => oreService;
-        public override IEnumerable<Error> Errors => Data.Mined?.Errors;
         protected override async Task Activate() {
             await LoadMined();
-            RaisePropertyChanged(nameof(Errors));
             var view = typeof(UnicodeView).FullName;
             var parameters = new NavigationParameters {
                 { Given.DataParameter, Data }
@@ -57,7 +52,6 @@ namespace Allgregator.Sts.ViewModels {
             else {
                 await LoadMined();
                 //await OreService.Retrieve(Data.Mined);
-                RaisePropertyChanged(nameof(Errors));
             }
         }
 

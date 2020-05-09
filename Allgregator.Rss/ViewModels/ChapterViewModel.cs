@@ -1,13 +1,11 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
 using Prism.Events;
 using Prism.Regions;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -16,7 +14,6 @@ namespace Allgregator.Rss.ViewModels {
         private readonly Settings settings;
         private readonly RepoService repoService;
         private readonly ViewService viewService;
-        private readonly OreService oreService;
 
         public ChapterViewModel(
             OreService oreService,
@@ -25,7 +22,7 @@ namespace Allgregator.Rss.ViewModels {
             Settings settings,
             IEventAggregator eventAggregator
             ) : base(eventAggregator) {
-            this.oreService = oreService;
+            OreService = oreService;
             this.repoService = repoService;
             this.viewService = viewService;
             this.settings = settings;
@@ -33,6 +30,7 @@ namespace Allgregator.Rss.ViewModels {
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
         }
         public Data Data { get; } = new Data();
+        public OreService OreService { get; private set; }
 
         public override void OnNavigatedTo(NavigationContext navigationContext) {
             base.OnNavigatedTo(navigationContext);
@@ -45,12 +43,9 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         protected override int ChapterId => Data.Id;
-        public override OreServiceBase OreService => oreService;
-        public override IEnumerable<Error> Errors => Data.Mined?.Errors;
         protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);
-            RaisePropertyChanged(nameof(Errors));
         }
         protected override async Task Deactivate() => await repoService.Save(Data);
 
@@ -60,8 +55,7 @@ namespace Allgregator.Rss.ViewModels {
             }
             else {
                 await repoService.Load(Data);
-                await oreService.Retrieve(Data, settings.RssCutoffTime);
-                RaisePropertyChanged(nameof(Errors));
+                await OreService.Retrieve(Data, settings.RssCutoffTime);
             }
         }
 

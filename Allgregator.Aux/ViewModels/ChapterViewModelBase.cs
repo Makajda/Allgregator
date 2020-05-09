@@ -31,12 +31,7 @@ namespace Allgregator.Aux.ViewModels {
         public bool IsActive {
             get => isActive;
             set => SetProperty(ref isActive, value);
-        }
 
-        private bool isUpdatable = true;
-        public bool IsUpdatable {
-            get { return isUpdatable; }
-            set { SetProperty(ref isUpdatable, value); }
         }
 
         protected abstract int ChapterId { get; }
@@ -44,8 +39,6 @@ namespace Allgregator.Aux.ViewModels {
         protected abstract Task Update();
         protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
-        public virtual OreServiceBase OreService { get; }
-        public virtual IEnumerable<Error> Errors { get; }
         protected virtual void Run() { }
 
         private async void CurrentChapterChanged(int chapterId) {

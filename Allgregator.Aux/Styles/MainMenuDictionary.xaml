@@ -61,7 +61,6 @@
         </StackPanel>
     </DataTemplate>
 
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter"/>
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     <converters:BooleanToObjectConverter x:Key="BooleanToContentUpdateConverter" True="&#x2715;" False="&#x2B6E;"/>
@@ -85,20 +84,20 @@
 
                         <Button Style="{StaticResource Menu.Update.Button}"
                                 Content="{Binding OreService.IsRetrieving, 
-                            Converter={StaticResource BooleanToContentUpdateConverter}}"
-                                Visibility="{Binding IsUpdatable,
-                            Converter={StaticResource BooleanToVisibilityConverter}}">
+                            Converter={StaticResource BooleanToContentUpdateConverter}}">
                             <Button.Resources>
                                 <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
                             </Button.Resources>
                         </Button>
 
-                        <ToggleButton Style="{StaticResource Menu.Error.Button}" 
-                                      x:Name="errorsButton"
-                                      Visibility="{Binding Errors, Converter={StaticResource NullToVisibilityConverter}}"/>
-                        <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
-                            <ListBox ItemsSource="{Binding Errors}" ItemTemplate="{StaticResource Menu.Error.ItemTemplate}"/>
-                        </Popup>
+                        <Grid Visibility="{Binding Data.Mined, Converter={StaticResource NullToVisibilityConverter}}">
+                            <ToggleButton x:Name="errorsButton"
+                                          Style="{StaticResource Menu.Error.Button}" 
+                                          Visibility="{Binding Data.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"/>
+                            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
+                                <ListBox ItemsSource="{Binding Data.Mined.Errors}" ItemTemplate="{StaticResource Menu.Error.ItemTemplate}"/>
+                            </Popup>
+                        </Grid>
 
                         <ProgressBar Grid.Row="1"
                                      Margin="0,3,0,0"
