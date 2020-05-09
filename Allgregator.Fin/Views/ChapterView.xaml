@@ -8,37 +8,29 @@
              >
 
     <UserControl.Resources>
-        <converters:TodayConverter x:Key="TodayConverter"/>
-        <converters:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Allgregator.Aux;component/Styles/MainMenuDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style x:Key="button" TargetType="ButtonBase">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="{StaticResource Chapter.Foreground}"/>
-            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
-            <Setter Property="Command" Value="{Binding OpenCommand}"/>
-        </Style>
-
-        <Style x:Key="activeButton" TargetType="ButtonBase" BasedOn="{StaticResource button}">
-            <Setter Property="Background" Value="{StaticResource Chapter.Selected.Background}"/>
-        </Style>
-
-        <converters:BooleanToObjectConverter x:Key="BooleanToMenuButtonStyleConverter"
-                                             True="{StaticResource activeButton}"
-                                             False="{StaticResource button}"/>
+            <converters:TodayConverter x:Key="TodayConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
 
-    <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
-            Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" 
+    <ContentControl Style="{StaticResource Menu.Updatable}">
+        <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
+                Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" 
                         HorizontalAlignment="Center"
                         Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
-            <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
+                <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
                         HorizontalAlignment="Center"
                         Text="&#x283F;"
                         Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
-            <TextBlock Text="Cbr" FontSize="16" TextTrimming="WordEllipsis" 
+                <TextBlock Text="Cbr" FontSize="16" TextTrimming="WordEllipsis" 
                         HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
-        </DockPanel>
-    </Button>
+            </DockPanel>
+        </Button>
+    </ContentControl>
 </UserControl>

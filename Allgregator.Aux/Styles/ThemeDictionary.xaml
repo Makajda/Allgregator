@@ -1,14 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:common="clr-namespace:Allgregator.Aux.Common"
-                    xmlns:t="clr-namespace:System;assembly=System.Runtime"
                     >
 
-    <!--//todo-->
-    <t:Double x:Key="Menu.Width">120</t:Double>
-    <t:Double x:Key="Menu.Height">74</t:Double>
-    <t:Double x:Key="Menu.Update.Size">60</t:Double>
-    
     <Color x:Key="Main.Background.Color">#91C9FF</Color>
     <Color x:Key="News.Background.Color">LightGreen</Color>
     <Color x:Key="Olds.Background.Color">SaddleBrown</Color>
