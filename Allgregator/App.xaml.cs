@@ -1,5 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Aux.Repository;
 using Prism.DryIoc;
 using Prism.Events;
 using Prism.Ioc;

@@ -7,11 +7,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
-    public class MinedRepositoryBase<TMined> where TMined : new() {
-        protected string name;
-
-        public async Task<TMined> GetOrDefault(int id = 0) {
-            TMined retval = default;
+    public class ZipRepositoryBase<TModel> where TModel : new() {
+        private readonly Lazy<string> startOfName = new Lazy<string>(typeof(TModel).Name);
+        public async Task<TModel> GetOrDefault(string id = null) {
+            TModel retval = default;
 
             try {
                 retval = await Get(id);
@@ -20,10 +19,10 @@ namespace Allgregator.Aux.Repositories {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return retval ?? new TMined();
+            return retval ?? CreateDefault(id);
         }
 
-        public async Task Save(TMined mined, int id = 0) {
+        public async Task Save(TModel model, string id = null) {
             var (entryName, fileName) = GetNames(id);
 
             using var fileStream = new FileStream(fileName, FileMode.Create);
@@ -31,8 +30,8 @@ namespace Allgregator.Aux.Repositories {
             var entry = archive.CreateEntry(entryName);
             using var streamEntry = entry.Open();
             using var writer = new StreamWriter(streamEntry);
-            var json = JsonSerializer.Serialize<TMined>(
-                mined,
+            var json = JsonSerializer.Serialize<TModel>(
+                model,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
@@ -42,14 +41,16 @@ namespace Allgregator.Aux.Repositories {
             await writer.WriteLineAsync(json);
         }
 
-        public void DeleteFile(int id = 0) {
+        public void DeleteFile(string id = null) {
             var (_, name) = GetNames(id);
             File.Delete(name);
         }
 
-        private async Task<TMined> Get(int id = 0) {
+        protected virtual TModel CreateDefault(string id) => new TModel();
+
+        private async Task<TModel> Get(string id) {
             var (_, fileName) = GetNames(id);
-            TMined mined = default;
+            TModel model = default;
 
             using var archive = ZipFile.OpenRead(fileName);
             if (archive.Entries.Count > 0) {
@@ -58,17 +59,17 @@ namespace Allgregator.Aux.Repositories {
                     using var stream = entry.Open();
                     using var reader = new StreamReader(entry.Open());
                     var json = await reader.ReadToEndAsync();
-                    mined = JsonSerializer.Deserialize<TMined>(json);
+                    model = JsonSerializer.Deserialize<TModel>(json);
                 }
             }
 
-            return mined;
+            return model;
         }
 
-        private (string EntryName, string FileName) GetNames(int id) {
-            string n = id == 0 ? $"{name}Mined" : $"{name}Mined{id}";
-            var entryName = Path.ChangeExtension(n, "json");
-            var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(n, "zip"));
+        private (string EntryName, string FileName) GetNames(string id) {
+            string name = $"{startOfName.Value}{id}";
+            var entryName = Path.ChangeExtension(name, "json");
+            var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
             return (entryName, fileName);
         }
     }

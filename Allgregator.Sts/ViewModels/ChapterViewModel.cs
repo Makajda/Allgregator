@@ -1,6 +1,7 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
 using Allgregator.Aux.ViewModels;
+using Allgregator.Sts.Common;
 using Allgregator.Sts.Model;
 using Allgregator.Sts.Repositories;
 using Allgregator.Sts.Services;
@@ -31,7 +32,7 @@ namespace Allgregator.Sts.ViewModels {
 
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
-        protected override int ChapterId => Given.StsChapter;
+        protected override string ChapterId => Givenloc.Module;
         protected override async Task Activate() {
             await LoadMined();
             var view = typeof(UnicodeView).FullName;

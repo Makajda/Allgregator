@@ -42,7 +42,7 @@ namespace Allgregator.Rss.ViewModels {
             }
         }
 
-        protected override int ChapterId => Data.Id;
+        protected override string ChapterId => Givenloc.GetChapterId(Data.Id);
         protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);
@@ -60,7 +60,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = Data.Id;
+            if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await repoService.Save(Data));
         }
     }

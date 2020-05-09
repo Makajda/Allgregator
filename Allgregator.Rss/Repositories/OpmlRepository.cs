@@ -1,4 +1,5 @@
-﻿using Allgregator.Rss.Models;
+﻿using Allgregator.Rss.Common;
+using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -35,9 +36,9 @@ namespace Allgregator.Rss.Repositories {
                     var newChapter = chapterRepository.GetNewChapter(chapters, cink.Name);
                     newChapters[indexChapters++] = newChapter;
                     chapters.Add(newChapter);
-                    var linked = await linkedRepository.GetOrDefault(newChapter.Id);
+                    var linked = await linkedRepository.GetOrDefault(Givenloc.GetChapterId(newChapter.Id));
                     linked.Links = cink.Links;
-                    await linkedRepository.Save(newChapter.Id, linked);
+                    await linkedRepository.Save(linked, Givenloc.GetChapterId(newChapter.Id));
                 }
 
                 chapterRepository.Save(chapters);
@@ -53,7 +54,7 @@ namespace Allgregator.Rss.Repositories {
             var chapters = chapterRepository.GetOrDefault();
             var cinks = new List<Cink>();
             foreach (var chapter in chapters) {
-                var linked = await linkedRepository.GetOrDefault(chapter.Id);
+                var linked = await linkedRepository.GetOrDefault(Givenloc.GetChapterId(chapter.Id));
                 cinks.Add(new Cink() { Name = chapter.Name, Links = linked.Links });
             }
 

@@ -1,11 +1,8 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -34,14 +31,14 @@ namespace Allgregator.Aux.ViewModels {
 
         }
 
-        protected abstract int ChapterId { get; }
+        protected abstract string ChapterId { get; }
         protected abstract Task Activate();
         protected abstract Task Update();
         protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
         protected virtual void Run() { }
 
-        private async void CurrentChapterChanged(int chapterId) {
+        private async void CurrentChapterChanged(string chapterId) {
             var savedIsActive = IsActive;
             IsActive = ChapterId == chapterId;
             if (savedIsActive) {

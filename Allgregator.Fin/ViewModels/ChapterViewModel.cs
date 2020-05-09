@@ -1,6 +1,7 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
 using Allgregator.Aux.ViewModels;
+using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
@@ -34,7 +35,7 @@ namespace Allgregator.Fin.ViewModels {
 
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
-        protected override int ChapterId => Given.FinChapter;
+        protected override string ChapterId => Givenloc.Module;
         protected override async Task Activate() {
             await LoadMined();
             ViewActivate();
@@ -71,7 +72,7 @@ namespace Allgregator.Fin.ViewModels {
                 Data.Mined = await minedRepository.GetOrDefault();
 
                 if (Data.Mined.Currencies == null) {
-                    Data.Mined.Currencies = Fin.Common.Givenloc.CurrencyNames.Select(n => new Currency() { Key = n });
+                    Data.Mined.Currencies = Givenloc.CurrencyNames.Select(n => new Currency() { Key = n });
                 }
             }
         }

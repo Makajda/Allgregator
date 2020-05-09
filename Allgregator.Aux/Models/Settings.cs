@@ -10,7 +10,7 @@ namespace Allgregator.Aux.Models {
         public double MainWindowHeight { get; set; }
         public WindowState MainWindowState { get; set; }
         public bool MainWindowTopmost { get; set; }
-        public int CurrentChapterId { get; set; }
+        public string CurrentChapterId { get; set; }
 
         private int rssMaxOpenTabs = 12;
         public int RssMaxOpenTabs {
