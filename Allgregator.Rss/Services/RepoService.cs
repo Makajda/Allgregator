@@ -67,6 +67,7 @@ namespace Allgregator.Rss.Services {
         private async Task LoadMined(Data data) {
             if (data.Mined == null) {
                 data.Mined = await minedRepository.GetOrDefault(Givenloc.GetChapterId(data.Id));
+                data.Mined.IsNeedToSave = false;
             }
         }
 

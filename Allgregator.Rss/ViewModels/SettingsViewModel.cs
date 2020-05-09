@@ -71,6 +71,7 @@ namespace Allgregator.Rss.ViewModels {
                 if (chapter != null) {
                     chapter.Name = string.IsNullOrEmpty(Data.Name) ? null : Data.Name;
                     Save(chapters);
+                    Data.IsNeedToSave = false;
                 }
             }
         }

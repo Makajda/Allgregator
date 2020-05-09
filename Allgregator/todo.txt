@@ -1,7 +1,6 @@
 ﻿1,6180339887 
 
 
-IsNeedToSave for Data-name & mined 2 date
 Givenloc по классам
 
 проверить ещё раз
