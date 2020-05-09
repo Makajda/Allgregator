@@ -1,5 +1,7 @@
 ﻿1,6180339887 
 
+ChapterView to DataTemplates ItemsControl
+
 проверить ещё раз
 opml import
 AddChapter

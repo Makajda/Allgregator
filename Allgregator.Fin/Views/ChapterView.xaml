@@ -8,63 +8,37 @@
              >
 
     <UserControl.Resources>
-        <converters:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:TodayConverter x:Key="TodayConverter"/>
-        <converters:BooleanToObjectConverter x:Key="BooleanToContentUpdateConverter" True="&#x2715;" False="&#x2B6E;"/>
+        <converters:BooleanToVisibilityHiddenConverter x:Key="BooleanToVisibilityHiddenConverter"/>
+
+        <Style x:Key="button" TargetType="ButtonBase">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{StaticResource Chapter.Foreground}"/>
+            <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
+            <Setter Property="Command" Value="{Binding OpenCommand}"/>
+        </Style>
+
+        <Style x:Key="activeButton" TargetType="ButtonBase" BasedOn="{StaticResource button}">
+            <Setter Property="Background" Value="{StaticResource Chapter.Selected.Background}"/>
+        </Style>
+
         <converters:BooleanToObjectConverter x:Key="BooleanToMenuButtonStyleConverter"
-                                             True="{StaticResource Menu.Main.Button.Active}"
-                                             False="{StaticResource Menu.Main.Button}"/>
+                                             True="{StaticResource activeButton}"
+                                             False="{StaticResource button}"/>
     </UserControl.Resources>
 
-    <Grid Margin="2">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
-                Width="{StaticResource Menu.Width}" Height="{StaticResource Menu.Height}"
-                Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" 
-                           HorizontalAlignment="Center"
-                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
-                <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
-                           HorizontalAlignment="Center"
-                           Text="&#x283F;"
-                           Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
-                <TextBlock Text="Cbr" FontSize="16" TextTrimming="WordEllipsis" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
-            </DockPanel>
-        </Button>
-
-        <Button Style="{StaticResource Menu.Update.Button}"
-                Content="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToContentUpdateConverter}}">
-            <Button.Resources>
-                <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Retrieving.Color}"/>
-            </Button.Resources>
-        </Button>
-
-        <Grid Visibility="{Binding Data.Mined, Converter={StaticResource NullToVisibilityConverter}}">
-            <ToggleButton Style="{StaticResource Menu.Error.Button}" 
-                          x:Name="errorsButton"
-                          Visibility="{Binding Data.Mined.Errors, Converter={StaticResource NullToVisibilityConverter}}"/>
-            <Popup IsOpen="{Binding IsChecked, ElementName=errorsButton}" StaysOpen="False" Placement="Mouse">
-                <ListBox ItemsSource="{Binding Data.Mined.Errors}" ItemTemplate="{StaticResource Menu.Error.ItemTemplate}"/>
-            </Popup>
-        </Grid>
-
-        <ProgressBar Grid.Row="1"
-                     Margin="0,2,0,0"
-                     Height="10"
-                     Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
-                     Value="{Binding OreService.ProgressValue, Mode=OneWay}"
-                     ToolTipService.ToolTip="{Binding OreService.ProgressValue}"
-                     Visibility="{Binding OreService.IsRetrieving, Converter={StaticResource BooleanToVisibilityHiddenConverter}}">
-            <ProgressBar.Foreground>
-                <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
-            </ProgressBar.Foreground>
-        </ProgressBar>
-    </Grid>
+    <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
+            Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" 
+                        HorizontalAlignment="Center"
+                        Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+            <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
+                        HorizontalAlignment="Center"
+                        Text="&#x283F;"
+                        Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
+            <TextBlock Text="Cbr" FontSize="16" TextTrimming="WordEllipsis" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
+        </DockPanel>
+    </Button>
 </UserControl>

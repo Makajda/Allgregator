@@ -1,5 +1,5 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Models;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Fin.Models;
 using Prism.Commands;
 

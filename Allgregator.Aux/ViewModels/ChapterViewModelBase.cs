@@ -1,11 +1,15 @@
-﻿using Prism.Commands;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
+using Allgregator.Aux.Services;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Allgregator.Aux.Common {
+namespace Allgregator.Aux.ViewModels {
     public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
         protected readonly IEventAggregator eventAggregator;
         public ChapterViewModelBase(
@@ -29,11 +33,19 @@ namespace Allgregator.Aux.Common {
             set => SetProperty(ref isActive, value);
         }
 
+        private bool isUpdatable = true;
+        public bool IsUpdatable {
+            get { return isUpdatable; }
+            set { SetProperty(ref isUpdatable, value); }
+        }
+
         protected abstract int ChapterId { get; }
         protected abstract Task Activate();
         protected abstract Task Update();
         protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
+        public virtual OreServiceBase OreService { get; }
+        public virtual IEnumerable<Error> Errors { get; }
         protected virtual void Run() { }
 
         private async void CurrentChapterChanged(int chapterId) {

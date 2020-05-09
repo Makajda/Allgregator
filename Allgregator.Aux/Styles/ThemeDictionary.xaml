@@ -4,6 +4,7 @@
                     xmlns:t="clr-namespace:System;assembly=System.Runtime"
                     >
 
+    <!--//todo-->
     <t:Double x:Key="Menu.Width">120</t:Double>
     <t:Double x:Key="Menu.Height">74</t:Double>
     <t:Double x:Key="Menu.Update.Size">60</t:Double>
@@ -44,58 +45,4 @@
     <SolidColorBrush x:Key="Fin.CNY" Color="PaleVioletRed"/>
     <SolidColorBrush x:Key="Fin.UAH" Color="Yellow"/>
     <SolidColorBrush x:Key="Fin.Foreground" Color="Black"/>
-
-
-    <Style x:Key="Menu.Main.Button" TargetType="ButtonBase">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="{StaticResource Chapter.Foreground}"/>
-        <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
-        <Setter Property="Command" Value="{Binding OpenCommand}"/>
-    </Style>
-
-    <Style x:Key="Menu.Main.Button.Active" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Main.Button}">
-        <Setter Property="Background" Value="{StaticResource Chapter.Selected.Background}"/>
-    </Style>
-
-    <Style x:Key="Menu.Manager.Button" TargetType="ButtonBase">
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-
-    <Style x:Key="Menu.Update.Button" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
-        <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
-        <Setter Property="BorderThickness" Value="0.3"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
-        <Setter Property="Opacity" Value="0.7"/>
-        <Setter Property="Width" Value="{StaticResource Menu.Update.Size}"/>
-        <Setter Property="Height" Value="{StaticResource Menu.Update.Size}"/>
-        <Setter Property="common:Shaatt.Path" Value="M2,0 V2 L1,2 Z"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="VerticalAlignment" Value="Bottom"/>
-        <Setter Property="HorizontalContentAlignment" Value="Right"/>
-        <Setter Property="VerticalContentAlignment" Value="Bottom"/>
-        <Setter Property="ToolTip" Value="Update/Cancel"/>
-        <Setter Property="Command" Value="{Binding UpdateCommand}"/>
-    </Style>
-
-    <Style x:Key="Menu.Error.Button" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
-        <Setter Property="Content" Value="&#x1D166;"/>
-        <Setter Property="Width" Value="30"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="common:Shaatt.Shape" Value="Circle"/>
-        <Setter Property="Background" Value="{StaticResource Error.Background}"/>
-        <Setter Property="Opacity" Value="0.7"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-    </Style>
-
-    <DataTemplate x:Key="Menu.Error.ItemTemplate">
-        <StackPanel Orientation="Horizontal" Background="{StaticResource Error.Background}">
-            <TextBlock Text="{Binding Source}" Width="150" Margin="20" Foreground="{StaticResource Error.Foreground}" FontSize="14"/>
-            <TextBlock Text="{Binding Message}" Width="450" Margin="0,20,20,20" Foreground="{StaticResource Error.Foreground}" FontSize="14"/>
-        </StackPanel>
-    </DataTemplate>
-
 </ResourceDictionary>

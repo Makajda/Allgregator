@@ -1,4 +1,4 @@
-﻿using Allgregator.Aux.Common;
+﻿using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.ViewModels {

@@ -4,12 +4,15 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="False"
              xmlns:commonLoc="clr-namespace:Allgregator.Rss.Common"
-             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              >
 
     <UserControl.Resources>
-        <Style x:Key="managerButton" TargetType="ButtonBase" BasedOn="{StaticResource Menu.Manager.Button}">
+        <Style x:Key="managerButton" TargetType="ButtonBase">
             <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
     </UserControl.Resources>
     
