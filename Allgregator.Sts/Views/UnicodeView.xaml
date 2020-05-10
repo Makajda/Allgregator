@@ -8,7 +8,6 @@
              >
 
     <UserControl.Resources>
-
         <t:Double x:Key="ElSize">70</t:Double>
         <t:Double x:Key="ElWithMargin">78</t:Double>
 
