@@ -81,10 +81,23 @@ namespace Allgregator.Fin.Views {
 
         private void ChangeOffs(string key, bool isOn) {
             var settings = (Settings)GetValue(SettingsProperty);
-            var offs = settings?.FinOffs;
-
-            if (isOn) {
+            if (settings != null) { 
+                if (isOn) {
+                    if (settings.FinOffs != null) {
+                        settings.FinOffs = settings.FinOffs.Where(n => n != key);
+                    }
+                }
+                else {
+                    if (settings.FinOffs != null) {
+                        settings.FinOffs = settings.FinOffs.Union(new[] { key });
+                    }
+                    else {
+                        settings.FinOffs = new[] { key };
+                    }
+                }
             }
+
+            Draw();
         }
 
         private void Draw() {
@@ -110,10 +123,12 @@ namespace Allgregator.Fin.Views {
 
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
-                    if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
-                    if (value > max[key]) max[key] = value;
-                    if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
-                    if (value < min[key]) min[key] = value;
+                    if (offs == null || !offs.Contains(key)) {
+                        if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
+                        if (value > max[key]) max[key] = value;
+                        if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
+                        if (value < min[key]) min[key] = value;
+                    }
                 }
             }
 
