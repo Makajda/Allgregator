@@ -51,7 +51,7 @@ namespace Allgregator.Sts.ViewModels {
             }
             else {
                 await LoadMined();
-                //await OreService.Retrieve(Data.Mined);
+                await OreService.Retrieve(Data.Mined);
             }
         }
 

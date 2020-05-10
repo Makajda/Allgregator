@@ -12,6 +12,12 @@ namespace Allgregator.Sts.Model {
             set => SetProperty(ref lastRetrieve, value);
         }
 
+        private IEnumerable<Symbol> symbols;
+        public IEnumerable<Symbol> Symbols {
+            get => symbols;
+            set => SetProperty(ref symbols, value);
+        }
+
         private IEnumerable<Error> errors;
         public IEnumerable<Error> Errors {
             get => errors;
