@@ -14,8 +14,8 @@ namespace Allgregator.Fin.Services {
             this.retrieveService = retrieveService;
         }
 
-        internal async Task Retrieve(Mined mined, DateTimeOffset startDate) {
-            if (mined == null || mined.Currencies == null) {
+        internal async Task Retrieve(Mined mined, DateTimeOffset startDate, IEnumerable<string> currencies) {
+            if (mined == null || currencies == null) {
                 return;
             }
 
@@ -45,6 +45,7 @@ namespace Allgregator.Fin.Services {
             }
 
             using (retrieveService) {
+                retrieveService.SetCurrencies(currencies);
                 var lastRetrieve = await Retrieve(dates, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {

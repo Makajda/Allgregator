@@ -6,6 +6,8 @@ using Prism.Regions;
 
 namespace Allgregator.Sts {
     public class Module : IModule {
+        internal const string Name = "Sts";
+
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
             regionManager.RequestNavigate(Given.MenuRegion, typeof(ChapterView).FullName);

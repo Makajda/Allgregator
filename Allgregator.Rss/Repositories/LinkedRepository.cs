@@ -5,8 +5,9 @@ using System.Collections.ObjectModel;
 
 namespace Allgregator.Rss.Repositories {
     internal class LinkedRepository : RepositoryBase<Linked> {
-        protected override Linked CreateDefault(string id) {
-            if (id == Givenloc.GetChapterId(Givenloc.TryDataId)) {
+        protected override string ModuleName => Module.Name;
+        protected override Linked CreateDefault(int id) {
+            if (id == Givenloc.TryDataId) {
                 var links = new ObservableCollection<Link>() {
                     new Link() {
                         HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",

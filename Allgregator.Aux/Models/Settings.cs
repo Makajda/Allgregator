@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace Allgregator.Aux.Models {
@@ -29,5 +30,9 @@ namespace Allgregator.Aux.Models {
             get { return finStartDate; }
             set { SetProperty(ref finStartDate, value); }
         }
+
+        public IEnumerable<string> FinCurrencies { get; set; }
+
+        public IEnumerable<string> FinOffs { get; set; }
     }
 }

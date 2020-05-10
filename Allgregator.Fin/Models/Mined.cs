@@ -18,12 +18,6 @@ namespace Allgregator.Fin.Models {
             set => SetProperty(ref terms, value);
         }
 
-        private IEnumerable<Currency> currencies;
-        public IEnumerable<Currency> Currencies {
-            get => currencies;
-            set => SetProperty(ref currencies, value);
-        }
-
         private IEnumerable<Error> errors;
         public IEnumerable<Error> Errors {
             get => errors;

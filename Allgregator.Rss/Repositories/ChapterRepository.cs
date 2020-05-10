@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Allgregator.Rss.Repositories {
     public class ChapterRepository {
-        private const string nameFile = "ChaptersRss.json";
+        private const string nameFile = "RssChapters.json";
 
         public IEnumerable<Data> GetOrDefault() {
             IEnumerable<Data> retval = null;

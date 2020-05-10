@@ -41,14 +41,14 @@ namespace Allgregator.Rss.Services {
 
         internal void DeleteFiles(int id) {
             try {
-                linkedRepository.DeleteFile(Givenloc.GetChapterId(id));
+                linkedRepository.DeleteFile(id);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
             try {
-                minedRepository.DeleteFile(Givenloc.GetChapterId(id));
+                minedRepository.DeleteFile(id);
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -57,7 +57,7 @@ namespace Allgregator.Rss.Services {
 
         internal async Task LoadLinks(Data data) {
             if (data.Linked == null) {
-                data.Linked = await linkedRepository.GetOrDefault(Givenloc.GetChapterId(data.Id));
+                data.Linked = await linkedRepository.GetOrDefault(data.Id);
                 if (data.Linked.CurrentState == LinksStates.Detection) {
                     data.Linked.CurrentState = LinksStates.Normal;
                 }
@@ -66,7 +66,7 @@ namespace Allgregator.Rss.Services {
 
         private async Task LoadMined(Data data) {
             if (data.Mined == null) {
-                data.Mined = await minedRepository.GetOrDefault(Givenloc.GetChapterId(data.Id));
+                data.Mined = await minedRepository.GetOrDefault(data.Id);
                 data.Mined.IsNeedToSave = false;
             }
         }
@@ -75,7 +75,7 @@ namespace Allgregator.Rss.Services {
             if (data.Linked?.Links != null) {
                 if (data.Linked.IsNeedToSave) {
                     try {
-                        await linkedRepository.Save(data.Linked, Givenloc.GetChapterId(data.Id));
+                        await linkedRepository.Save(data.Linked, data.Id);
                         data.Linked.IsNeedToSave = false;
                     }
                     catch (Exception e) {
@@ -89,7 +89,7 @@ namespace Allgregator.Rss.Services {
             if (data.Mined != null) {
                 if (data.Mined.IsNeedToSave) {
                     try {
-                        await minedRepository.Save(data.Mined, Givenloc.GetChapterId(data.Id));
+                        await minedRepository.Save(data.Mined, data.Id);
                         data.Mined.IsNeedToSave = false;
                     }
                     catch (Exception e) {

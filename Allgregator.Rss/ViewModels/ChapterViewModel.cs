@@ -43,7 +43,7 @@ namespace Allgregator.Rss.ViewModels {
             }
         }
 
-        protected override string ChapterId => Givenloc.GetChapterId(Data.Id);
+        protected override string ChapterId => $"{Module.Name}{Data.Id}";
         protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);

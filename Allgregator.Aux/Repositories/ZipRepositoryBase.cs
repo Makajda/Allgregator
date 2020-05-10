@@ -1,5 +1,4 @@
 ﻿using Allgregator.Aux.Common;
-using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Encodings.Web;
@@ -7,22 +6,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
-    public class ZipRepositoryBase<TModel> where TModel : new() {
-        private readonly Lazy<string> startOfName = new Lazy<string>(typeof(TModel).Name);
-        public async Task<TModel> GetOrDefault(string id = null) {
-            TModel retval = default;
-
-            try {
-                retval = await Get(id);
-            }
-            catch (Exception e) {
-                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-            }
-
-            return retval ?? CreateDefault(id);
-        }
-
-        public async Task Save(TModel model, string id = null) {
+    public abstract class ZipRepositoryBase<TModel> : RepositoryBase<TModel> where TModel : new() {
+        public override async Task Save(TModel model, int id = 0) {
             var (entryName, fileName) = GetNames(id);
 
             using var fileStream = new FileStream(fileName, FileMode.Create);
@@ -41,14 +26,12 @@ namespace Allgregator.Aux.Repositories {
             await writer.WriteLineAsync(json);
         }
 
-        public void DeleteFile(string id = null) {
+        public override void DeleteFile(int id = 0) {
             var (_, name) = GetNames(id);
             File.Delete(name);
         }
 
-        protected virtual TModel CreateDefault(string id) => new TModel();
-
-        private async Task<TModel> Get(string id) {
+        protected override async Task<TModel> Get(int id = 0) {
             var (_, fileName) = GetNames(id);
             TModel model = default;
 
@@ -66,8 +49,8 @@ namespace Allgregator.Aux.Repositories {
             return model;
         }
 
-        private (string EntryName, string FileName) GetNames(string id) {
-            string name = $"{startOfName.Value}{id}";
+        private (string EntryName, string FileName) GetNames(int id) {
+            string name = $"{startOfName.Value}{(id == default ? null : id.ToString())}";
             var entryName = Path.ChangeExtension(name, "json");
             var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
             return (entryName, fileName);

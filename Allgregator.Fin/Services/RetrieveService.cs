@@ -1,6 +1,5 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
-using Allgregator.Fin.Common;
 using Allgregator.Fin.Models;
 using System;
 using System.Collections.Generic;
@@ -11,11 +10,16 @@ using System.Threading.Tasks;
 namespace Allgregator.Fin.Services {
     internal class RetrieveService : RetrieveServiceBase<DateTimeOffset, Term> {
         private readonly WebService webService;
+        private IEnumerable<string> currencies;
 
         public RetrieveService(
             WebService webService
             ) {
             this.webService = webService;
+        }
+
+        internal void SetCurrencies(IEnumerable<string> currencies) {
+            this.currencies = currencies;
         }
 
         public override async Task ProductionAsync(DateTimeOffset date) {
@@ -29,7 +33,7 @@ namespace Allgregator.Fin.Services {
                 var matches = regex.Matches(html);
                 var term = new Term() { Date = date };
                 term.Values = new Dictionary<string, decimal>();
-                foreach (var key in Givenloc.CurrencyNames) {
+                foreach (var key in currencies) {
                     var value = GetValue(matches, key);
                     term.Values.Add(key, value);
                 }
