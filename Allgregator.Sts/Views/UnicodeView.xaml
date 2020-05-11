@@ -9,6 +9,7 @@
 
     <UserControl.Resources>
         <t:Double x:Key="ElSize">70</t:Double>
+        <Thickness x:Key="ElMargin">0</Thickness>
         <t:Double x:Key="ElWithMargin">78</t:Double>
 
         <DataTemplate x:Key="SymbolItemTemplate">
@@ -28,6 +29,9 @@
               >
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Margin" Value="{StaticResource ElMargin}" />
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
         </ListView.ItemContainerStyle>
