@@ -13,7 +13,6 @@
 
         <DataTemplate x:Key="SymbolItemTemplate">
             <Button Width="{StaticResource ElSize}" Height="{StaticResource ElSize}" Padding="0"
-                    ToolTip="{Binding Name}"
                     Content="{Binding Char}"
                     FontSize="32"
                     Background="Transparent"

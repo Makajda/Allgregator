@@ -36,5 +36,25 @@ namespace Allgregator.Rss.Models {
             Name == other.Name &&
             HtmlUrl == other.HtmlUrl &&
             XmlUrl == other.XmlUrl;
+
+        public override bool Equals(object obj) =>
+            Equals((Link)obj);
+
+        public override int GetHashCode() =>
+            $"{Name}{HtmlUrl}{XmlUrl}".GetHashCode();
+
+        public static bool operator ==(Link link1, Link link2) {
+            if (((object)link1) == null || ((object)link2) == null)
+                return Object.Equals(link1, link2);
+
+            return link1.Equals(link2);
+        }
+
+        public static bool operator !=(Link link1, Link link2) {
+            if (((object)link1) == null || ((object)link2) == null)
+                return !Object.Equals(link1, link2);
+
+            return !(link1.Equals(link2));
+        }
     }
 }

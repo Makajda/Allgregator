@@ -2,6 +2,7 @@
 using Allgregator.Aux.Services;
 using Allgregator.Sts.Model;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -24,13 +25,10 @@ namespace Allgregator.Sts.Services {
                 foreach (Match match in matches) {
                     var value = match.Value;
                     try {
-                        var symbol = GetSymbol(value);
-                        Items.Add(symbol);
+                        TakeSymbol(value);
                     }
                     catch (Exception exception) {
-                        if (!value.Contains("BOOP") && !value.Contains("DOOD")) {
-                            Errors.Add(new Error() { Source = value, Message = exception.Message });
-                        }
+                        Errors.Add(new Error() { Source = value, Message = exception.Message });
                     }
                 }
             }
@@ -40,16 +38,20 @@ namespace Allgregator.Sts.Services {
             }
         }
 
-        private Symbol GetSymbol(string str) {
-            var indexName = str.IndexOf("</td>");
-            var name = str.Substring(0, indexName);
+        private void TakeSymbol(string str) {
+            if (!str.Contains("BOOP") && !str.Contains("DOOD")) {
+                var indexCode = str.LastIndexOf(">") + 1;
+                var codeChar = str.Substring(indexCode);
 
-            var indexCode = str.LastIndexOf(">") + 1;
-            var codeChar = str.Substring(indexCode);
+                var valueChar = (char)Convert.ToInt32(codeChar, 16);
+                if (Items.All(n => n.Char != valueChar)) {
+                    var indexName = str.IndexOf("</td>");
+                    var name = str.Substring(0, indexName);
 
-            var valueChar = (char)Convert.ToInt32(codeChar, 16);
-            var symbol = new Symbol() { Char = valueChar, Name = name };
-            return symbol;
+                    var symbol = new Symbol() { Char = valueChar, Name = name };
+                    Items.Add(symbol);
+                }
+            }
         }
     }
 }
