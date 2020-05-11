@@ -1,11 +1,12 @@
-﻿using Prism.Commands;
+﻿using Allgregator.Aux.Common;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Allgregator.Aux.Common {
+namespace Allgregator.Aux.ViewModels {
     public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
         protected readonly IEventAggregator eventAggregator;
         public ChapterViewModelBase(
@@ -27,16 +28,17 @@ namespace Allgregator.Aux.Common {
         public bool IsActive {
             get => isActive;
             set => SetProperty(ref isActive, value);
+
         }
 
-        protected abstract int ChapterId { get; }
+        protected abstract string ChapterId { get; }
         protected abstract Task Activate();
         protected abstract Task Update();
         protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
         protected virtual void Run() { }
 
-        private async void CurrentChapterChanged(int chapterId) {
+        private async void CurrentChapterChanged(string chapterId) {
             var savedIsActive = IsActive;
             IsActive = ChapterId == chapterId;
             if (savedIsActive) {

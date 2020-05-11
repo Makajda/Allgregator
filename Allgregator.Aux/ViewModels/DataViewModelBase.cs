@@ -1,7 +1,8 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Aux.Common;
+using Prism.Mvvm;
 using Prism.Regions;
 
-namespace Allgregator.Aux.Common {
+namespace Allgregator.Aux.ViewModels {
     public class DataViewModelBase<TData> : BindableBase, INavigationAware {
         private TData data;
         public TData Data {

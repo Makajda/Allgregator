@@ -1,5 +1,8 @@
 ﻿1,6180339887 
 
+
+Givenloc по классам
+
 проверить ещё раз
 opml import
 AddChapter
@@ -7,9 +10,6 @@ DeleteChapter
 
 todo
 
-MinedRepository - base!
-Data - base? no!
-Mined - base? no!
-
-
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
+
+

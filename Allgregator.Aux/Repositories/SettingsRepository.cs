@@ -1,24 +1,31 @@
-﻿using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
-namespace Allgregator.Aux.Common {
+namespace Allgregator.Aux.Repository {
     public class SettingsRepository {
-        private const string nameFile = "settings.json";
+        private const string nameFile = "Settings.json";
 
         public Settings GetOrDefault() {
-            Settings retval = null;
+            Settings settings = null;
 
             try {
-                retval = Get();
+                settings = Get();
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return retval ?? new Settings();
+            var retval = settings ?? new Settings();
+
+            if (retval.FinCurrencies == null) {
+                retval.FinCurrencies = new[] { "USD", "EUR", "GBP", "CHF", "CNY", "UAH" };
+            }
+
+            return retval;
         }
 
         public void Save(Settings settings) {

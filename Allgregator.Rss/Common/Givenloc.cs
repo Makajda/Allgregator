@@ -4,8 +4,11 @@ using Prism.Events;
 namespace Allgregator.Rss.Common {
     public static class Givenloc {
         public const string SubmainRegion = "SubmainRegion";
+
         internal const string ChapterIdParameter = "ChapterId";
         internal const string ChapterNameParameter = "ChapterName";
+
+        internal static int TryDataId = 10010;
     }
 
     internal class LinkMovedEvent : PubSubEvent<(int Id, Link Link)> { }

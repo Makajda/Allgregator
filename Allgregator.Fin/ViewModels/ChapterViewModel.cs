@@ -1,6 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Fin.Common;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
@@ -9,7 +9,6 @@ using Prism.Events;
 using Prism.Regions;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Fin.ViewModels {
@@ -32,9 +31,9 @@ namespace Allgregator.Fin.ViewModels {
             this.minedRepository = minedRepository;
         }
 
-        public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
-        protected override int ChapterId => Given.FinChapter;
+        public OreService OreService { get; private set; }
+        protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
             await LoadMined();
             ViewActivate();
@@ -54,7 +53,7 @@ namespace Allgregator.Fin.ViewModels {
             }
             else {
                 await LoadMined();
-                await OreService.Retrieve(Data.Mined, settings.FinStartDate);
+                await OreService.Retrieve(Data.Mined, settings.FinStartDate, settings.FinCurrencies);
             }
         }
 
@@ -69,10 +68,6 @@ namespace Allgregator.Fin.ViewModels {
         private async Task LoadMined() {
             if (Data.Mined == null) {
                 Data.Mined = await minedRepository.GetOrDefault();
-
-                if (Data.Mined.Currencies == null) {
-                    Data.Mined.Currencies = Fin.Common.Givenloc.CurrencyNames.Select(n => new Currency() { Key = n });
-                }
             }
         }
 

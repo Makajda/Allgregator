@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Rss.Models;
 using Prism.Commands;
 

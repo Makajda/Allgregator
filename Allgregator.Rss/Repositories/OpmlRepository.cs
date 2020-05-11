@@ -1,4 +1,5 @@
-﻿using Allgregator.Rss.Models;
+﻿using Allgregator.Rss.Common;
+using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace Allgregator.Rss.Repositories {
                     chapters.Add(newChapter);
                     var linked = await linkedRepository.GetOrDefault(newChapter.Id);
                     linked.Links = cink.Links;
-                    await linkedRepository.Save(newChapter.Id, linked);
+                    await linkedRepository.Save(linked, newChapter.Id);
                 }
 
                 chapterRepository.Save(chapters);

@@ -3,8 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:t="clr-namespace:System;assembly=System.Runtime"
+             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              >
-    
-    <Grid Background="Red">
-    </Grid>
+
+    <UserControl.Resources>
+        <t:Double x:Key="ElSize">70</t:Double>
+        <t:Double x:Key="ElWithMargin">78</t:Double>
+
+        <DataTemplate x:Key="SymbolItemTemplate">
+            <Button Width="{StaticResource ElSize}" Height="{StaticResource ElSize}" Padding="0"
+                    Content="{Binding Char}"
+                    FontSize="32"
+                    Background="Transparent"
+                    common:Shaatt.Shape="Rect"/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ListView BorderThickness="0"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+              Background="{StaticResource Main.Background}"
+              ItemsSource="{Binding Data.Mined.Symbols}"
+              ItemTemplate="{StaticResource SymbolItemTemplate}"
+              >
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </ListView.ItemContainerStyle>
+
+        <ListView.ItemsPanel>
+            <ItemsPanelTemplate>
+                <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWithMargin}" ItemHeight="{StaticResource ElWithMargin}"/>
+            </ItemsPanelTemplate>
+        </ListView.ItemsPanel>
+    </ListView>
 </UserControl>

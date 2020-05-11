@@ -6,18 +6,7 @@
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="currenciesControl" ItemsSource="{Binding Data.Mined.Currencies}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ToggleButton Content="{Binding Key}"
-                                      Padding="20" 
-                                      Margin="2"
-                                      Checked="ToggleButton_Checked"
-                                      Unchecked="ToggleButton_Checked"
-                                      IsChecked="{Binding IsOn, Mode=TwoWay}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-
+            <ItemsControl x:Name="currenciesControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="1" Columns="{Binding Items.Count, ElementName=currenciesControl}"/>

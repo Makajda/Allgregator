@@ -67,6 +67,7 @@ namespace Allgregator.Rss.Services {
         private async Task LoadMined(Data data) {
             if (data.Mined == null) {
                 data.Mined = await minedRepository.GetOrDefault(data.Id);
+                data.Mined.IsNeedToSave = false;
             }
         }
 
@@ -74,7 +75,7 @@ namespace Allgregator.Rss.Services {
             if (data.Linked?.Links != null) {
                 if (data.Linked.IsNeedToSave) {
                     try {
-                        await linkedRepository.Save(data.Id, data.Linked);
+                        await linkedRepository.Save(data.Linked, data.Id);
                         data.Linked.IsNeedToSave = false;
                     }
                     catch (Exception e) {
@@ -88,7 +89,7 @@ namespace Allgregator.Rss.Services {
             if (data.Mined != null) {
                 if (data.Mined.IsNeedToSave) {
                     try {
-                        await minedRepository.Save(data.Id, data.Mined);
+                        await minedRepository.Save(data.Mined, data.Id);
                         data.Mined.IsNeedToSave = false;
                     }
                     catch (Exception e) {

@@ -6,5 +6,6 @@
              xmlns:views="clr-namespace:Allgregator.Fin.Views"
              >
 
-    <views:CurrencyChart ItemsSource="{Binding Data.Mined.Terms}"/>
+    <views:CurrencyChart Terms="{Binding Data.Mined.Terms}"
+                         Settings="{Binding Settings}"/>
 </UserControl>

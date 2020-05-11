@@ -1,11 +1,11 @@
-﻿using Allgregator.Fin.Common;
+﻿using Allgregator.Aux.Models;
 using Allgregator.Fin.Models;
-using Allgregator.Fin.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -24,18 +24,80 @@ namespace Allgregator.Fin.Views {
             foreground = new Lazy<Brush>(ForegroundFactory);
         }
 
-        public IEnumerable<Term> ItemsSource {
-            get { return (IEnumerable<Term>)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
+        public IEnumerable<Term> Terms {
+            get { return (IEnumerable<Term>)GetValue(TermsProperty); }
+            set { SetValue(TermsProperty, value); }
         }
 
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable<Term>), typeof(CurrencyChart), new PropertyMetadata(null, OnItemsSourceChanged));
+        public static readonly DependencyProperty TermsProperty = DependencyProperty.Register("Terms",
+            typeof(IEnumerable<Term>), typeof(CurrencyChart), new PropertyMetadata(null, OnTermsChanged));
 
-        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+
+        public Settings Settings {
+            get { return (Settings)GetValue(SettingsProperty); }
+            set { SetValue(SettingsProperty, value); }
+        }
+
+        public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register("Settings",
+            typeof(Settings), typeof(CurrencyChart), new PropertyMetadata(null, OnSettingsChanged));
+
+
+        private static void OnSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (d is CurrencyChart view) {
+                view.SettingsChanged();
+            }
+        }
+
+        private static void OnTermsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d is CurrencyChart view) {
                 view.Draw();
             }
+        }
+
+
+        private void SettingsChanged() {
+            var settings = (Settings)GetValue(SettingsProperty);
+            var currencies = settings?.FinCurrencies;
+            var offs = settings?.FinOffs;
+
+            if (currencies == null) return;
+
+            canvas.Children.Clear();
+            currenciesControl.Items.Clear();
+            foreach (var key in currencies) {
+                var toggleButton = new ToggleButton() {
+                    Content = key,
+                    Margin = new Thickness(2),
+                    Padding = new Thickness(20),
+                    IsChecked = offs == null || !offs.Contains(key)
+                };
+                currenciesControl.Items.Add(toggleButton);
+                toggleButton.Checked += (s, e) => ChangeOffs(key, true);
+                toggleButton.Unchecked += (s, e) => ChangeOffs(key, false);
+            }
+
+            Draw();
+        }
+
+        private void ChangeOffs(string key, bool isOn) {
+            var settings = (Settings)GetValue(SettingsProperty);
+            if (settings != null) { 
+                if (isOn) {
+                    if (settings.FinOffs != null) {
+                        settings.FinOffs = settings.FinOffs.Where(n => n != key);
+                    }
+                }
+                else {
+                    if (settings.FinOffs != null) {
+                        settings.FinOffs = settings.FinOffs.Union(new[] { key });
+                    }
+                    else {
+                        settings.FinOffs = new[] { key };
+                    }
+                }
+            }
+
+            Draw();
         }
 
         private void Draw() {
@@ -47,32 +109,35 @@ namespace Allgregator.Fin.Views {
             var heightHost = canvas.ActualHeight - marginHost * 2d;
             if (heightHost <= 0) return;
 
-            canvas.Children.Clear();
+            var terms = (IEnumerable<Term>)GetValue(TermsProperty);
+            var settings = (Settings)GetValue(SettingsProperty);
+            var currencies = settings?.FinCurrencies;
+            var offs = settings?.FinOffs;
 
-            var terms = (IEnumerable<Term>)GetValue(ItemsSourceProperty);
-            var currencies = (IEnumerable<Currency>)currenciesControl.ItemsSource;
-            if (terms == null || currencies == null) return;
-            if (terms.Any(n => n.Values == null)) return;
+            if (terms == null || currencies == null || terms.Any(n => n.Values == null)) return;
+
+            canvas.Children.Clear();
 
             var max = new Dictionary<string, decimal>();
             var min = new Dictionary<string, decimal>();
 
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
-                    if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
-                    if (value > max[key]) max[key] = value;
-                    if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
-                    if (value < min[key]) min[key] = value;
+                    if (offs == null || !offs.Contains(key)) {
+                        if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
+                        if (value > max[key]) max[key] = value;
+                        if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
+                        if (value < min[key]) min[key] = value;
+                    }
                 }
             }
 
-            var prevs = new Dictionary<string, Point>();
-            foreach (var name in Givenloc.CurrencyNames) prevs.Add(name, new Point());
+            var prevs = new Dictionary<string, Point>(currencies.Select(n => new KeyValuePair<string, Point>(n, new Point())));
             var day = 0;
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
-                    if (currencies.FirstOrDefault(n => n.Key == key && n.IsOn) != null) {
-                        var brush = curBrushes.Value[key];
+                    if (offs == null || !offs.Contains(key)) {
+                        var brush = curBrushes?.Value[key] ?? Brushes.Black;
                         var delta = max[key] - min[key];
                         var y = delta == 0m ?
                             heightHost / 2d :
@@ -132,13 +197,19 @@ namespace Allgregator.Fin.Views {
         }
 
         private Dictionary<string, Brush> BrushesFactory() {
-            var result = new Dictionary<string, Brush>();
-            foreach (var name in Givenloc.CurrencyNames) {
-                var brush = (Brush)TryFindResource($"Fin.{name}");
-                result.Add(name, brush ?? Brushes.Black);
+            var settings = (Settings)GetValue(SettingsProperty);
+            var currencies = settings?.FinCurrencies;
+            if (currencies != null) {
+                var result = new Dictionary<string, Brush>();
+                foreach (var key in currencies) {
+                    var brush = (Brush)TryFindResource($"Fin.{key}");
+                    result.Add(key, brush ?? Brushes.Black);
+                }
+
+                return result;
             }
 
-            return result;
+            return null;
         }
 
         private Brush ForegroundFactory() {
@@ -146,10 +217,6 @@ namespace Allgregator.Fin.Views {
         }
 
         private void Scroll_SizeChanged(object sender, SizeChangedEventArgs e) {
-            Draw();
-        }
-
-        private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
             Draw();
         }
     }

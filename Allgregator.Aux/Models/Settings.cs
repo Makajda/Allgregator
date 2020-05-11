@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace Allgregator.Aux.Models {
@@ -10,7 +11,7 @@ namespace Allgregator.Aux.Models {
         public double MainWindowHeight { get; set; }
         public WindowState MainWindowState { get; set; }
         public bool MainWindowTopmost { get; set; }
-        public int CurrentChapterId { get; set; }
+        public string CurrentChapterId { get; set; }
 
         private int rssMaxOpenTabs = 12;
         public int RssMaxOpenTabs {
@@ -29,5 +30,9 @@ namespace Allgregator.Aux.Models {
             get { return finStartDate; }
             set { SetProperty(ref finStartDate, value); }
         }
+
+        public IEnumerable<string> FinCurrencies { get; set; }
+
+        public IEnumerable<string> FinOffs { get; set; }
     }
 }

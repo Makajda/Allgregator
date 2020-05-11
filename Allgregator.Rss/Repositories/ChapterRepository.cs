@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text.Json;
 
 namespace Allgregator.Rss.Repositories {
     public class ChapterRepository {
-        private const string nameFile = "rssChapters.json";
+        private const string nameFile = "RssChapters.json";
 
         public IEnumerable<Data> GetOrDefault() {
             IEnumerable<Data> retval = null;
@@ -58,7 +59,7 @@ namespace Allgregator.Rss.Repositories {
 
         private IEnumerable<Data> CreateDefault() {
             return new List<Data>() {
-                new Data() { Id = Given.TryChapter, Name = "Try" },
+                new Data() { Id = Givenloc.TryDataId, Name = "Try" },
                 new Data() { Id = 1, Name = "Other" }
             };
         }

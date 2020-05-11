@@ -1,6 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
-using Allgregator.Aux.Services;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
@@ -29,8 +29,8 @@ namespace Allgregator.Rss.ViewModels {
 
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
         }
-        public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
+        public OreService OreService { get; private set; }
 
         public override void OnNavigatedTo(NavigationContext navigationContext) {
             base.OnNavigatedTo(navigationContext);
@@ -39,10 +39,11 @@ namespace Allgregator.Rss.ViewModels {
             }
             if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string name)) {
                 Data.Name = name;
+                Data.IsNeedToSave = false;
             }
         }
 
-        protected override int ChapterId => Data.Id;
+        protected override string ChapterId => $"{Module.Name}{Data.Id}";
         protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);
@@ -60,7 +61,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = Data.Id;
+            if (IsActive) settings.CurrentChapterId = ChapterId;
             AsyncHelper.RunSync(async () => await repoService.Save(Data));
         }
     }

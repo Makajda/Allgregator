@@ -1,17 +1,14 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
 using Allgregator.Sts.Repositories;
 using Allgregator.Sts.Services;
 using Allgregator.Sts.Views;
-using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using Prism.Regions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Sts.ViewModels {
@@ -32,9 +29,9 @@ namespace Allgregator.Sts.ViewModels {
             this.settings = settings;
         }
 
-        public OreService OreService { get; private set; }
         public Data Data { get; } = new Data();
-        protected override int ChapterId => Given.StsChapter;
+        public OreService OreService { get; private set; }
+        protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
             await LoadMined();
             var view = typeof(UnicodeView).FullName;
@@ -54,7 +51,7 @@ namespace Allgregator.Sts.ViewModels {
             }
             else {
                 await LoadMined();
-                //await OreService.Retrieve(Data.Mined);
+                await OreService.Retrieve(Data.Mined);
             }
         }
 

@@ -1,5 +1,5 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
+﻿using Allgregator.Aux.Services;
+using Allgregator.Aux.ViewModels;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
