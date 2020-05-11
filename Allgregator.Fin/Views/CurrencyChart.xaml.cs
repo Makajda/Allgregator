@@ -108,6 +108,7 @@ namespace Allgregator.Fin.Views {
 
             var heightHost = canvas.ActualHeight - marginHost * 2d;
             if (heightHost <= 0) return;
+            canvas.Children.Clear();
 
             var terms = (IEnumerable<Term>)GetValue(TermsProperty);
             var settings = (Settings)GetValue(SettingsProperty);
@@ -115,8 +116,6 @@ namespace Allgregator.Fin.Views {
             var offs = settings?.FinOffs;
 
             if (terms == null || currencies == null || terms.Any(n => n.Values == null)) return;
-
-            canvas.Children.Clear();
 
             var max = new Dictionary<string, decimal>();
             var min = new Dictionary<string, decimal>();
