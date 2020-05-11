@@ -69,8 +69,9 @@ namespace Allgregator.Fin.Views {
                     Content = key,
                     Margin = new Thickness(2),
                     Padding = new Thickness(20),
-                    IsChecked = offs == null || !offs.Contains(key)
-                };
+                    IsChecked = offs == null || !offs.Contains(key),
+                    Foreground = curBrushes?.Value[key] ?? Brushes.Black
+            };
                 currenciesControl.Items.Add(toggleButton);
                 toggleButton.Checked += (s, e) => ChangeOffs(key, true);
                 toggleButton.Unchecked += (s, e) => ChangeOffs(key, false);
