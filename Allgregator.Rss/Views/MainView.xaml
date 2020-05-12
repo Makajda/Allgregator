@@ -32,14 +32,6 @@
                         Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.OldsView}"
                         ToolTip="Outdated"
                         Background="{StaticResource Olds.Background}"/>
-                <Button Content="&#x2630;" Style="{StaticResource managerButton}"
-                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
-                        ToolTip="Links"
-                        Background="{StaticResource Links.Background}"/>
-                <Button Content="&#x283F;" Style="{StaticResource managerButton}"
-                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.SettingsView}"
-                        ToolTip="Settings"
-                        Background="{StaticResource Settings.Background}"/>
                 <Button Content="&#x1F310;"
                         Style="{StaticResource managerButton}"
                         ToolTip="Browse"
@@ -49,7 +41,15 @@
                         Style="{StaticResource managerButton}"
                         ToolTip="Clean"
                         Command="{Binding MoveCommand}"
-                        Background="{StaticResource Olds.Background}"/>
+                        Background="{StaticResource Clean.Background}"/>
+                <Button Content="&#x2630;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
+                        ToolTip="Links"
+                        Background="{StaticResource Links.Background}"/>
+                <Button Content="&#x283F;" Style="{StaticResource managerButton}"
+                        Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.SettingsView}"
+                        ToolTip="Settings"
+                        Background="{StaticResource Settings.Background}"/>
             </UniformGrid>
         </ScrollViewer>
 

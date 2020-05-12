@@ -1,8 +1,6 @@
 ﻿1,6180339887 
 
 
-Givenloc по классам
-
 проверить ещё раз
 opml import
 AddChapter
