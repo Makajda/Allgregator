@@ -32,22 +32,6 @@ namespace Allgregator.Fin.Views {
         public static readonly DependencyProperty TermsProperty = DependencyProperty.Register("Terms",
             typeof(IEnumerable<Term>), typeof(CurrencyChart), new PropertyMetadata(null, OnTermsChanged));
 
-
-        public Settings Settings {
-            get { return (Settings)GetValue(SettingsProperty); }
-            set { SetValue(SettingsProperty, value); }
-        }
-
-        public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register("Settings",
-            typeof(Settings), typeof(CurrencyChart), new PropertyMetadata(null, OnSettingsChanged));
-
-
-        private static void OnSettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (d is CurrencyChart view) {
-                view.SettingsChanged();
-            }
-        }
-
         private static void OnTermsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d is CurrencyChart view) {
                 view.Draw();
@@ -55,23 +39,36 @@ namespace Allgregator.Fin.Views {
         }
 
 
-        private void SettingsChanged() {
-            var settings = (Settings)GetValue(SettingsProperty);
-            var currencies = settings?.FinCurrencies;
-            var offs = settings?.FinOffs;
+        public Cured Cured {
+            get { return (Cured)GetValue(CuredProperty); }
+            set { SetValue(CuredProperty, value); }
+        }
 
-            if (currencies == null) return;
+        public static readonly DependencyProperty CuredProperty = DependencyProperty.Register("Cured",
+            typeof(Cured), typeof(CurrencyChart), new PropertyMetadata(null, OnCuredChanged));
+
+        private static void OnCuredChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (d is CurrencyChart view) {
+                view.SettingsChanged();
+            }
+        }
+
+
+        private void SettingsChanged() {
+            var cured = (Cured)GetValue(CuredProperty);
+
+            if (cured == null || cured.Currencies == null) return;
 
             canvas.Children.Clear();
             currenciesControl.Items.Clear();
-            foreach (var key in currencies) {
+            foreach (var key in cured.Currencies) {
                 var toggleButton = new ToggleButton() {
                     Content = key,
                     Margin = new Thickness(2),
                     Padding = new Thickness(20),
-                    IsChecked = offs == null || !offs.Contains(key),
+                    IsChecked = cured.Offs == null || !cured.Offs.Contains(key),
                     Foreground = curBrushes?.Value[key] ?? Brushes.Black
-            };
+                };
                 currenciesControl.Items.Add(toggleButton);
                 toggleButton.Checked += (s, e) => ChangeOffs(key, true);
                 toggleButton.Unchecked += (s, e) => ChangeOffs(key, false);
@@ -81,21 +78,23 @@ namespace Allgregator.Fin.Views {
         }
 
         private void ChangeOffs(string key, bool isOn) {
-            var settings = (Settings)GetValue(SettingsProperty);
-            if (settings != null) { 
+            var cured = (Cured)GetValue(CuredProperty);
+            if (cured != null) {
                 if (isOn) {
-                    if (settings.FinOffs != null) {
-                        settings.FinOffs = settings.FinOffs.Where(n => n != key);
+                    if (cured.Offs != null) {
+                        cured.Offs = cured.Offs.Where(n => n != key);
                     }
                 }
                 else {
-                    if (settings.FinOffs != null) {
-                        settings.FinOffs = settings.FinOffs.Union(new[] { key });
+                    if (cured.Offs != null) {
+                        cured.Offs = cured.Offs.Union(new[] { key });
                     }
                     else {
-                        settings.FinOffs = new[] { key };
+                        cured.Offs = new[] { key };
                     }
                 }
+
+                cured.IsNeedToSave = true;
             }
 
             Draw();
@@ -112,18 +111,16 @@ namespace Allgregator.Fin.Views {
             canvas.Children.Clear();
 
             var terms = (IEnumerable<Term>)GetValue(TermsProperty);
-            var settings = (Settings)GetValue(SettingsProperty);
-            var currencies = settings?.FinCurrencies;
-            var offs = settings?.FinOffs;
+            var cured = (Cured)GetValue(CuredProperty);
 
-            if (terms == null || currencies == null || terms.Any(n => n.Values == null)) return;
+            if (terms == null || cured == null || cured.Currencies == null || terms.Any(n => n.Values == null)) return;
 
             var max = new Dictionary<string, decimal>();
             var min = new Dictionary<string, decimal>();
 
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
-                    if (offs == null || !offs.Contains(key)) {
+                    if (cured.Offs == null || !cured.Offs.Contains(key)) {
                         if (!max.ContainsKey(key)) max.Add(key, decimal.MinValue);
                         if (value > max[key]) max[key] = value;
                         if (!min.ContainsKey(key)) min.Add(key, decimal.MaxValue);
@@ -132,11 +129,11 @@ namespace Allgregator.Fin.Views {
                 }
             }
 
-            var prevs = new Dictionary<string, Point>(currencies.Select(n => new KeyValuePair<string, Point>(n, new Point())));
+            var prevs = new Dictionary<string, Point>(cured.Currencies.Select(n => new KeyValuePair<string, Point>(n, new Point())));
             var day = 0;
             foreach (var term in terms) {
                 foreach (var (key, value) in term.Values) {
-                    if (offs == null || !offs.Contains(key)) {
+                    if (cured.Offs == null || !cured.Offs.Contains(key)) {
                         var brush = curBrushes?.Value[key] ?? Brushes.Black;
                         var delta = max[key] - min[key];
                         var y = delta == 0m ?
@@ -197,11 +194,10 @@ namespace Allgregator.Fin.Views {
         }
 
         private Dictionary<string, Brush> BrushesFactory() {
-            var settings = (Settings)GetValue(SettingsProperty);
-            var currencies = settings?.FinCurrencies;
-            if (currencies != null) {
+            var cured = (Cured)GetValue(CuredProperty);
+            if (cured?.Currencies != null) {
                 var result = new Dictionary<string, Brush>();
-                foreach (var key in currencies) {
+                foreach (var key in cured.Currencies) {
                     var brush = (Brush)TryFindResource($"Fin.{key}");
                     result.Add(key, brush ?? Brushes.Black);
                 }

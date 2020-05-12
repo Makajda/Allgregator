@@ -36,7 +36,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel HorizontalAlignment="Center">
             <GroupBox Header="Start">
-                <TextBox Text="{Binding Settings.FinStartDate, UpdateSourceTrigger=PropertyChanged,
+                <TextBox Text="{Binding Data.Cured.StartDate, UpdateSourceTrigger=PropertyChanged,
                     Converter={StaticResource DateTimeOffsetToStringConverter}}"
                          Background="{StaticResource Edit.Background}" 
                          Foreground="{StaticResource Edit.Foreground}"/>

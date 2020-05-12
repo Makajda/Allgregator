@@ -7,5 +7,11 @@ namespace Allgregator.Fin.Models {
             get { return mined; }
             set { SetProperty(ref mined, value); }
         }
+
+        private Cured cured;
+        public Cured Cured {
+            get { return cured; }
+            set { SetProperty(ref cured, value); }
+        }
     }
 }

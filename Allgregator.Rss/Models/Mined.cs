@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
-    public class Mined : BindableBase {
+    public class Mined : BindableBase, IWatchSave {
         private DateTimeOffset lastRetrieve;
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;

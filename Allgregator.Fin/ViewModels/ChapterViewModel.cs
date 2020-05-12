@@ -16,6 +16,7 @@ namespace Allgregator.Fin.ViewModels {
         private readonly Settings settings;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
+        private readonly CuredRepository curedRepository;
         private bool isSettings;
 
         public ChapterViewModel(
@@ -23,37 +24,39 @@ namespace Allgregator.Fin.ViewModels {
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
-            MinedRepository minedRepository
+            MinedRepository minedRepository,
+            CuredRepository curedRepository
             ) : base(eventAggregator) {
             OreService = oreService;
             this.settings = settings;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
+            this.curedRepository = curedRepository;
         }
 
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
         protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
-            await LoadMined();
+            await Load();
             ViewActivate();
         }
-        protected override async Task Deactivate() => await SaveMined();
+        protected override async Task Deactivate() => await Save();
         protected override void Run() {
             isSettings = !isSettings;
             ViewActivate();
         }
         protected override void WindowClosing(CancelEventArgs args) {
             if (IsActive) settings.CurrentChapterId = ChapterId;
-            AsyncHelper.RunSync(async () => await SaveMined());
+            AsyncHelper.RunSync(async () => await Save());
         }
         protected override async Task Update() {
             if (OreService.IsRetrieving) {
                 OreService.CancelRetrieve();
             }
             else {
-                await LoadMined();
-                await OreService.Retrieve(Data.Mined, settings.FinStartDate, settings.FinCurrencies);
+                await Load();
+                await OreService.Retrieve(Data);
             }
         }
 
@@ -65,17 +68,29 @@ namespace Allgregator.Fin.ViewModels {
             regionManager.RequestNavigate(Given.MainRegion, view, parameters);
         }
 
-        private async Task LoadMined() {
+        private async Task Load() {
             if (Data.Mined == null) {
                 Data.Mined = await minedRepository.GetOrDefault();
             }
+
+            if (Data.Cured == null) {
+                Data.Cured = await curedRepository.GetOrDefault();
+            }
         }
 
-        private async Task SaveMined() {
-            if (Data.Mined != null && Data.Mined.IsNeedToSave) {
+        private async Task Save() {
+            if (Data.Mined != null) {
                 try {
                     await minedRepository.Save(Data.Mined);
-                    Data.Mined.IsNeedToSave = false;
+                }
+                catch (Exception e) {
+                    Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+                }
+            }
+
+            if (Data.Cured != null) {
+                try {
+                    await curedRepository.Save(Data.Cured);
                 }
                 catch (Exception e) {
                     Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

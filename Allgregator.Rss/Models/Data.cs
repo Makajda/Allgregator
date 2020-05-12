@@ -1,8 +1,9 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Aux.Models;
+using Prism.Mvvm;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
-    public class Data : BindableBase {
+    public class Data : BindableBase, IWatchSave {
         public int Id { get; set; }
 
         private string name;

@@ -62,10 +62,9 @@ namespace Allgregator.Sts.ViewModels {
         }
 
         private async Task SaveMined() {
-            if (Data.Mined != null && Data.Mined.IsNeedToSave) {
+            if (Data.Mined != null) {
                 try {
                     await minedRepository.Save(Data.Mined);
-                    Data.Mined.IsNeedToSave = false;
                 }
                 catch (Exception e) {
                     Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

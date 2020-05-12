@@ -67,34 +67,27 @@ namespace Allgregator.Rss.Services {
         private async Task LoadMined(Data data) {
             if (data.Mined == null) {
                 data.Mined = await minedRepository.GetOrDefault(data.Id);
-                data.Mined.IsNeedToSave = false;
             }
         }
 
         private async Task SaveLinks(Data data) {
             if (data.Linked?.Links != null) {
-                if (data.Linked.IsNeedToSave) {
-                    try {
-                        await linkedRepository.Save(data.Linked, data.Id);
-                        data.Linked.IsNeedToSave = false;
-                    }
-                    catch (Exception e) {
-                        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-                    }
+                try {
+                    await linkedRepository.Save(data.Linked, data.Id);
+                }
+                catch (Exception e) {
+                    Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
                 }
             }
         }
 
         private async Task SaveMined(Data data) {
             if (data.Mined != null) {
-                if (data.Mined.IsNeedToSave) {
-                    try {
-                        await minedRepository.Save(data.Mined, data.Id);
-                        data.Mined.IsNeedToSave = false;
-                    }
-                    catch (Exception e) {
-                        Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
-                    }
+                try {
+                    await minedRepository.Save(data.Mined, data.Id);
+                }
+                catch (Exception e) {
+                    Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
                 }
             }
         }

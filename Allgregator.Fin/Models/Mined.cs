@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Fin.Models {
-    public class Mined : BindableBase {
+    public class Mined : BindableBase, IWatchSave {
         private DateTimeOffset lastRetrieve;
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;
