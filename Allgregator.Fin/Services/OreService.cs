@@ -21,20 +21,32 @@ namespace Allgregator.Fin.Services {
                 return;
             }
 
-            // dates - недостающие даты
             var startDate = cured.StartDate;
             var date = startDate.Date;
             var toDate = DateTimeOffset.Now.Date;
             var dates = new List<DateTimeOffset>();
 
             if (mined.Terms != null) {
+                var firstTerm = mined.Terms.FirstOrDefault();
+                if (firstTerm != null && firstTerm.Date < date) {
+                    date = firstTerm.Date.Date;
+                }
+
+                var lastTerm = mined.Terms.LastOrDefault();
+                if (lastTerm != null) {
+                    dates.Add(lastTerm.Date.Date);
+                }
+
                 foreach (var term in mined.Terms) {
-                    while (date <= toDate && date < term.Date) {
-                        dates.Add(date);
+                    if (date <= toDate && date < term.Date.Date) {
+                        do {
+                            dates.Add(date);
+                            date = date.AddDays(1);
+                        } while (date <= toDate && date < term.Date.Date);
+                    }
+                    else {
                         date = date.AddDays(1);
                     }
-
-                    date = date.AddDays(1);
                 }
             }
 
