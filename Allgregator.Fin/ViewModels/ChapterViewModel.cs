@@ -38,8 +38,8 @@ namespace Allgregator.Fin.ViewModels {
         public OreService OreService { get; private set; }
         protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
-            await Load();
             ViewActivate();
+            await Load();
         }
         protected override async Task Deactivate() => await Save();
         protected override void Run() {

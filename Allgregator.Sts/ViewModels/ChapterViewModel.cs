@@ -33,12 +33,12 @@ namespace Allgregator.Sts.ViewModels {
         public OreService OreService { get; private set; }
         protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
-            await LoadMined();
             var view = typeof(UnicodeView).FullName;
             var parameters = new NavigationParameters {
                 { Given.DataParameter, Data }
             };
             regionManager.RequestNavigate(Given.MainRegion, view, parameters);
+            await LoadMined();
         }
         protected override async Task Deactivate() => await SaveMined();
         protected override void WindowClosing(CancelEventArgs args) {

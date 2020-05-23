@@ -1,8 +1,8 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Services;
+﻿using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -115,14 +115,20 @@ namespace Allgregator.Rss.Services {
             object sync = new object();
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try {
-                await Task.WhenAll(rsses.Select(n => Task.Run(async () => {
-                    var link = await GetLink(n);
-                    if (link != null) {
-                        lock (sync) {
-                            links.Add(link);
-                        }
-                    }
-                }, cancellationTokenSource.Token)));
+                await Task.WhenAll(
+                        Partitioner.Create(rsses).GetPartitions(5).Select(partition =>
+                            Task.Run(async () => {
+                                using (partition) {
+                                    while (partition.MoveNext()) {
+                                        var link = await GetLink(partition.Current);
+                                        if (link != null) {
+                                            lock (sync) {
+                                                links.Add(link);
+                                            }
+                                        }
+                                    }
+                                };
+                            }, cancellationTokenSource.Token)));
             }
             catch (Exception) { }
 
@@ -134,16 +140,22 @@ namespace Allgregator.Rss.Services {
             object sync = new object();
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try {
-                await Task.WhenAll(addresses.Select(n => Task.Run(async () => {
-                    var html = await webService.TryGetHtml(n);
-                    if (html != null) {
-                        var hrefs = RegexUtilities.GetHrefs(html);
-                        var rsses = hrefs.Where(n => n != null && (n.Contains("rss") || n.Contains("atom") || n.Contains("feed"))).Distinct();
-                        lock (sync) {
-                            result.AddRange(rsses);
-                        }
-                    }
-                }, cancellationTokenSource.Token)));
+                await Task.WhenAll(
+                        Partitioner.Create(addresses).GetPartitions(5).Select(partition =>
+                            Task.Run(async () => {
+                                using (partition) {
+                                    while (partition.MoveNext()) {
+                                        var html = await webService.TryGetHtml(partition.Current);
+                                        if (html != null) {
+                                            var hrefs = RegexUtilities.GetHrefs(html);
+                                            var rsses = hrefs.Where(n => n != null && (n.Contains("rss") || n.Contains("atom") || n.Contains("feed"))).Distinct();
+                                            lock (sync) {
+                                                result.AddRange(rsses);
+                                            }
+                                        }
+                                    }
+                                };
+                            }, cancellationTokenSource.Token)));
             }
             catch (Exception) { }
 
