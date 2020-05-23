@@ -15,7 +15,7 @@ namespace Allgregator.Rss.Services {
     internal class DetectionService {
         private readonly WebService webService;
         private const int timeout = 45_000;
-        public DetectionService(
+        internal DetectionService(
             WebService webService
             ) {
             this.webService = webService;
@@ -28,8 +28,17 @@ namespace Allgregator.Rss.Services {
                 Selected(linked, link);
             }
             else {
-                linked.DetectedLinks = await GetLinks(linked.Address);
-                linked.CurrentState = linked.DetectedLinks == null ? LinksStates.Normal : LinksStates.Selection;
+                var links = await GetLinks(linked.Address);
+                if (links == null || links.Count == 0) {
+                    links.Add(new Link() { Name = linked.Address, XmlUrl = linked.Address, HtmlUrl = linked.Address });
+                }
+                else {
+                    links = links.Distinct(EqualityComparer<Link>.Default).OrderBy(n => n.XmlUrl.ToString().Length).ToList();
+                }
+
+                links.Add(new Link());
+                linked.DetectedLinks = links;
+                linked.CurrentState = LinksStates.Selection;
                 linked.IsNeedToSave = true;
             }
         }
@@ -73,7 +82,7 @@ namespace Allgregator.Rss.Services {
             return link;
         }
 
-        private async Task<IEnumerable<Link>> GetLinks(string address) {
+        private async Task<IList<Link>> GetLinks(string address) {
             if (string.IsNullOrWhiteSpace(address)) {
                 return null;
             }
@@ -92,37 +101,28 @@ namespace Allgregator.Rss.Services {
                 links = await ValidationRsses(rsses);
                 if (links.Count == 0) {
                     // 7.find additional uris
-                    rsses = GetAdditionalUris(address);
-
                     // 8.validation additional uris
+                    rsses = GetAdditionalUris(address);
                     links = await ValidationRsses(rsses);
                 }
             }
 
-            if (links.Count == 0) {
-                links.Add(new Link() { Name = address, XmlUrl = address, HtmlUrl = address });
-            }
-            else {
-                links = links.Distinct(EqualityComparer<Link>.Default).OrderBy(n => n.XmlUrl.ToString().Length).ToList();
-            }
-
-            links.Add(new Link());
             return links;
         }
 
-        private async Task<List<Link>> ValidationRsses(IEnumerable<string> rsses) {
+        private async Task<IList<Link>> ValidationRsses(IEnumerable<string> rsses) {
             var links = new List<Link>();
             object sync = new object();
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try {
-                await Task.WhenAll(rsses.Select(n => Task.Factory.StartNew(async () => {
-                    var link = await GetLink(n).ConfigureAwait(false);
+                await Task.WhenAll(rsses.Select(n => Task.Run(async () => {
+                    var link = await GetLink(n);
                     if (link != null) {
                         lock (sync) {
                             links.Add(link);
                         }
                     }
-                }, cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default)));
+                }, cancellationTokenSource.Token)));
             }
             catch (Exception) { }
 
@@ -166,6 +166,7 @@ namespace Allgregator.Rss.Services {
                     wAddress.Path = adata;
                     wAddress.Query = null;
                     result.Add(wAddress.Uri.ToString());
+                    result.Add(wAddress.Uri.ToString().Replace("http://", "https://"));
                 }
                 catch (Exception) { }
             }
