@@ -141,11 +141,7 @@
         <StackPanel VerticalAlignment="Center"
                     Visibility="{Binding Data.Linked.CurrentState, Converter={StaticResource IntEqToVisibilityConverter},
             ConverterParameter={x:Static commonLoc:LinksStates.Detection}}">
-            <ProgressBar Margin="30" Background="Transparent" BorderThickness="0" Height="60" IsIndeterminate="True">
-                <ProgressBar.Foreground>
-                    <SolidColorBrush Color="{StaticResource Retrieving.Color}"/>
-                </ProgressBar.Foreground>
-            </ProgressBar>
+            <Control Style="{StaticResource BusyAnimationStyle}" Background="Transparent"/>
             <TextBlock Text="{Binding Data.Linked.Address}" 
                        Foreground="{StaticResource Button.Manager.Foreground}" FontSize="28" Margin="20"
                        TextWrapping="Wrap" TextAlignment="Center"/>

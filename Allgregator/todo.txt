@@ -12,4 +12,4 @@ this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 
 IDetectionService & test
-progress template
+theme
