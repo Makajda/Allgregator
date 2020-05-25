@@ -2,8 +2,4 @@
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 
-проверить ещё раз
-AddChapter
-DeleteChapter
-
 theme

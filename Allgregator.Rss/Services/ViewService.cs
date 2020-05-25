@@ -54,8 +54,16 @@ namespace Allgregator.Rss.Services {
 
         internal void RemoveMenuView(int id) {
             var region = regionManager.Regions[Given.MenuRegion];
-            var view = region.GetView(GetName(id));
-            if (view != null) region.Remove(view);
+            var views = region.Views;
+            foreach(var view in views) {
+                if (view is FrameworkElement element) {
+                    if(element.DataContext is ChapterViewModel viewModel) {
+                        if(viewModel.Data.Id == id) {
+                            region.Remove(view);
+                        }
+                    }
+                }
+            }
         }
 
         private string GetName(int id) {
