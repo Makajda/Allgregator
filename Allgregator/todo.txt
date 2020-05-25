@@ -1,15 +1,9 @@
 ﻿1,6180339887 
-
-
-проверить ещё раз
-opml import
-AddChapter
-DeleteChapter
-
-todo
-
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 
-IDetectionService & test
+проверить ещё раз
+AddChapter
+DeleteChapter
+
 theme

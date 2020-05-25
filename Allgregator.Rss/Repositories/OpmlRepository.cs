@@ -1,5 +1,4 @@
-﻿using Allgregator.Rss.Common;
-using Allgregator.Rss.Models;
+﻿using Allgregator.Rss.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -21,23 +20,23 @@ namespace Allgregator.Rss.Repositories {
             this.linkedRepository = linkedRepository;
         }
 
-        internal async Task<Data[]> Import() {
+        internal async Task<IList<Data>> Import() {
             var cinks = await ImportPicker();
             if (cinks == null || cinks.Count == 0) {
                 return default;
             }
 
             var chapters = chapterRepository.GetOrDefault().ToList();
-            var newChapters = new Data[cinks.Count];
-            var indexChapters = 0;
+            var newChapters = new List<Data>();
 
             try {
                 foreach (var cink in cinks) {
                     var newChapter = chapterRepository.GetNewChapter(chapters, cink.Name);
-                    newChapters[indexChapters++] = newChapter;
+                    newChapters.Add(newChapter);
                     chapters.Add(newChapter);
                     var linked = await linkedRepository.GetOrDefault(newChapter.Id);
                     linked.Links = cink.Links;
+                    linked.IsNeedToSave = true;
                     await linkedRepository.Save(linked, newChapter.Id);
                 }
 
@@ -87,7 +86,7 @@ namespace Allgregator.Rss.Repositories {
                 using var fileStream = picker.OpenFile();
                 using var cancellationTokenSource = new CancellationTokenSource();
                 var xdocument = ToOpml(cinks);
-                await xdocument.SaveAsync(fileStream, SaveOptions.DisableFormatting, cancellationTokenSource.Token);
+                await xdocument.SaveAsync(fileStream, SaveOptions.None, cancellationTokenSource.Token);
             }
         }
 
@@ -96,7 +95,7 @@ namespace Allgregator.Rss.Repositories {
             var root = new XElement("opml");
             root.Add(new XAttribute("version", "1.0"));
             var head = new XElement("head");
-            var title = new XElement("title") { Value = $"from infeed {DateTime.Now}" };
+            var title = new XElement("title") { Value = $"from allgregator {DateTimeOffset.Now}" };
             head.Add(title);
             root.Add(head);
             var body = new XElement("body");
@@ -138,7 +137,7 @@ namespace Allgregator.Rss.Repositories {
                 return retval;
             }
 
-            retval.Add(new Cink() { Links = new ObservableCollection<Link>() }); // to current collection
+            retval.Add(new Cink() { Links = new ObservableCollection<Link>() }); // current collection
 
             foreach (var outline in outlines) {
                 var link = LinkParse(outline);
@@ -149,7 +148,7 @@ namespace Allgregator.Rss.Repositories {
                     var os = outline.Elements();
                     if (os != null) {
                         var links = new ObservableCollection<Link>();
-                        retval.Add(new Cink() { Name = link.Name, Links = links }); // to new collection
+                        retval.Add(new Cink() { Name = link.Name, Links = links }); // new collection
                         foreach (var o in os) {
                             link = LinkParse(o);
                             if (link.XmlUrl != null) {
@@ -160,7 +159,7 @@ namespace Allgregator.Rss.Repositories {
                 }
             }
 
-            return retval;
+            return retval.Where(n => n.Links.Count > 0).ToList();
         }
 
         private Link LinkParse(XElement xe) {
