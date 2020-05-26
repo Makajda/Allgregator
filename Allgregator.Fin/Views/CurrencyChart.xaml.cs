@@ -1,5 +1,4 @@
-﻿using Allgregator.Aux.Models;
-using Allgregator.Fin.Models;
+﻿using Allgregator.Fin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

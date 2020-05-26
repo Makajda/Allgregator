@@ -23,7 +23,7 @@ namespace Allgregator.Fin.Services {
 
             var startDate = cured.StartDate;
             var date = startDate.Date;
-            var toDate = DateTimeOffset.Now.Date;
+            var toDate = DateTimeOffset.Now.Date.AddDays(1);
             var dates = new List<DateTimeOffset>();
 
             if (mined.Terms != null) {
