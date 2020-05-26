@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
-        private readonly Settings settings;
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
         private readonly CuredRepository curedRepository;
@@ -26,9 +25,8 @@ namespace Allgregator.Fin.ViewModels {
             IRegionManager regionManager,
             MinedRepository minedRepository,
             CuredRepository curedRepository
-            ) : base(eventAggregator) {
+            ) : base(settings, eventAggregator) {
             OreService = oreService;
-            this.settings = settings;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
             this.curedRepository = curedRepository;

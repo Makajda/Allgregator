@@ -15,18 +15,16 @@ namespace Allgregator.Sts.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
-        private readonly Settings settings;
         public ChapterViewModel(
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             MinedRepository minedRepository,
             Settings settings
-            ) : base(eventAggregator) {
+            ) : base(settings, eventAggregator) {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
-            this.settings = settings;
         }
 
         public Data Data { get; } = new Data();
