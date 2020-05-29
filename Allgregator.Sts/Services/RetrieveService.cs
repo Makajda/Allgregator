@@ -46,7 +46,7 @@ namespace Allgregator.Sts.Services {
                 var valueChar = (char)Convert.ToInt32(codeChar, 16);
                 if (Items.All(n => n.Char != valueChar)) {
                     var indexName = str.IndexOf("</td>");
-                    var name = str.Substring(0, indexName);
+                    var name = str.Substring(0, indexName).ToLower();
 
                     var symbol = new Symbol() { Char = valueChar, Name = name };
                     Items.Add(symbol);

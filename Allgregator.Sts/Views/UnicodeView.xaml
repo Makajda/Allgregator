@@ -12,34 +12,47 @@
         <Thickness x:Key="ElMargin">0</Thickness>
         <t:Double x:Key="ElWithMargin">78</t:Double>
 
+        <CollectionViewSource x:Key="cvs" Source="{Binding Data.Mined.Symbols}" Filter="CollectionViewSource_Filter"/>
+
         <DataTemplate x:Key="SymbolItemTemplate">
-            <Button Width="{StaticResource ElSize}" Height="{StaticResource ElSize}" Padding="0"
-                    Content="{Binding Char}"
-                    FontSize="32"
-                    Background="Transparent"
-                    common:Shaatt.Shape="Rect"/>
+            <Border Width="{StaticResource ElSize}" Height="{StaticResource ElSize}"
+                    BorderThickness="1" BorderBrush="Black" Background="Transparent"
+                    ToolTip="{Binding Name}"
+                    >
+                <TextBlock Text="{Binding Char}" FontSize="32"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
         </DataTemplate>
     </UserControl.Resources>
 
-    <ListView BorderThickness="0"
-              ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
-              Background="{StaticResource Main.Background}"
-              ItemsSource="{Binding Data.Mined.Symbols}"
-              ItemTemplate="{StaticResource SymbolItemTemplate}"
-              >
-        <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Margin" Value="{StaticResource ElMargin}" />
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
-        </ListView.ItemContainerStyle>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10"
+                    DataContext="{Binding CurrentItem, Source={StaticResource cvs}}">
+            <TextBox x:Name="filter" Width="150" Padding="10"/>
+            <Button Content="Filter" Padding="10" Margin="5,0,0,0" Click="ButtonFilter_Click"/>
+        </StackPanel>
 
-        <ListView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWithMargin}" ItemHeight="{StaticResource ElWithMargin}"/>
-            </ItemsPanelTemplate>
-        </ListView.ItemsPanel>
-    </ListView>
+        <ListView BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  Background="{StaticResource Main.Background}"
+                  ItemsSource="{Binding Source={StaticResource cvs}}"
+                  ItemTemplate="{StaticResource SymbolItemTemplate}"
+                  IsSynchronizedWithCurrentItem="True"
+                  >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="{StaticResource ElMargin}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWithMargin}" ItemHeight="{StaticResource ElWithMargin}"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </DockPanel>
 </UserControl>
