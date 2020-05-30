@@ -1,5 +1,7 @@
-﻿using Allgregator.Sts.Model;
+﻿using Allgregator.Aux.Models;
+using Allgregator.Sts.Model;
 using Allgregator.Sts.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,49 +15,48 @@ namespace Allgregator.Sts.Views {
     /// Interaction logic for UnicodeView
     /// </summary>
     public partial class UnicodeView : UserControl {
-        public UnicodeView() {
+        public UnicodeView(Settings settings) {
             InitializeComponent();
 
-            cvs = Resources["cvs"] as CollectionViewSource;
+            this.settings = settings;
+            areasView.SelectedIndex = settings.StsAreasIndex;
+            symbolsView.SelectedIndex = settings.StsSymbolsIndex;
         }
 
-        private CollectionViewSource cvs;
+        private readonly Settings settings;
 
-        private void CollectionViewSource_Filter(object sender, FilterEventArgs e) {
-            if (!string.IsNullOrWhiteSpace(filter.Text) && e.Item is Symbol item) {
-                if (item.Name.Contains(filter.Text)) {
-                    e.Accepted = true;
-                }
-                else {
-                    e.Accepted = false;
-                }
-            }
-        }
-
-        private void ButtonFilter_Click(object sender, RoutedEventArgs e) {
-            //await Task.Run(() => Dispatcher.Invoke(() => cvs.View.Refresh(), DispatcherPriority.Normal));
-            var vm = DataContext as UnicodeViewModel;
-            //var area = vm.Data.Mined.Areas.FirstOrDefault();
-            var ranges = vm.Data.Mined.Areas.SelectMany(n => n.Ranges);
-            //if (area != null && area.Ranges.Count > 0) {
-            //var range = area.Ranges[0];
-            var symbols = new List<Symbol>();
-            var sym = new List<int>();
-            foreach (var range in ranges) {
-                for (var i = range.Begin; i <= range.End; i++) {
-                    if (!sym.Contains(i)) {
-                        sym.Add(i);
-                        //    var name = i.ToString();
-                        //    if (!symbols.Any(n => n.Name == name)) {
-                        //        symbols.Add(new Symbol() { Char = (char)i, Name = name });
-                        //    }
+        private void AreasView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            symbolsView.Items.Clear();
+            var areaObject = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (areaObject is Area area && area != null) {
+                foreach (var range in area.Ranges) {
+                    for (var i = range.First; i <= range.Second; i++) {
+                        symbolsView.Items.Add((char)i);
                     }
                 }
-
-                s.ItemsSource = symbols;
-                //}
-
             }
+
+            settings.StsAreasIndex = areasView.SelectedIndex;
+        }
+
+        private void SymbolsView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var symbolObject = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
+            if (symbolObject is char symbol) {
+                result.Content = ((int)symbol).ToString("X");
+            }
+            else {
+                result.Content = null;
+            }
+
+            settings.StsSymbolsIndex = symbolsView.SelectedIndex;
+        }
+
+        private void Result_Click(object sender, RoutedEventArgs e) {
+            try {
+                var text = result.Content == null ? string.Empty : result.Content.ToString();
+                Clipboard.SetText(text);
+            }
+            catch (Exception) { }
         }
     }
 }

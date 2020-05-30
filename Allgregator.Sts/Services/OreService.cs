@@ -17,7 +17,7 @@ namespace Allgregator.Sts.Services {
                 return;
             }
 
-            var addresses = new[] { "https://unicode.org/charts/charindex.html" };
+            var addresses = new[] { "https://unicode.org/charts/" };
 
             using (retrieveService) {
                 var lastRetrieve = await Retrieve(addresses, retrieveService.ProductionAsync);
