@@ -1,7 +1,8 @@
-﻿namespace Allgregator.Sts.Model {
+﻿using System.Collections.Generic;
+
+namespace Allgregator.Sts.Model {
     public class Area {
-        public string From { get; set; }
-        public string To { get; set; }
         public string Name { get; set; }
+        public List<(int Begin, int End)> Ranges { get; } = new List<(int Begin, int End)>();
     }
 }

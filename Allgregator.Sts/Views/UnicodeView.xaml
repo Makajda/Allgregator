@@ -12,7 +12,7 @@
         <Thickness x:Key="ElMargin">0</Thickness>
         <t:Double x:Key="ElWithMargin">78</t:Double>
 
-        <CollectionViewSource x:Key="cvs" Source="{Binding Data.Mined.Symbols}" Filter="CollectionViewSource_Filter"/>
+        <CollectionViewSource x:Key="cvs" Source="{Binding Data.Mined.Areas}" Filter="CollectionViewSource_Filter"/>
 
         <DataTemplate x:Key="SymbolItemTemplate">
             <Border Width="{StaticResource ElSize}" Height="{StaticResource ElSize}"
@@ -32,10 +32,32 @@
             <Button Content="Filter" Padding="10" Margin="5,0,0,0" Click="ButtonFilter_Click"/>
         </StackPanel>
 
-        <ListView BorderThickness="0"
+        <!--<ListView DockPanel.Dock="Top" BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Background="{StaticResource Main.Background}"
                   ItemsSource="{Binding Source={StaticResource cvs}}"
+                  ItemTemplate="{StaticResource SymbolItemTemplate}"
+                  IsSynchronizedWithCurrentItem="True"
+                  >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="{StaticResource ElMargin}" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWithMargin}" ItemHeight="{StaticResource ElWithMargin}"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>-->
+
+        <ListView BorderThickness="0" x:Name="s"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  Background="{StaticResource Main.Background}"
                   ItemTemplate="{StaticResource SymbolItemTemplate}"
                   IsSynchronizedWithCurrentItem="True"
                   >
