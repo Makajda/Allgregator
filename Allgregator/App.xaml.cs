@@ -1,8 +1,6 @@
 ﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
 using Allgregator.Aux.Repository;
 using Prism.DryIoc;
-using Prism.Events;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Mvvm;
@@ -13,13 +11,6 @@ using System.Windows;
 
 namespace Allgregator {
     public partial class App : PrismApplication {
-        protected override void OnInitialized() {
-            base.OnInitialized();
-            var settings = Container.Resolve<Settings>();
-            var eventAggregator = Container.Resolve<IEventAggregator>();
-            eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(settings.CurrentChapterId);
-        }
-
         protected override Window CreateShell() => WindowUtilities.CreateShell<MainWindow, MainWindowViewModel>(Container);
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry) {

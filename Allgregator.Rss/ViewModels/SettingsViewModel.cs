@@ -61,7 +61,7 @@ namespace Allgregator.Rss.ViewModels {
             var chapter = chapterRepository.GetNewChapter(chapters, AddedName);
             chapters.Add(chapter);
             Save(chapters);
-            viewService.AddModuleViews(new[] { chapter });
+            viewService.AddMenuViews(new[] { chapter });
         }
 
         private void SaveChapterName(CancelEventArgs obj) {
@@ -78,13 +78,14 @@ namespace Allgregator.Rss.ViewModels {
 
         private async void DeleteChapter() {
             await repoService.LoadLinks(Data);
-            dialogService.Show($"{Data.Linked.Links.Count} addresses?", DeleteChapterReal, 20, true);
+            dialogService.Show($"{(Data.Linked?.Links == null ? 0 : Data.Linked.Links.Count)} addresses?", DeleteChapterReal, 20, true);
 
             void DeleteChapterReal() {
                 var chapters = chapterRepository.GetOrDefault().Where(n => n.Id != Data.Id);
                 Save(chapters);
                 repoService.DeleteFiles(Data.Id);
                 viewService.RemoveMainView(Data.Id);
+                viewService.RemoveMenuView(Data.Id);
             }
         }
 
@@ -109,10 +110,10 @@ namespace Allgregator.Rss.ViewModels {
         private async void ImportOpml() {
             try {
                 var chapters = await opmlRepository.Import();
-                if (chapters != null) {
-                    viewService.AddModuleViews(chapters);
+                if (chapters != null && chapters.Count > 0) {
+                    viewService.AddMenuViews(chapters);
 
-                    var str = $"added {chapters.Length} collections";
+                    var str = $"added {chapters.Count} collections";
                     dialogService.Show(str);
                 }
             }

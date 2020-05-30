@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Encodings.Web;
@@ -6,24 +7,27 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
-    public abstract class ZipRepositoryBase<TModel> : RepositoryBase<TModel> where TModel : new() {
+    public abstract class ZipRepositoryBase<TModel> : RepositoryBase<TModel> where TModel : IWatchSave, new() {
         public override async Task Save(TModel model, int id = 0) {
-            var (entryName, fileName) = GetNames(id);
+            if (model.IsNeedToSave) {
+                model.IsNeedToSave = false;
+                var (entryName, fileName) = GetNames(id);
 
-            using var fileStream = new FileStream(fileName, FileMode.Create);
-            using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
-            var entry = archive.CreateEntry(entryName);
-            using var streamEntry = entry.Open();
-            using var writer = new StreamWriter(streamEntry);
-            var json = JsonSerializer.Serialize<TModel>(
-                model,
-                new JsonSerializerOptions() {
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    IgnoreNullValues = true,
-                    WriteIndented = false
-                });
+                using var fileStream = new FileStream(fileName, FileMode.Create);
+                using var archive = new ZipArchive(fileStream, ZipArchiveMode.Create);
+                var entry = archive.CreateEntry(entryName);
+                using var streamEntry = entry.Open();
+                using var writer = new StreamWriter(streamEntry);
+                var json = JsonSerializer.Serialize<TModel>(
+                    model,
+                    new JsonSerializerOptions() {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        IgnoreNullValues = true,
+                        WriteIndented = false
+                    });
 
-            await writer.WriteLineAsync(json);
+                await writer.WriteLineAsync(json);
+            }
         }
 
         public override void DeleteFile(int id = 0) {

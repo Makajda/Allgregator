@@ -4,9 +4,10 @@
 
     <Color x:Key="Main.Background.Color">#FF8DE3FF</Color>
     <Color x:Key="News.Background.Color">LightGreen</Color>
-    <Color x:Key="Olds.Background.Color">SaddleBrown</Color>
+    <Color x:Key="Olds.Background.Color">Brown</Color>
     <Color x:Key="Links.Background.Color">Green</Color>
     <Color x:Key="Settings.Background.Color">DarkBlue</Color>
+    <Color x:Key="Clean.Background.Color">SaddleBrown</Color>
     <Color x:Key="Retrieving.Color">PaleGreen</Color>
 
     <SolidColorBrush x:Key="Main.Background" Color="{StaticResource Main.Background.Color}"/>
@@ -26,6 +27,7 @@
     <SolidColorBrush x:Key="Olds.Background" Color="{StaticResource Olds.Background.Color}"/>
     <SolidColorBrush x:Key="Links.Background" Color="{StaticResource Links.Background.Color}"/>
     <SolidColorBrush x:Key="Settings.Background" Color="{StaticResource Settings.Background.Color}"/>
+    <SolidColorBrush x:Key="Clean.Background" Color="{StaticResource Clean.Background.Color}"/>
     <SolidColorBrush x:Key="Links.Background.Row" Color="LightSlateGray"/>
     <SolidColorBrush x:Key="Links.Background.Alt" Color="LightGray"/>
     <SolidColorBrush x:Key="Edit.Background" Color="White"/>

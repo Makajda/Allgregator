@@ -15,30 +15,28 @@ namespace Allgregator.Sts.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
         private readonly MinedRepository minedRepository;
-        private readonly Settings settings;
         public ChapterViewModel(
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             MinedRepository minedRepository,
             Settings settings
-            ) : base(eventAggregator) {
+            ) : base(settings, eventAggregator) {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
-            this.settings = settings;
         }
 
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
         protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
-            await LoadMined();
             var view = typeof(UnicodeView).FullName;
             var parameters = new NavigationParameters {
                 { Given.DataParameter, Data }
             };
             regionManager.RequestNavigate(Given.MainRegion, view, parameters);
+            await LoadMined();
         }
         protected override async Task Deactivate() => await SaveMined();
         protected override void WindowClosing(CancelEventArgs args) {
@@ -62,10 +60,9 @@ namespace Allgregator.Sts.ViewModels {
         }
 
         private async Task SaveMined() {
-            if (Data.Mined != null && Data.Mined.IsNeedToSave) {
+            if (Data.Mined != null) {
                 try {
                     await minedRepository.Save(Data.Mined);
-                    Data.Mined.IsNeedToSave = false;
                 }
                 catch (Exception e) {
                     Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);

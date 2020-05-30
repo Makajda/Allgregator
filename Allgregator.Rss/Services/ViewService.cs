@@ -41,7 +41,7 @@ namespace Allgregator.Rss.Services {
             if (view != null) region.Remove(view);
         }
 
-        internal void AddModuleViews(IEnumerable<Data> chapters) {
+        internal void AddMenuViews(IEnumerable<Data> chapters) {
             var region = regionManager.Regions[Given.MenuRegion];
             foreach (var chapter in chapters) {
                 var parameters = new NavigationParameters {
@@ -49,6 +49,20 @@ namespace Allgregator.Rss.Services {
                     { Common.Givenloc.ChapterNameParameter, chapter.Name }
                 };
                 region.RequestNavigate(typeof(ChapterView).FullName, parameters);
+            }
+        }
+
+        internal void RemoveMenuView(int id) {
+            var region = regionManager.Regions[Given.MenuRegion];
+            var views = region.Views;
+            foreach(var view in views) {
+                if (view is FrameworkElement element) {
+                    if(element.DataContext is ChapterViewModel viewModel) {
+                        if(viewModel.Data.Id == id) {
+                            region.Remove(view);
+                        }
+                    }
+                }
             }
         }
 

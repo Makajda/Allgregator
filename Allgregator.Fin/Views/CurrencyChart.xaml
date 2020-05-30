@@ -4,7 +4,7 @@
              >
 
     <DockPanel>
-        <ScrollViewer DockPanel.Dock="Top" Margin="10" HorizontalAlignment="Stretch"
+        <ScrollViewer DockPanel.Dock="Top" HorizontalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
             <ItemsControl x:Name="currenciesControl">
                 <ItemsControl.ItemsPanel>

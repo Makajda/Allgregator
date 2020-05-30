@@ -1,6 +1,5 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Windows;
 
 namespace Allgregator.Aux.Models {
@@ -24,15 +23,7 @@ namespace Allgregator.Aux.Models {
             get => rssCutoffTime;
             set => SetProperty(ref rssCutoffTime, value);
         }
-
-        private DateTimeOffset finStartDate = DateTimeOffset.Now.Date.Date.AddMonths(-1);
-        public DateTimeOffset FinStartDate {
-            get { return finStartDate; }
-            set { SetProperty(ref finStartDate, value); }
-        }
-
-        public IEnumerable<string> FinCurrencies { get; set; }
-
-        public IEnumerable<string> FinOffs { get; set; }
+        public int StsAreasIndex { get; set; }
+        public int StsSymbolsIndex { get; set; }
     }
 }

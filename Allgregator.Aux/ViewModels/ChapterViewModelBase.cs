@@ -1,17 +1,22 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {
     public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
+        protected readonly Settings settings;
         protected readonly IEventAggregator eventAggregator;
         public ChapterViewModelBase(
+            Settings settings,
             IEventAggregator eventAggregator
             ) {
+            this.settings = settings;
             this.eventAggregator = eventAggregator;
 
             OpenCommand = new DelegateCommand(Open);
@@ -27,7 +32,7 @@ namespace Allgregator.Aux.ViewModels {
         private bool isActive;
         public bool IsActive {
             get => isActive;
-            set => SetProperty(ref isActive, value);
+            protected set => SetProperty(ref isActive, value);
 
         }
 
@@ -59,7 +64,12 @@ namespace Allgregator.Aux.ViewModels {
             }
         }
 
-        public virtual void OnNavigatedTo(NavigationContext navigationContext) { }
+        public virtual void OnNavigatedTo(NavigationContext navigationContext) {
+            if (settings.CurrentChapterId == ChapterId) {
+                IsActive = true;
+                Activate();
+            }
+        }
         public virtual bool IsNavigationTarget(NavigationContext navigationContext) => false;
         public virtual void OnNavigatedFrom(NavigationContext navigationContext) { }
     }

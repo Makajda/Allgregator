@@ -12,7 +12,7 @@ namespace Allgregator.Rss {
             var viewService = containerProvider.Resolve<ViewService>();
             var chapterRepository = new ChapterRepository();
             var chapters = chapterRepository.GetOrDefault();
-            viewService.AddModuleViews(chapters);
+            viewService.AddMenuViews(chapters);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Rss.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
-        private readonly Settings settings;
         private readonly RepoService repoService;
         private readonly ViewService viewService;
 
@@ -21,11 +20,10 @@ namespace Allgregator.Rss.ViewModels {
             ViewService viewService,
             Settings settings,
             IEventAggregator eventAggregator
-            ) : base(eventAggregator) {
+            ) : base(settings, eventAggregator) {
             OreService = oreService;
             this.repoService = repoService;
             this.viewService = viewService;
-            this.settings = settings;
 
             eventAggregator.GetEvent<LinkMovedEvent>().Subscribe(async n => await repoService.LinkMoved(Data, n));
         }
@@ -33,14 +31,16 @@ namespace Allgregator.Rss.ViewModels {
         public OreService OreService { get; private set; }
 
         public override void OnNavigatedTo(NavigationContext navigationContext) {
-            base.OnNavigatedTo(navigationContext);
             if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterIdParameter, out int id)) {
                 Data.Id = id;
             }
+
             if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string name)) {
                 Data.Name = name;
-                Data.IsNeedToSave = false;
             }
+
+            Data.IsNeedToSave = false;
+            base.OnNavigatedTo(navigationContext);
         }
 
         protected override string ChapterId => $"{Module.Name}{Data.Id}";

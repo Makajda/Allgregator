@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Aux", "Allgrega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Fin", "Allgregator.Fin\Allgregator.Fin.csproj", "{A596A90A-F5FE-4372-8A76-6544EF783B17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allgregator.Sts", "Allgregator.Sts\Allgregator.Sts.csproj", "{A1D690F4-A290-42AF-A92B-F1AD35710929}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Sts", "Allgregator.Sts\Allgregator.Sts.csproj", "{A1D690F4-A290-42AF-A92B-F1AD35710929}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

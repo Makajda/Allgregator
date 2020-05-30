@@ -1,11 +1,12 @@
-﻿using Allgregator.Rss.Common;
+﻿using Allgregator.Aux.Models;
+using Allgregator.Rss.Common;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
-    public class Linked : BindableBase {
+    public class Linked : BindableBase, IWatchSave {
         private ObservableCollection<Link> links;
         public ObservableCollection<Link> Links {
             get => links;

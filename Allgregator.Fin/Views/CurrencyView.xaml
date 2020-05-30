@@ -7,5 +7,5 @@
              >
 
     <views:CurrencyChart Terms="{Binding Data.Mined.Terms}"
-                         Settings="{Binding Settings}"/>
+                         Cured="{Binding Data.Cured}"/>
 </UserControl>

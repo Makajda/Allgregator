@@ -13,4 +13,9 @@ namespace Allgregator.Aux.Common {
     }
 
     public class CurrentChapterChangedEvent : PubSubEvent<string> { }
+
+    public class Pair<T, U> {
+        public T First { get; set; }
+        public U Second { get; set; }
+    };
 }

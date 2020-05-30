@@ -14,24 +14,39 @@ namespace Allgregator.Fin.Services {
             this.retrieveService = retrieveService;
         }
 
-        internal async Task Retrieve(Mined mined, DateTimeOffset startDate, IEnumerable<string> currencies) {
-            if (mined == null || currencies == null) {
+        internal async Task Retrieve(Data data) {
+            var mined = data.Mined;
+            var cured = data.Cured;
+            if (mined == null || cured == null || cured.Currencies == null) {
                 return;
             }
 
-            // dates - недостающие даты
+            var startDate = cured.StartDate;
             var date = startDate.Date;
-            var toDate = DateTimeOffset.Now.Date;
+            var toDate = DateTimeOffset.Now.Date.AddDays(1);
             var dates = new List<DateTimeOffset>();
 
             if (mined.Terms != null) {
+                var firstTerm = mined.Terms.FirstOrDefault();
+                if (firstTerm != null && firstTerm.Date < date) {
+                    date = firstTerm.Date.Date;
+                }
+
+                var lastTerm = mined.Terms.LastOrDefault();
+                if (lastTerm != null) {
+                    dates.Add(lastTerm.Date.Date);
+                }
+
                 foreach (var term in mined.Terms) {
-                    while (date <= toDate && date < term.Date) {
-                        dates.Add(date);
+                    if (date <= toDate && date < term.Date.Date) {
+                        do {
+                            dates.Add(date);
+                            date = date.AddDays(1);
+                        } while (date <= toDate && date < term.Date.Date);
+                    }
+                    else {
                         date = date.AddDays(1);
                     }
-
-                    date = date.AddDays(1);
                 }
             }
 
@@ -45,7 +60,7 @@ namespace Allgregator.Fin.Services {
             }
 
             using (retrieveService) {
-                retrieveService.SetCurrencies(currencies);
+                retrieveService.SetCurrencies(cured.Currencies);
                 var lastRetrieve = await Retrieve(dates, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {

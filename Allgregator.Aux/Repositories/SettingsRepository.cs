@@ -19,13 +19,7 @@ namespace Allgregator.Aux.Repository {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            var retval = settings ?? new Settings();
-
-            if (retval.FinCurrencies == null) {
-                retval.FinCurrencies = new[] { "USD", "EUR", "GBP", "CHF", "CNY", "UAH" };
-            }
-
-            return retval;
+            return settings ?? new Settings();
         }
 
         public void Save(Settings settings) {

@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Allgregator.Aux;component/Styles/ThemeDictionary.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Allgregator.Aux;component/Styles/ButtonShapeDictionary.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Allgregator.Aux;component/Styles/BusyDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

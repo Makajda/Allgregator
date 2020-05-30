@@ -66,7 +66,7 @@
                         VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="&#x1F9F9;"
                         Command="{Binding DataContext.MoveCommand, ElementName=view}" CommandParameter="{Binding}">
                     <Button.Resources>
-                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Olds.Background.Color}"/>
+                        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource Clean.Background.Color}"/>
                     </Button.Resources>
                 </Button>
             </Grid>

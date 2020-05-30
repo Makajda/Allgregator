@@ -1,6 +1,5 @@
 ﻿using Allgregator.Aux.Services;
 using Allgregator.Sts.Model;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,13 +17,13 @@ namespace Allgregator.Sts.Services {
                 return;
             }
 
-            var addresses = new[] { "https://unicode.org/charts/charindex.html" };
+            var addresses = new[] { "https://unicode.org/charts/" };
 
             using (retrieveService) {
                 var lastRetrieve = await Retrieve(addresses, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {
-                    mined.Symbols = retrieveService.Items.OrderBy(n => n.Char).ToList();
+                    mined.Areas = retrieveService.Items.OrderBy(n => n.Name).ToList();
                     mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
                     mined.LastRetrieve = lastRetrieve;
                     mined.IsNeedToSave = true;

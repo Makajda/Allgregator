@@ -19,7 +19,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         private void Move(Reco reco) {
-            if (Data.Mined != null) {
+            if (Data.Mined != null && Data.Mined.NewRecos != null && Data.Mined.OldRecos != null) {
                 Data.Mined.NewRecos.Remove(reco);
                 Data.Mined.OldRecos.Insert(0, reco);
                 if (Data.Mined.NewRecos.Count == 0) {

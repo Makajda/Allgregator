@@ -1,4 +1,5 @@
 ﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using System;
 using System.IO;
 using System.Text.Encodings.Web;
@@ -6,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
-    public abstract class RepositoryBase<TModel> where TModel : new() {
+    public abstract class RepositoryBase<TModel> where TModel : IWatchSave, new() {
         protected readonly Lazy<string> startOfName;
 
         public RepositoryBase() {
@@ -25,19 +26,27 @@ namespace Allgregator.Aux.Repositories {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
 
-            return retval ?? CreateDefault(id);
+            if (retval == null) {
+                retval = CreateDefault(id);
+            }
+
+            retval.IsNeedToSave = false;
+            return retval;
         }
 
         public virtual async Task Save(TModel model, int id = 0) {
-            var json = JsonSerializer.Serialize<TModel>(model,
-                new JsonSerializerOptions() {
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    IgnoreNullValues = true,
-                    WriteIndented = true
-                });
+            if (model.IsNeedToSave) {
+                model.IsNeedToSave = false;
+                var json = JsonSerializer.Serialize<TModel>(model,
+                    new JsonSerializerOptions() {
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        IgnoreNullValues = true,
+                        WriteIndented = true
+                    });
 
-            var name = GetName(id);
-            await File.WriteAllTextAsync(name, json);
+                var name = GetName(id);
+                await File.WriteAllTextAsync(name, json);
+            }
         }
 
         public virtual void DeleteFile(int id = 0) {
