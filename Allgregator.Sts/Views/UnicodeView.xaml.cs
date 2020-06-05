@@ -45,12 +45,14 @@ namespace Allgregator.Sts.Views {
             settings.StsSymbolsIndex = symbolsView.SelectedIndex;
         }
 
-        private void Result_Click(object sender, RoutedEventArgs e) {
+        private void Result_Click(object sender, RoutedEventArgs arg) {
             try {
                 var text = result.Content == null ? string.Empty : result.Content.ToString();
                 Clipboard.SetText(text);
             }
-            catch (Exception) { }
+            catch (Exception e) {
+                Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            }
         }
     }
 }
