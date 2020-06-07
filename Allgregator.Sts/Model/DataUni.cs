@@ -3,9 +3,9 @@
 namespace Allgregator.Sts.Model {
     public class DataUni : BindableBase {
         private MinedUni mined;
-        public MinedUni Mined {
-            get { return mined; }
-            set { SetProperty(ref mined, value); }
+        public MinedUni Data {
+            get => mined;
+            set => SetProperty(ref mined, value);
         }
     }
 }
