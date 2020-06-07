@@ -3,6 +3,6 @@ using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.Repositories {
     public class MinedUniRepository : ZipRepositoryBase<MinedUni> {
-        protected override string ModuleName => Module.NameUni;
+        protected override string ModuleName => Module.Name;
     }
 }

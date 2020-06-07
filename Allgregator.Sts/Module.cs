@@ -6,7 +6,7 @@ using Prism.Regions;
 
 namespace Allgregator.Sts {
     public class Module : IModule {
-        internal const string NameUni = "Uni";
+        internal const string Name = "Sts";
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();

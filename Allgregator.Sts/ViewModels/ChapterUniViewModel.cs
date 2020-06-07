@@ -29,7 +29,7 @@ namespace Allgregator.Sts.ViewModels {
 
         public DataUni Data { get; } = new DataUni();
         public OreUniService OreService { get; private set; }
-        protected override string ChapterId => Module.NameUni;
+        protected override string ChapterId => $"{Module.Name}Uni";
         protected override async Task Activate() {
             var view = typeof(UnicodeView).FullName;
             var parameters = new NavigationParameters {
