@@ -6,14 +6,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Allgregator.Sts.Services {
-    internal class UnicodeOreService : SiteOreServiceBase<AreaUnicode> {
-        public UnicodeOreService(UnicodeRetrieveService retrieveService) : base(retrieveService) { }
-    }
-
-    internal class UnicodeRetrieveService : SiteRetrieveServiceBase<AreaUnicode> {
-        public UnicodeRetrieveService(
-            WebService webService
-            ) : base(webService) { }
+    internal class UnicodeRetrieveService : SiteRetrieveServiceBase<UnicodeArea> {
+        public UnicodeRetrieveService(WebService webService) : base(webService) { }
 
         protected override void Process(string html) {
             var sgs = Regex.Split(html, "<p class=\"sg\">", RegexOptions.Singleline);
@@ -53,7 +47,7 @@ namespace Allgregator.Sts.Services {
                         ranges.Remove(r);
                     }
 
-                    var area = new AreaUnicode() {
+                    var area = new UnicodeArea() {
                         Ranges = ranges,
                         Name = sg.Substring(0, sg.IndexOf("</p>"))
                             .Replace("amp;", null)

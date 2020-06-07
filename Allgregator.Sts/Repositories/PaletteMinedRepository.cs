@@ -1,8 +1,9 @@
-﻿using Allgregator.Aux.Repositories;
+﻿using Allgregator.Aux.Models;
+using Allgregator.Aux.Repositories;
 using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.Repositories {
-    public class PaletteMinedRepository : ZipRepositoryBase<MinedPalette> {
-        protected override string ModuleName => Module.Name;
+    public class PaletteMinedRepository : ZipRepositoryBase<MinedBase<PaletteColor>> {
+        public PaletteMinedRepository() : base(Module.Name, "MinedPalette") { }
     }
 }

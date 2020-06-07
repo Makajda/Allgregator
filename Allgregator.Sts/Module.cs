@@ -10,15 +10,15 @@ namespace Allgregator.Sts {
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
-            regionManager.RequestNavigate(Given.MenuRegion, typeof(ChapterUniView).FullName);
-            regionManager.RequestNavigate(Given.MenuRegion, typeof(ChapterClrView).FullName);
+            regionManager.RequestNavigate(Given.MenuRegion, typeof(UnicodeChapterView).FullName);
+            regionManager.RequestNavigate(Given.MenuRegion, typeof(PaletteChapterView).FullName);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<ChapterUniView>(typeof(ChapterUniView).FullName);
+            containerRegistry.RegisterForNavigation<UnicodeChapterView>(typeof(UnicodeChapterView).FullName);
             containerRegistry.RegisterForNavigation<UnicodeView>(typeof(UnicodeView).FullName);
-            containerRegistry.RegisterForNavigation<ChapterClrView>(typeof(ChapterClrView).FullName);
-            containerRegistry.RegisterForNavigation<ColoresView>(typeof(ColoresView).FullName);
+            containerRegistry.RegisterForNavigation<PaletteChapterView>(typeof(PaletteChapterView).FullName);
+            containerRegistry.RegisterForNavigation<PaletteView>(typeof(PaletteView).FullName);
         }
     }
 }

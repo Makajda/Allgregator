@@ -1,15 +1,16 @@
-﻿<UserControl x:Class="Allgregator.Sts.Views.ColoresView"
+﻿<UserControl x:Class="Allgregator.Sts.Views.PaletteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:t="clr-namespace:System;assembly=System.Runtime"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              >
 
     <UserControl.Resources>
     </UserControl.Resources>
 
-    <Grid Background="Red">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>

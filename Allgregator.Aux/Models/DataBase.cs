@@ -2,10 +2,10 @@
 
 namespace Allgregator.Aux.Models {
     public class DataBase<TMined> : BindableBase {
-        private string name;
-        public string Name {
-            get { return name; }
-            set { SetProperty(ref name, value); }
+        private string title;
+        public string Title {
+            get { return title; }
+            set { SetProperty(ref title, value); }
         }
 
         private TMined mined;

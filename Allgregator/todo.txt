@@ -1,5 +1,7 @@
 ﻿1,6180339887 
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
-
 theme
+
+1) в файле palette сделать namespace для ViewModels
+будет папка Views и файлы Unicode & Palette & Module

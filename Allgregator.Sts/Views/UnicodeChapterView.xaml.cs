@@ -2,10 +2,10 @@
 
 namespace Allgregator.Sts.Views {
     /// <summary>
-    /// Interaction logic for ChapterUniView
+    /// Interaction logic for UnicodeChapterView
     /// </summary>
-    public partial class ChapterUniView : UserControl {
-        public ChapterUniView() {
+    public partial class UnicodeChapterView : UserControl {
+        public UnicodeChapterView() {
             InitializeComponent();
         }
     }

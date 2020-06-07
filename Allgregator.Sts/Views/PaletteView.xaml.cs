@@ -13,10 +13,10 @@ using System.Windows.Shapes;
 
 namespace Allgregator.Sts.Views {
     /// <summary>
-    /// Interaction logic for ColoresView.xaml
+    /// Interaction logic for PaletteView.xaml
     /// </summary>
-    public partial class ColoresView : UserControl {
-        public ColoresView() {
+    public partial class PaletteView : UserControl {
+        public PaletteView() {
             InitializeComponent();
         }
     }

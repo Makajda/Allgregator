@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
     public abstract class ZipRepositoryBase<TModel> : RepositoryBase<TModel> where TModel : IWatchSave, new() {
+        public ZipRepositoryBase(string moduleName, string modelName = null) : base(moduleName, modelName) { }
         public override async Task Save(TModel model, int id = 0) {
             if (model.IsNeedToSave) {
                 model.IsNeedToSave = false;
@@ -54,7 +55,7 @@ namespace Allgregator.Aux.Repositories {
         }
 
         private (string EntryName, string FileName) GetNames(int id) {
-            string name = $"{startOfName.Value}{(id == default ? null : id.ToString())}";
+            string name = $"{startOfName}{(id == default ? null : id.ToString())}";
             var entryName = Path.ChangeExtension(name, "json");
             var fileName = Path.Combine(Given.PathData, Path.ChangeExtension(name, "zip"));
             return (entryName, fileName);

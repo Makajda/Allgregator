@@ -3,5 +3,5 @@ using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.ViewModels {
-    public class UnicodeViewModel : DataViewModelBase<DataBase<MinedBase<UnicodeArea>>> { }
+    public class PaletteViewModel : DataViewModelBase<DataBase<MinedBase<PaletteColor>>> { }
 }

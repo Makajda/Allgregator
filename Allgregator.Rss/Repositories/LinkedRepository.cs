@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Allgregator.Rss.Repositories {
     internal class LinkedRepository : RepositoryBase<Linked> {
-        protected override string ModuleName => Module.Name;
+        public LinkedRepository() : base(Module.Name) { }
         protected override Linked CreateDefault(int id) {
             if (id == Givenloc.TryDataId) {
                 var links = new ObservableCollection<Link>() {

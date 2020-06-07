@@ -13,10 +13,10 @@ using System.Windows.Shapes;
 
 namespace Allgregator.Sts.Views {
     /// <summary>
-    /// Interaction logic for ChapterClrView.xaml
+    /// Interaction logic for PaletteChapterView.xaml
     /// </summary>
-    public partial class ChapterClrView : UserControl {
-        public ChapterClrView() {
+    public partial class PaletteChapterView : UserControl {
+        public PaletteChapterView() {
             InitializeComponent();
         }
     }
