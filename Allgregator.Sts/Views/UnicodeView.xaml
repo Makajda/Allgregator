@@ -57,7 +57,7 @@
                   BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Background="{StaticResource Main.Background}"
-                  ItemsSource="{Binding Data.Mined.Areas}"
+                  ItemsSource="{Binding Data.Mined.Items}"
                   ItemTemplate="{StaticResource AreaItemTemplate}"
                   SelectionChanged="AreasView_SelectionChanged"
                   >

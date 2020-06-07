@@ -1,29 +1,29 @@
-﻿using Allgregator.Aux.Services;
-using Allgregator.Sts.Model;
+﻿using Allgregator.Aux.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Allgregator.Sts.Services {
-    internal class OreUniService : OreServiceBase {
-        private readonly RetrieveUniService retrieveService;
-        public OreUniService(
-            RetrieveUniService retrieveService
+namespace Allgregator.Aux.Services {
+    public class SiteOreServiceBase<TItem> : OreServiceBase where TItem : IName {
+        protected readonly RetrieveServiceBase<string, TItem> retrieveService;
+
+        public SiteOreServiceBase(
+            RetrieveServiceBase<string, TItem> retrieveService
             ) {
             this.retrieveService = retrieveService;
         }
 
-        internal async Task Retrieve(MinedUni mined) {
+        public async Task Retrieve(MinedBase<TItem> mined, string address) {
             if (mined == null) {
                 return;
             }
 
-            var addresses = new[] { "https://unicode.org/charts/" };
+            var addresses = new[] { address };
 
             using (retrieveService) {
                 var lastRetrieve = await Retrieve(addresses, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {
-                    mined.Areas = retrieveService.Items.OrderBy(n => n.Name).ToList();
+                    mined.Items = retrieveService.Items.OrderBy(n => n.Name).ToList();
                     mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
                     mined.LastRetrieve = lastRetrieve;
                     mined.IsNeedToSave = true;

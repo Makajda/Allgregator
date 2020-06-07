@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="Allgregator.Sts.Views.ChapterClrView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
+             >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Allgregator.Aux;component/Styles/MainMenuDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:TodayConverter x:Key="TodayConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ContentControl Style="{StaticResource Menu.Updatable}">
+        <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
+                Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" HorizontalAlignment="Center"
+                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                <TextBlock Text="Colors" FontSize="16" TextTrimming="WordEllipsis" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
+            </DockPanel>
+        </Button>
+    </ContentControl>
+</UserControl>

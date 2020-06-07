@@ -12,14 +12,14 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Sts.ViewModels {
-    internal class ChapterUniViewModel : ChapterViewModelBase {
+    internal class ChapterClrViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
-        private readonly UnicodeMinedRepository minedRepository;
-        public ChapterUniViewModel(
-            UnicodeOreService oreService,
+        private readonly PaletteMinedRepository minedRepository;
+        public ChapterClrViewModel(
+            PaletteOreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
-            UnicodeMinedRepository minedRepository,
+            PaletteMinedRepository minedRepository,
             Settings settings
             ) : base(settings, eventAggregator) {
             OreService = oreService;
@@ -27,11 +27,11 @@ namespace Allgregator.Sts.ViewModels {
             this.minedRepository = minedRepository;
         }
 
-        public DataUnicode Data { get; } = new DataUnicode();
-        public UnicodeOreService OreService { get; private set; }
-        protected override string ChapterId => $"{Module.Name}Uni";
+        public DataPalette Data { get; } = new DataPalette();
+        public PaletteOreService OreService { get; private set; }
+        protected override string ChapterId => $"{Module.Name}Clr";
         protected override async Task Activate() {
-            var view = typeof(UnicodeView).FullName;
+            var view = typeof(ColoresView).FullName;
             var parameters = new NavigationParameters {
                 { Given.DataParameter, Data }
             };
@@ -49,7 +49,7 @@ namespace Allgregator.Sts.ViewModels {
             }
             else {
                 await LoadMined();
-                await OreService.Retrieve(Data.Mined, "https://unicode.org/charts/");
+                await OreService.Retrieve(Data.Mined, "");
             }
         }
 

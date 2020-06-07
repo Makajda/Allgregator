@@ -2,7 +2,7 @@
 using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.Repositories {
-    public class MinedUniRepository : ZipRepositoryBase<MinedUni> {
+    public class UnicodeMinedRepository : ZipRepositoryBase<MinedUnicode> {
         protected override string ModuleName => Module.Name;
     }
 }

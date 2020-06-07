@@ -1,21 +1,20 @@
-﻿using Allgregator.Aux.Models;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Allgregator.Sts.Model {
-    public class MinedUni : BindableBase, IWatchSave {
+namespace Allgregator.Aux.Models {
+    public class MinedBase<TItem> : BindableBase, IWatchSave {
         private DateTimeOffset lastRetrieve;
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;
             set => SetProperty(ref lastRetrieve, value);
         }
 
-        private IEnumerable<AreaUni> areas;
-        public IEnumerable<AreaUni> Areas {
-            get => areas;
-            set => SetProperty(ref areas, value);
+        private IEnumerable<TItem> items;
+        public IEnumerable<TItem> Items {
+            get => items;
+            set => SetProperty(ref items, value);
         }
 
         private IEnumerable<Error> errors;
