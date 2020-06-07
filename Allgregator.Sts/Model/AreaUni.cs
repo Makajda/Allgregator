@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Allgregator.Sts.Model {
-    public class Area {
+    public class AreaUni {
         public string Name { get; set; }
         public IEnumerable<Pair<int, int>> Ranges { get; set; }
     }

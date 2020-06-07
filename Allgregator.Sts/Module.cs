@@ -6,15 +6,15 @@ using Prism.Regions;
 
 namespace Allgregator.Sts {
     public class Module : IModule {
-        internal const string Name = "Sts";
+        internal const string NameUni = "Uni";
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
-            regionManager.RequestNavigate(Given.MenuRegion, typeof(ChapterView).FullName);
+            regionManager.RequestNavigate(Given.MenuRegion, typeof(ChapterUniView).FullName);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
-            containerRegistry.RegisterForNavigation<ChapterView>(typeof(ChapterView).FullName);
+            containerRegistry.RegisterForNavigation<ChapterUniView>(typeof(ChapterUniView).FullName);
             containerRegistry.RegisterForNavigation<UnicodeView>(typeof(UnicodeView).FullName);
         }
     }

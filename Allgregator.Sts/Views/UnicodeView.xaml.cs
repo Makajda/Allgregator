@@ -22,7 +22,7 @@ namespace Allgregator.Sts.Views {
         private void AreasView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             symbolsView.Items.Clear();
             var areaObject = e.AddedItems.Count > 0 ? e.AddedItems[0] : null;
-            if (areaObject is Area area && area != null) {
+            if (areaObject is AreaUni area && area != null) {
                 foreach (var range in area.Ranges) {
                     for (var i = range.First; i <= range.Second; i++) {
                         symbolsView.Items.Add((char)i);

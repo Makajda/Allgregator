@@ -5,15 +5,15 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Sts.Model {
-    public class Mined : BindableBase, IWatchSave {
+    public class MinedUni : BindableBase, IWatchSave {
         private DateTimeOffset lastRetrieve;
         public DateTimeOffset LastRetrieve {
             get => lastRetrieve;
             set => SetProperty(ref lastRetrieve, value);
         }
 
-        private IEnumerable<Area> areas;
-        public IEnumerable<Area> Areas {
+        private IEnumerable<AreaUni> areas;
+        public IEnumerable<AreaUni> Areas {
             get => areas;
             set => SetProperty(ref areas, value);
         }

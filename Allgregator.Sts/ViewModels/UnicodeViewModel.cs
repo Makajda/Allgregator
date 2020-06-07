@@ -2,5 +2,5 @@
 using Allgregator.Sts.Model;
 
 namespace Allgregator.Sts.ViewModels {
-    public class UnicodeViewModel : DataViewModelBase<Data> { }
+    public class UnicodeViewModel : DataViewModelBase<DataUni> { }
 }

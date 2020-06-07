@@ -8,10 +8,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Sts.Services {
-    internal class RetrieveService : RetrieveServiceBase<string, Area> {
+    internal class RetrieveUniService : RetrieveServiceBase<string, AreaUni> {
         private readonly WebService webService;
 
-        public RetrieveService(
+        public RetrieveUniService(
             WebService webService
             ) {
             this.webService = webService;
@@ -58,7 +58,7 @@ namespace Allgregator.Sts.Services {
                             ranges.Remove(r);
                         }
 
-                        var area = new Area() {
+                        var area = new AreaUni() {
                             Ranges = ranges,
                             Name = sg.Substring(0, sg.IndexOf("</p>"))
                                 .Replace("amp;", null)

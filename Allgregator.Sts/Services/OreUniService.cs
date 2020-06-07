@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Sts.Services {
-    internal class OreService : OreServiceBase {
-        private readonly RetrieveService retrieveService;
-        public OreService(
-            RetrieveService retrieveService
+    internal class OreUniService : OreServiceBase {
+        private readonly RetrieveUniService retrieveService;
+        public OreUniService(
+            RetrieveUniService retrieveService
             ) {
             this.retrieveService = retrieveService;
         }
 
-        internal async Task Retrieve(Mined mined) {
+        internal async Task Retrieve(MinedUni mined) {
             if (mined == null) {
                 return;
             }
