@@ -32,11 +32,11 @@ namespace Allgregator.Fin.ViewModels {
             this.minedRepository = minedRepository;
             this.curedRepository = curedRepository;
             minedRepository.SetNames(Module.Name);
+            chapterId = Module.Name;
         }
 
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
-        protected override string ChapterId => Module.Name;
         protected override async Task Activate() {
             ViewActivate();
             await Load();
@@ -47,7 +47,7 @@ namespace Allgregator.Fin.ViewModels {
             ViewActivate();
         }
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = ChapterId;
+            base.WindowClosing(args);
             AsyncHelper.RunSync(async () => await Save());
         }
         protected override async Task Update() {

@@ -9,35 +9,42 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {
-    public abstract class SiteChapterViewModelBase<TItem, TView> : ChapterViewModelBase where TItem : IName {
+    public abstract class SiteChapterViewModelBase<TItem> : ChapterViewModelBase where TItem : IName {
+        private readonly string viewName;
         private readonly IRegionManager regionManager;
         private readonly RepositoryBase<MinedBase<TItem>> minedRepository;
         public SiteChapterViewModelBase(
+            string itemName,
+            string moduleName,
+            string viewName,
             SiteOreServiceBase<TItem> oreService,
             RepositoryBase<MinedBase<TItem>> minedRepository,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             Settings settings
             ) : base(settings, eventAggregator) {
-            //todo Data.Title = title;
+            this.viewName = viewName;
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
+            minedRepository.SetNames(moduleName, $"Mined{itemName}");
+            Data.Title = itemName;
+            chapterId = $"{moduleName}{itemName}";
         }
 
         public DataBase<MinedBase<TItem>> Data { get; } = new DataBase<MinedBase<TItem>>();
         public SiteOreServiceBase<TItem> OreService { get; private set; }
+
         protected override async Task Activate() {
-            var view = typeof(TView).FullName;
             var parameters = new NavigationParameters {
                 { Given.DataParameter, Data }
             };
-            regionManager.RequestNavigate(Given.MainRegion, view, parameters);
+            regionManager.RequestNavigate(Given.MainRegion, viewName, parameters);
             await LoadMined();
         }
         protected override async Task Deactivate() => await SaveMined();
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = ChapterId;
+            base.WindowClosing(args);
             AsyncHelper.RunSync(async () => await SaveMined());
         }
         protected override async Task Update() {

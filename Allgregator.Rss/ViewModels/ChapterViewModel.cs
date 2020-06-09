@@ -40,10 +40,10 @@ namespace Allgregator.Rss.ViewModels {
             }
 
             Data.IsNeedToSave = false;
+            chapterId = $"{Module.Name}{Data.Id}";
             base.OnNavigatedTo(navigationContext);
         }
 
-        protected override string ChapterId => $"{Module.Name}{Data.Id}";
         protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);
@@ -61,7 +61,7 @@ namespace Allgregator.Rss.ViewModels {
         }
 
         protected override void WindowClosing(CancelEventArgs args) {
-            if (IsActive) settings.CurrentChapterId = ChapterId;
+            base.WindowClosing(args);
             AsyncHelper.RunSync(async () => await repoService.Save(Data));
         }
     }

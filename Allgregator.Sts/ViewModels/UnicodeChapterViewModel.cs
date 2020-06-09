@@ -1,24 +1,29 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
+using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
-using Allgregator.Sts.Services;
 using Allgregator.Sts.Views;
 using Prism.Events;
 using Prism.Regions;
 
 namespace Allgregator.Sts.ViewModels {
-    internal class UnicodeChapterViewModel : SiteChapterViewModelBase<UnicodeArea, UnicodeView> {
+    internal class UnicodeChapterViewModel : SiteChapterViewModelBase<UnicodeArea> {
         public UnicodeChapterViewModel(
-            UnicodeOreService oreService,
+            SiteOreServiceBase<UnicodeArea> oreService,
             ZipRepositoryBase<MinedBase<UnicodeArea>> minedRepository,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             Settings settings
-            ) : base(oreService, minedRepository, eventAggregator, regionManager, settings) {
-            minedRepository.SetNames(Module.Name, "MinedUnicode");
+            ) : base(
+                "Unicode",
+                Module.Name,
+                typeof(UnicodeView).FullName,
+                oreService,
+                minedRepository,
+                eventAggregator,
+                regionManager,
+                settings) {
         }
-
-        protected override string ChapterId => $"{Module.Name}Unicode";
     }
 }

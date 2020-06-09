@@ -3,24 +3,27 @@ using Allgregator.Aux.Repositories;
 using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
-using Allgregator.Sts.Services;
 using Allgregator.Sts.Views;
 using Prism.Events;
 using Prism.Regions;
 
 namespace Allgregator.Sts.ViewModels {
-    internal class PaletteChapterViewModel : SiteChapterViewModelBase<PaletteColor, PaletteView> {
+    internal class PaletteChapterViewModel : SiteChapterViewModelBase<PaletteColor> {
         public PaletteChapterViewModel(
-            SiteOreServiceBase<PaletteColor> s,
-            PaletteOreService oreService,
+            SiteOreServiceBase<PaletteColor> oreService,
             ZipRepositoryBase<MinedBase<PaletteColor>> minedRepository,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             Settings settings
-            ) : base(oreService, minedRepository, eventAggregator, regionManager, settings) {
-            minedRepository.SetNames(Module.Name, "MinedPalette");
+            ) : base(
+                "Palette",
+                Module.Name,
+                typeof(PaletteView).FullName,
+                oreService,
+                minedRepository,
+                eventAggregator,
+                regionManager,
+                settings) {
         }
-
-        protected override string ChapterId => $"{Module.Name}Palette";
     }
 }
