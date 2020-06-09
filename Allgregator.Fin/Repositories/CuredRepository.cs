@@ -3,7 +3,7 @@ using Allgregator.Fin.Models;
 
 namespace Allgregator.Fin.Repositories {
     public class CuredRepository : RepositoryBase<Cured> {
-        public CuredRepository() : base(Module.Name) { }
+        public CuredRepository() { SetNames(Module.Name); }
         protected override Cured CreateDefault(int id = 0) {
             return new Cured() {
                 Currencies = new[] {

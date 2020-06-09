@@ -11,16 +11,15 @@ using System.Threading.Tasks;
 namespace Allgregator.Aux.ViewModels {
     public abstract class SiteChapterViewModelBase<TItem, TView> : ChapterViewModelBase where TItem : IName {
         private readonly IRegionManager regionManager;
-        private readonly ZipRepositoryBase<MinedBase<TItem>> minedRepository;
+        private readonly RepositoryBase<MinedBase<TItem>> minedRepository;
         public SiteChapterViewModelBase(
-            string title,
             SiteOreServiceBase<TItem> oreService,
-            ZipRepositoryBase<MinedBase<TItem>> minedRepository,
+            RepositoryBase<MinedBase<TItem>> minedRepository,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             Settings settings
             ) : base(settings, eventAggregator) {
-            Data.Title = title;
+            //todo Data.Title = title;
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;

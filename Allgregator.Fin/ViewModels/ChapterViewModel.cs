@@ -1,5 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
+using Allgregator.Aux.Repositories;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Fin.Models;
 using Allgregator.Fin.Repositories;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
-        private readonly MinedRepository minedRepository;
+        private readonly RepositoryBase<Mined> minedRepository;
         private readonly CuredRepository curedRepository;
         private bool isSettings;
 
@@ -23,13 +24,14 @@ namespace Allgregator.Fin.ViewModels {
             OreService oreService,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
-            MinedRepository minedRepository,
+            ZipRepositoryBase<Mined> minedRepository,
             CuredRepository curedRepository
             ) : base(settings, eventAggregator) {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
             this.curedRepository = curedRepository;
+            minedRepository.SetNames(Module.Name);
         }
 
         public Data Data { get; } = new Data();
