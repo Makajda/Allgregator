@@ -2,8 +2,3 @@
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 theme
-
-1) в файле palette сделать namespace для ViewModels
-будет папка Views и файлы Unicode & Palette & Module
-
-2)  убрать или заменить protected override string ChapterId => $"{Module.Name}Palette";

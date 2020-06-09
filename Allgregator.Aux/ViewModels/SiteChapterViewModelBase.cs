@@ -17,7 +17,9 @@ namespace Allgregator.Aux.ViewModels {
             string itemName,
             string moduleName,
             string viewName,
+            string address,
             SiteOreServiceBase<TItem> oreService,
+            SiteRetrieveServiceBase<TItem> retrieveService,
             RepositoryBase<MinedBase<TItem>> minedRepository,
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
@@ -30,6 +32,7 @@ namespace Allgregator.Aux.ViewModels {
             minedRepository.SetNames(moduleName, $"Mined{itemName}");
             Data.Title = itemName;
             chapterId = $"{moduleName}{itemName}";
+            oreService.Initialize(address, retrieveService);
         }
 
         public DataBase<MinedBase<TItem>> Data { get; } = new DataBase<MinedBase<TItem>>();

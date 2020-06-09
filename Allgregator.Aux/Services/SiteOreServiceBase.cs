@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Services {
     public class SiteOreServiceBase<TItem> : OreServiceBase where TItem : IName {
-        private readonly string address;
-        private readonly RetrieveServiceBase<string, TItem> retrieveService;
+        private string address;
+        private RetrieveServiceBase<string, TItem> retrieveService;
 
-        public SiteOreServiceBase(
-            //string address,
-            RetrieveServiceBase<string, TItem> retrieveService
-            ) {
-            //this.address = address;
+        public void Initialize(string address, SiteRetrieveServiceBase<TItem> retrieveService) {
+            this.address = address;
             this.retrieveService = retrieveService;
         }
 
