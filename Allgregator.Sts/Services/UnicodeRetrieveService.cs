@@ -19,7 +19,7 @@ namespace Allgregator.Sts.Services {
 
                 var ranges = new List<Pair<int, int>>();
 
-                while (title.Success) {
+                while (title.Success && title.Groups.Count > 1) {
                     var begin = title.Groups[1].Value;
                     var end = title.Groups[2].Value;
 

@@ -21,7 +21,7 @@ namespace Allgregator.Sts.ViewModels {
                 "Palette",
                 Module.Name,
                 typeof(PaletteView).FullName,
-                "",
+                "https://docs.microsoft.com/en-gb/dotnet/api/system.windows.media.brushes?view=net-5.0",
                 oreService,
                 retrieveService,
                 minedRepository,

@@ -8,6 +8,15 @@
              >
 
     <UserControl.Resources>
+        <DataTemplate x:Key="ItemTemplate">
+            <Border Height="50" Width="81"
+                    BorderThickness="0" BorderBrush="Black" Background="Transparent"
+                    >
+                <TextBlock Text="{Binding Name}" FontSize="12"
+                           TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                           TextAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -20,5 +29,21 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+
+        <ListView BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  Background="{StaticResource Main.Background}"
+                  ItemsSource="{Binding Data.Mined.Items}"
+                  ItemTemplate="{StaticResource ItemTemplate}"
+                  >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </UserControl>
