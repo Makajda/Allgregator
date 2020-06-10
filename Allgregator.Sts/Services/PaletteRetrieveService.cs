@@ -25,12 +25,12 @@ namespace Allgregator.Sts.Services {
                         var value = valueMatch.Groups[1].Value;
 
                         if (value.Length == 9) {
-                            var r = Convert.ToInt32(value.Substring(3, 2), 16);
-                            var g = Convert.ToInt32(value.Substring(5, 2), 16);
-                            var b = Convert.ToInt32(value.Substring(7, 2), 16);
+                            var r = Convert.ToByte(value.Substring(3, 2), 16);
+                            var g = Convert.ToByte(value.Substring(5, 2), 16);
+                            var b = Convert.ToByte(value.Substring(7, 2), 16);
 
                             var color = new PaletteColor() { Name = name, R = r, G = g, B = b };
-                            
+
                             Items.Add(color);
                         }
                     }

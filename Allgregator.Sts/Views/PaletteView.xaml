@@ -8,14 +8,19 @@
              >
 
     <UserControl.Resources>
+        <t:Double x:Key="ElWidth">120</t:Double>
+        <t:Double x:Key="ElHeight">74</t:Double>
+        <Thickness x:Key="ElMargin">0</Thickness>
+        <t:Double x:Key="ElWidthWithMargin">128</t:Double>
+        <t:Double x:Key="ElHeightWithMargin">82</t:Double>
+
         <DataTemplate x:Key="ItemTemplate">
-            <Border Height="50" Width="81"
-                    BorderThickness="0" BorderBrush="Black" Background="Transparent"
-                    >
-                <TextBlock Text="{Binding Name}" FontSize="12"
+            <DockPanel Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}">
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="12"
                            TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
                            TextAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
+                <Rectangle Fill="{Binding Brush}"/>
+            </DockPanel>
         </DataTemplate>
     </UserControl.Resources>
 
@@ -27,10 +32,34 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ListView BorderThickness="0"
+            <Button Width="{StaticResource ElWidth}"
+                    Height="{StaticResource ElHeight}"
+                    Padding="5"
+                    FontSize="24" 
+                    ToolTip="Copy"
+                    Content="123"
+                    Background="Transparent"
+                    common:Shaatt.Shape="Circle"
+                    Margin="15"/>
+
+        <Rectangle Grid.Column="1"
+                   Width="{StaticResource ElWidth}" 
+                   Height="{StaticResource ElHeight}" 
+                   Fill="Red" 
+                   Margin="15"/>
+
+        <StackPanel Grid.Column="2">
+            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
+            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
+            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" Grid.ColumnSpan="3"
+                  BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Background="{StaticResource Main.Background}"
                   ItemsSource="{Binding Data.Mined.Items}"
@@ -40,10 +69,16 @@
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Margin" Value="{StaticResource ElMargin}" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
             </ListView.ItemContainerStyle>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <common:VirtualizingWrapPanel ItemWidth="{StaticResource ElWidthWithMargin}" ItemHeight="{StaticResource ElHeightWithMargin}"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
         </ListView>
     </Grid>
 </UserControl>
