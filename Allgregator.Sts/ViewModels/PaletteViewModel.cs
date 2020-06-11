@@ -9,9 +9,9 @@ using System.Windows.Media;
 namespace Allgregator.Sts.ViewModels {
     public class PaletteViewModel : DataViewModelBase<DataBase<MinedBase<PaletteColor>>> {
         public PaletteViewModel(Settings settings) {
-            R = settings.StsPaletteR = 99;
-            G = settings.StsPaletteG = 99;
-            B = settings.StsPaletteB = 99;
+            R = settings.StsPaletteR;
+            G = settings.StsPaletteG;
+            B = settings.StsPaletteB;
             CopyCommand = new DelegateCommand(Copy);
         }
 
@@ -49,7 +49,7 @@ namespace Allgregator.Sts.ViewModels {
 
         private void SetResult() {
             Result = $"{R:X}{G:X}{B:X}";
-            ResultBrush = new SolidColorBrush(Color.FromRgb(R, G, B));//todo
+            ResultBrush = new SolidColorBrush(Color.FromRgb(R, G, B));
         }
 
         private void Copy() {

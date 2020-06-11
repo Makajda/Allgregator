@@ -1,12 +1,21 @@
 ﻿using Allgregator.Aux.Models;
+using System;
+using System.Text.Json.Serialization;
 using System.Windows.Media;
 
 namespace Allgregator.Sts.Model {
     public class PaletteColor : IName {
+        private Lazy<Brush> brush;
+        public PaletteColor() {
+            brush = new Lazy<Brush>(() => new SolidColorBrush(Color.FromRgb(R, G, B)));
+        }
+
         public string Name { get; set; }
         public byte R { get; set; }
         public byte G { get; set; }
         public byte B { get; set; }
-        public Brush Brush { get => new SolidColorBrush(Color.FromRgb(R, G, B)); }//todo
+
+        [JsonIgnore]
+        public Brush Brush { get => brush.Value; }
     }
 }
