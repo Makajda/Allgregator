@@ -3,7 +3,6 @@ using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Fin.Models;
-using Allgregator.Fin.Repositories;
 using Allgregator.Fin.Services;
 using Allgregator.Fin.Views;
 using Prism.Events;
@@ -16,7 +15,7 @@ namespace Allgregator.Fin.ViewModels {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
         private readonly RepositoryBase<Mined> minedRepository;
-        private readonly CuredRepository curedRepository;
+        private readonly RepositoryBase<Cured> curedRepository;
         private bool isSettings;
 
         public ChapterViewModel(
@@ -25,13 +24,14 @@ namespace Allgregator.Fin.ViewModels {
             IEventAggregator eventAggregator,
             IRegionManager regionManager,
             ZipRepositoryBase<Mined> minedRepository,
-            CuredRepository curedRepository
+            RepositoryBase<Cured> curedRepository
             ) : base(settings, eventAggregator) {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
             this.curedRepository = curedRepository;
             minedRepository.SetNames(Module.Name);
+            curedRepository.SetNames(Module.Name);
             chapterId = Module.Name;
         }
 
@@ -75,6 +75,9 @@ namespace Allgregator.Fin.ViewModels {
 
             if (Data.Cured == null) {
                 Data.Cured = await curedRepository.GetOrDefault();
+                if (Data.Cured.Currencies == null) {
+                    Data.Cured.Currencies = new[] { "USD", "EUR", "GBP", "CHF", "CNY", "UAH" };
+                }
             }
         }
 
