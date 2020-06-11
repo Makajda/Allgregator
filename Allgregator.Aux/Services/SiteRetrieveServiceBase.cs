@@ -1,6 +1,5 @@
 ﻿using Allgregator.Aux.Models;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Services {
@@ -17,8 +16,8 @@ namespace Allgregator.Aux.Services {
 
         public override async Task ProductionAsync(string address) {
             try {
-                //var html = await webService.GetHtml(address);
-                var html = await File.ReadAllTextAsync(@"c:\files\brushes.html");
+                var html = await webService.GetHtml(address);
+                //var html = await File.ReadAllTextAsync(@"c:\files\brushes.html");
 
                 Process(html);
             }

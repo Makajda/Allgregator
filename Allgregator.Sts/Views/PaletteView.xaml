@@ -14,6 +14,21 @@
         <t:Double x:Key="ElWidthWithMargin">128</t:Double>
         <t:Double x:Key="ElHeightWithMargin">82</t:Double>
 
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="{StaticResource ElWidth}"/>
+            <Setter Property="Height" Value="{StaticResource ElHeight}"/>
+            <Setter Property="ToolTip" Value="Copy"/>
+            <Setter Property="common:Shaatt.Shape" Value="Circle"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Command" Value="{Binding CopyCommand}"/>
+        </Style>
+
+        <Style TargetType="Slider">
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="255"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+
         <DataTemplate x:Key="ItemTemplate">
             <DockPanel Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}">
                 <TextBlock DockPanel.Dock="Bottom" Text="{Binding Name}" FontSize="12"
@@ -36,26 +51,20 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-            <Button Width="{StaticResource ElWidth}"
-                    Height="{StaticResource ElHeight}"
-                    Padding="5"
-                    FontSize="24" 
-                    ToolTip="Copy"
-                    Content="123"
-                    Background="Transparent"
-                    common:Shaatt.Shape="Circle"
-                    Margin="15"/>
+        <Button Padding="5"
+                FontSize="24" 
+                Content="{Binding Result}"
+                Background="Transparent"
+                />
 
-        <Rectangle Grid.Column="1"
-                   Width="{StaticResource ElWidth}" 
-                   Height="{StaticResource ElHeight}" 
-                   Fill="Red" 
-                   Margin="15"/>
+        <Button Grid.Column="1"
+                Background="{Binding ResultBrush}" 
+                />
 
         <StackPanel Grid.Column="2">
-            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
-            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
-            <Slider Minimum="0" Maximum="255" Value="111" Margin="10"/>
+            <Slider Value="{Binding R, Mode=TwoWay}"/>
+            <Slider Value="{Binding G, Mode=TwoWay}"/>
+            <Slider Value="{Binding B, Mode=TwoWay}"/>
         </StackPanel>
 
         <ListView Grid.Row="1" Grid.ColumnSpan="3"

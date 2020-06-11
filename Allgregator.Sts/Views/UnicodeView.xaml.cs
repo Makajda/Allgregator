@@ -13,8 +13,8 @@ namespace Allgregator.Sts.Views {
             InitializeComponent();
 
             this.settings = settings;
-            areasView.SelectedIndex = settings.StsAreasIndex;
-            symbolsView.SelectedIndex = settings.StsSymbolsIndex;
+            areasView.SelectedIndex = settings.StsUnicodeAreaIndex;
+            symbolsView.SelectedIndex = settings.StsUnicodeSymbolIndex;
         }
 
         private readonly Settings settings;
@@ -30,7 +30,7 @@ namespace Allgregator.Sts.Views {
                 }
             }
 
-            settings.StsAreasIndex = areasView.SelectedIndex;
+            settings.StsUnicodeAreaIndex = areasView.SelectedIndex;
         }
 
         private void SymbolsView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -42,7 +42,7 @@ namespace Allgregator.Sts.Views {
                 result.Content = null;
             }
 
-            settings.StsSymbolsIndex = symbolsView.SelectedIndex;
+            settings.StsUnicodeSymbolIndex = symbolsView.SelectedIndex;
         }
 
         private void Result_Click(object sender, RoutedEventArgs arg) {
