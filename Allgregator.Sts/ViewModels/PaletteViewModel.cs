@@ -1,64 +1,64 @@
-﻿using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Model;
 using Prism.Commands;
+using Prism.Events;
 using System;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 
 namespace Allgregator.Sts.ViewModels {
     public class PaletteViewModel : DataViewModelBase<DataBase<MinedBase<PaletteColor>>> {
-        public PaletteViewModel(Settings settings) {
+        private readonly Settings settings;
+        public PaletteViewModel(Settings settings, IEventAggregator eventAggregator) {
+            this.settings = settings;
             R = settings.StsPaletteR;
             G = settings.StsPaletteG;
             B = settings.StsPaletteB;
             CopyCommand = new DelegateCommand(Copy);
+            eventAggregator.GetEvent<WindowClosingEvent>().Subscribe(WindowClosing);
         }
 
         public DelegateCommand CopyCommand { get; private set; }
 
-        private string result;
-        public string Result {
-            get => result;
-            set => SetProperty(ref result, value);
-        }
-
-        private Brush resultBrush;
-        public Brush ResultBrush {
-            get => resultBrush;
-            set => SetProperty(ref resultBrush, value);
+        private PaletteColor selectedColor;
+        public PaletteColor SelectedColor {
+            get => selectedColor;
+            set => SetProperty(ref selectedColor, value, () => { R = selectedColor.R; G = selectedColor.G; B = selectedColor.B; });
         }
 
         private byte r;
         public byte R {
             get => r;
-            set => SetProperty(ref r, value, SetResult);
+            set => SetProperty(ref r, value);
         }
 
         private byte g;
         public byte G {
             get => g;
-            set => SetProperty(ref g, value, SetResult);
+            set => SetProperty(ref g, value);
         }
 
         private byte b;
         public byte B {
             get => b;
-            set => SetProperty(ref b, value, SetResult);
-        }
-
-        private void SetResult() {
-            Result = $"{R:X}{G:X}{B:X}";
-            ResultBrush = new SolidColorBrush(Color.FromRgb(R, G, B));
+            set => SetProperty(ref b, value);
         }
 
         private void Copy() {
             try {
-                Clipboard.SetText(Result);
+                Clipboard.SetText($"{R:X2}{G:X2}{B:X2}");
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
+        }
+
+        private void WindowClosing(CancelEventArgs obj) {
+            settings.StsPaletteR = R;
+            settings.StsPaletteG = G;
+            settings.StsPaletteB = B;
         }
     }
 }

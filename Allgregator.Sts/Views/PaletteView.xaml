@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:t="clr-namespace:System;assembly=System.Runtime"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              >
 
     <UserControl.Resources>
@@ -14,18 +15,7 @@
         <t:Double x:Key="ElWidthWithMargin">128</t:Double>
         <t:Double x:Key="ElHeightWithMargin">82</t:Double>
 
-        <Style TargetType="Button">
-            <Setter Property="Width" Value="{StaticResource ElWidth}"/>
-            <Setter Property="Height" Value="{StaticResource ElHeight}"/>
-            <Setter Property="ToolTip" Value="Copy"/>
-            <Setter Property="common:Shaatt.Shape" Value="Circle"/>
-            <Setter Property="Margin" Value="15"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Content" Value="{Binding Result}"/>
-            <Setter Property="Command" Value="{Binding CopyCommand}"/>
-        </Style>
+        <converters:RgbToColorConverter x:Key="RgbToColorConverter"/>
 
         <Style TargetType="Slider">
             <Setter Property="Minimum" Value="0"/>
@@ -55,16 +45,40 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button/>
+        <Button Width="{StaticResource ElWidth}"
+                Height="{StaticResource ElHeight}"
+                ToolTip="Copy"
+                common:Shaatt.Shape="Circle"
+                Margin="15"
+                Padding="5"
+                FontSize="24"
+                Background="Transparent"
+                Command="{Binding CopyCommand}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding R, StringFormat={}{0:X2}}"/>
+                <TextBlock Text="{Binding G, StringFormat={}{0:X2}}" Margin="3,0,3,0"/>
+                <TextBlock Text="{Binding B, StringFormat={}{0:X2}}"/>
+            </StackPanel>
+        </Button>
 
         <Path Grid.Column="1"
               Width="{StaticResource ElWidth}"
               Height="{StaticResource ElHeight}"
               Stretch="Fill"
               Data="M1,0 L2,2 H0 Z"
-              Margin="15"
-              Fill="{Binding ResultBrush}"
-              />
+              Margin="15">
+            <Path.Fill>
+                <SolidColorBrush>
+                    <SolidColorBrush.Color>
+                        <MultiBinding Converter="{StaticResource RgbToColorConverter}">
+                            <Binding Path="R"/>
+                            <Binding Path="G"/>
+                            <Binding Path="B"/>
+                        </MultiBinding>
+                    </SolidColorBrush.Color>
+                </SolidColorBrush>
+            </Path.Fill>
+        </Path>
 
         <StackPanel Grid.Column="2">
             <Slider Value="{Binding R, Mode=TwoWay}"/>
@@ -78,6 +92,7 @@
                   Background="{StaticResource Main.Background}"
                   ItemsSource="{Binding Data.Mined.Items}"
                   ItemTemplate="{StaticResource ItemTemplate}"
+                  SelectedItem="{Binding SelectedColor}"
                   >
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">

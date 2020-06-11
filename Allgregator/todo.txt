@@ -2,6 +2,4 @@
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 theme
-
-settings save
-itemClick
+default rss
