@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Allgregator.Fin.Views.CurrencyChart"
+﻿<UserControl x:Class="Allgregator.Sts.Views.Cbr.CurrencyChart"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              >

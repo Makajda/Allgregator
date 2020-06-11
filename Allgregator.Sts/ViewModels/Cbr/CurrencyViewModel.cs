@@ -1,6 +1,6 @@
 ﻿using Allgregator.Aux.ViewModels;
-using Allgregator.Fin.Models;
+using Allgregator.Sts.Cbr.Models;
 
-namespace Allgregator.Fin.ViewModels {
+namespace Allgregator.Sts.ViewModels.Cbr {
     public class CurrencyViewModel : DataViewModelBase<Data> { }
 }

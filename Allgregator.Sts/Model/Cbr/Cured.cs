@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Allgregator.Fin.Models {
+namespace Allgregator.Sts.Cbr.Models {
     public class Cured : BindableBase, IWatchSave {
 
         private DateTimeOffset startDate = DateTimeOffset.Now.Date.Date.AddMonths(-1);

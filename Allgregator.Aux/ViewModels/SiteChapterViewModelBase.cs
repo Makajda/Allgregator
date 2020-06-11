@@ -29,7 +29,7 @@ namespace Allgregator.Aux.ViewModels {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
-            minedRepository.SetNames(moduleName, $"Mined{itemName}");
+            minedRepository.SetNames(moduleName, $"{itemName}Mined");
             Data.Title = itemName;
             chapterId = $"{moduleName}{itemName}";
             oreService.Initialize(address, retrieveService);

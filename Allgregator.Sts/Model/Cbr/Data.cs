@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace Allgregator.Fin.Models {
+namespace Allgregator.Sts.Cbr.Models {
     public class Data : BindableBase {
         private Mined mined;
         public Mined Mined {

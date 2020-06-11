@@ -1,13 +1,13 @@
 ﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
-using Allgregator.Fin.Models;
+using Allgregator.Sts.Cbr.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Allgregator.Fin.Services {
+namespace Allgregator.Sts.Cbr.Services {
     internal class RetrieveService : RetrieveServiceBase<DateTimeOffset, Term> {
         private readonly WebService webService;
         private IEnumerable<string> currencies;

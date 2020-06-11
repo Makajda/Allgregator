@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Allgregator.Fin.Views {
+namespace Allgregator.Sts.Views.Cbr {
     /// <summary>
     /// Interaction logic for CurrencyView
     /// </summary>

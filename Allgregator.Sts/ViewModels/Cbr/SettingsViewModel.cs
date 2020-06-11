@@ -1,8 +1,8 @@
 ﻿using Allgregator.Aux.ViewModels;
-using Allgregator.Fin.Models;
+using Allgregator.Sts.Cbr.Models;
 using Prism.Commands;
 
-namespace Allgregator.Fin.ViewModels {
+namespace Allgregator.Sts.ViewModels.Cbr {
     public class SettingsViewModel : DataViewModelBase<Data> {
         public SettingsViewModel() {
             DeleteCommand = new DelegateCommand(Delete);

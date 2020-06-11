@@ -2,16 +2,16 @@
 using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
 using Allgregator.Aux.ViewModels;
-using Allgregator.Fin.Models;
-using Allgregator.Fin.Services;
-using Allgregator.Fin.Views;
+using Allgregator.Sts.Cbr.Models;
+using Allgregator.Sts.Cbr.Services;
+using Allgregator.Sts.Views.Cbr;
 using Prism.Events;
 using Prism.Regions;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Allgregator.Fin.ViewModels {
+namespace Allgregator.Sts.ViewModels.Cbr {
     internal class ChapterViewModel : ChapterViewModelBase {
         private readonly IRegionManager regionManager;
         private readonly RepositoryBase<Mined> minedRepository;
@@ -30,8 +30,8 @@ namespace Allgregator.Fin.ViewModels {
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;
             this.curedRepository = curedRepository;
-            minedRepository.SetNames(Module.Name);
-            curedRepository.SetNames(Module.Name);
+            minedRepository.SetNames(Module.Name, "CbrMined");
+            curedRepository.SetNames(Module.Name, "CbrCured");
             chapterId = Module.Name;
         }
 
@@ -74,10 +74,12 @@ namespace Allgregator.Fin.ViewModels {
             }
 
             if (Data.Cured == null) {
-                Data.Cured = await curedRepository.GetOrDefault();
-                if (Data.Cured.Currencies == null) {
-                    Data.Cured.Currencies = new[] { "USD", "EUR", "GBP", "CHF", "CNY", "UAH" };
+                var cured = await curedRepository.GetOrDefault();
+                if (cured.Currencies == null) {
+                    cured.Currencies = new[] { "USD", "EUR", "GBP", "CHF", "CNY", "UAH" };
                 }
+
+                Data.Cured = cured;//after define currencies
             }
         }
 

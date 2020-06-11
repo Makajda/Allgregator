@@ -1,11 +1,11 @@
 ﻿using Allgregator.Aux.Services;
-using Allgregator.Fin.Models;
+using Allgregator.Sts.Cbr.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Allgregator.Fin.Services {
+namespace Allgregator.Sts.Cbr.Services {
     internal class OreService : OreServiceBase {
         private readonly RetrieveService retrieveService;
         public OreService(
