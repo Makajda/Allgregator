@@ -22,14 +22,14 @@
                 Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top" Margin="0,3,0,0" 
-                        HorizontalAlignment="Center"
-                        Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                           HorizontalAlignment="Center"
+                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
                 <TextBlock DockPanel.Dock="Bottom" Margin="0,0,0,3"
-                        HorizontalAlignment="Center"
-                        Text="&#x283F;"
-                        Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
-                <TextBlock Text="Cbr" FontSize="16" TextTrimming="WordEllipsis" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                           HorizontalAlignment="Center"
+                           Text="&#x283F;"
+                           Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
+                <TextBlock Text="{Binding Data.Title}" FontSize="16" TextTrimming="WordEllipsis" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
             </DockPanel>
         </Button>
     </ContentControl>

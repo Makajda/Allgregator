@@ -1,13 +1,7 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Aux.Models;
 
 namespace Allgregator.Sts.Cbr.Models {
-    public class Data : BindableBase {
-        private Mined mined;
-        public Mined Mined {
-            get { return mined; }
-            set { SetProperty(ref mined, value); }
-        }
-
+    public class Data : DataBase<Mined> {
         private Cured cured;
         public Cured Cured {
             get { return cured; }

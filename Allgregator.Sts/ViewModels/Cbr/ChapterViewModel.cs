@@ -32,6 +32,7 @@ namespace Allgregator.Sts.ViewModels.Cbr {
             this.curedRepository = curedRepository;
             minedRepository.SetNames(Module.Name, "CbrMined");
             curedRepository.SetNames(Module.Name, "CbrCured");
+            Data.Title = "Cbr";
             chapterId = Module.Name;
         }
 
