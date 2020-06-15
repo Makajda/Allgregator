@@ -59,8 +59,10 @@ namespace Allgregator.Rss.Repositories {
 
         private IEnumerable<Data> CreateDefault() {
             return new List<Data>() {
-                new Data() { Id = Givenloc.TryDataId, Name = "Try" },
-                new Data() { Id = 1, Name = "Other" }
+                new Data() { Id = Givenloc.TryNewsId, Name = "News" },
+                new Data() { Id = Givenloc.TrySportId, Name = "Sport" },
+                new Data() { Id = Givenloc.TryGameId, Name = "Game" },
+                new Data() { Id = Givenloc.TryProgId, Name = "Prog" },
             };
         }
     }

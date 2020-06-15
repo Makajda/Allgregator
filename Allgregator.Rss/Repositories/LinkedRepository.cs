@@ -7,7 +7,7 @@ namespace Allgregator.Rss.Repositories {
     internal class LinkedRepository : RepositoryBase<Linked> {
         public LinkedRepository() { SetNames(Module.Name); }
         protected override Linked CreateDefault(int id) {
-            if (id == Givenloc.TryDataId) {
+            if (id == Givenloc.TryNewsId) {
                 var links = new ObservableCollection<Link>() {
                     new Link() {
                         HtmlUrl = "http://feeds.bbci.co.uk/news/health/rss.xml",
@@ -25,9 +25,9 @@ namespace Allgregator.Rss.Repositories {
                         XmlUrl = "http://rss.cnn.com/rss/edition_technology.rss"
                     },
                     new Link() {
-                        HtmlUrl = "http://feeds.foxnews.com/foxnews/sports",
-                        Name = "FOX News",
-                        XmlUrl = "http://feeds.foxnews.com/foxnews/sports"
+                        HtmlUrl = "https://www.lepoint.fr/",
+                        Name = "Le Point - Actualité",
+                        XmlUrl = "https://www.lepoint.fr/rss.xml"
                     },
                     new Link() {
                         HtmlUrl = "http://feeds.reuters.com/news/artsculture",
@@ -35,7 +35,56 @@ namespace Allgregator.Rss.Repositories {
                         XmlUrl = "http://feeds.reuters.com/news/artsculture"
                     }
                 };
-
+                return new Linked() { Links = links };
+            }
+            else if (id == Givenloc.TrySportId) {
+                var links = new ObservableCollection<Link>() {
+                    new Link() {
+                        HtmlUrl = "http://feeds.foxnews.com/foxnews/sports",
+                        Name = "FOX News",
+                        XmlUrl = "http://feeds.foxnews.com/foxnews/sports"
+                    },
+                    new Link() {
+                        HtmlUrl = "https://www.sportschau.de/",
+                        Name = "Sportschau",
+                        XmlUrl = "https://www.sportschau.de//sportschauindex100~_type-rss.feed"
+                    },
+                    new Link() {
+                        HtmlUrl = "https://www.football-italia.net/news",
+                        Name = "Football Italia",
+                        XmlUrl = "https://www.football-italia.net/rss.xml"
+                    }
+                };
+                return new Linked() { Links = links };
+            }
+            else if (id == Givenloc.TryGameId) {
+                var links = new ObservableCollection<Link>() {
+                    new Link() {
+                        HtmlUrl = "https://store.steampowered.com/",
+                        Name = "Steampowered",
+                        XmlUrl = "https://store.steampowered.com/feeds/news.xml"
+                    },
+                    new Link() {
+                        HtmlUrl = "https://news.ea.com/",
+                        Name = "EA",
+                        XmlUrl = "https://news.ea.com/rss"
+                    }
+                };
+                return new Linked() { Links = links };
+            }
+            else if (id == Givenloc.TryProgId) {
+                var links = new ObservableCollection<Link>() {
+                    new Link() {
+                        HtmlUrl = "Visual Studio Blog",
+                        Name = "https://devblogs.microsoft.com/visualstudio/",
+                        XmlUrl = "https://devblogs.microsoft.com/visualstudio/rss"
+                    },
+                    new Link() {
+                        HtmlUrl = "https://csharpdigest.net/",
+                        Name = "Weekly C# Digest",
+                        XmlUrl = "http://feeds.feedburner.com/digest-csharp"
+                    }
+                };
                 return new Linked() { Links = links };
             }
 

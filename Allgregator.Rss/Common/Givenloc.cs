@@ -8,7 +8,10 @@ namespace Allgregator.Rss.Common {
         internal const string ChapterIdParameter = "ChapterId";
         internal const string ChapterNameParameter = "ChapterName";
 
-        internal static int TryDataId = 10010;
+        internal static int TryNewsId = 10010;
+        internal static int TrySportId = 10011;
+        internal static int TryGameId = 10012;
+        internal static int TryProgId = 10013;
     }
 
     internal class LinkMovedEvent : PubSubEvent<(int Id, Link Link)> { }
