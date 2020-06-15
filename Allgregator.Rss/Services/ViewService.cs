@@ -46,7 +46,7 @@ namespace Allgregator.Rss.Services {
             foreach (var chapter in chapters) {
                 var parameters = new NavigationParameters {
                     { Common.Givenloc.ChapterIdParameter, chapter.Id },
-                    { Common.Givenloc.ChapterNameParameter, chapter.Name }
+                    { Common.Givenloc.ChapterNameParameter, chapter.Title }
                 };
                 region.RequestNavigate(typeof(ChapterView).FullName, parameters);
             }

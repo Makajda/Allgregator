@@ -35,8 +35,8 @@ namespace Allgregator.Rss.ViewModels {
                 Data.Id = id;
             }
 
-            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string name)) {
-                Data.Name = name;
+            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string title)) {
+                Data.Title = title;
             }
 
             Data.IsNeedToSave = false;

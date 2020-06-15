@@ -67,10 +67,11 @@
     <converters:BooleanToObjectConverter x:Key="BooleanToMenuButtonStyleConverter"
                                                  True="{StaticResource Menu.ActiveButton}"
                                                  False="{StaticResource Menu.Button}"/>
+    <converters:TodayConverter x:Key="TodayConverter"/>
 
-    <Style x:Key="Menu.Updatable">
-        <Setter Property="Control.Margin" Value="2"/>
-        <Setter Property="Control.Template">
+    <Style x:Key="Menu.Updatable" TargetType="Control">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <Grid>
@@ -79,8 +80,25 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ContentPresenter Content="{TemplateBinding Content}"
-                                          Width="{StaticResource Menu.Width}" Height="{StaticResource Menu.Height}"/>
+                        <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
+                                Width="{StaticResource Menu.Width}" 
+                                Height="{StaticResource Menu.Height}"
+                                Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top"
+                                           HorizontalAlignment="Center"
+                                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                                <ContentPresenter DockPanel.Dock="Bottom"
+                                                  Content="{TemplateBinding Content}"
+                                                  HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Data.Title}" 
+                                           FontSize="16" 
+                                           TextTrimming="WordEllipsis"
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center" 
+                                           Margin="5,0,5,3"/>
+                            </DockPanel>
+                        </Button>
 
                         <Button Style="{StaticResource Menu.Update.Button}"
                                 Content="{Binding OreService.IsRetrieving, 
@@ -116,9 +134,9 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Menu.Simple">
-        <Setter Property="Control.Margin" Value="2"/>
-        <Setter Property="Control.Template">
+    <Style x:Key="Menu.Simple" TargetType="Control">
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
                     <ContentPresenter Content="{TemplateBinding Content}"

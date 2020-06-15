@@ -6,10 +6,10 @@ namespace Allgregator.Rss.Models {
     public class Data : BindableBase, IWatchSave {
         public int Id { get; set; }
 
-        private string name;
-        public string Name {
-            get { return name; }
-            set { SetProperty(ref name, value, () => IsNeedToSave = true); }
+        private string title;
+        public string Title {
+            get { return title; }
+            set { SetProperty(ref title, value, () => IsNeedToSave = true); }
         }
 
         private Linked linked;

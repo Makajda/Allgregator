@@ -69,7 +69,7 @@ namespace Allgregator.Rss.ViewModels {
                 var chapters = chapterRepository.GetOrDefault();
                 var chapter = chapters.FirstOrDefault(n => n.Id == Data.Id);
                 if (chapter != null) {
-                    chapter.Name = string.IsNullOrEmpty(Data.Name) ? null : Data.Name;
+                    chapter.Title = string.IsNullOrEmpty(Data.Title) ? null : Data.Title;
                     Save(chapters);
                     Data.IsNeedToSave = false;
                 }
