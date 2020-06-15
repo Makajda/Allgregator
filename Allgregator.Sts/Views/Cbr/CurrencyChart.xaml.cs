@@ -131,7 +131,10 @@ namespace Allgregator.Sts.Views.Cbr {
             var prevs = new Dictionary<string, Point>(cured.Currencies.Select(n => new KeyValuePair<string, Point>(n, new Point())));
             var day = 0;
             foreach (var term in terms) {
+                var toolTip = $"{term.Date.Day}{Environment.NewLine}";
+                var dayCanvas = canvas.Children.Count;
                 foreach (var (key, value) in term.Values) {
+                    toolTip += $"{key} - {value}{Environment.NewLine}";
                     if (cured.Offs == null || !cured.Offs.Contains(key)) {
                         var brush = curBrushes?.Value[key] ?? Brushes.Black;
                         var delta = max[key] - min[key];
@@ -165,8 +168,7 @@ namespace Allgregator.Sts.Views.Cbr {
                             Width = ellipseSize,
                             Height = ellipseSize,
                             Fill = Brushes.Transparent,
-                            Stroke = brush,
-                            ToolTip = $"{term.Date.Day} - {value}"
+                            Stroke = brush
                         };
                         Canvas.SetLeft(ellipse, nextPoint.X - ellipseSize / 2d);
                         Canvas.SetTop(ellipse, nextPoint.Y - ellipseSize / 2d);
@@ -185,6 +187,12 @@ namespace Allgregator.Sts.Views.Cbr {
                 };
                 Canvas.SetLeft(textBlock, day * dayWidth + marginHost - ellipseSize / 2d);
                 canvas.Children.Add(textBlock);
+
+                for (var i = dayCanvas; i < canvas.Children.Count; i++) {
+                    if (canvas.Children[i] is FrameworkElement toolTipElement) {
+                        toolTipElement.ToolTip = toolTip;
+                    }
+                }
 
                 day++;
             }
