@@ -2,4 +2,3 @@
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 theme
-default rss

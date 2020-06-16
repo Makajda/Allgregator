@@ -25,7 +25,7 @@ namespace Allgregator.Sts.ViewModels {
         private PaletteColor selectedColor;
         public PaletteColor SelectedColor {
             get => selectedColor;
-            set => SetProperty(ref selectedColor, value, () => { R = selectedColor.R; G = selectedColor.G; B = selectedColor.B; });
+            set => SetProperty(ref selectedColor, value, OnSelectedColorChanged);
         }
 
         private byte r;
@@ -52,6 +52,15 @@ namespace Allgregator.Sts.ViewModels {
             }
             catch (Exception e) {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        private void OnSelectedColorChanged() {
+            if (SelectedColor != null) {
+                R = SelectedColor.R;
+                G = SelectedColor.G;
+                B = SelectedColor.B;
+                SelectedColor = null;
             }
         }
 
