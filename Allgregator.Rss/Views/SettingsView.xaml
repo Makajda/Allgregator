@@ -44,8 +44,8 @@
                 <StackPanel>
                     <StackPanel Margin="10" HorizontalAlignment="Center">
                         <StackPanel>
-                            <TextBlock Text="Name"/>
-                            <TextBox Text="{Binding Data.Name, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBlock Text="Title"/>
+                            <TextBox Text="{Binding Data.Title, UpdateSourceTrigger=PropertyChanged}"
                                      Background="{StaticResource Edit.Background}" 
                                      Foreground="{StaticResource Edit.Foreground}"/>
                         </StackPanel>
@@ -67,7 +67,7 @@
             <GroupBox Header="New">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel>
-                        <TextBlock Text="Name"/>
+                        <TextBlock Text="Title"/>
                         <TextBox Text="{Binding AddedName, UpdateSourceTrigger=PropertyChanged}"
                                  Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                     </StackPanel>
