@@ -48,6 +48,7 @@
                 FontSize="24" 
                 ToolTip="Copy"
                 Height="60"
+                Foreground="{StaticResource Edit.Foreground}"
                 Background="Transparent"
                 common:Shaatt.Shape="Circle"
                 Click="Result_Click"/>

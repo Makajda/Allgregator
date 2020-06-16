@@ -31,10 +31,10 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="Button.IsDefaulted" Value="true">
-                <Setter Property="Stroke" TargetName="border" Value="{StaticResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                <Setter Property="Stroke" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Fill" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                <Setter Property="Fill" TargetName="border" Value="{DynamicResource Button.MouseOver.Background}"/>
                 <Setter Property="Stroke" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
