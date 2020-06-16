@@ -23,7 +23,10 @@ namespace Allgregator.Aux.Models {
             get => rssCutoffTime;
             set => SetProperty(ref rssCutoffTime, value);
         }
-        public int StsAreasIndex { get; set; }
-        public int StsSymbolsIndex { get; set; }
+        public int StsUnicodeAreaIndex { get; set; }
+        public int StsUnicodeSymbolIndex { get; set; }
+        public byte StsPaletteR { get; set; }
+        public byte StsPaletteG { get; set; }
+        public byte StsPaletteB { get; set; }
     }
 }

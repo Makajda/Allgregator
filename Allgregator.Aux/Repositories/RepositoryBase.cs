@@ -7,14 +7,12 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Repositories {
-    public abstract class RepositoryBase<TModel> where TModel : IWatchSave, new() {
-        protected readonly Lazy<string> startOfName;
+    public class RepositoryBase<TModel> where TModel : IWatchSave, new() {
+        protected string startOfName;
 
-        public RepositoryBase() {
-            startOfName = new Lazy<string>($"{ModuleName}{typeof(TModel).Name}");
+        public void SetNames(string moduleName, string modelName = null) {
+            this.startOfName = $"{moduleName}{(modelName ?? typeof(TModel).Name)}";
         }
-
-        protected abstract string ModuleName { get; }
 
         public async Task<TModel> GetOrDefault(int id = 0) {
             TModel retval = default;

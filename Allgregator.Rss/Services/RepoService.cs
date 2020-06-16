@@ -1,4 +1,5 @@
-﻿using Allgregator.Rss.Common;
+﻿using Allgregator.Aux.Repositories;
+using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Repositories;
 using System;
@@ -8,13 +9,14 @@ using System.Threading.Tasks;
 namespace Allgregator.Rss.Services {
     internal class RepoService {
         private readonly LinkedRepository linkedRepository;
-        private readonly MinedRepository minedRepository;
+        private readonly RepositoryBase<Mined> minedRepository;
         public RepoService(
             LinkedRepository linkedRepository,
-            MinedRepository minedRepository
+            ZipRepositoryBase<Mined> minedRepository
             ) {
             this.linkedRepository = linkedRepository;
             this.minedRepository = minedRepository;
+            minedRepository.SetNames(Module.Name);
         }
 
         internal async Task Load(Data data) {

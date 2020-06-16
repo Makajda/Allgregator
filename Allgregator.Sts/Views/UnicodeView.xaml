@@ -13,10 +13,10 @@
         <t:Double x:Key="ElWithMargin">78</t:Double>
 
         <DataTemplate x:Key="AreaItemTemplate">
-            <Border Height="60" Width="97"
-                    BorderThickness="1" BorderBrush="Black" Background="Transparent"
+            <Border Height="50" Width="81"
+                    BorderThickness="0" BorderBrush="Black" Background="Transparent"
                     >
-                <TextBlock Text="{Binding Name}" FontSize="14"
+                <TextBlock Text="{Binding Name}" FontSize="12"
                            TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
                            TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
@@ -24,7 +24,7 @@
 
         <DataTemplate x:Key="SymbolItemTemplate">
             <Border Width="{StaticResource ElSize}" Height="{StaticResource ElSize}"
-                    BorderThickness="1" BorderBrush="Black" Background="Transparent"
+                    BorderThickness="0" BorderBrush="Black" Background="Transparent"
                     >
                 <TextBlock Text="{Binding}" FontSize="28"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -45,9 +45,11 @@
 
         <Button x:Name="result" 
                 Padding="5" 
-                FontSize="28" 
+                FontSize="24" 
                 ToolTip="Copy"
                 Height="60"
+                Foreground="{StaticResource Edit.Foreground}"
+                Background="Transparent"
                 common:Shaatt.Shape="Circle"
                 Click="Result_Click"/>
 
@@ -56,7 +58,7 @@
                   BorderThickness="0"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   Background="{StaticResource Main.Background}"
-                  ItemsSource="{Binding Data.Mined.Areas}"
+                  ItemsSource="{Binding Data.Mined.Items}"
                   ItemTemplate="{StaticResource AreaItemTemplate}"
                   SelectionChanged="AreasView_SelectionChanged"
                   >

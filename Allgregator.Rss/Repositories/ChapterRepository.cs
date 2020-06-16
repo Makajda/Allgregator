@@ -27,7 +27,7 @@ namespace Allgregator.Rss.Repositories {
 
         public void Save(IEnumerable<Data> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters.OrderBy(n => n.Name),
+            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters.OrderBy(n => n.Title),
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,
@@ -48,7 +48,7 @@ namespace Allgregator.Rss.Repositories {
                 newId++;
             }
 
-            return new Data() { Id = newId, Name = name };
+            return new Data() { Id = newId, Title = name };
         }
 
         private IEnumerable<Data> Get() {
@@ -59,8 +59,10 @@ namespace Allgregator.Rss.Repositories {
 
         private IEnumerable<Data> CreateDefault() {
             return new List<Data>() {
-                new Data() { Id = Givenloc.TryDataId, Name = "Try" },
-                new Data() { Id = 1, Name = "Other" }
+                new Data() { Id = Givenloc.TryNewsId, Title = "News" },
+                new Data() { Id = Givenloc.TrySportId, Title = "Sport" },
+                new Data() { Id = Givenloc.TryGameId, Title = "Game" },
+                new Data() { Id = Givenloc.TryProgId, Title = "Prog" },
             };
         }
     }

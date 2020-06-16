@@ -5,13 +5,14 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.ComponentModel;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {
     public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
         protected readonly Settings settings;
         protected readonly IEventAggregator eventAggregator;
+        protected string chapterId;
+
         public ChapterViewModelBase(
             Settings settings,
             IEventAggregator eventAggregator
@@ -36,16 +37,19 @@ namespace Allgregator.Aux.ViewModels {
 
         }
 
-        protected abstract string ChapterId { get; }
         protected abstract Task Activate();
         protected abstract Task Update();
-        protected abstract void WindowClosing(CancelEventArgs args);
         protected abstract Task Deactivate();
         protected virtual void Run() { }
+        protected virtual void WindowClosing(CancelEventArgs args) {
+            if (IsActive) {
+                settings.CurrentChapterId = chapterId;
+            }
+        }
 
         private async void CurrentChapterChanged(string chapterId) {
             var savedIsActive = IsActive;
-            IsActive = ChapterId == chapterId;
+            IsActive = this.chapterId == chapterId;
             if (savedIsActive) {
                 await Deactivate();
             }
@@ -60,12 +64,12 @@ namespace Allgregator.Aux.ViewModels {
                 Run();
             }
             else {
-                eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(ChapterId);
+                eventAggregator.GetEvent<CurrentChapterChangedEvent>().Publish(chapterId);
             }
         }
 
         public virtual void OnNavigatedTo(NavigationContext navigationContext) {
-            if (settings.CurrentChapterId == ChapterId) {
+            if (settings.CurrentChapterId == chapterId) {
                 IsActive = true;
                 Activate();
             }

@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="Allgregator.Sts.Views.Cbr.CurrencyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:views="clr-namespace:Allgregator.Sts.Views.Cbr"
+             >
+
+    <views:CurrencyChart Terms="{Binding Data.Mined.Terms}"
+                         Cured="{Binding Data.Cured}"/>
+</UserControl>

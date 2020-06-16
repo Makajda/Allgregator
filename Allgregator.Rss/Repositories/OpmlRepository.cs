@@ -54,7 +54,7 @@ namespace Allgregator.Rss.Repositories {
             var cinks = new List<Cink>();
             foreach (var chapter in chapters) {
                 var linked = await linkedRepository.GetOrDefault(chapter.Id);
-                cinks.Add(new Cink() { Name = chapter.Name, Links = linked.Links });
+                cinks.Add(new Cink() { Name = chapter.Title, Links = linked.Links });
             }
 
             await ExportPicker(cinks);

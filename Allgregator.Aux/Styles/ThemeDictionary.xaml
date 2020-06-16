@@ -2,16 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
-    <Color x:Key="Main.Background.Color">#FF8DE3FF</Color>
-    <Color x:Key="News.Background.Color">LightGreen</Color>
-    <Color x:Key="Olds.Background.Color">Brown</Color>
-    <Color x:Key="Links.Background.Color">Green</Color>
-    <Color x:Key="Settings.Background.Color">DarkBlue</Color>
-    <Color x:Key="Clean.Background.Color">SaddleBrown</Color>
-    <Color x:Key="Retrieving.Color">PaleGreen</Color>
+    <Color x:Key="Main.Background.Color">#FFBDC16B</Color>
+    <Color x:Key="News.Background.Color">#FF08CD08</Color>
+    <Color x:Key="Olds.Background.Color">#FFA55800</Color>
+    <Color x:Key="Links.Background.Color">#FF118B11</Color>
+    <Color x:Key="Settings.Background.Color">#FF11115A</Color>
+    <Color x:Key="Clean.Background.Color">#FF805A5A</Color>
+    <Color x:Key="Retrieving.Color">#FFEE82EE</Color>
 
     <SolidColorBrush x:Key="Main.Background" Color="{StaticResource Main.Background.Color}"/>
-    <SolidColorBrush x:Key="Main.Foreground" Color="Green"/>
     <SolidColorBrush x:Key="Button.Manager.Foreground" Color="White"/>
     <SolidColorBrush x:Key="Reco.Background" Color="White"/>
     <SolidColorBrush x:Key="Reco.FeedTitle.Foreground" Color="Blue"/>
@@ -19,10 +18,9 @@
     <SolidColorBrush x:Key="Reco.Text.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="Error.Background" Color="Red"/>
     <SolidColorBrush x:Key="Error.Foreground" Color="White"/>
-    <SolidColorBrush x:Key="Chapter.Background" Color="LightSeaGreen"/>
+    <SolidColorBrush x:Key="Chapter.Background" Color="#FF2092DD"/>
     <SolidColorBrush x:Key="Chapter.Selected.Background" Color="#FF1CF9ED"/>
     <SolidColorBrush x:Key="Chapter.Foreground" Color="Black"/>
-    <SolidColorBrush x:Key="Update.Background" Color="LightCoral"/>
     <SolidColorBrush x:Key="News.Background" Color="{StaticResource News.Background.Color}"/>
     <SolidColorBrush x:Key="Olds.Background" Color="{StaticResource Olds.Background.Color}"/>
     <SolidColorBrush x:Key="Links.Background" Color="{StaticResource Links.Background.Color}"/>
