@@ -1,4 +1,2 @@
 ﻿1,6180339887 
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
-
-theme
