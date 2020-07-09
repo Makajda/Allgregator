@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Allgregator.Rss.Models {
-    public class Reco : IEquatable<Reco> {
+    public class Reco {
         private string summaryText;
 
         public string Uri { get; set; }
@@ -27,6 +27,7 @@ namespace Allgregator.Rss.Models {
         public string SummaryHtml { get; set; }
 
         public bool Equals([AllowNull] Reco other) =>
+            other != null &&
             Uri == other.Uri &&
             ImageUri == other.ImageUri &&
             FeedTitle == other.FeedTitle &&
@@ -34,25 +35,5 @@ namespace Allgregator.Rss.Models {
             PublishDate == other.PublishDate &&
             SummaryText == other.SummaryText &&
             SummaryHtml == other.SummaryHtml;
-
-        public override bool Equals(object obj) =>
-            Equals((Reco)obj);
-
-        public override int GetHashCode() =>
-            $"{Uri}{ImageUri}{FeedTitle}{ItemTitle}{PublishDate}{SummaryText}{SummaryHtml}".GetHashCode();
-
-        public static bool operator ==(Reco reco1, Reco reco2) {
-            if (((object)reco1) == null || ((object)reco2) == null)
-                return Object.Equals(reco1, reco2);
-
-            return reco1.Equals(reco2);
-        }
-
-        public static bool operator !=(Reco reco1, Reco reco2) {
-            if (((object)reco1) == null || ((object)reco2) == null)
-                return !Object.Equals(reco1, reco2);
-
-            return !(reco1.Equals(reco2));
-        }
     }
 }

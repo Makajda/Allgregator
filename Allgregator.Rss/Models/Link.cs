@@ -33,6 +33,7 @@ namespace Allgregator.Rss.Models {
         }
 
         public bool Equals([AllowNull] Link other) =>
+            other != null &&
             Name == other.Name &&
             HtmlUrl == other.HtmlUrl &&
             XmlUrl == other.XmlUrl;
