@@ -28,11 +28,6 @@ namespace Allgregator.Rss.Repositories {
                         HtmlUrl = "https://www.lepoint.fr/",
                         Name = "Le Point - Actualité",
                         XmlUrl = "https://www.lepoint.fr/rss.xml"
-                    },
-                    new Link() {
-                        HtmlUrl = "http://feeds.reuters.com/news/artsculture",
-                        Name = "Reuters: Arts",
-                        XmlUrl = "http://feeds.reuters.com/news/artsculture"
                     }
                 };
                 return new Linked() { Links = links };
@@ -60,14 +55,14 @@ namespace Allgregator.Rss.Repositories {
             else if (id == Givenloc.TryGameId) {
                 var links = new ObservableCollection<Link>() {
                     new Link() {
-                        HtmlUrl = "https://store.steampowered.com/",
-                        Name = "Steampowered",
-                        XmlUrl = "https://store.steampowered.com/feeds/news.xml"
+                        HtmlUrl = "https://www.gamespot.com/",
+                        Name = "Gamespot",
+                        XmlUrl = "https://www.gamespot.com/feeds/news/"
                     },
                     new Link() {
                         HtmlUrl = "https://news.ea.com/",
                         Name = "EA",
-                        XmlUrl = "https://news.ea.com/rss"
+                        XmlUrl = "https://news.ea.com/feeds/press_release/all/rss.xml"
                     }
                 };
                 return new Linked() { Links = links };
