@@ -39,7 +39,7 @@ namespace Allgregator.Rss.Models {
             XmlUrl == other.XmlUrl;
 
         public override bool Equals(object obj) =>
-            Equals((Link)obj);
+            Equals(obj as Link);
 
         public override int GetHashCode() =>
             $"{Name}{HtmlUrl}{XmlUrl}".GetHashCode();
