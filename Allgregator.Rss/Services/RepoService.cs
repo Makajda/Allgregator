@@ -29,14 +29,14 @@ namespace Allgregator.Rss.Services {
             await SaveMined(data);
         }
 
-        internal async Task LinkMoved(Data data, (int Id, Link Link) obj) {
-            if (obj.Id == data.Id) {
+        internal async Task LinkMoved(Data data, MoveRecord moveRecord) {
+            if (moveRecord.Id == data.Id) {
                 await LoadLinks(data);
                 if (data.Linked.Links == null) {
                     data.Linked.Links = new ObservableCollection<Link>();
                 }
 
-                data.Linked.Links.Add(obj.Link);
+                data.Linked.Links.Add(moveRecord.Link);
                 await SaveLinks(data);
             }
         }
