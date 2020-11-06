@@ -19,7 +19,7 @@
         <t:Double x:Key="ElHeightMargin">172</t:Double>
 
         <LinearGradientBrush x:Key="MainBackground" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
+            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0.7" />
             <GradientStop Color="{StaticResource Olds.Background.Color}" Offset="1" />
         </LinearGradientBrush>
 

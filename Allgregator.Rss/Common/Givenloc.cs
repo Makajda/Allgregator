@@ -14,7 +14,8 @@ namespace Allgregator.Rss.Common {
         internal static int TryProgId = 10013;
     }
 
-    internal class LinkMovedEvent : PubSubEvent<(int Id, Link Link)> { }
+    public class MoveRecord { public int Id; public Link Link; }
+    public class LinkMovedEvent : PubSubEvent<MoveRecord> { }
 
     public enum ChapterViews {
         NewsView,
