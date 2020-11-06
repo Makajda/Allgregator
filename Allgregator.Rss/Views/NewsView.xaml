@@ -18,10 +18,7 @@
         <t:Double x:Key="ElWidthMargin">266</t:Double>
         <t:Double x:Key="ElHeightMargin">418</t:Double>
 
-        <LinearGradientBrush x:Key="MainBackground" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="{StaticResource Main.Background.Color}" Offset="0" />
-            <GradientStop Color="{StaticResource News.Background.Color}" Offset="1" />
-        </LinearGradientBrush>
+        <SolidColorBrush x:Key="MainBackground" Color="{StaticResource Main.Background.Color}" />
 
         <DataTemplate x:Key="RecosItemTemplate">
             <Grid Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}">

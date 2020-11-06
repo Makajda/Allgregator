@@ -22,6 +22,12 @@
             <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
             <Setter Property="common:Shaatt.Path" Value="M0,0 H1 A1,1 0 0 1 0,1 Z"/>
         </Style>
+
+        <Style x:Key="buttonClose" TargetType="ButtonBase" BasedOn="{StaticResource buttonTopmost}">
+            <Setter Property="Padding" Value="10,0,0,10"/>
+            <Setter Property="FontSize" Value="21"/>
+            <Setter Property="common:Shaatt.Path" Value="M0,0 A1,1 0 0 0 1,1 V0 Z"/>
+        </Style>
     </Window.Resources>
     
     <Grid Background="{StaticResource Main.Background}">
@@ -32,6 +38,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <ToggleButton Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, 
@@ -52,7 +59,9 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        
-        <ContentControl Grid.Row="2" Grid.ColumnSpan="2" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
+
+        <Button Grid.Column="2" Content="x" Style="{StaticResource buttonClose}" ToolTip="Close of Window" Click="CloseButton_Click"/>
+
+        <ContentControl Grid.Row="2" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
 </Window>
