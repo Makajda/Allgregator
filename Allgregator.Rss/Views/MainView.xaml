@@ -8,7 +8,7 @@
 
     <UserControl.Resources>
         <Style x:Key="managerButton" TargetType="ButtonBase">
-            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Margin" Value="1"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
@@ -17,13 +17,13 @@
     </UserControl.Resources>
     
     <Grid Background="{StaticResource Main.Background}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition  Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-            <UniformGrid Rows="1" Columns="6">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <UniformGrid Rows="6" Columns="1">
                 <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                         Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
                         ToolTip="News"
@@ -53,6 +53,6 @@
             </UniformGrid>
         </ScrollViewer>
 
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static commonLoc:Givenloc.SubmainRegion}" />
+        <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static commonLoc:Givenloc.SubmainRegion}" />
     </Grid>
 </UserControl>
