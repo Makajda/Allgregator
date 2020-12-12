@@ -13,5 +13,10 @@ namespace Allgregator
         {
             Close();
         }
+
+        private void TopmostButton_Click(object sender, RoutedEventArgs e)
+        {
+            Topmost = !Topmost;
+        }
     }
 }

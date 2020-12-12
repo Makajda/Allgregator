@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
         Title="{Binding Title}"
         >
-    
+
     <Window.Resources>
         <converters:BooleanToObjectConverter x:Key="TopmostContentConverter" True="&#x25B4;" False="&#x25B5;"/>
 
@@ -20,7 +20,7 @@
             <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
         </Style>
     </Window.Resources>
-    
+
     <Grid Background="{StaticResource Main.Background}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -44,11 +44,10 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <ToggleButton
-            Grid.Column="1" Style="{StaticResource buttonCtr}" ToolTip="Window is topmost" FontSize="32"
-            Content="{Binding IsChecked, RelativeSource={RelativeSource Self}, Converter={StaticResource TopmostContentConverter}}"
-            IsChecked="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}}"/>
-        
+        <Button
+            Grid.Column="1" Style="{StaticResource buttonCtr}" ToolTip="Window is topmost" FontSize="38" Click="TopmostButton_Click"
+            Content="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TopmostContentConverter}}"/>
+
         <Button Grid.Column="2" Content="&#x2715;" Style="{StaticResource buttonCtr}" ToolTip="Close of Window" Click="CloseButton_Click"/>
 
         <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
