@@ -29,7 +29,7 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="Opacity" Value="0.7"/>
         <Setter Property="Width" Value="{StaticResource Menu.Update.Size}"/>
-        <Setter Property="Height" Value="{StaticResource Menu.Update.Size}"/>
+        <Setter Property="Height" Value="{StaticResource Menu.Height}"/>
         <Setter Property="common:Shaatt.Path" Value="M2,0 V2 L1,2 Z"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -70,7 +70,7 @@
     <converters:TodayConverter x:Key="TodayConverter"/>
 
     <Style x:Key="Menu.Updatable" TargetType="Control">
-        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Margin" Value="0,0,1,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
@@ -80,7 +80,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Button common:Shaatt.Path="M0,0 H2 V0.4 L1,2 H0 Z"
+                        <Button common:Shaatt.Path="M0,0 H2 L1,2 H0 Z"
                                 Width="{StaticResource Menu.Width}" 
                                 Height="{StaticResource Menu.Height}"
                                 Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
