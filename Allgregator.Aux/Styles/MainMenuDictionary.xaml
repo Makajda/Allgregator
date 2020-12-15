@@ -6,8 +6,7 @@
                     >
 
     <t:Double x:Key="Menu.Width">120</t:Double>
-    <t:Double x:Key="Menu.Height">74</t:Double>
-    <t:Double x:Key="Menu.Update.Size">60</t:Double>
+    <t:Double x:Key="Menu.Height">60</t:Double>
 
     <Style x:Key="Menu.Button" TargetType="ButtonBase">
         <Setter Property="BorderThickness" Value="0"/>
@@ -28,7 +27,7 @@
         <Setter Property="BorderThickness" Value="0.3"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="Opacity" Value="0.7"/>
-        <Setter Property="Width" Value="{StaticResource Menu.Update.Size}"/>
+        <Setter Property="Width" Value="{StaticResource Menu.Height}"/>
         <Setter Property="Height" Value="{StaticResource Menu.Height}"/>
         <Setter Property="common:Shaatt.Path" Value="M2,0 V2 L1,2 Z"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
@@ -96,7 +95,7 @@
                                            TextTrimming="WordEllipsis"
                                            HorizontalAlignment="Center" 
                                            VerticalAlignment="Center" 
-                                           Margin="5,0,5,3"/>
+                                           Margin="5,0,5,0"/>
                             </DockPanel>
                         </Button>
 
@@ -118,7 +117,7 @@
                         </Grid>
 
                         <ProgressBar Grid.Row="1"
-                                     Margin="0,3,0,0"
+                                     Margin="0,2,0,0"
                                      Height="7"
                                      Maximum="{Binding OreService.ProgressMaximum, Mode=OneWay}"
                                      Value="{Binding OreService.ProgressValue, Mode=OneWay}"
