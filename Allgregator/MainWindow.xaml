@@ -12,7 +12,7 @@
         <converters:BooleanToObjectConverter x:Key="TopmostContentConverter" True="&#x25B4;" False="&#x25B5;"/>
 
         <Style x:Key="buttonCtr" TargetType="ButtonBase">
-            <Setter Property="Width" Value="50"/>
+            <Setter Property="Width" Value="43"/>
             <Setter Property="Margin" Value="1"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -27,13 +27,15 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
+        <Button Content="&#x2715;" Style="{StaticResource buttonCtr}" ToolTip="Close of Window" Click="CloseButton_Click"/>
+
         <ScrollViewer
-            MaxHeight="230" VerticalScrollBarVisibility="Auto"
+            Grid.Column="1" MaxHeight="230" VerticalScrollBarVisibility="Auto"
             HorizontalAlignment="Center" HorizontalScrollBarVisibility="Disabled">
             <ItemsControl prism:RegionManager.RegionName="{x:Static common:Given.MenuRegion}">
                 <ItemsControl.ItemsPanel>
@@ -45,10 +47,8 @@
         </ScrollViewer>
 
         <Button
-            Grid.Column="1" Style="{StaticResource buttonCtr}" ToolTip="Window is topmost" FontSize="38" Click="TopmostButton_Click"
+            Grid.Column="2" Style="{StaticResource buttonCtr}" ToolTip="Window is topmost" FontSize="38" Click="TopmostButton_Click"
             Content="{Binding Topmost, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TopmostContentConverter}}"/>
-
-        <Button Grid.Column="2" Content="&#x2715;" Style="{StaticResource buttonCtr}" ToolTip="Close of Window" Click="CloseButton_Click"/>
 
         <ContentControl Grid.Row="1" Grid.ColumnSpan="3" prism:RegionManager.RegionName="{x:Static common:Given.MainRegion}" />
     </Grid>
