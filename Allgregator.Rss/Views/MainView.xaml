@@ -29,6 +29,11 @@
                         ToolTip="Browse"
                         Command="{Binding BrowseCommand}"
                         Background="{StaticResource Chapter.Background}"/>
+                <Button Content="&#x1F9F9;"
+                        Style="{StaticResource managerButton}"
+                        ToolTip="Clean"
+                        Command="{Binding MoveCommand}"
+                        Background="{StaticResource Clean.Background}"/>
                 <Button Content="&#x1F4C4;" Style="{StaticResource managerButton}"
                         Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.NewsView}"
                         ToolTip="News"
@@ -37,11 +42,6 @@
                         Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.OldsView}"
                         ToolTip="Outdated"
                         Background="{StaticResource Olds.Background}"/>
-                <Button Content="&#x1F9F9;"
-                        Style="{StaticResource managerButton}"
-                        ToolTip="Clean"
-                        Command="{Binding MoveCommand}"
-                        Background="{StaticResource Clean.Background}"/>
                 <Button Content="&#x2630;" Style="{StaticResource managerButton}"
                         Command="{Binding ViewsCommand}" CommandParameter="{x:Static commonLoc:ChapterViews.LinksView}"
                         ToolTip="Links"

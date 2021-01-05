@@ -7,7 +7,7 @@
     <Color x:Key="Olds.Background.Color">#FFBBB09B</Color>
     <Color x:Key="Links.Background.Color">#FFBBC7A4</Color>
     <Color x:Key="Settings.Background.Color">#FF82B698</Color>
-    <Color x:Key="Clean.Background.Color">#FF495867</Color>
+    <Color x:Key="Clean.Background.Color">Sienna</Color>
     <Color x:Key="Retrieving.Color">#FFE75A7C</Color>
 
     <SolidColorBrush x:Key="Main.Background" Color="{StaticResource Main.Background.Color}"/>
