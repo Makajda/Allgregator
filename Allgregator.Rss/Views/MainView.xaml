@@ -28,12 +28,12 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="88"/>
-                    <RowDefinition Height="88"/>
                     <RowDefinition/>
                     <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="77"/>
+                    <RowDefinition Height="77"/>
+                    <RowDefinition Height="77"/>
+                    <RowDefinition Height="77"/>
                 </Grid.RowDefinitions>
 
                 <Button
