@@ -45,7 +45,7 @@ namespace Allgregator.Rss.Services
                 }
 
                 data.Linked.Links.Add(moveRecord.Link);
-                data.IsNeedToSave = true;
+                data.Linked.IsNeedToSave = true;
                 await SaveLinks(data);
             }
         }
