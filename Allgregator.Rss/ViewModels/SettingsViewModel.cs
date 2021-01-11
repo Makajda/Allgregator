@@ -12,8 +12,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Allgregator.Rss.ViewModels {
-    internal class SettingsViewModel : DataViewModelBase<Data> {
+namespace Allgregator.Rss.ViewModels
+{
+    internal class SettingsViewModel : DataViewModelBase<Data>
+    {
         private readonly OpmlRepository opmlRepository;
         private readonly ChapterRepository chapterRepository;
         private readonly RepoService repoService;
@@ -28,7 +30,8 @@ namespace Allgregator.Rss.ViewModels {
             ViewService viewService,
             IEventAggregator eventAggregator,
             DialogService dialogService
-            ) {
+            )
+        {
             this.opmlRepository = opmlRepository;
             this.chapterRepository = chapterRepository;
             this.repoService = repoService;
@@ -51,12 +54,14 @@ namespace Allgregator.Rss.ViewModels {
         public Settings Settings { get; private set; }
 
         private string addedName;
-        public string AddedName {
+        public string AddedName
+        {
             get => addedName;
             set => SetProperty(ref addedName, value);
         }
 
-        private void AddChapter() {
+        private void AddChapter()
+        {
             var chapters = chapterRepository.GetOrDefault().ToList();
             var chapter = chapterRepository.GetNewChapter(chapters, AddedName);
             chapters.Add(chapter);
@@ -64,11 +69,14 @@ namespace Allgregator.Rss.ViewModels {
             viewService.AddMenuViews(new[] { chapter });
         }
 
-        private void SaveChapterName(CancelEventArgs obj) {
-            if (Data.IsNeedToSave) {
+        private void SaveChapterName(CancelEventArgs obj)
+        {
+            if (Data.IsNeedToSave)
+            {
                 var chapters = chapterRepository.GetOrDefault();
                 var chapter = chapters.FirstOrDefault(n => n.Id == Data.Id);
-                if (chapter != null) {
+                if (chapter != null)
+                {
                     chapter.Title = string.IsNullOrEmpty(Data.Title) ? null : Data.Title;
                     Save(chapters);
                     Data.IsNeedToSave = false;
@@ -76,11 +84,13 @@ namespace Allgregator.Rss.ViewModels {
             }
         }
 
-        private async void DeleteChapter() {
+        private async void DeleteChapter()
+        {
             await repoService.LoadLinks(Data);
             dialogService.Show($"{(Data.Linked?.Links == null ? 0 : Data.Linked.Links.Count)} addresses?", DeleteChapterReal, 20, true);
 
-            void DeleteChapterReal() {
+            void DeleteChapterReal()
+            {
                 var chapters = chapterRepository.GetOrDefault().Where(n => n.Id != Data.Id);
                 Save(chapters);
                 repoService.DeleteFiles(Data.Id);
@@ -89,36 +99,46 @@ namespace Allgregator.Rss.ViewModels {
             }
         }
 
-        private void Save(IEnumerable<Data> chapters) {
-            try {
+        private void Save(IEnumerable<Data> chapters)
+        {
+            try
+            {
                 chapterRepository.Save(chapters);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Serilog.Log.Error(e, System.Reflection.MethodBase.GetCurrentMethod().Name);
             }
         }
 
-        private async void ExportOpml() {
-            try {
+        private async void ExportOpml()
+        {
+            try
+            {
                 await opmlRepository.Export();
             }
-            catch (Exception exception) {
-                dialogService.Show(exception.Message);
+            catch (Exception exception)
+            {
+                dialogService.Show(ExceptionHelper.GetMessage(exception));
             }
         }
 
-        private async void ImportOpml() {
-            try {
+        private async void ImportOpml()
+        {
+            try
+            {
                 var chapters = await opmlRepository.Import();
-                if (chapters != null && chapters.Count > 0) {
+                if (chapters != null && chapters.Count > 0)
+                {
                     viewService.AddMenuViews(chapters);
 
                     var str = $"added {chapters.Count} collections";
                     dialogService.Show(str);
                 }
             }
-            catch (Exception exception) {
-                dialogService.Show(exception.Message);
+            catch (Exception exception)
+            {
+                dialogService.Show(ExceptionHelper.GetMessage(exception));
             }
         }
     }

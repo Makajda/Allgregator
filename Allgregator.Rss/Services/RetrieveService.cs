@@ -1,4 +1,5 @@
-﻿using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
@@ -7,39 +8,50 @@ using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Xml;
 
-namespace Allgregator.Rss.Services {
-    internal class RetrieveService : RetrieveServiceBase<Link, Reco> {
+namespace Allgregator.Rss.Services
+{
+    internal class RetrieveService : RetrieveServiceBase<Link, Reco>
+    {
         public DateTimeOffset CutoffTime { get; set; }
 
-        public override void Production(Link link) {
-            try {
+        public override void Production(Link link)
+        {
+            try
+            {
                 using var reader = XmlReader.Create(link.XmlUrl);
                 var feed = SyndicationFeed.Load(reader);
                 var recos = new List<Reco>();
-                foreach (var item in feed.Items) {
-                    if (item.PublishDate > CutoffTime) {
+                foreach (var item in feed.Items)
+                {
+                    if (item.PublishDate > CutoffTime)
+                    {
                         var reco = GetRecoFromSyndication(feed, item);
                         recos.Add(reco);
                     }
                 }
 
-                lock (syncItems) {
+                lock (syncItems)
+                {
                     Items.AddRange(recos);
                 }
             }
             catch (OperationCanceledException) { }
-            catch (Exception exception) {
-                lock (syncErrors) {
-                    Errors.Add(new Error() { Source = link.Name, Message = exception.Message });
+            catch (Exception exception)
+            {
+                lock (syncErrors)
+                {
+                    Errors.Add(new Error() { Source = link.Name, Message = ExceptionHelper.GetMessage(exception) });
                 }
             }
         }
 
-        private Reco GetRecoFromSyndication(SyndicationFeed feed, SyndicationItem item) {
+        private Reco GetRecoFromSyndication(SyndicationFeed feed, SyndicationItem item)
+        {
             var imageUri = feed.ImageUrl ?? RegexUtilities.GetImage(item.Summary?.Text);
             var itemUri = item.Links == null || item.Links.Count == 0 ? null : item.Links[0]?.Uri.ToString();
 
-            var reco = new Reco() {
+            var reco = new Reco()
+            {
                 ImageUri = imageUri,
                 Uri = itemUri,
                 FeedTitle = RegexUtilities.GetText(feed.Title?.Text),
