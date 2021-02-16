@@ -134,13 +134,24 @@
     </Style>
 
     <Style x:Key="Menu.Simple" TargetType="Control">
-        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Margin" Value="0,0,1,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentControl">
-                    <ContentPresenter Content="{TemplateBinding Content}"
-                                      VerticalAlignment="Top"
-                                      Width="{StaticResource Menu.Width}" Height="{StaticResource Menu.Height}"/>
+                    <Button 
+                        common:Shaatt.Shape="Rect" Width="{StaticResource Menu.Width}" Height="{StaticResource Menu.Height}"
+                        VerticalAlignment="Top"
+                        Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
+                        <DockPanel>
+                            <TextBlock 
+                                DockPanel.Dock="Top" HorizontalAlignment="Center"
+                                Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                            <ContentPresenter DockPanel.Dock="Bottom" Content="{TemplateBinding Content}" HorizontalAlignment="Center"/>
+                            <TextBlock 
+                                Text="{Binding Data.Title}" FontSize="16" TextTrimming="WordEllipsis" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                        </DockPanel>
+                    </Button>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

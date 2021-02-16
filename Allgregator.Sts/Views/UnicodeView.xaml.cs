@@ -1,13 +1,10 @@
 ﻿using Allgregator.Aux.Models;
-using Allgregator.Sts.Model;
+using Allgregator.Sts.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Allgregator.Sts.Views {
-    /// <summary>
-    /// Interaction logic for UnicodeView
-    /// </summary>
     public partial class UnicodeView : UserControl {
         public UnicodeView(Settings settings) {
             InitializeComponent();

@@ -1,5 +1,5 @@
 ﻿using Allgregator.Aux.Services;
-using Allgregator.Sts.Model;
+using Allgregator.Sts.Models;
 using System;
 using System.Text.RegularExpressions;
 

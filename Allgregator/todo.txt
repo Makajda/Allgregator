@@ -1,2 +1,2 @@
-﻿1,6180339887 
+﻿double goldenRatio = 1.618033988749894848;
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;

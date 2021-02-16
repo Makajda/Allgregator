@@ -1,6 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Services;
-using Allgregator.Sts.Model;
+using Allgregator.Sts.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
