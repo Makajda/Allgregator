@@ -8,9 +8,40 @@
              >
 
     <UserControl.Resources>
+        <Style x:Key="ctrlButton" TargetType="Button">
+            <Setter Property="Grid.Row" Value="1"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="1,0,1,0"/>
+            <Setter Property="common:Shaatt.Shape" Value="Rect"/>
+        </Style>
+        
+        <DataTemplate x:Key="ItemTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--показывать всего, добавлено сегодня, добавлено сейчас-->
+                <Button Grid.ColumnSpan="3" common:Shaatt.Shape="TopCap" Background="GreenYellow" Height="333" Margin="1" Content="{Binding Name}" BorderThickness="0"/>
+                <Button Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
+                <Button Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
+                <Button Grid.Column="2" Content="+30" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
-        <Canvas x:Name="canvas" Background="Yellow"/>
-    </Grid>
+    <ItemsControl ItemsSource="{Binding Butasks}" ItemTemplate="{StaticResource ItemTemplate}" VerticalAlignment="Bottom">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding Butasks.Countfy}"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
 </UserControl>
