@@ -6,7 +6,7 @@ using Prism.Modularity;
 
 namespace Allgregator.Rss {
     public class Module : IModule {
-        internal const string Name = "Rss";
+        public const string Name = "Rss";
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var viewService = containerProvider.Resolve<ViewService>();

@@ -30,9 +30,9 @@ namespace Allgregator {
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog) {
-            moduleCatalog.AddModule<Rss.Module>("Rss");
-            moduleCatalog.AddModule<Sts.Module>("Sts");
-            moduleCatalog.AddModule<Spl.Module>("Spl");
+            moduleCatalog.AddModule<Rss.Module>(Rss.Module.Name);
+            moduleCatalog.AddModule<Sts.Module>(Sts.Module.Name);
+            moduleCatalog.AddModule<Spl.Module>(Spl.Module.Name);
         }
     }
 }

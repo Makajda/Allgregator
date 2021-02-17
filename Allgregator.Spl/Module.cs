@@ -6,7 +6,7 @@ using Prism.Regions;
 
 namespace Allgregator.Spl {
     public class Module : IModule {
-        internal const string Name = "Spl";
+        public const string Name = "Spl";
 
         public void OnInitialized(IContainerProvider containerProvider) {
             var regionManager = containerProvider.Resolve<IRegionManager>();
@@ -15,6 +15,7 @@ namespace Allgregator.Spl {
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterForNavigation<ButimeChapterView>(typeof(ButimeChapterView).FullName);
+            containerRegistry.RegisterForNavigation<ButimeSettingsView>(typeof(ButimeSettingsView).FullName);
             containerRegistry.RegisterForNavigation<ButimeView>(typeof(ButimeView).FullName);
         }
     }
