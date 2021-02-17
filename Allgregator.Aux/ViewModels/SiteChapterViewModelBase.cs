@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {
-    public abstract class SiteChapterViewModelBase<TItem> : SimpleChapterViewModelBase<TItem> where TItem : IName {
+    public abstract class SiteChapterViewModelBase<TItem> : SimpleChapterViewModelBase<TItem> {
         public SiteChapterViewModelBase(
             string address,
             SiteOreServiceBase<TItem> oreService,

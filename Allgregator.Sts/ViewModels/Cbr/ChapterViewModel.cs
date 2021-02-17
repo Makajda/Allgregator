@@ -1,6 +1,7 @@
 ﻿using Allgregator.Aux.Common;
 using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
+using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Sts.Cbr.Models;
 using Allgregator.Sts.Cbr.Services;
@@ -12,13 +13,20 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Sts.ViewModels.Cbr {
-    internal class ChapterViewModel : ChapterViewModelBase {
+    internal class ChapterViewModel : SiteChapterViewModelBase<Term> {
         private readonly IRegionManager regionManager;
         private readonly RepositoryBase<Mined> minedRepository;
         private readonly RepositoryBase<Cured> curedRepository;
         private bool isSettings;
 
         public ChapterViewModel(
+            OreService oreService,
+            RetrieveService retrieveService,
+            ZipRepositoryBase<MinedBase<Term>> minedRepository,
+            IEventAggregator eventAggregator,
+            IRegionManager regionManager,
+            Settings settings
+
             Settings settings,
             OreService oreService,
             IEventAggregator eventAggregator,

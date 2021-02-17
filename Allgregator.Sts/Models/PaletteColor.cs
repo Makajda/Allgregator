@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using System.Windows.Media;
 
 namespace Allgregator.Sts.Models {
-    public class PaletteColor : IName {
+    public class PaletteColor : IOrdered {
         private readonly Lazy<Brush> brush;
         public PaletteColor() {
             brush = new Lazy<Brush>(() => new SolidColorBrush(Color.FromRgb(R, G, B)));

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.Services {
-    public class SiteOreServiceBase<TItem> : OreServiceBase where TItem : IName {
+    public class SiteOreServiceBase<TItem> : OreServiceBase {
         private string address;
         private RetrieveServiceBase<string, TItem> retrieveService;
 
@@ -23,7 +23,11 @@ namespace Allgregator.Aux.Services {
                 var lastRetrieve = await Retrieve(addresses, retrieveService.ProductionAsync);
 
                 if (IsRetrieving) {
-                    mined.Items = retrieveService.Items.OrderBy(n => n.Name).ToList();
+                    if (typeof(IOrdered).IsAssignableFrom(typeof(TItem)))
+                        mined.Items = retrieveService.Items.OrderBy(n => ((IOrdered)n).Name).ToList();
+                    else
+                        mined.Items = retrieveService.Items.ToList();
+
                     mined.Errors = retrieveService.Errors.Count == 0 ? null : retrieveService.Errors.ToList();//cached;
                     mined.LastRetrieve = lastRetrieve;
                     mined.IsNeedToSave = true;
