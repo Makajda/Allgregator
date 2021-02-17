@@ -18,15 +18,16 @@ namespace Allgregator.Sts.ViewModels {
             IRegionManager regionManager,
             Settings settings
             ) : base(
-                "Unicode",
-                Module.Name,
-                typeof(UnicodeView).FullName,
                 "https://unicode.org/charts/",
                 oreService,
                 retrieveService,
+                "Unicode",
+                Module.Name,
+                typeof(UnicodeView).FullName,
+                null,
                 minedRepository,
-                eventAggregator,
                 regionManager,
+                eventAggregator,
                 settings) {
         }
     }
