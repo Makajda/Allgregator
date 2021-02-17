@@ -10,7 +10,7 @@
     <UserControl.Resources>
     </UserControl.Resources>
 
-    <Grid Background="Yellow">
-            
+    <Grid>
+        <Canvas x:Name="canvas" Background="Yellow"/>
     </Grid>
 </UserControl>

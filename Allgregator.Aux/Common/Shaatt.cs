@@ -11,7 +11,12 @@ namespace Allgregator.Aux.Common {
         TopLeft,
         TopRight,
         BottomRight,
-        BottomLeft
+        BottomLeft,
+        TopCap
+    }
+
+    public class ButtonShaatt : Button {
+        public ButtonShaatt(Shapes shapes) => Shaatt.SetShape(this, shapes);
     }
 
     public class Shaatt {
@@ -22,9 +27,6 @@ namespace Allgregator.Aux.Common {
 
         public static Size GetThick(DependencyObject obj) => (Size)obj.GetValue(ThickProperty);
         public static void SetThick(DependencyObject obj, Size value) => obj.SetValue(ThickProperty, value);
-        /// <summary>
-        /// Width, Height Percent Size
-        /// </summary>
         public static readonly DependencyProperty ThickProperty = DependencyProperty.RegisterAttached(
             "Thick", typeof(Size), typeof(Shaatt), new PropertyMetadata(default(Size), OnShapeChanged));
 
@@ -43,8 +45,7 @@ namespace Allgregator.Aux.Common {
 
             var thick1 = ((Size)d.GetValue(ThickProperty)).Width;
             var thick2 = ((Size)d.GetValue(ThickProperty)).Height;
-            Geometry geometry = shape switch
-            {
+            Geometry geometry = shape switch {
                 Shapes.Rect => new RectangleGeometry() { Rect = new Rect(0, 0, 1, 1) },//M0,0 V1 H1 V0 Z
                 Shapes.Circle => new EllipseGeometry() { RadiusX = 1d, RadiusY = 1d },//M0,1 A1,1 0 1 1 2,1 A1,1 0 1 1 0,1
                 Shapes.TopLeft => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
@@ -68,6 +69,11 @@ namespace Allgregator.Aux.Common {
                 Shapes.BottomLeft => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
                         new LineSegment(new Point(thick2, 0), true),
                         new ArcSegment(new Point(size, size - thick1), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true),
+                        new LineSegment(new Point(size, size), true),
+                        new LineSegment(new Point(0, size), true)
+                    }, true) }),
+                Shapes.TopCap => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
+                        new ArcSegment(new Point(size, 0), new Size(size, size), 0, false, SweepDirection.Clockwise, true),
                         new LineSegment(new Point(size, size), true),
                         new LineSegment(new Point(0, size), true)
                     }, true) }),

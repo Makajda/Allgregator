@@ -14,6 +14,6 @@
     </UserControl.Resources>
 
     <ContentControl Style="{StaticResource Menu.Simple}">
-        <TextBlock/>
+        <TextBlock Text="&#x2180;" Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"/>
     </ContentControl>
 </UserControl>
