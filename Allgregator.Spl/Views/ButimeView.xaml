@@ -28,7 +28,6 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <!--показывать всего, добавлено сегодня, добавлено сейчас-->
                 <Button Grid.ColumnSpan="3" common:Shaatt.Shape="TopCap" Background="GreenYellow" Height="333" Margin="1" Content="{Binding Name}" BorderThickness="0"/>
                 <Button Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
                 <Button Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>

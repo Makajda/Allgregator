@@ -4,7 +4,6 @@ using Allgregator.Aux.ViewModels;
 using Allgregator.Spl.Models;
 using Prism.Events;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
