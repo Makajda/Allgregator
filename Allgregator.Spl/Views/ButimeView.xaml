@@ -10,15 +10,22 @@
 
     <UserControl.Resources>
         <converters:ValueMaxToHeightConverter x:Key="ValueMaxToHeightConverter"/>
-        
-        <Style x:Key="ctrlButton" TargetType="Button">
+        <converters:MinutesToTextConverter x:Key="MinutesToTextConverter"/>
+
+        <Style x:Key="ctrlButtonStyle" TargetType="Button">
             <Setter Property="Grid.Row" Value="1"/>
             <Setter Property="Height" Value="60"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="1"/>
             <Setter Property="common:Shaatt.Shape" Value="Rect"/>
         </Style>
-        
+
+        <Style x:Key="valuesStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
         <DataTemplate x:Key="ItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -33,24 +40,37 @@
 
                 <Button
                     Grid.ColumnSpan="3" common:Shaatt.Shape="TopCap" VerticalAlignment="Bottom"
-                    Background="GreenYellow" Margin="1,0,1,0" Content="{Binding Name}" BorderThickness="0">
+                    Background="GreenYellow" Margin="1,0,1,0" BorderThickness="0" MinHeight="50">
                     <Button.Height>
                         <MultiBinding Converter="{StaticResource ValueMaxToHeightConverter}">
                             <Binding Path="DataContext.MaxValue" ElementName="rootElement"/>
-                            <Binding Path="Value"/>
-                            <Binding Path="RowDefinitions[0].ActualHeight" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                            <Binding Path="Total"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
                         </MultiBinding>
                     </Button.Height>
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Text="{Binding Now, Converter={StaticResource MinutesToTextConverter}, StringFormat={}now {0}}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Text="{Binding Today, Converter={StaticResource MinutesToTextConverter}, StringFormat={}today {0}}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Text="{Binding Total, Converter={StaticResource MinutesToTextConverter}, StringFormat={}total {0}}" Style="{StaticResource valuesStyle}"/>
+                    </WrapPanel>
                 </Button>
                 
-                <Button Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
-                <Button Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
-                <Button Grid.Column="2" Content="+30" Background="GreenYellow" Style="{StaticResource ctrlButton}"/>
+                <Button
+                    Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
+                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                <Button
+                    Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
+                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                <Button
+                    Grid.Column="2" Content="+30" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
+                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
 
-    <ItemsControl ItemsSource="{Binding Butasks}" ItemTemplate="{StaticResource ItemTemplate}" VerticalAlignment="Bottom">
+    <ItemsControl ItemsSource="{Binding Butasks}" ItemTemplate="{StaticResource ItemTemplate}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid Columns="{Binding Butasks.Countfy}"/>
