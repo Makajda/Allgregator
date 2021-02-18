@@ -18,9 +18,9 @@
         <Grid>
             <Path x:Name="border" 
                   Stretch="Fill"
-                  Stroke="{TemplateBinding BorderBrush}" 
-                  StrokeThickness="{TemplateBinding BorderThickness, Converter={StaticResource ThicknessToDoubleConverter}}"
+                  Stroke="{TemplateBinding BorderBrush}"
                   Fill="{TemplateBinding Background}"
+                  StrokeThickness="{TemplateBinding BorderThickness, Converter={StaticResource ThicknessToDoubleConverter}}"
                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                   />
             <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True"
