@@ -15,9 +15,11 @@ namespace Allgregator.Aux.ViewModels {
                 Data = data;
             }
         }
+
         public bool IsNavigationTarget(NavigationContext navigationContext) {
             return true;
         }
+
         public void OnNavigatedFrom(NavigationContext navigationContext) { }
     }
 }

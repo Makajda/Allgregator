@@ -43,7 +43,7 @@
                     Background="GreenYellow" Margin="1,0,1,0" BorderThickness="0" MinHeight="50" Click="OpenButton_Click">
                     <Button.Height>
                         <MultiBinding Converter="{StaticResource ValueMaxToHeightConverter}">
-                            <Binding Path="DataContext.Data.MaxValue" ElementName="rootElement"/>
+                            <Binding Path="DataContext.Data.Mined.MaxValue" ElementName="rootElement"/>
                             <Binding Path="Total"/>
                             <Binding RelativeSource="{RelativeSource AncestorType=Grid}"/>
                             <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
@@ -78,10 +78,10 @@
     </UserControl.Resources>
 
     <Grid>
-        <ItemsControl ItemsSource="{Binding Data.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
+        <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding Data.Butasks.Countfy}"/>
+                    <UniformGrid Columns="{Binding Data.Mined.Butasks.Countfy}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

@@ -2,38 +2,33 @@
 using Allgregator.Aux.Repositories;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Spl.Models;
+using Allgregator.Spl.Repositories;
+using Allgregator.Spl.Views;
 using Prism.Events;
 using Prism.Regions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Spl.ViewModels {
-    internal class ButimeChapterViewModel : ChapterViewModelBase {
+    internal class ButimeChapterViewModel : SimpleChapterViewModelBase<Mined> {
         public ButimeChapterViewModel(
-            ZipRepositoryBase<MinedBase<Butime>> minedRepository,
+            ButimeRepository repository,
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
-            ) : base(settings, eventAggregator) {
-            //"Times",
-            //Module.Name,
-            //typeof(ButimeView).FullName,
-            //typeof(ButimeSettingsView).FullName,
-            //minedRepository,
-            //regionManager,
-            //eventAggregator,
-            //settings) {
+            ) : base(
+                "Times",
+                Module.Name,
+                typeof(ButimeView).FullName,
+                typeof(ButimeSettingsView).FullName,
+                repository,
+                regionManager,
+                eventAggregator,
+                settings) {
         }
 
-        protected override Task Activate() {
-            return Task.CompletedTask;
-        }
-
-        protected override Task Deactivate() {
-            return Task.CompletedTask;
-        }
-
-        protected override Task Update() {
-            return Task.CompletedTask;
+        protected override async Task LoadMined() {
+            await base.LoadMined();
+            Data?.Mined?.Recalc();
         }
     }
 }

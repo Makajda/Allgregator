@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using System.Windows.Media;
 
 namespace Allgregator.Spl.Models {
-    public class Data : BindableBase, IWatchSave {
+    public class Mined : BindableBase, IWatchSave {
         private Obsefy<Butask> butasks;
         public Obsefy<Butask> Butasks {
             get => butasks;
