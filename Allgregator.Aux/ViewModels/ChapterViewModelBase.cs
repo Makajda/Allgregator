@@ -38,8 +38,8 @@ namespace Allgregator.Aux.ViewModels {
         }
 
         protected abstract Task Activate();
-        protected abstract Task Update();
         protected abstract Task Deactivate();
+        protected virtual Task Update() => Task.CompletedTask;
         protected virtual void Run() { }
         protected virtual void WindowClosing(CancelEventArgs args) {
             if (IsActive) {
