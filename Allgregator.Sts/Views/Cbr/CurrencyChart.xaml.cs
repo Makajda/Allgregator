@@ -9,9 +9,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Allgregator.Sts.Views.Cbr {
-    /// <summary>
-    /// Interaction logic for CurrencyChart.xaml
-    /// </summary>
     public partial class CurrencyChart : UserControl {
         private readonly Lazy<Dictionary<string, Brush>> curBrushes;
         private readonly Lazy<Brush> foreground;

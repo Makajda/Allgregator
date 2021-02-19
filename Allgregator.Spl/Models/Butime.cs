@@ -1,10 +1,51 @@
-﻿using Prism.Mvvm;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
+using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 
 namespace Allgregator.Spl.Models {
+    public class Data : BindableBase, IWatchSave {
+        private Obsefy<Butask> butasks;
+        public Obsefy<Butask> Butasks {
+            get => butasks;
+            set => SetProperty(ref butasks, value);
+        }
+
+        private int maxValue = int.MinValue;
+        [JsonIgnore]
+        public int MaxValue {
+            get => maxValue;
+            set => SetProperty(ref maxValue, value);
+        }
+
+        [JsonIgnore]
+        public bool IsNeedToSave { get; set; }
+
+        public void Recalc() {
+            var max = int.MinValue;
+            if (Butasks != null) {
+                foreach (var butask in Butasks) {
+                    butask.Recalc();
+                    if (max < butask.Total)
+                        max = butask.Total;
+                }
+            }
+
+            MaxValue = max;
+        }
+
+        public void RecalcMax() {
+            if (Butasks != null)
+                MaxValue = Butasks.Max(n => n.Total);
+            else
+                MaxValue = int.MinValue;
+        }
+    }
+
     public class Butask : BindableBase {
         private string name;
         public string Name {

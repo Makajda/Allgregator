@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Allgregator.Spl.Models;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Allgregator.Spl.Views {
@@ -7,8 +8,9 @@ namespace Allgregator.Spl.Views {
             InitializeComponent();
         }
 
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
-            base.OnRenderSizeChanged(sizeInfo);
+        private void OpenButton_Click(object sender, RoutedEventArgs e) {
+            popupOpen.IsOpen = true;
+            listOpen.ItemsSource = ((sender as FrameworkElement)?.DataContext as Butask)?.Butimes;
         }
     }
 }

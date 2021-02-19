@@ -26,7 +26,7 @@
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
 
-        <DataTemplate x:Key="ItemTemplate">
+        <DataTemplate x:Key="ButaskItemTemplate">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -40,10 +40,10 @@
 
                 <Button
                     Grid.ColumnSpan="3" common:Shaatt.Shape="TopCap" VerticalAlignment="Bottom"
-                    Background="GreenYellow" Margin="1,0,1,0" BorderThickness="0" MinHeight="50">
+                    Background="GreenYellow" Margin="1,0,1,0" BorderThickness="0" MinHeight="50" Click="OpenButton_Click">
                     <Button.Height>
                         <MultiBinding Converter="{StaticResource ValueMaxToHeightConverter}">
-                            <Binding Path="DataContext.MaxValue" ElementName="rootElement"/>
+                            <Binding Path="DataContext.Data.MaxValue" ElementName="rootElement"/>
                             <Binding Path="Total"/>
                             <Binding RelativeSource="{RelativeSource AncestorType=Grid}"/>
                             <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
@@ -56,25 +56,38 @@
                         <TextBlock Text="{Binding Total, Converter={StaticResource MinutesToTextConverter}, StringFormat={}total {0}}" Style="{StaticResource valuesStyle}"/>
                     </WrapPanel>
                 </Button>
-                
+
                 <Button
                     Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
                 <Button
                     Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    Command="{Binding DataContext.Add15Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
                 <Button
                     Grid.Column="2" Content="+30" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    Command="{Binding DataContext.Add30Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
             </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="OpenItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Date}" Width="100" FontSize="14" Margin="10"/>
+                <TextBlock Text="{Binding Value, Converter={StaticResource MinutesToTextConverter}}" Width="100" FontSize="14" TextAlignment="Right" Margin="10"/>
+            </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
 
-    <ItemsControl ItemsSource="{Binding Butasks}" ItemTemplate="{StaticResource ItemTemplate}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <UniformGrid Columns="{Binding Butasks.Countfy}"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Data.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding Data.Butasks.Countfy}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">
+            <ListBox x:Name="listOpen" ItemTemplate="{StaticResource OpenItemTemplate}"/>
+        </Popup>
+    </Grid>
 </UserControl>
