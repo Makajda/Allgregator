@@ -6,14 +6,11 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
 using Prism.Events;
 using Prism.Regions;
-using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Allgregator.Rss.ViewModels
-{
-    internal class ChapterViewModel : ChapterViewModelBase
-    {
+namespace Allgregator.Rss.ViewModels {
+    internal class ChapterViewModel : ChapterViewModelBase {
         private readonly RepoService repoService;
         private readonly ViewService viewService;
 
@@ -23,8 +20,7 @@ namespace Allgregator.Rss.ViewModels
             ViewService viewService,
             Settings settings,
             IEventAggregator eventAggregator
-            ) : base(settings, eventAggregator)
-        {
+            ) : base(eventAggregator, settings) {
             OreService = oreService;
             this.repoService = repoService;
             this.viewService = viewService;
@@ -35,15 +31,12 @@ namespace Allgregator.Rss.ViewModels
         public Data Data { get; } = new Data();
         public OreService OreService { get; private set; }
 
-        public override void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterIdParameter, out int id))
-            {
+        public override void OnNavigatedTo(NavigationContext navigationContext) {
+            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterIdParameter, out int id)) {
                 Data.Id = id;
             }
 
-            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string title))
-            {
+            if (navigationContext.Parameters.TryGetValue(Common.Givenloc.ChapterNameParameter, out string title)) {
                 Data.Title = title;
             }
 
@@ -52,28 +45,23 @@ namespace Allgregator.Rss.ViewModels
             base.OnNavigatedTo(navigationContext);
         }
 
-        protected override async Task Activate()
-        {
+        protected override async Task Activate() {
             viewService.ActivateMainView(Data);
             await repoService.Load(Data);
         }
         protected override async Task Deactivate() => await repoService.Save(Data);
 
-        protected override async Task Update()
-        {
-            if (OreService.IsRetrieving)
-            {
+        protected override async Task Update() {
+            if (OreService.IsRetrieving) {
                 OreService.CancelRetrieve();
             }
-            else
-            {
+            else {
                 await repoService.Load(Data);
                 await OreService.Retrieve(Data, settings.RssCutoffTime);
             }
         }
 
-        protected override void WindowClosing(CancelEventArgs args)
-        {
+        protected override void WindowClosing(CancelEventArgs args) {
             base.WindowClosing(args);
             AsyncHelper.RunSync(async () => await repoService.Save(Data));
         }

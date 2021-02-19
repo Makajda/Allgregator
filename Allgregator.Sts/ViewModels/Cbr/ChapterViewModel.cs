@@ -25,7 +25,7 @@ namespace Allgregator.Sts.ViewModels.Cbr {
             IRegionManager regionManager,
             ZipRepositoryBase<Mined> minedRepository,
             RepositoryBase<Cured> curedRepository
-            ) : base(settings, eventAggregator) {
+            ) : base(eventAggregator, settings) {
             OreService = oreService;
             this.regionManager = regionManager;
             this.minedRepository = minedRepository;

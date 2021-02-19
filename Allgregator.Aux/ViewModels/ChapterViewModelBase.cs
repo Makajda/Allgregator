@@ -14,8 +14,8 @@ namespace Allgregator.Aux.ViewModels {
         protected string chapterId;
 
         public ChapterViewModelBase(
-            Settings settings,
-            IEventAggregator eventAggregator
+            IEventAggregator eventAggregator,
+            Settings settings
             ) {
             this.settings = settings;
             this.eventAggregator = eventAggregator;

@@ -23,7 +23,7 @@ namespace Allgregator.Aux.ViewModels {
             IRegionManager regionManager,
             IEventAggregator eventAggregator,
             Settings settings
-            ) : base(settings, eventAggregator) {
+            ) : base(eventAggregator, settings) {
             this.viewMain = viewMain;
             this.viewSettings = viewSettings;
             this.regionManager = regionManager;
