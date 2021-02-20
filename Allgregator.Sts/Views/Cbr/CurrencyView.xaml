@@ -3,9 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:views="clr-namespace:Allgregator.Sts.Views.Cbr"
              >
 
-    <views:CurrencyChart Terms="{Binding Data.Mined.Terms}"
-                         Cured="{Binding Data.Cured}"/>
+    <DockPanel>
+        <ScrollViewer DockPanel.Dock="Top" HorizontalAlignment="Stretch"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="currenciesControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="1" Columns="{Binding Items.Count, ElementName=currenciesControl}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <ScrollViewer x:Name="scroll" SizeChanged="Scroll_SizeChanged"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <Canvas x:Name="canvas"/>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

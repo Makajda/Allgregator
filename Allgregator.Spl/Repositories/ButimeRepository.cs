@@ -7,9 +7,9 @@ namespace Allgregator.Spl.Repositories {
         protected override Mined CreateDefault(int id = 0) {
             var result = new Mined {
                 Butasks = new Obsefy<Butask> {
-                    new Butask { Name = "One" },
-                    new Butask { Name = "Two" },
-                    new Butask { Name = "Three" },
+                    new Butask { Name = "Task1" },
+                    new Butask { Name = "Task2" },
+                    new Butask { Name = "Task3" },
                 }
             };
             return result;
