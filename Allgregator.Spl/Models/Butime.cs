@@ -9,6 +9,12 @@ using System.Windows.Media;
 
 namespace Allgregator.Spl.Models {
     public class Mined : BindableBase, IWatchSave {
+        private DateTimeOffset lastWork;
+        public DateTimeOffset LastWork {
+            get => lastWork;
+            set => SetProperty(ref lastWork, value);
+        }
+
         private Obsefy<Butask> butasks;
         public Obsefy<Butask> Butasks {
             get => butasks;

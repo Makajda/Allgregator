@@ -84,18 +84,15 @@
                                 Height="{StaticResource Menu.Height}"
                                 Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
                             <DockPanel>
-                                <TextBlock DockPanel.Dock="Top"
-                                           HorizontalAlignment="Center"
-                                           Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
-                                <ContentPresenter DockPanel.Dock="Bottom"
-                                                  Content="{TemplateBinding Content}"
-                                                  HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Data.Title}" 
-                                           FontSize="16" 
-                                           TextTrimming="WordEllipsis"
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center" 
-                                           Margin="5,0,5,0"/>
+                                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="{Binding Data.Mined.LastRetrieve, Converter={StaticResource TodayConverter}}"/>
+                                <ContentPresenter DockPanel.Dock="Bottom" Content="{TemplateBinding Content}" HorizontalAlignment="Center"/>
+                                <TextBlock
+                                    Text="{Binding Data.Title}"
+                                    FontSize="16" 
+                                    TextTrimming="WordEllipsis"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Margin="5,0,5,0"/>
                             </DockPanel>
                         </Button>
 
@@ -142,17 +139,17 @@
                         common:Shaatt.Shape="Rect" Width="{StaticResource Menu.Width}" Height="{StaticResource Menu.Height}"
                         VerticalAlignment="Top" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
-                        <Grid>
-                            <TextBlock Text="{Binding Data.Title}" 
-                                           FontSize="16" 
-                                           TextTrimming="WordEllipsis"
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center" 
-                                           Margin="5,0,5,0"/>
-                            <ContentPresenter
-                                Margin="0,0,0,5"
-                                Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-                        </Grid>
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="{Binding Data.Mined.LastWork, Converter={StaticResource TodayConverter}}"/>
+                            <ContentPresenter DockPanel.Dock="Bottom" Content="{TemplateBinding Content}" HorizontalAlignment="Center"/>
+                            <TextBlock
+                                Text="{Binding Data.Title}" 
+                                FontSize="16" 
+                                TextTrimming="WordEllipsis"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center" 
+                                Margin="5,0,5,0"/>
+                        </DockPanel>
                     </Button>
                 </ControlTemplate>
             </Setter.Value>

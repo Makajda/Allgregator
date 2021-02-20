@@ -37,6 +37,7 @@ namespace Allgregator.Spl.ViewModels {
                 butime.Value += value;
             }
 
+            Data.Mined.LastWork = newDate;
             Data.Mined.IsNeedToSave = true;
             butask.Recalc();
             Data.Mined.RecalcMax();
