@@ -1,9 +1,10 @@
 ﻿double goldenRatio = 1.618033988749894848;
 this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
-добавить
-удалить
+добавить, планировщик, запускать через
+
+ScrollView ItemsControl with template for each task
 переименовать
-переупорядочить
 color
-планировщик, запускать через
+удалить
+переупорядочить
