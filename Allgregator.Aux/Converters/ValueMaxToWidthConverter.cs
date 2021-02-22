@@ -4,13 +4,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public sealed class ValueMaxToHeightConverter : IMultiValueConverter {
+    public sealed class ValueMaxToWidthConverter : IMultiValueConverter {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
             if (values.Length > 2) {
                 if (values[0] is int max && max != 0) {
                     if (values[1] is int value) {
-                        if (values[2] is Grid grid && grid.RowDefinitions.Count > 0) {
-                            return grid.RowDefinitions[0].ActualHeight * value / max;
+                        if (values[2] is Grid grid && grid.ColumnDefinitions.Count > 0) {
+                            return grid.ColumnDefinitions[0].ActualWidth * value / max;
                         }
                     }
                 }

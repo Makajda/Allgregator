@@ -12,7 +12,8 @@ namespace Allgregator.Aux.Common {
         TopRight,
         BottomRight,
         BottomLeft,
-        TopCap
+        CapTop,
+        CapLeft
     }
 
     public class ButtonShaatt : Button {
@@ -72,10 +73,15 @@ namespace Allgregator.Aux.Common {
                         new LineSegment(new Point(size, size), true),
                         new LineSegment(new Point(0, size), true)
                     }, true) }),
-                Shapes.TopCap => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
+                Shapes.CapTop => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
                         new ArcSegment(new Point(size, 0), new Size(size, size), 0, false, SweepDirection.Clockwise, true),
                         new LineSegment(new Point(size, size), true),
                         new LineSegment(new Point(0, size), true)
+                    }, true) }),
+                Shapes.CapLeft => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
+                        new ArcSegment(new Point(0, size), new Size(size, size), 0, false, SweepDirection.Counterclockwise, true),
+                        new LineSegment(new Point(size, size), true),
+                        new LineSegment(new Point(size, 0), true)
                     }, true) }),
                 _ => new RectangleGeometry() { Rect = new Rect(0, 0, 1, 1) }
             };

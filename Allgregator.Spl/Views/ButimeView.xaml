@@ -9,63 +9,95 @@
              >
 
     <UserControl.Resources>
-        <converters:ValueMaxToHeightConverter x:Key="ValueMaxToHeightConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BooleanNotToVisibilityConverter x:Key="BooleanNotToVisibilityConverter"/>
+        <converters:ValueMaxToWidthConverter x:Key="ValueMaxToWidthConverter"/>
         <converters:MinutesToTextConverter x:Key="MinutesToTextConverter"/>
 
-        <Style x:Key="ctrlButtonStyle" TargetType="Button">
-            <Setter Property="Grid.Row" Value="1"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Margin" Value="1"/>
-            <Setter Property="common:Shaatt.Shape" Value="Rect"/>
+        <Style x:Key="nameStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <Style x:Key="valuesStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="nameValuesStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <DataTemplate x:Key="ButaskItemTemplate">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+                <Grid Visibility="{Binding DataContext.Data.IsSettings, ElementName=rootElement, Converter={StaticResource BooleanNotToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <Button
-                    Grid.ColumnSpan="3" common:Shaatt.Shape="TopCap" VerticalAlignment="Bottom"
-                    Background="GreenYellow" Margin="1,0,1,0" BorderThickness="0" MinHeight="50" Click="OpenButton_Click">
-                    <Button.Height>
-                        <MultiBinding Converter="{StaticResource ValueMaxToHeightConverter}">
-                            <Binding Path="DataContext.Data.Mined.MaxValue" ElementName="rootElement"/>
-                            <Binding Path="Total"/>
-                            <Binding RelativeSource="{RelativeSource AncestorType=Grid}"/>
-                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
-                        </MultiBinding>
-                    </Button.Height>
-                    <WrapPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" Style="{StaticResource valuesStyle}"/>
-                        <TextBlock Text="{Binding Now, Converter={StaticResource MinutesToTextConverter}, StringFormat={}now {0}}" Style="{StaticResource valuesStyle}"/>
-                        <TextBlock Text="{Binding Today, Converter={StaticResource MinutesToTextConverter}, StringFormat={}today {0}}" Style="{StaticResource valuesStyle}"/>
-                        <TextBlock Text="{Binding Total, Converter={StaticResource MinutesToTextConverter}, StringFormat={}total {0}}" Style="{StaticResource valuesStyle}"/>
-                    </WrapPanel>
-                </Button>
+                    <Button common:Shaatt.Shape="Rect" Background="Transparent" Margin="0,1,0,1" BorderThickness="0" Height="99" Click="OpenButton_Click"/>
+                    <!--<Button
+                        common:Shaatt.Shape="CapLeft" HorizontalAlignment="Right"
+                        Background="GreenYellow" Margin="0,1,0,1" BorderThickness="0" Height="99" Click="OpenButton_Click">
+                        <Button.Width>
+                            <MultiBinding Converter="{StaticResource ValueMaxToWidthConverter}">
+                                <Binding Path="DataContext.Data.Mined.MaxValue" ElementName="rootElement"/>
+                                <Binding Path="Total"/>
+                                <Binding RelativeSource="{RelativeSource AncestorType=Grid}"/>
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+                            </MultiBinding>
+                        </Button.Width>
+                    </Button>-->
 
-                <Button
-                    Grid.Column="0" Content="-15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
-                <Button
-                    Grid.Column="1" Content="+15" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.Add15Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
-                <Button
-                    Grid.Column="2" Content="+30" Background="GreenYellow" Style="{StaticResource ctrlButtonStyle}"
-                    Command="{Binding DataContext.Add30Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    <Grid Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.RowSpan="3" Text="{Binding Name}" Margin="30,0,10,0" Style="{StaticResource nameStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Now, Converter={StaticResource MinutesToTextConverter}}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Today, Converter={StaticResource MinutesToTextConverter}}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Total, Converter={StaticResource MinutesToTextConverter}}" Style="{StaticResource valuesStyle}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="now" Style="{StaticResource nameValuesStyle}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="today" Style="{StaticResource nameValuesStyle}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="total" Style="{StaticResource nameValuesStyle}"/>
+                    </Grid>
+
+                    <Button
+                        Grid.Column="1" Content="-15" Background="GreenYellow"
+                        common:Shaatt.Shape="Circle" Width="60" Height="60" VerticalAlignment="Center" BorderThickness="0" Margin="1"
+                        Command="{Binding DataContext.SubCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    <Button
+                        Grid.Column="2" Content="+30" Background="GreenYellow"
+                        common:Shaatt.Shape="Rect" Width="50" BorderThickness="0" Margin="1"
+                        Command="{Binding DataContext.Add30Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                </Grid>
+            
+                <!--Settings-->
+                <Grid Background="Yellow" Visibility="{Binding DataContext.Data.IsSettings, ElementName=rootElement, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Settings"/>
+                </Grid>
             </Grid>
         </DataTemplate>
 
@@ -89,14 +121,16 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
-        <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="{Binding Data.Mined.Butasks.Countfy}"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+    <Grid Margin="0,10,0,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
 
         <Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">
             <ListBox x:Name="listOpen" ItemTemplate="{StaticResource OpenItemTemplate}"/>
