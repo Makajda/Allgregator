@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using System.Text.Json.Serialization;
 
 namespace Allgregator.Aux.Models {
     public class DataBase<TMined> : BindableBase {
@@ -12,6 +13,13 @@ namespace Allgregator.Aux.Models {
         public TMined Mined {
             get => mined;
             set => SetProperty(ref mined, value);
+        }
+
+        private bool isSettings;
+        [JsonIgnore]
+        public bool IsSettings {
+            get { return isSettings; }
+            set { SetProperty(ref isSettings, value); }
         }
     }
 }

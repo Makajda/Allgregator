@@ -1,5 +1,4 @@
 ﻿using Allgregator.Aux.Models;
-using Allgregator.Aux.Repositories;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Spl.Models;
 using Allgregator.Spl.Repositories;
@@ -19,7 +18,7 @@ namespace Allgregator.Spl.ViewModels {
                 "Times",
                 Module.Name,
                 typeof(ButimeView).FullName,
-                typeof(ButimeSettingsView).FullName,
+                null,
                 repository,
                 regionManager,
                 eventAggregator,

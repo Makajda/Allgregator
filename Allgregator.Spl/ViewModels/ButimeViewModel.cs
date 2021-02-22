@@ -10,6 +10,7 @@ using System.Windows.Input;
 
 namespace Allgregator.Spl.ViewModels {
     public class ButimeViewModel : DataViewModelBase<DataBase<Mined>> {
+        //Main
         private DelegateCommand<Butask> subCommand; public ICommand SubCommand => subCommand ??= new DelegateCommand<Butask>(n => Sub(n, 15));
         private DelegateCommand<Butask> add15Command; public ICommand Add15Command => add15Command ??= new DelegateCommand<Butask>(n => Add(n, 15));
         private DelegateCommand<Butask> add30Command; public ICommand Add30Command => add30Command ??= new DelegateCommand<Butask>(n => Add(n, 30));
@@ -42,5 +43,7 @@ namespace Allgregator.Spl.ViewModels {
             butask.Recalc();
             Data.Mined.RecalcMax();
         }
+
+        //Settings
     }
 }

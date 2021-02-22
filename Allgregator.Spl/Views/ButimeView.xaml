@@ -69,6 +69,18 @@
             </Grid>
         </DataTemplate>
 
+        <!--//todo-->
+        <DataTemplate x:Key="SettingsItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding Name}"/>
+                <TextBox Text="{Binding Color}"/>
+                <TextBlock Text="{Binding Total}"/>
+                <Button Content="Del"/>
+                <Button Content="Up"/>
+                <Button Content="Down"/>
+            </StackPanel>
+        </DataTemplate>
+
         <DataTemplate x:Key="OpenItemTemplate">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Date}" Width="100" FontSize="14" Margin="10"/>

@@ -15,7 +15,6 @@ namespace Allgregator.Spl {
 
         public void RegisterTypes(IContainerRegistry containerRegistry) {
             containerRegistry.RegisterForNavigation<ButimeChapterView>(typeof(ButimeChapterView).FullName);
-            containerRegistry.RegisterForNavigation<ButimeSettingsView>(typeof(ButimeSettingsView).FullName);
             containerRegistry.RegisterForNavigation<ButimeView>(typeof(ButimeView).FullName);
         }
     }

@@ -66,9 +66,9 @@ namespace Allgregator.Aux.ViewModels {
             }
         }
         private void ViewActivate() {
-            regionManager.RequestNavigate(Given.MainRegion, isSettings ? viewSettings : viewMain, new NavigationParameters {
-                { Given.DataParameter, Data }
-            });
+            Data.IsSettings = isSettings;
+            if (!isSettings || viewSettings != null)
+                regionManager.RequestNavigate(Given.MainRegion, isSettings ? viewSettings : viewMain, new NavigationParameters { { Given.DataParameter, Data } });
         }
     }
 }
