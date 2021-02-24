@@ -3,8 +3,9 @@ this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 
 добавить, планировщик, запускать через
 
-ScrollView ItemsControl with template for each task
+ScrollView проверить
+при переключении с rss на isSettings не переключается
 переименовать
-color
+color выбор в прямоугольнике охотника
+упорядочить треугольниками
 удалить
-переупорядочить

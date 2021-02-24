@@ -10,7 +10,7 @@ namespace Allgregator.Aux.Converters {
                 if (values[0] is int max && max != 0) {
                     if (values[1] is int value) {
                         if (values[2] is Grid grid && grid.ColumnDefinitions.Count > 0) {
-                            return grid.ColumnDefinitions[0].ActualWidth * value / max;
+                            return grid.ActualWidth * value / max;
                         }
                     }
                 }
