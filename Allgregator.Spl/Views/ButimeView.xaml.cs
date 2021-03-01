@@ -9,9 +9,12 @@ namespace Allgregator.Spl.Views {
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e) {
-            popupOpen.IsOpen = true;
             listOpen.ItemsSource = null;
-            listOpen.ItemsSource = ((sender as FrameworkElement)?.DataContext as Butask)?.Butimes;
+            var source = ((sender as FrameworkElement)?.DataContext as Butask)?.Butimes;
+            if (source != null && source.Count > 0) {
+                popupOpen.IsOpen = true;
+                listOpen.ItemsSource = source;
+            }
         }
     }
 }

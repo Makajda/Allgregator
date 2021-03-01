@@ -16,6 +16,13 @@ namespace Allgregator.Spl.ViewModels {
         private void Sub(Butask butask, int value) {
             if (butask != null && butask.Now >= value) {
                 Add(butask, -value);
+
+                var i = 0;
+                while (i < butask.Butimes.Count)
+                    if (butask.Butimes[i].Value != 0)
+                        i++;
+                    else
+                        butask.Butimes.RemoveAt(i);
             }
         }
 

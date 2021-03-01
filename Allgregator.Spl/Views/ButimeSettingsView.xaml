@@ -9,13 +9,6 @@
              >
 
     <UserControl.Resources>
-        <Style x:Key="clrStyle" TargetType="Button">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="common:Shaatt.Shape" Value="Rect"/>
-        </Style>
-        
         <DataTemplate x:Key="ButaskItemTemplate">
             <Grid Height="62" Margin="0,1,0,0">
                 <Grid.ColumnDefinitions>
@@ -26,37 +19,38 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Text="{Binding Name}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
-                <StackPanel Grid.Column="1" Margin="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Button common:Shaatt.Shape="Rect" Background="Red" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Orange" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Yellow" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Green" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Blue" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="DarkBlue" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Violet" Style="{StaticResource clrStyle}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button common:Shaatt.Shape="Rect" Background="Purple" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Orchid" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="YellowGreen" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="IndianRed" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Brown" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Cyan" Style="{StaticResource clrStyle}"/>
-                        <Button common:Shaatt.Shape="Rect" Background="Wheat" Style="{StaticResource clrStyle}"/>
-                    </StackPanel>
-                </StackPanel>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
 
-                <Button Grid.Column="2" common:Shaatt.Shape="Rect" Content="up" Margin="1" Padding="10"/>
-                <Button Grid.Column="3" common:Shaatt.Shape="Rect" Content="dwn" Margin="1" Padding="10"/>
-                <Button Grid.Column="4" common:Shaatt.Shape="Circle" Content="del" Margin="1" Padding="10"/>
+                <Button Grid.Column="1" common:Shaatt.Shape="Rect" Width="60" Margin="1" Padding="10">
+                    <Button.Background>
+                        <SolidColorBrush Color="{Binding Color}"/>
+                    </Button.Background>
+                </Button>
+                <Button Grid.Column="2" common:Shaatt.Shape="TriTop" Height="50" Width="60" Margin="1"/>
+                <Button Grid.Column="3" common:Shaatt.Shape="TriBottom" Height="50" Width="60" Margin="-25,0,0,0"/>
+                <Button Grid.Column="4" common:Shaatt.Shape="Circle" Content="del" Width="60" Margin="1"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Margin="0,10,0,0">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="New task" Margin="40,20,0,5"/>
+        <TextBox Grid.Row="1" Text="{Binding Name}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
+        <Button Grid.Row="1" Grid.Column="1" common:Shaatt.Shape="Rect" Content="+" Width="60"/>
+        <Button Grid.Row="1" Grid.Column="2" common:Shaatt.Shape="Rect" Content="Scd" Width="60" Margin="10,0,0,0"/>
+        
+        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto" Margin="0,30,0,0">
             <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

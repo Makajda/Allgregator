@@ -59,7 +59,7 @@ namespace Allgregator.Spl.Models {
             set => SetProperty(ref name, value);
         }
 
-        private Color color;
+        private Color color = Colors.GreenYellow;
         public Color Color {
             get => color;
             set => SetProperty(ref color, value);

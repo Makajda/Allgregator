@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              x:Name="rootElement"
@@ -11,6 +12,7 @@
     <UserControl.Resources>
         <converters:ValueMaxToWidthConverter x:Key="ValueMaxToWidthConverter"/>
         <converters:MinutesToTextConverter x:Key="MinutesToTextConverter"/>
+        <converters:IntNqToVisibilityHiddenConverter x:Key="IntNqToVisibilityHiddenConverter"/>
 
         <Style x:Key="nameStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
@@ -30,8 +32,19 @@
             <Setter Property="Margin" Value="10,0,10,0"/>
         </Style>
 
+        <Style x:Key="ctrButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CommandParameter" Value="{Binding}"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <!--System.Windows.Data Error: 2 : Cannot find governing FrameworkElement or FrameworkContentElement for target element-->
+                    <SolidColorBrush Color="{Binding Color}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate x:Key="ButaskItemTemplate">
-            <Grid Height="66" Margin="0,1,0,0">
+            <Grid Height="66" Margin="0,1,0,1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
@@ -56,7 +69,10 @@
 
                         <Path
                             Grid.RowSpan="3" Grid.ColumnSpan="3" Stretch="Fill" HorizontalAlignment="Right"
-                            Data="M0,0 A1,1 1 0 0 0,1 H1 V0 Z" Fill="GreenYellow">
+                            Data="M0,0 A1,1 1 0 0 0,1 H1 V0 Z">
+                            <Path.Fill>
+                                <SolidColorBrush Color="{Binding Color}"/>
+                            </Path.Fill>
                             <Path.Width>
                                 <MultiBinding Converter="{StaticResource ValueMaxToWidthConverter}">
                                     <Binding Path="DataContext.Data.Mined.MaxValue" ElementName="rootElement"/>
@@ -78,19 +94,25 @@
                 </Button>
 
                 <Button
-                    Grid.Column="1" Content="-15" Background="GreenYellow"
-                    common:Shaatt.Shape="Circle" Width="60" Height="60" VerticalAlignment="Center" BorderThickness="0"
-                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    Grid.Column="1" Content="+30" common:Shaatt.Shape="Rect" Width="60" Margin="1,0,0,0"
+                    Command="{Binding DataContext.Add30Command, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}"/>
                 <Button
-                    Grid.Column="2" Content="+30" Background="GreenYellow"
-                    common:Shaatt.Shape="Rect" Width="50" BorderThickness="0"
-                    Command="{Binding DataContext.Add30Command, ElementName=rootElement}" CommandParameter="{Binding}"/>
+                    Grid.Column="2" Content="-15" common:Shaatt.Shape="Circle" Width="50" Height="50" VerticalAlignment="Center"
+                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}">
+                    <Button.Visibility>
+                        <Binding Path="Now" Converter="{StaticResource IntNqToVisibilityHiddenConverter}">
+                            <Binding.ConverterParameter>
+                                <sys:Int32>0</sys:Int32>
+                            </Binding.ConverterParameter>
+                        </Binding>
+                    </Button.Visibility>
+                </Button>
             </Grid>
         </DataTemplate>
 
         <DataTemplate x:Key="OpenItemTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Date}" Width="100" FontSize="14" Margin="10"/>
+                <TextBlock Text="{Binding Date, StringFormat={}{0:dd.MM HH:mm}}" Width="100" FontSize="14" Margin="10"/>
                 <TextBlock Text="{Binding Value, Converter={StaticResource MinutesToTextConverter}}" Width="100" FontSize="14" TextAlignment="Right" Margin="10"/>
             </StackPanel>
         </DataTemplate>
