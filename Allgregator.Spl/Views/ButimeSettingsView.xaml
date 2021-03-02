@@ -12,7 +12,6 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="60"/>
             <Setter Property="Height" Value="60"/>
-            <Setter Property="Margin" Value="1,0,1,0"/>
         </Style>
 
         <Style x:Key="tplTextBox" TargetType="TextBox">
@@ -32,13 +31,13 @@
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Style="{StaticResource tplTextBox}"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBox Text="{Binding Value}" TextAlignment="Right" Width="80" Style="{StaticResource tplTextBox}"/>
-                    <Button common:Shaatt.Shape="Rect" Style="{StaticResource tplButton}" Margin="5,0,5,0">
+                    <Button common:Shaatt.Shape="Circle" Style="{StaticResource tplButton}" Margin="6,0,0,0">
                         <Button.Background>
                             <SolidColorBrush Color="{Binding Color}"/>
                         </Button.Background>
                     </Button>
                     <Button common:Shaatt.Shape="TriTop" Style="{StaticResource tplButton}"/>
-                    <Button common:Shaatt.Shape="TriBottom" Height="50" Margin="-25,0,0,0" Style="{StaticResource tplButton}"/>
+                    <Button common:Shaatt.Shape="TriBottom" Margin="-25,0,0,0" Style="{StaticResource tplButton}"/>
                     <Button common:Shaatt.Shape="Circle" Content="del" Style="{StaticResource tplButton}"/>
                 </StackPanel>
             </Grid>
