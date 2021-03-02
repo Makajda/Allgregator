@@ -8,7 +8,7 @@ using Prism.Regions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Spl.ViewModels {
-    internal class ButimeChapterViewModel : SimpleChapterViewModelBase<Mined> {
+    internal class ButimeChapterViewModel : SimpleChapterViewModelBase<Bumined> {
         public ButimeChapterViewModel(
             ButimeRepository repository,
             IRegionManager regionManager,

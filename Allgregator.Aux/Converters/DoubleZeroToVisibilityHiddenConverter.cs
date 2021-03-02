@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace Allgregator.Aux.Converters {
-    public sealed class IntNqToVisibilityHiddenConverter : IValueConverter {
+    public sealed class DoubleZeroToVisibilityHiddenConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (int)value == (int)parameter ? Visibility.Hidden : Visibility.Visible;
+            return Math.Abs((double)value) < double.Epsilon ? Visibility.Hidden : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

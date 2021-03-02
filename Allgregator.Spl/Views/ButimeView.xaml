@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
              xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              x:Name="rootElement"
@@ -12,7 +11,7 @@
     <UserControl.Resources>
         <converters:ValueMaxToWidthConverter x:Key="ValueMaxToWidthConverter"/>
         <converters:MinutesToTextConverter x:Key="MinutesToTextConverter"/>
-        <converters:IntNqToVisibilityHiddenConverter x:Key="IntNqToVisibilityHiddenConverter"/>
+        <converters:DoubleZeroToVisibilityHiddenConverter x:Key="DoubleZeroToVisibilityHiddenConverter"/>
 
         <Style x:Key="nameStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
@@ -33,6 +32,7 @@
         </Style>
 
         <Style x:Key="ctrButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="CommandParameter" Value="{Binding}"/>
             <Setter Property="Background">
@@ -94,19 +94,12 @@
                 </Button>
 
                 <Button
-                    Grid.Column="1" Content="+30" common:Shaatt.Shape="Rect" Width="60" Margin="1,0,0,0"
-                    Command="{Binding DataContext.Add30Command, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}"/>
+                    Grid.Column="1" Content="{Binding Value}" common:Shaatt.Shape="Rect" Width="60" Margin="1,0,0,0"
+                    Command="{Binding DataContext.AddCommand, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}"/>
                 <Button
-                    Grid.Column="2" Content="-15" common:Shaatt.Shape="Circle" Width="50" Height="50" VerticalAlignment="Center"
-                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}">
-                    <Button.Visibility>
-                        <Binding Path="Now" Converter="{StaticResource IntNqToVisibilityHiddenConverter}">
-                            <Binding.ConverterParameter>
-                                <sys:Int32>0</sys:Int32>
-                            </Binding.ConverterParameter>
-                        </Binding>
-                    </Button.Visibility>
-                </Button>
+                    Grid.Column="2" Content="-" common:Shaatt.Shape="Circle" Width="50" Height="50" VerticalAlignment="Center"
+                    Command="{Binding DataContext.SubCommand, ElementName=rootElement}" Style="{StaticResource ctrButtonStyle}"
+                    Visibility="{Binding Now, Converter={StaticResource DoubleZeroToVisibilityHiddenConverter}}"/>
             </Grid>
         </DataTemplate>
 

@@ -17,18 +17,20 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
 
-                <Button Grid.Column="1" common:Shaatt.Shape="Rect" Width="60" Margin="1" Padding="10">
+                <TextBox Grid.Column="1" Text="{Binding Value}" Width="90" Margin="1" Padding="8" VerticalAlignment="Center"/>
+                <Button Grid.Column="2" common:Shaatt.Shape="Rect" Width="60" Margin="1" Padding="10">
                     <Button.Background>
                         <SolidColorBrush Color="{Binding Color}"/>
                     </Button.Background>
                 </Button>
-                <Button Grid.Column="2" common:Shaatt.Shape="TriTop" Height="50" Width="60" Margin="1"/>
-                <Button Grid.Column="3" common:Shaatt.Shape="TriBottom" Height="50" Width="60" Margin="-25,0,0,0"/>
-                <Button Grid.Column="4" common:Shaatt.Shape="Circle" Content="del" Width="60" Margin="1"/>
+                <Button Grid.Column="3" common:Shaatt.Shape="TriTop" Height="50" Width="60" Margin="1"/>
+                <Button Grid.Column="4" common:Shaatt.Shape="TriBottom" Height="50" Width="60" Margin="-25,0,0,0"/>
+                <Button Grid.Column="5" common:Shaatt.Shape="Circle" Content="del" Width="60" Margin="1"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>

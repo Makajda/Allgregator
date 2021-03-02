@@ -9,44 +9,50 @@ using System.Linq;
 using System.Windows.Input;
 
 namespace Allgregator.Spl.ViewModels {
-    public class ButimeViewModel : DataViewModelBase<DataBase<Mined>> {
-        private DelegateCommand<Butask> subCommand; public ICommand SubCommand => subCommand ??= new DelegateCommand<Butask>(n => Sub(n, 15));
-        private DelegateCommand<Butask> add30Command; public ICommand Add30Command => add30Command ??= new DelegateCommand<Butask>(n => Add(n, 30));
+    public class ButimeViewModel : DataViewModelBase<DataBase<Bumined>> {
+        private DelegateCommand<Butask> subCommand; public ICommand SubCommand => subCommand ??= new DelegateCommand<Butask>(Sub);
+        private DelegateCommand<Butask> addCommand; public ICommand AddCommand => addCommand ??= new DelegateCommand<Butask>(Add);
 
-        private void Sub(Butask butask, int value) {
-            if (butask != null && butask.Now >= value) {
-                Add(butask, -value);
-
-                var i = 0;
-                while (i < butask.Butimes.Count)
-                    if (butask.Butimes[i].Value != 0)
-                        i++;
-                    else
-                        butask.Butimes.RemoveAt(i);
+        private void Sub(Butask butask) {
+            if (butask != null && butask.Now > double.Epsilon) {
+                var butime = Change(butask, -butask.Value / 2d);
+                if (butime != null && butime.Value < double.Epsilon) {
+                    butask.Butimes.Remove(butime);
+                }
             }
         }
 
-        private void Add(Butask butask, int value) {
-            if (butask == null) return;//<-----------------------return
+        private void Add(Butask butask) {
+            Change(butask, butask.Value);
+        }
+
+        private Butime Change(Butask butask, double value) {
+            if (butask == null) return null;//<-----------------------return
 
             var newDate = DateTimeOffset.Now;
             Butime butime = null;
             if (butask.Butimes == null)
                 butask.Butimes = new List<Butime>();
             else
-                butime = butask.Butimes.LastOrDefault(n => Math.Abs((newDate - n.Date).TotalSeconds) < Givenloc.NewDateInterval * 60);
+                butime = butask.Butimes.LastOrDefault(n => Givenloc.IsIncludedInTheInterval(newDate, n.Date));
 
-            if (butime == null)
-                butask.Butimes.Add(new Butime { Date = newDate, Value = value });
+            if (butime == null) {
+                if (value > double.Epsilon) {
+                    butime = new Butime { Date = newDate, Value = value };
+                    butask.Butimes.Add(butime);
+                }
+            }
             else {
                 butime.Date = newDate;
-                butime.Value += value;
+                var newValue = butime.Value + value;
+                butime.Value = newValue > double.Epsilon ? newValue : 0d;
             }
 
             Data.Mined.LastWork = newDate;
             Data.Mined.IsNeedToSave = true;
             butask.Recalc();
             Data.Mined.RecalcMax();
+            return butime;
         }
     }
 }
