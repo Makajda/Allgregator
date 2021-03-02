@@ -3,9 +3,9 @@ this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 xmlns:sys="clr-namespace:System;assembly=netstandard"
 
 
-вверху добавить, планировщик=запускать через
 добавлять всегда первой
 переименовать
-color выбор в попап
+color попап
 упорядочить
 удалить
+scheduler

@@ -4,33 +4,43 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
-             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              x:Name="rootElement"
              >
 
     <UserControl.Resources>
+        <Style x:Key="tplButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="1,0,1,0"/>
+        </Style>
+
+        <Style x:Key="tplTextBox" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+
         <DataTemplate x:Key="ButaskItemTemplate">
-            <Grid Height="62" Margin="0,1,0,0">
+            <Grid Height="60" Margin="0,1,0,1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
-
-                <TextBox Grid.Column="1" Text="{Binding Value}" Width="90" Margin="1" Padding="8" VerticalAlignment="Center"/>
-                <Button Grid.Column="2" common:Shaatt.Shape="Rect" Width="60" Margin="1" Padding="10">
-                    <Button.Background>
-                        <SolidColorBrush Color="{Binding Color}"/>
-                    </Button.Background>
-                </Button>
-                <Button Grid.Column="3" common:Shaatt.Shape="TriTop" Height="50" Width="60" Margin="1"/>
-                <Button Grid.Column="4" common:Shaatt.Shape="TriBottom" Height="50" Width="60" Margin="-25,0,0,0"/>
-                <Button Grid.Column="5" common:Shaatt.Shape="Circle" Content="del" Width="60" Margin="1"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Style="{StaticResource tplTextBox}"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBox Text="{Binding Value}" TextAlignment="Right" Width="80" Style="{StaticResource tplTextBox}"/>
+                    <Button common:Shaatt.Shape="Rect" Style="{StaticResource tplButton}" Margin="5,0,5,0">
+                        <Button.Background>
+                            <SolidColorBrush Color="{Binding Color}"/>
+                        </Button.Background>
+                    </Button>
+                    <Button common:Shaatt.Shape="TriTop" Style="{StaticResource tplButton}"/>
+                    <Button common:Shaatt.Shape="TriBottom" Height="50" Margin="-25,0,0,0" Style="{StaticResource tplButton}"/>
+                    <Button common:Shaatt.Shape="Circle" Content="del" Style="{StaticResource tplButton}"/>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -40,19 +50,18 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="New task" Margin="40,20,0,5"/>
-        <TextBox Grid.Row="1" Text="{Binding Name}" Margin="30,0,10,0" VerticalAlignment="Center" Padding="8" FontSize="16" BorderThickness="0"/>
-        <Button Grid.Row="1" Grid.Column="1" common:Shaatt.Shape="Rect" Content="+" Width="60"/>
-        <Button Grid.Row="1" Grid.Column="2" common:Shaatt.Shape="Rect" Content="Scd" Width="60" Margin="10,0,0,0"/>
-        
-        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto" Margin="0,30,0,0">
+        <TextBox Grid.Row="1" Text="{Binding Name}" Margin="30,0,10,0" Style="{StaticResource tplTextBox}"/>
+        <Button Grid.Row="1" Grid.Column="1" common:Shaatt.Shape="Rect" BorderThickness="0" Content="+" Width="60" Margin="0,0,30,0"/>
+
+        <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto" Margin="30">
             <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -61,6 +70,13 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
+
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <TextBlock Text="Launch every" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Name}" Margin="10,0,10,0" Width="99" Style="{StaticResource tplTextBox}"/>
+            <Button DockPanel.Dock="Right" common:Shaatt.Shape="Rect" Content="On" Width="60" Margin="10,0,0,0" BorderThickness="0"/>
+            <TextBlock DockPanel.Dock="Right" Text="minutes" VerticalAlignment="Center"/>
+        </DockPanel>
 
         <!--//todo<Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">
             <ListBox x:Name="listOpen" ItemTemplate="{StaticResource OpenItemTemplate}"/>
