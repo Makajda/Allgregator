@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Prism.DryIoc" Version="8.0.0.1909" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="TaskScheduler" Version="2.9.1" />
   </ItemGroup>
 
   <ItemGroup>

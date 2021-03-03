@@ -4,10 +4,13 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:common="clr-namespace:Allgregator.Aux.Common;assembly=Allgregator.Aux"
+             xmlns:converters="clr-namespace:Allgregator.Aux.Converters;assembly=Allgregator.Aux"
              x:Name="rootElement"
              >
 
     <UserControl.Resources>
+        <converters:BooleanToObjectConverter x:Key="ScheduleContentConverter" True="On" False="Off"/>
+
         <Style x:Key="tplButton" TargetType="Button">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="60"/>
@@ -57,8 +60,10 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="New task" Margin="40,20,0,5"/>
-        <TextBox Grid.Row="1" Text="{Binding Name}" Margin="30,0,10,0" Style="{StaticResource tplTextBox}"/>
-        <Button Grid.Row="1" Grid.Column="1" common:Shaatt.Shape="Rect" BorderThickness="0" Content="+" Width="60" Margin="0,0,30,0"/>
+        <TextBox Grid.Row="1" Margin="30,0,10,0" Style="{StaticResource tplTextBox}" x:Name="addNameBox"/>
+        <Button
+            Grid.Row="1" Grid.Column="1" common:Shaatt.Shape="Rect" BorderThickness="0" Content="+" Width="60"
+            Margin="0,0,30,0" Command="{Binding AddCommand}" CommandParameter="{Binding Text, ElementName=addNameBox}"/>
 
         <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto" Margin="30">
             <ItemsControl ItemsSource="{Binding Data.Mined.Butasks}" ItemTemplate="{StaticResource ButaskItemTemplate}">
@@ -70,12 +75,16 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <DockPanel Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Launch every" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding Name}" Margin="10,0,10,0" Width="99" Style="{StaticResource tplTextBox}"/>
-            <Button DockPanel.Dock="Right" common:Shaatt.Shape="Rect" Content="On" Width="60" Margin="10,0,0,0" BorderThickness="0"/>
-            <TextBlock DockPanel.Dock="Right" Text="minutes" VerticalAlignment="Center"/>
-        </DockPanel>
+            <TextBox
+                Text="{Binding ScheduleInterval, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
+                TextAlignment="Right" Width="99" Style="{StaticResource tplTextBox}"/>
+            <TextBlock Text="minutes" VerticalAlignment="Center"/>
+            <Button
+                common:Shaatt.Shape="Rect" Content="{Binding ScheduleOn, Converter={StaticResource ScheduleContentConverter}}"
+                Width="60" BorderThickness="0" Margin="10,0,0,0" Command="{Binding ScheduleCommand}"/>
+        </StackPanel>
 
         <!--//todo<Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">
             <ListBox x:Name="listOpen" ItemTemplate="{StaticResource OpenItemTemplate}"/>
