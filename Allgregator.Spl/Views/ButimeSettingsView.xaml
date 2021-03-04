@@ -9,7 +9,8 @@
              >
 
     <UserControl.Resources>
-        <converters:BooleanToObjectConverter x:Key="ScheduleContentConverter" True="On" False="Off"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BooleanToObjectConverter x:Key="ScheduleContentConverter" True="Turn off" False="Schedule is off"/>
 
         <Style x:Key="tplButton" TargetType="Button">
             <Setter Property="BorderThickness" Value="0"/>
@@ -76,14 +77,16 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Launch every" VerticalAlignment="Center"/>
-            <TextBox
-                Text="{Binding ScheduleInterval, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"
-                TextAlignment="Right" Width="99" Style="{StaticResource tplTextBox}"/>
-            <TextBlock Text="minutes" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding ScheduleOn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="Launch every" VerticalAlignment="Center"/>
+                <TextBox
+                    Text="{Binding ScheduleInterval}" Margin="10,0,10,0"
+                    TextAlignment="Right" Width="99" Style="{StaticResource tplTextBox}"/>
+                <TextBlock Text="minutes" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            </StackPanel>
             <Button
-                common:Shaatt.Shape="Rect" Content="{Binding ScheduleOn, Converter={StaticResource ScheduleContentConverter}}"
-                Width="60" BorderThickness="0" Margin="10,0,0,0" Command="{Binding ScheduleCommand}"/>
+                common:Shaatt.Shape="Circle" Content="{Binding ScheduleOn, Converter={StaticResource ScheduleContentConverter}}"
+                BorderThickness="0" Padding="20" Command="{Binding ScheduleCommand}"/>
         </StackPanel>
 
         <!--//todo<Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">

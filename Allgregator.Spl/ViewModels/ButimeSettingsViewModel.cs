@@ -13,13 +13,16 @@ namespace Allgregator.Spl.ViewModels {
     public class ButimeSettingsViewModel : DataViewModelBase<DataBase<Bumined>> {
         private const string taskName = "AllgregatorButime";
         public ButimeSettingsViewModel() {
-            var task = GetTask();
-            if (task != null) {
-                ScheduleOn = task.Definition.Settings.Enabled;
-                ScheduleOn = task.Enabled;
-                var trigger = GetTrigger(task);
-                if (trigger != null)
+            try {
+                var task = TaskService.Instance.RootFolder.Tasks.FirstOrDefault(n => n.Name == taskName);
+                var trigger = task?.Definition.Triggers.FirstOrDefault(n => n.GetType() == typeof(TimeTrigger)) as TimeTrigger;
+                if (trigger != null) {
+                    ScheduleOn = task.Definition.Settings.Enabled;
                     ScheduleInterval = trigger.Repetition.Interval.TotalMinutes;
+                }
+            }
+            catch (Exception exception) {
+                MessageBox.Show(exception.Message, "Schedule get error");
             }
         }
 
@@ -32,28 +35,18 @@ namespace Allgregator.Spl.ViewModels {
             set { SetProperty(ref scheduleOn, value); }
         }
 
-        private double scheduleInterval;
+        private double scheduleInterval = 60d;
         public double ScheduleInterval {
             get { return scheduleInterval; }
-            set { SetProperty(ref scheduleInterval, value, OnScheduleIntervalChanged); }
-        }
-
-        private Task GetTask() {
-            var task = TaskService.Instance.RootFolder.Tasks.FirstOrDefault(n => n.Name == taskName);
-            return task;
-        }
-
-        private TimeTrigger GetTrigger(Task task) {
-            var trigger = task?.Definition.Triggers.FirstOrDefault(n => n.GetType() == typeof(TimeTrigger)) as TimeTrigger;
-            return trigger;
-        }
-
-        private void OnScheduleIntervalChanged() {
-            if (ScheduleOn) {
-                ScheduleOn = false;
-                var task = GetTask();
-                if (task != null)
-                    task.Enabled = false;
+            set {
+                try {
+                    if (value <= 0) throw new Exception("interval > 0");//todo validation
+                    ScheduleRegister(ScheduleOn, value);
+                    SetProperty(ref scheduleInterval, value);
+                }
+                catch (Exception exception) {
+                    MessageBox.Show(exception.Message, "Schedule interval error");
+                }
             }
         }
 
@@ -65,47 +58,22 @@ namespace Allgregator.Spl.ViewModels {
 
         private void Schedule() {
             try {
-                if (ScheduleOn) {
-                    var task = GetTask();
-                    if (task != null) {
-                        task.Enabled = false;
-                    }
-
-                    ScheduleOn = false;
-                }
-                else {
-                    if (ScheduleInterval > 0) {
-                        var task = GetTask();
-                        if (task == null) {
-                            CreateTask();
-                        }
-                        else {
-                            task.Enabled = true;
-                            var trigger = GetTrigger(task);
-                            if (trigger == null) {
-                                TaskService.Instance.RootFolder.DeleteTask(task.Name);
-                                CreateTask();
-                            }
-                            else
-                                trigger.Repetition.Interval = TimeSpan.FromMinutes(ScheduleInterval);
-                        }
-
-                        ScheduleOn = true;
-                    }
-                }
+                ScheduleRegister(!ScheduleOn, ScheduleInterval);
+                ScheduleOn = !ScheduleOn;
             }
             catch (Exception exception) {
                 MessageBox.Show(exception.Message, "Schedule turns error");
             }
         }
 
-        private void CreateTask() {
-            var action = new ExecAction(Process.GetCurrentProcess().MainModule.FileName);
-            var taskDefinition = TaskService.Instance.NewTask();
+        private static void ScheduleRegister(bool scheduleOn, double value) {
+            using var action = new ExecAction(Process.GetCurrentProcess().MainModule.FileName);
+            using var taskDefinition = TaskService.Instance.NewTask();
+            taskDefinition.Settings.Enabled = scheduleOn;
             taskDefinition.Actions.Add(action);
             var trigger = new TimeTrigger();
             trigger.StartBoundary = DateTime.Now;
-            trigger.Repetition.Interval = TimeSpan.FromMinutes(ScheduleInterval);
+            trigger.Repetition.Interval = TimeSpan.FromMinutes(value);
             taskDefinition.Triggers.Add(trigger);
             taskDefinition.Validate(true);
             TaskService.Instance.RootFolder.RegisterTaskDefinition(taskName, taskDefinition);
