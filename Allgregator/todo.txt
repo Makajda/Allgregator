@@ -3,9 +3,3 @@ this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
 xmlns:sys="clr-namespace:System;assembly=netstandard"
 
 
-добавлять всегда первой
-переименовать
-color попап
-упорядочить
-удалить
-scheduler

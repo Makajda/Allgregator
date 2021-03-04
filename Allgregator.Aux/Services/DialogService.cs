@@ -50,7 +50,7 @@ namespace Allgregator.Aux.Services {
             panel.Children.Add(textBlock);
         }
 
-        public void Show(IEnumerable<string> messages, Action<string> callback = null, double fontSize = 16) {
+        public void Show(IEnumerable<object> messages, Action<object> callback = null, double fontSize = 16) {
             var (popup, host) = Create();
 
             var itemsControl = new ItemsControl() {
@@ -61,10 +61,15 @@ namespace Allgregator.Aux.Services {
             host.Content = itemsControl;
 
             foreach (var message in messages) {
-                var button = new Button() {
-                    Content = message,
-                    Padding = new Thickness(20)
-                };
+                var button = new Button { BorderThickness = new Thickness(0), Margin = new Thickness(0, 0, 0, 1) };
+                if (message is Color color) {
+                    button.Background = new SolidColorBrush { Color = color };
+                    button.Height = 40d;
+                }
+                else {
+                    button.Content = message;
+                    button.Padding = new Thickness(20);
+                }
 
                 button.Click += (s, e) => {
                     popup.IsOpen = false; callback?.Invoke(message);
@@ -74,7 +79,7 @@ namespace Allgregator.Aux.Services {
             }
         }
 
-        private (Popup, ContentControl) Create() {
+        private static (Popup, ContentControl) Create() {
             var popup = new Popup() {
                 AllowsTransparency = true,
                 Opacity = 0.8d,

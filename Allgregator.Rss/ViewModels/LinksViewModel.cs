@@ -39,7 +39,7 @@ namespace Allgregator.Rss.ViewModels {
             var chapters = chapterRepository.GetOrDefault();
             dialogService.Show(chapters.Where(n => n.Id != Data.Id).Select(n => n.Title),
                 title => {
-                    var newChapter = chapters.FirstOrDefault(n => n.Title == title);
+                    var newChapter = chapters.FirstOrDefault(n => n.Title == (string)title);
                     eventAggregator.GetEvent<LinkMovedEvent>().Publish(new MoveRecord { Id = newChapter.Id, Link = link });
                     if (Data.Linked?.Links != null) {
                         Data.Linked.IsNeedToSave = true;

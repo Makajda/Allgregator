@@ -13,6 +13,7 @@
         <converters:BooleanToObjectConverter x:Key="ScheduleContentConverter" True="Turn off" False="Schedule is off"/>
 
         <Style x:Key="tplButton" TargetType="Button">
+            <Setter Property="CommandParameter" Value="{Binding}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="60"/>
             <Setter Property="Height" Value="60"/>
@@ -35,14 +36,22 @@
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Style="{StaticResource tplTextBox}"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBox Text="{Binding Value}" TextAlignment="Right" Width="80" Style="{StaticResource tplTextBox}"/>
-                    <Button common:Shaatt.Shape="Circle" Style="{StaticResource tplButton}" Margin="6,0,0,0">
+                    <Button
+                        common:Shaatt.Shape="Circle" Style="{StaticResource tplButton}" Margin="6,0,0,0"
+                        Command="{Binding DataContext.SelectColorCommand, ElementName=rootElement}">
                         <Button.Background>
                             <SolidColorBrush Color="{Binding Color}"/>
                         </Button.Background>
                     </Button>
-                    <Button common:Shaatt.Shape="TriTop" Style="{StaticResource tplButton}"/>
-                    <Button common:Shaatt.Shape="TriBottom" Margin="-25,0,0,0" Style="{StaticResource tplButton}"/>
-                    <Button common:Shaatt.Shape="Circle" Content="del" Style="{StaticResource tplButton}"/>
+                    <Button
+                        common:Shaatt.Shape="TriTop" Style="{StaticResource tplButton}"
+                        Command="{Binding DataContext.MoveUpCommand, ElementName=rootElement}"/>
+                    <Button
+                        common:Shaatt.Shape="TriBottom" Margin="-25,0,0,0" Style="{StaticResource tplButton}"
+                        Command="{Binding DataContext.MoveDownCommand, ElementName=rootElement}"/>
+                    <Button
+                        common:Shaatt.Shape="Circle" Content="del" Style="{StaticResource tplButton}"
+                        Command="{Binding DataContext.DeleteCommand, ElementName=rootElement}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -89,8 +98,8 @@
                 BorderThickness="0" Padding="20" Command="{Binding ScheduleCommand}"/>
         </StackPanel>
 
-        <!--//todo<Popup StaysOpen="False" Placement="Mouse" x:Name="popupOpen">
-            <ListBox x:Name="listOpen" ItemTemplate="{StaticResource OpenItemTemplate}"/>
+        <!--<Popup StaysOpen="False" Placement="Mouse" x:Name="popupDelete">
+            <Button Width="100" Height="100"/>
         </Popup>-->
     </Grid>
 </UserControl>
