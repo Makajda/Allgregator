@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {
-    public abstract class ChapterViewModelBase : BindableBase, INavigationAware {
+    public abstract class ChapterViewModelBase : BindableBase, INavigationAware, IComparison {
         protected readonly Settings settings;
         protected readonly IEventAggregator eventAggregator;
         protected string chapterId;
@@ -17,8 +17,8 @@ namespace Allgregator.Aux.ViewModels {
             IEventAggregator eventAggregator,
             Settings settings
             ) {
-            this.settings = settings;
             this.eventAggregator = eventAggregator;
+            this.settings = settings;
 
             OpenCommand = new DelegateCommand(Open);
             UpdateCommand = new DelegateCommand(async () => await Update());
@@ -36,6 +36,8 @@ namespace Allgregator.Aux.ViewModels {
             protected set => SetProperty(ref isActive, value);
 
         }
+
+        public double Weight => double.MaxValue;
 
         protected abstract Task Activate();
         protected abstract Task Deactivate();
