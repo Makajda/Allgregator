@@ -17,8 +17,8 @@ namespace Allgregator.Spl.ViewModels {
             ) : base(
                 "Times",
                 Module.Name,
-                typeof(ButimeSettingsView).FullName,
                 typeof(ButimeView).FullName,
+                typeof(ButimeSettingsView).FullName,
                 repository,
                 regionManager,
                 eventAggregator,

@@ -6,6 +6,7 @@ using Microsoft.Win32.TaskScheduler;
 using Prism.Commands;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -116,7 +117,8 @@ namespace Allgregator.Spl.ViewModels {
         }
 
         private static void ScheduleRegister(bool scheduleOn, double value) {
-            using var action = new ExecAction(Process.GetCurrentProcess().MainModule.FileName);
+            var filename = Process.GetCurrentProcess().MainModule.FileName;
+            using var action = new ExecAction(filename, null, Path.GetDirectoryName(filename));
             using var taskDefinition = TaskService.Instance.NewTask();
             taskDefinition.Settings.Enabled = scheduleOn;
             taskDefinition.Actions.Add(action);

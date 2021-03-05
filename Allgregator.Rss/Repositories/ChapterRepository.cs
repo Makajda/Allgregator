@@ -27,7 +27,7 @@ namespace Allgregator.Rss.Repositories {
 
         public void Save(IEnumerable<Data> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters.OrderBy(n => n.Title),
+            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     IgnoreNullValues = true,

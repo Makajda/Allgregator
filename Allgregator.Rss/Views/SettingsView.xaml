@@ -53,15 +53,18 @@
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Accept Time"/>
-                            <TextBox Text="{Binding Data.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
+                            <TextBox
+                                Text="{Binding Data.Mined.AcceptTime, UpdateSourceTrigger=PropertyChanged,
                                 Converter={StaticResource DateTimeOffsetToStringConverter}}"
-                                     Background="{StaticResource Edit.Background}" 
-                                     Foreground="{StaticResource Edit.Foreground}"/>
+                                Background="{StaticResource Edit.Background}" Foreground="{StaticResource Edit.Foreground}"/>
                         </StackPanel>
                     </StackPanel>
 
-                    <Button Content="Delete all" Command="{Binding DeleteChapterCommand}"
-                            common:Shaatt.Shape="Circle"/>
+                    <StackPanel Orientation="Horizontal">
+                        <!--//todo<Button Command="{Binding MoveLeftCommand}" common:Shaatt.Shape="TriLeft"/>
+                        <Button Command="{Binding MoveRightCommand}" common:Shaatt.Shape="TriRight"/>-->
+                        <Button Content="Delete" Command="{Binding DeleteChapterCommand}" common:Shaatt.Shape="Circle"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
 

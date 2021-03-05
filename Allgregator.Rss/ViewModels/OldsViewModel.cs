@@ -4,7 +4,7 @@ using Allgregator.Rss.Models;
 using Prism.Commands;
 
 namespace Allgregator.Rss.ViewModels {
-    public class OldsViewModel : DataViewModelBase<Data> {
+    internal class OldsViewModel : DataViewModelBase<Data> {
         public OldsViewModel() {
             OpenCommand = new DelegateCommand<Reco>(Open);
         }

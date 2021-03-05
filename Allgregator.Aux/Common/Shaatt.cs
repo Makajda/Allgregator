@@ -15,7 +15,9 @@ namespace Allgregator.Aux.Common {
         CapTop,
         CapLeft,
         TriTop,
-        TriBottom
+        TriBottom,
+        TriLeft,
+        TriRight,
     }
 
     public class ButtonShaatt : Button {
@@ -92,6 +94,14 @@ namespace Allgregator.Aux.Common {
                 Shapes.TriBottom => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
                         new LineSegment(new Point(size, 0), true),
                         new LineSegment(new Point(size / 2d, size), true)
+                    }, true) }),
+                Shapes.TriLeft => new PathGeometry(new[] { new PathFigure(new Point(size, 0), new PathSegment[] {
+                        new LineSegment(new Point(size, size), true),
+                        new LineSegment(new Point(0, size / 2d), true)
+                    }, true) }),
+                Shapes.TriRight => new PathGeometry(new[] { new PathFigure(new Point(), new PathSegment[] {
+                        new LineSegment(new Point(size, size / 2d), true),
+                        new LineSegment(new Point(0, size), true)
                     }, true) }),
                 _ => new RectangleGeometry() { Rect = new Rect(0, 0, 1, 1) }
             };

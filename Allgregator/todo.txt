@@ -1,5 +1,20 @@
 ﻿double goldenRatio = 1.618033988749894848;
-this._regionManager.Regions["MyRegion"].SortComparison = CompareViews;
+regionManager.Regions[Given.MenuRegion].SortComparison = new Comparison<object>(ComparisonReal);
+private int ComparisonReal(object x, object y) {
+    if (x is FrameworkElement xe && y is FrameworkElement ye && xe.DataContext is IComparison xc && ye.DataContext is IComparison yc) {
+        if (xc.Weight < yc.Weight) return -1;
+        if (xc.Weight > yc.Weight) return 1;
+    }
+
+    return 0;
+}
+
 xmlns:sys="clr-namespace:System;assembly=netstandard"
+xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+<b:Interaction.Triggers>
+    <b:EventTrigger EventName="Loaded">
+        <b:InvokeCommandAction Command="{Binding LoadedCommand}" />
+    </b:EventTrigger>
+</b:Interaction.Triggers>
 
 

@@ -4,7 +4,7 @@ using Allgregator.Rss.Models;
 using Prism.Commands;
 
 namespace Allgregator.Rss.ViewModels {
-    public class NewsViewModel : DataViewModelBase<Data> {
+    internal class NewsViewModel : DataViewModelBase<Data> {
         public NewsViewModel() {
             OpenCommand = new DelegateCommand<Reco>(Open);
             MoveCommand = new DelegateCommand<Reco>(Move);
