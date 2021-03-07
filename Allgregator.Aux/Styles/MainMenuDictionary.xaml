@@ -24,7 +24,7 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="Foreground" Value="{StaticResource Button.Manager.Foreground}"/>
         <Setter Property="Background" Value="{StaticResource Chapter.Background}"/>
-        <Setter Property="BorderThickness" Value="0.3"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="Opacity" Value="0.7"/>
         <Setter Property="Width" Value="{StaticResource Menu.Height}"/>

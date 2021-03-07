@@ -7,9 +7,12 @@
     <Color x:Key="Olds.Background.Color">#FFBBB09B</Color>
     <Color x:Key="Links.Background.Color">#FFBBC7A4</Color>
     <Color x:Key="Settings.Background.Color">#FF82B698</Color>
-    <Color x:Key="Clean.Background.Color">Sienna</Color>
+    <Color x:Key="Clean.Background.Color">#FF968984</Color>
     <Color x:Key="Retrieving.Color">#FFE75A7C</Color>
 
+    <SolidColorBrush x:Key="Chapter.Background" Color="#FFB1C6BB"/>
+    <SolidColorBrush x:Key="Chapter.Selected.Background" Color="#FF1CF9ED"/>
+    <SolidColorBrush x:Key="Chapter.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="Main.Background" Color="{StaticResource Main.Background.Color}"/>
     <SolidColorBrush x:Key="Button.Manager.Foreground" Color="White"/>
     <SolidColorBrush x:Key="Reco.Background" Color="White"/>
@@ -18,9 +21,6 @@
     <SolidColorBrush x:Key="Reco.Text.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="Error.Background" Color="Red"/>
     <SolidColorBrush x:Key="Error.Foreground" Color="White"/>
-    <SolidColorBrush x:Key="Chapter.Background" Color="#FF2092DD"/>
-    <SolidColorBrush x:Key="Chapter.Selected.Background" Color="#FF1CF9ED"/>
-    <SolidColorBrush x:Key="Chapter.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="News.Background" Color="{StaticResource News.Background.Color}"/>
     <SolidColorBrush x:Key="Olds.Background" Color="{StaticResource Olds.Background.Color}"/>
     <SolidColorBrush x:Key="Links.Background" Color="{StaticResource Links.Background.Color}"/>
