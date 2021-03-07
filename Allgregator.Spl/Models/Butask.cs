@@ -10,19 +10,19 @@ namespace Allgregator.Spl.Models {
         private string name;
         public string Name {
             get => name;
-            set => SetProperty(ref name, value);
+            set => SetProperty(ref name, value, () => IsNeedToSave = true);
         }
 
         private Color color = Colors.GreenYellow;
         public Color Color {
             get => color;
-            set => SetProperty(ref color, value);
+            set => SetProperty(ref color, value, () => IsNeedToSave = true);
         }
 
         private double valueReal = 30d;
         public double Value {
             get => valueReal;
-            set => SetProperty(ref valueReal, value);
+            set => SetProperty(ref valueReal, value, () => IsNeedToSave = true);
         }
 
         private List<Butime> butimes;
@@ -30,6 +30,9 @@ namespace Allgregator.Spl.Models {
             get => butimes;
             set => SetProperty(ref butimes, value);
         }
+
+        [JsonIgnore]
+        public bool IsNeedToSave { get; set; }
 
         private double now;
         [JsonIgnore]

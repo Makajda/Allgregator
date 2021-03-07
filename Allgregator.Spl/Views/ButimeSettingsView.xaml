@@ -35,7 +35,9 @@
 
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Style="{StaticResource tplTextBox}"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <TextBox Text="{Binding Value}" TextAlignment="Right" Width="80" Style="{StaticResource tplTextBox}"/>
+                    <TextBox
+                        Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Right"
+                        Width="80" Style="{StaticResource tplTextBox}"/>
                     <Button
                         common:Shaatt.Shape="Circle" Style="{StaticResource tplButton}" Margin="6,0,0,0"
                         Command="{Binding DataContext.SelectColorCommand, ElementName=rootElement}">

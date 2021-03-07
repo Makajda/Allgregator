@@ -1,4 +1,5 @@
-﻿using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Common;
+using Allgregator.Aux.Models;
 using Allgregator.Aux.Services;
 using Allgregator.Aux.ViewModels;
 using Allgregator.Spl.Models;
@@ -70,7 +71,12 @@ namespace Allgregator.Spl.ViewModels {
 
         private void Add() {
             if (!string.IsNullOrEmpty(NewName)) {
+                if (Data.Mined.Butasks == null) {
+                    Data.Mined.Butasks = new Obsefy<Butask>();
+                }
+
                 Data.Mined.Butasks.Insert(0, new Butask { Name = NewName });
+                Data.Mined.IsNeedToSave = true;
                 NewName = null;
             }
         }

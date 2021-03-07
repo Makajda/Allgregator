@@ -26,8 +26,19 @@ namespace Allgregator.Spl.Models {
             set => SetProperty(ref maxValue, value);
         }
 
+        private bool isNeedToSave;
         [JsonIgnore]
-        public bool IsNeedToSave { get; set; }
+        public bool IsNeedToSave {
+            get {
+                return isNeedToSave || (Butasks != null && Butasks.Any(n => n.IsNeedToSave));
+            }
+            set {
+                isNeedToSave = value;
+                if (!value)
+                    foreach (var butask in Butasks)
+                        butask.IsNeedToSave = false;
+            }
+        }
 
         public void Recalc() {
             var max = double.MinValue;

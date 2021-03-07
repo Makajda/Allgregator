@@ -27,7 +27,8 @@ namespace Allgregator.Spl.ViewModels {
 
         protected override async Task LoadMined() {
             await base.LoadMined();
-            Data?.Mined?.Recalc();
+            Data.Mined.Recalc();
+            Data.Mined.IsNeedToSave = false;
         }
     }
 }
