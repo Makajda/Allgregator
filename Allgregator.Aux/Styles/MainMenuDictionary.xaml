@@ -140,7 +140,10 @@
                         VerticalAlignment="Top" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Style="{Binding IsActive, Converter={StaticResource BooleanToMenuButtonStyleConverter}}">
                         <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="{Binding Data.Mined.LastWork, Converter={StaticResource TodayConverter}}"/>
+                            <TextBlock
+                                DockPanel.Dock="Top" HorizontalAlignment="Center"
+                                Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityHiddenConverter}}"
+                                Text="{Binding Data.Mined.LastWork, Converter={StaticResource TodayConverter}}"/>
                             <ContentPresenter DockPanel.Dock="Bottom" Content="{TemplateBinding Content}" HorizontalAlignment="Center"/>
                             <TextBlock
                                 Text="{Binding Data.Title}" 
