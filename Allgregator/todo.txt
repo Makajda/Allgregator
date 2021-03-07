@@ -18,3 +18,6 @@ xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
 </b:Interaction.Triggers>
 
 
+расписание минуты старта
+на меню время добавить последнюю корректировку времени
+сделать меню уже за счёт меньше фонт времени

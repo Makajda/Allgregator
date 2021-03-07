@@ -34,12 +34,18 @@ namespace Allgregator.Spl.ViewModels {
             }
         }
 
-        private DelegateCommand<string> addCommand; public ICommand AddCommand => addCommand ??= new DelegateCommand<string>(Add);
+        private DelegateCommand addCommand; public ICommand AddCommand => addCommand ??= new DelegateCommand(Add);
         private DelegateCommand scheduleCommand; public ICommand ScheduleCommand => scheduleCommand ??= new DelegateCommand(Schedule);
         private DelegateCommand<Butask> selectColorCommand; public ICommand SelectColorCommand => selectColorCommand ??= new DelegateCommand<Butask>(SelectColor);
         private DelegateCommand<Butask> moveUpCommand; public ICommand MoveUpCommand => moveUpCommand ??= new DelegateCommand<Butask>(MoveUp);
         private DelegateCommand<Butask> moveDownCommand; public ICommand MoveDownCommand => moveDownCommand ??= new DelegateCommand<Butask>(MoveDown);
         private DelegateCommand<Butask> deleteCommand; public ICommand DeleteCommand => deleteCommand ??= new DelegateCommand<Butask>(Delete);
+
+        private string newName;
+        public string NewName {
+            get { return newName; }
+            set { SetProperty(ref newName, value); }
+        }
 
         private bool scheduleOn;
         public bool ScheduleOn {
@@ -62,9 +68,10 @@ namespace Allgregator.Spl.ViewModels {
             }
         }
 
-        private void Add(string name) {
-            if (!string.IsNullOrEmpty(name)) {
-                Data.Mined.Butasks.Insert(0, new Butask { Name = name });
+        private void Add() {
+            if (!string.IsNullOrEmpty(NewName)) {
+                Data.Mined.Butasks.Insert(0, new Butask { Name = NewName });
+                NewName = null;
             }
         }
 
