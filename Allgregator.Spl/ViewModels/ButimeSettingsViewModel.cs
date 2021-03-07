@@ -130,7 +130,7 @@ namespace Allgregator.Spl.ViewModels {
             taskDefinition.Settings.Enabled = scheduleOn;
             taskDefinition.Actions.Add(action);
             var trigger = new TimeTrigger {
-                StartBoundary = DateTime.Now
+                StartBoundary = DateTime.Today
             };
             trigger.Repetition.Interval = TimeSpan.FromMinutes(value);
             taskDefinition.Triggers.Add(trigger);

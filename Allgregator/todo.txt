@@ -17,6 +17,3 @@ xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     </b:EventTrigger>
 </b:Interaction.Triggers>
 
-
-расписание минуты старта
-сделать меню уже за счёт меньше фонт времени
