@@ -27,6 +27,7 @@
             <Button Background="{StaticResource Reco.Background}" 
                     Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}" 
                     Padding="0"
+                    BorderThickness="0"
                     common:Shaatt.Shape="Rect"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                     Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
