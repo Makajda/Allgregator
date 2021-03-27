@@ -24,7 +24,7 @@
             <Grid Width="{StaticResource ElWidth}" Height="{StaticResource ElHeight}">
                 <Button Background="{StaticResource Reco.Background}" 
                         Padding="0"
-                        BorderThickness="0"
+                        BorderThickness="0.2"
                         common:Shaatt.Shape="Rect"
                         HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                         Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
