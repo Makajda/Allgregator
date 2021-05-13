@@ -32,7 +32,7 @@
     <SolidColorBrush x:Key="Edit.Foreground" Color="Black"/>
 
     <SolidColorBrush x:Key="Fin.USD" Color="Blue"/>
-    <SolidColorBrush x:Key="Fin.EUR" Color="White"/>
+    <SolidColorBrush x:Key="Fin.EUR" Color="Green"/>
     <SolidColorBrush x:Key="Fin.GBP" Color="Red"/>
     <SolidColorBrush x:Key="Fin.CHF" Color="Brown"/>
     <SolidColorBrush x:Key="Fin.CNY" Color="PaleVioletRed"/>
