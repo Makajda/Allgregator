@@ -38,7 +38,7 @@ namespace Allgregator.Aux.Repositories {
                 var json = JsonSerializer.Serialize<TModel>(model,
                     new JsonSerializerOptions() {
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                        IgnoreNullValues = true,
+                        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
                         WriteIndented = true
                     });
 

@@ -6,14 +6,13 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.Views;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Navigation;
+using Prism.Navigation.Regions;
 using System;
 using System.Linq;
 
-namespace Allgregator.Rss.ViewModels
-{
-    internal class MainViewModel : BindableBase
-    {
+namespace Allgregator.Rss.ViewModels {
+    internal class MainViewModel : BindableBase {
         private readonly Settings settings;
         private readonly DialogService dialogService;
         private readonly IRegionManager regionManager;
@@ -24,8 +23,7 @@ namespace Allgregator.Rss.ViewModels
             Data data,
             Settings settings,
             DialogService dialogService
-            )
-        {
+            ) {
             this.regionManager = regionManager;
             this.data = data;
             this.settings = settings;
@@ -42,17 +40,14 @@ namespace Allgregator.Rss.ViewModels
         public DelegateCommand MoveCommand { get; private set; }
 
         private ChapterViews currentView;
-        public ChapterViews CurrentView
-        {
+        public ChapterViews CurrentView {
             get { return currentView; }
             private set { SetProperty(ref currentView, value); }
         }
 
-        private void ChangeView(ChapterViews? chapterView)
-        {
+        private void ChangeView(ChapterViews? chapterView) {
             CurrentView = chapterView ?? ChapterViews.NewsView;
-            var viewName = CurrentView switch
-            {
+            var viewName = CurrentView switch {
                 ChapterViews.NewsView => typeof(NewsView).FullName,
                 ChapterViews.OldsView => typeof(OldsView).FullName,
                 ChapterViews.LinksView => typeof(LinksView).FullName,
@@ -65,40 +60,30 @@ namespace Allgregator.Rss.ViewModels
             regionManager.RequestNavigate(Givenloc.SubmainRegion, viewName, parameters);
         }
 
-        private void Browse()
-        {
-            var recos = CurrentView switch
-            {
+        private void Browse() {
+            var recos = CurrentView switch {
                 ChapterViews.NewsView => data.Mined?.NewRecos,
                 ChapterViews.OldsView => data.Mined?.OldRecos,
                 _ => null
             };
 
-            if (recos != null)
-            {
+            if (recos != null) {
                 var count = recos.Count;
-                if (count > settings.RssMaxOpenTabs)
-                {
+                if (count > settings.RssMaxOpenTabs) {
                     dialogService.Show($"{count}?", OpenReal, 72d);
                 }
-                else
-                {
+                else {
                     OpenReal();
                 }
             }
         }
 
-        private void OpenReal()
-        {
+        private void OpenReal() {
             var mined = data.Mined;
-            if (mined != null)
-            {
-                if (CurrentView == ChapterViews.NewsView)
-                {
-                    if (mined.NewRecos != null && mined.OldRecos != null)
-                    {
-                        foreach (var reco in mined.NewRecos.Reverse())
-                        {
+            if (mined != null) {
+                if (CurrentView == ChapterViews.NewsView) {
+                    if (mined.NewRecos != null && mined.OldRecos != null) {
+                        foreach (var reco in mined.NewRecos.Reverse()) {
                             WindowUtilities.Run(reco.Uri);
                             mined.OldRecos.Insert(0, reco);
                         }
@@ -107,21 +92,17 @@ namespace Allgregator.Rss.ViewModels
                     mined.NewRecos.Clear();
                     mined.AcceptTime = mined.LastRetrieve;
                 }
-                else
-                {
-                    if (mined.OldRecos != null)
-                    {
+                else {
+                    if (mined.OldRecos != null) {
                         foreach (var reco in mined.OldRecos) WindowUtilities.Run(reco.Uri);
                     }
                 }
             }
         }
 
-        private void Move()
-        {
+        private void Move() {
             var mined = data.Mined;
-            if (mined != null && mined.NewRecos != null && mined.OldRecos != null)
-            {
+            if (mined != null && mined.NewRecos != null && mined.OldRecos != null) {
                 mined.IsNeedToSave = true;
                 foreach (var reco in mined.NewRecos.Reverse()) mined.OldRecos.Insert(0, reco);
                 mined.NewRecos.Clear();

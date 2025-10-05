@@ -107,7 +107,7 @@ namespace Allgregator.Rss.ViewModels {
                 await opmlRepository.Export();
             }
             catch (Exception exception) {
-                dialogService.Show(ExceptionHelper.GetMessage(exception));
+                dialogService.Show(Aux.Common.ExceptionHelper.GetMessage(exception));
             }
         }
 
@@ -122,7 +122,7 @@ namespace Allgregator.Rss.ViewModels {
                 }
             }
             catch (Exception exception) {
-                dialogService.Show(ExceptionHelper.GetMessage(exception));
+                dialogService.Show(Aux.Common.ExceptionHelper.GetMessage(exception));
             }
         }
 

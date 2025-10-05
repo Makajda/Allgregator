@@ -3,7 +3,7 @@ using Allgregator.Aux.Models;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using System.ComponentModel;
 using System.Threading.Tasks;
 

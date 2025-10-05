@@ -6,7 +6,7 @@ using Allgregator.Sts.Models;
 using Allgregator.Sts.Services;
 using Allgregator.Sts.Views;
 using Prism.Events;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Allgregator.Sts.ViewModels {
     internal class PaletteChapterViewModel : SiteChapterViewModelBase<PaletteColor> {

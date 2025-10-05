@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU</Platforms>
-    <ApplicationIcon>App.ico</ApplicationIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<Platforms>AnyCPU</Platforms>
+		<ApplicationIcon>App.ico</ApplicationIcon>
+		<NoWarn>MC3074</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Prism.DryIoc" Version="9.0.537" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Allgregator.Aux\Allgregator.Aux.csproj" />
-    <ProjectReference Include="..\Allgregator.Rss\Allgregator.Rss.csproj" />
-    <ProjectReference Include="..\Allgregator.Spl\Allgregator.Spl.csproj" />
-    <ProjectReference Include="..\Allgregator.Sts\Allgregator.Sts.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Allgregator.Aux\Allgregator.Aux.csproj" />
+		<ProjectReference Include="..\Allgregator.Rss\Allgregator.Rss.csproj" />
+		<ProjectReference Include="..\Allgregator.Spl\Allgregator.Spl.csproj" />
+		<ProjectReference Include="..\Allgregator.Sts\Allgregator.Sts.csproj" />
+	</ItemGroup>
 
 </Project>

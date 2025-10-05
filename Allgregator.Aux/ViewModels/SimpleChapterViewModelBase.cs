@@ -2,7 +2,8 @@
 using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
 using Prism.Events;
-using Prism.Regions;
+using Prism.Navigation;
+using Prism.Navigation.Regions;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;

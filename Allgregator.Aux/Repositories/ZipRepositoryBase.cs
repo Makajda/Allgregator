@@ -22,7 +22,7 @@ namespace Allgregator.Aux.Repositories {
                     model,
                     new JsonSerializerOptions() {
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                        IgnoreNullValues = true,
+                        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
                         WriteIndented = false
                     });
 

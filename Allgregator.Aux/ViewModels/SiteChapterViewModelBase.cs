@@ -1,11 +1,8 @@
-﻿using Allgregator.Aux.Common;
-using Allgregator.Aux.Models;
+﻿using Allgregator.Aux.Models;
 using Allgregator.Aux.Repositories;
 using Allgregator.Aux.Services;
 using Prism.Events;
-using Prism.Regions;
-using System;
-using System.ComponentModel;
+using Prism.Navigation.Regions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Aux.ViewModels {

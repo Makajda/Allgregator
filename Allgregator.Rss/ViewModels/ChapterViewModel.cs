@@ -5,7 +5,7 @@ using Allgregator.Rss.Common;
 using Allgregator.Rss.Models;
 using Allgregator.Rss.Services;
 using Prism.Events;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using System.ComponentModel;
 using System.Threading.Tasks;
 

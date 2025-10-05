@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath >..\bin\rss-obj\</BaseIntermediateOutputPath>
+		<BaseOutputPath >..\bin\rss-bin\</BaseOutputPath>
+	</PropertyGroup>
+</Project>

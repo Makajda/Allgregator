@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath >..\bin\aux-obj\</BaseIntermediateOutputPath>
+		<BaseOutputPath >..\bin\aux-bin\</BaseOutputPath>
+	</PropertyGroup>
+</Project>

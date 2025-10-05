@@ -4,7 +4,7 @@ using Allgregator.Spl.Models;
 using Allgregator.Spl.Repositories;
 using Allgregator.Spl.Views;
 using Prism.Events;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 using System.Threading.Tasks;
 
 namespace Allgregator.Spl.ViewModels {

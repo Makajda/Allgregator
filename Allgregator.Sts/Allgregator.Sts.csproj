@@ -1,41 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<NoWarn>MC3072;MC3074</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Prism.DryIoc" Version="9.0.537" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Allgregator.Aux\Allgregator.Aux.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Allgregator.Aux\Allgregator.Aux.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Views\Cbr\ChapterView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Cbr\CurrencyView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Cbr\SettingsView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Views\Cbr\ChapterView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\Cbr\CurrencyView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\Cbr\SettingsView.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Views\Cbr\ChapterView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Cbr\CurrencyView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Cbr\SettingsView.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Views\Cbr\ChapterView.xaml">
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Cbr\CurrencyView.xaml">
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Cbr\SettingsView.xaml">
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
 
 </Project>

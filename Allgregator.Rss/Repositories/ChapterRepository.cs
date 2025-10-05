@@ -27,10 +27,10 @@ namespace Allgregator.Rss.Repositories {
 
         public void Save(IEnumerable<Data> chapters) {
             var name = Path.Combine(Given.PathData, nameFile);
-            var json = JsonSerializer.Serialize<IEnumerable<Data>>(chapters,
+            var json = JsonSerializer.Serialize(chapters,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    IgnoreNullValues = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
                     WriteIndented = true
                 });
 

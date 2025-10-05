@@ -3,7 +3,8 @@ using Allgregator.Rss.Models;
 using Allgregator.Rss.ViewModels;
 using Allgregator.Rss.Views;
 using Prism.Ioc;
-using Prism.Regions;
+using Prism.Navigation;
+using Prism.Navigation.Regions;
 using System.Collections.Generic;
 using System.Windows;
 

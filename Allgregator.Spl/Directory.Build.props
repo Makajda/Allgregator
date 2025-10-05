@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath >..\bin\spl-obj\</BaseIntermediateOutputPath>
+		<BaseOutputPath >..\bin\spl-bin\</BaseOutputPath>
+	</PropertyGroup>
+</Project>

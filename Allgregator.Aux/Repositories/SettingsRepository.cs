@@ -28,7 +28,7 @@ namespace Allgregator.Aux.Repository {
             var json = JsonSerializer.Serialize<Settings>(settings,
                 new JsonSerializerOptions() {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    IgnoreNullValues = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
                     WriteIndented = true
                 });
 

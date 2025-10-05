@@ -2,7 +2,7 @@
 using Allgregator.Spl.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Allgregator.Spl {
     public class Module : IModule {

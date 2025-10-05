@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29920.165
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator", "Allgregator\Allgregator.csproj", "{62FC81BE-C81C-420F-B981-A7474D3A6F61}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Tests", "Allgregator.Tests\Allgregator.Tests.csproj", "{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allgregator.Rss", "Allgregator.Rss\Allgregator.Rss.csproj", "{3CD09935-2B24-4D04-9D2E-ED76814F814F}"
 EndProject
@@ -25,10 +23,6 @@ Global
 		{62FC81BE-C81C-420F-B981-A7474D3A6F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62FC81BE-C81C-420F-B981-A7474D3A6F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62FC81BE-C81C-420F-B981-A7474D3A6F61}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82DEEBA9-4733-46A2-B72D-7C85CB6510AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CD09935-2B24-4D04-9D2E-ED76814F814F}.Release|Any CPU.ActiveCfg = Release|Any CPU

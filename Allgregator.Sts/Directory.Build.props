@@ -1,0 +1,6 @@
+<Project>
+	<PropertyGroup>
+		<BaseIntermediateOutputPath >..\bin\sts-obj\</BaseIntermediateOutputPath>
+		<BaseOutputPath >..\bin\sts-bin\</BaseOutputPath>
+	</PropertyGroup>
+</Project>

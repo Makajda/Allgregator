@@ -1,6 +1,6 @@
 ﻿using Allgregator.Aux.Common;
 using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Navigation.Regions;
 
 namespace Allgregator.Aux.ViewModels {
     public class DataViewModelBase<TData> : BindableBase, INavigationAware {
