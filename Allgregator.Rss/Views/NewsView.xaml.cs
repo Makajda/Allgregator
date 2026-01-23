@@ -17,14 +17,15 @@ namespace Allgregator.Rss.Views {
 
         private async void Open(Reco reco) {
             Window window = new() {
-                ShowActivated = true, ShowInTaskbar = false, Title = reco.ItemTitle,
-                Width = 1400, Height = 1000, WindowStartupLocation = WindowStartupLocation.CenterScreen
+                ShowActivated = true, ShowInTaskbar = false, Title = reco.ItemTitle + reco.Uri,
+                Width = 1400, Height = 1200, WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             Microsoft.Web.WebView2.Wpf.WebView2 browser = new();
             window.Content = browser;
             window.Show();
             await browser.EnsureCoreWebView2Async();
             browser.NavigateToString(reco.SummaryHtml);
+            browser.ZoomFactor = 2.1;
         }
     }
 }
