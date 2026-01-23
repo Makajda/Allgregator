@@ -18,7 +18,7 @@ namespace Allgregator.Rss.Views {
         private async void Open(Reco reco) {
             Window window = new() {
                 ShowActivated = true, ShowInTaskbar = false, Title = reco.ItemTitle,
-                Width = 1400, Height = 1000, WindowStartupLocation = WindowStartupLocation.CenterScreen, Owner = Application.Current.MainWindow
+                Width = 1400, Height = 1000, WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             Microsoft.Web.WebView2.Wpf.WebView2 browser = new();
             window.Content = browser;

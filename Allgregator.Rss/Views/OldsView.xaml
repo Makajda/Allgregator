@@ -30,7 +30,8 @@
                     BorderThickness="0.2"
                     common:Shaatt.Shape="Rect"
                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
-                    Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">
+                    Command="{Binding OpenCommand, ElementName=view}" CommandParameter="{Binding}">
+                    <!--Command="{Binding DataContext.OpenCommand, ElementName=view}" CommandParameter="{Binding}">-->
                 <Grid Margin="18">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
