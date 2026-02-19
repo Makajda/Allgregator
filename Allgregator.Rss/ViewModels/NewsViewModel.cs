@@ -17,7 +17,7 @@ namespace Allgregator.Rss.ViewModels {
 
         private void Open(Reco reco) {
             WindowUtilities.Run(reco.Uri);
-            Move(reco);
+            MoveReal(reco);
         }
 
         private async void Move(Reco reco) {
