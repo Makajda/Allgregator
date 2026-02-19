@@ -32,21 +32,23 @@ namespace Allgregator.Rss.ViewModels {
                 await browser.EnsureCoreWebView2Async();
                 browser.NavigateToString(reco.SummaryHtml);
                 browser.ZoomFactor = 2.1;
+                MoveReal(reco);
             }
             catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
+        }
 
-            //todo after sanction
-            //if (Data.Mined != null && Data.Mined.NewRecos != null && Data.Mined.OldRecos != null) {
-            //    Data.Mined.NewRecos.Remove(reco);
-            //    Data.Mined.OldRecos.Insert(0, reco);
-            //    if (Data.Mined.NewRecos.Count == 0) {
-            //        Data.Mined.AcceptTime = Data.Mined.LastRetrieve;
-            //    }
+        private void MoveReal(Reco reco) {
+            if (Data.Mined != null && Data.Mined.NewRecos != null && Data.Mined.OldRecos != null) {
+                Data.Mined.NewRecos.Remove(reco);
+                Data.Mined.OldRecos.Insert(0, reco);
+                if (Data.Mined.NewRecos.Count == 0) {
+                    Data.Mined.AcceptTime = Data.Mined.LastRetrieve;
+                }
 
-            //    Data.Mined.IsNeedToSave = true;
-            //}
+                Data.Mined.IsNeedToSave = true;
+            }
         }
     }
 }
