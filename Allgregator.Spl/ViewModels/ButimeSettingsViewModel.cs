@@ -59,7 +59,7 @@ namespace Allgregator.Spl.ViewModels {
             get { return scheduleInterval; }
             set {
                 try {
-                    if (value <= 0) throw new Exception("interval > 0");//todo validation
+                    if (value <= 0) throw new Exception("interval > 0");
                     ScheduleRegister(ScheduleOn, value);
                     SetProperty(ref scheduleInterval, value);
                 }

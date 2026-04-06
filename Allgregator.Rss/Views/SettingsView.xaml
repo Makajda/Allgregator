@@ -61,7 +61,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <!--//todo<Button Command="{Binding MoveLeftCommand}" common:Shaatt.Shape="TriLeft"/>
+                        <!--<Button Command="{Binding MoveLeftCommand}" common:Shaatt.Shape="TriLeft"/>
                         <Button Command="{Binding MoveRightCommand}" common:Shaatt.Shape="TriRight"/>-->
                         <Button Content="Delete" Command="{Binding DeleteChapterCommand}" common:Shaatt.Shape="Circle"/>
                     </StackPanel>
